@@ -14,6 +14,10 @@ use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorA;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorB;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorC;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorD;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedA;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedB;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedC;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedD;
 
 class DependencyResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -64,6 +68,31 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
                     ->addProperty("e2", AnnotationE::class),
                 AnnotationE::class => DefinitionItem::singleton(AnnotationE::class),
                 AnnotationD::class => DefinitionItem::singleton(AnnotationD::class),
+            ],
+            $dependencyResolver->getDependencyGraph()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function resolveMixedDependencies()
+    {
+        $dependencyResolver = new DependencyResolver(new CompilationConfig(true, true));
+
+        $dependencyResolver->resolve(MixedA::class);
+
+        $this->assertEquals(
+            [
+                MixedA::class => DefinitionItem::singleton(MixedA::class)
+                    ->addRequiredConstructorParam(MixedB::class)
+                    ->addRequiredConstructorParam(MixedC::class)
+                    ->addProperty("d", MixedD::class),
+                MixedB::class => DefinitionItem::singleton(MixedB::class)
+                    ->addRequiredConstructorParam(MixedD::class),
+                MixedD::class => DefinitionItem::singleton(MixedD::class),
+                MixedC::class => DefinitionItem::singleton(MixedC::class)
+                    ->addProperty("b", MixedB::class),
             ],
             $dependencyResolver->getDependencyGraph()
         );
