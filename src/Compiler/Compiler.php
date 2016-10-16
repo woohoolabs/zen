@@ -19,13 +19,13 @@ class Compiler
         $this->dependencyResolver = $dependencyResolver;
     }
 
-    public function compileDefinition(string $filename, CompilationConfig $config)
+    public function compileDefinition(string $filename)
     {
         /** @var array $definition */
         $definition = require($filename);
 
         foreach ($definition as $item) {
-            $this->dependencyResolver->resolve($item, $config);
+            $this->dependencyResolver->resolve($item);
         }
     }
 }
