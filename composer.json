@@ -1,0 +1,44 @@
+{
+    "name": "woohoolabs/dicone",
+    "description": "Woohoo Labs. DI Container",
+    "type": "library",
+    "keywords": ["Woohoo Labs.", "DI", "DIC"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name":"Máté Kocsis",
+            "email":"kocsismate@woohoolabs.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/woohoolabs/dicone/issues",
+        "source": "https://github.com/woohoolabs/dicone"
+    },
+    "require": {
+        "php":"^7.0.0",
+        "container-interop/container-interop":"^1.1.0",
+        "php-di/phpdoc-reader": "^2.0.1"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "^5.0.0",
+        "squizlabs/php_codesniffer": "^2.1.1",
+        "doctrine/annotations": "^1.2.6"
+    },
+    "suggests": {
+        "doctrine/annotations": "^1.2.0"
+    },
+    "provide": {
+        "container-interop/container-interop-implementation": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WoohooLabs\\Dicone\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WoohooLabs\\Dicone\\Tests\\Unit\\": "tests/unit",
+            "WoohooLabs\\Dicone\\Examples\\": "examples/"
+        }
+    }
+}
