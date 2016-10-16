@@ -1,7 +1,7 @@
 <?php
 namespace WoohooLabs\Dicone\Compiler;
 
-interface Container
+interface ContainerInterface
 {
     public function getItem($id);
 }
