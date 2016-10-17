@@ -1,5 +1,5 @@
 <?php
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor;
+namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor;
 
 class ConstructorA
 {

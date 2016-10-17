@@ -1,5 +1,5 @@
 <?php
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed;
+namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed;
 
 use WoohooLabs\Dicone\Resolver\Annotation\Dependency;
 

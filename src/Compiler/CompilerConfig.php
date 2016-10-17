@@ -1,7 +1,7 @@
 <?php
 namespace WoohooLabs\Dicone\Compiler;
 
-class CompilationConfig
+class CompilerConfig
 {
     /**
      * @var bool

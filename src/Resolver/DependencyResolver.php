@@ -6,7 +6,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
-use WoohooLabs\Dicone\Compiler\CompilationConfig;
+use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
@@ -15,7 +15,7 @@ use WoohooLabs\Dicone\Resolver\Annotation\Dependency;
 class DependencyResolver
 {
     /**
-     * @var CompilationConfig
+     * @var CompilerConfig
      */
     private $config;
 
@@ -32,34 +32,42 @@ class DependencyResolver
     /**
      * @var array
      */
-    private $graph = [];
+    private $definitionItems = [];
 
-    public function __construct(CompilationConfig $config)
+    public function __construct(CompilerConfig $config)
     {
         $this->config = $config;
         $this->typeHintReader = new PhpDocReader();
     }
 
-    public function getDependencyGraph(): array
+    /**
+     * @return DefinitionItem[]
+     */
+    public function getDefinitionItems(): array
     {
-        return $this->graph;
+        return $this->definitionItems;
     }
 
     public function resolve(string $className)
     {
-        if (isset($this->graph[$className])) {
+        if (isset($this->definitionItems[$className])) {
             return;
         }
 
-        $this->graph[$className] = new DefinitionItem($className);
+        $this->definitionItems[$className] = new DefinitionItem($className);
 
         if ($this->config->useConstructorTypeHints()) {
-            $this->resolveConstructorDependencies($this->graph[$className]);
+            $this->resolveConstructorDependencies($this->definitionItems[$className]);
         }
 
         if ($this->config->usePropertyAnnotation()) {
-            $this->resolvePropertyAnnotationDependencies($this->graph[$className]);
+            $this->resolvePropertyAnnotationDependencies($this->definitionItems[$className]);
         }
+    }
+
+    public function addDefinitionItem($key, DefinitionItem $definitionItem)
+    {
+        $this->definitionItems[$key] = $definitionItem;
     }
 
     private function resolveConstructorDependencies(DefinitionItem $item)

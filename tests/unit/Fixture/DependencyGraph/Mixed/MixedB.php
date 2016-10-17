@@ -1,5 +1,5 @@
 <?php
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed;
+namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed;
 
 class MixedB
 {

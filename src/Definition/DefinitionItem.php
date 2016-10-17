@@ -79,16 +79,16 @@ class DefinitionItem
         return $this->constructorParams;
     }
 
-    public function addRequiredConstructorParam(string $type)
+    public function addRequiredConstructorParam(string $className)
     {
-        $this->constructorParams[] = ["type" => $type];
+        $this->constructorParams[] = ["class" => $className];
 
         return $this;
     }
 
-    public function addOptionalConstructorParam($default)
+    public function addOptionalConstructorParam($defaultValue)
     {
-        $this->constructorParams[] = ["default" => $default];
+        $this->constructorParams[] = ["default" => $defaultValue];
 
         return $this;
     }

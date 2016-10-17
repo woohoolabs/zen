@@ -1,32 +1,32 @@
 <?php
 namespace WoohooLabs\Dicone\Tests\Unit\Resolver;
 
-use PHPUnit_Framework_TestCase;
-use WoohooLabs\Dicone\Compiler\CompilationConfig;
+use PHPUnit\Framework\TestCase;
+use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 use WoohooLabs\Dicone\Resolver\DependencyResolver;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Annotation\AnnotationA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Annotation\AnnotationB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Annotation\AnnotationC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Annotation\AnnotationD;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Annotation\AnnotationE;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Constructor\ConstructorD;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Mixed\MixedD;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationD;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationE;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedA;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedB;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedC;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedD;
 
-class DependencyResolverTest extends PHPUnit_Framework_TestCase
+class DependencyResolverTest extends TestCase
 {
     /**
      * @test
      */
     public function resolveConstructorDependencies()
     {
-        $dependencyResolver = new DependencyResolver(new CompilationConfig(true, false));
+        $dependencyResolver = new DependencyResolver(new CompilerConfig(true, false));
 
         $dependencyResolver->resolve(ConstructorA::class);
 
@@ -42,7 +42,7 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
                     ->addRequiredConstructorParam(ConstructorD::class),
                 ConstructorD::class => DefinitionItem::singleton(ConstructorD::class),
             ],
-            $dependencyResolver->getDependencyGraph()
+            $dependencyResolver->getDefinitionItems()
         );
     }
 
@@ -51,7 +51,7 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
      */
     public function resolveAnnotationDependencies()
     {
-        $dependencyResolver = new DependencyResolver(new CompilationConfig(false, true));
+        $dependencyResolver = new DependencyResolver(new CompilerConfig(false, true));
 
         $dependencyResolver->resolve(AnnotationA::class);
 
@@ -69,7 +69,7 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
                 AnnotationE::class => DefinitionItem::singleton(AnnotationE::class),
                 AnnotationD::class => DefinitionItem::singleton(AnnotationD::class),
             ],
-            $dependencyResolver->getDependencyGraph()
+            $dependencyResolver->getDefinitionItems()
         );
     }
 
@@ -78,7 +78,7 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
      */
     public function resolveMixedDependencies()
     {
-        $dependencyResolver = new DependencyResolver(new CompilationConfig(true, true));
+        $dependencyResolver = new DependencyResolver(new CompilerConfig(true, true));
 
         $dependencyResolver->resolve(MixedA::class);
 
@@ -94,7 +94,7 @@ class DependencyResolverTest extends PHPUnit_Framework_TestCase
                 MixedC::class => DefinitionItem::singleton(MixedC::class)
                     ->addProperty("b", MixedB::class),
             ],
-            $dependencyResolver->getDependencyGraph()
+            $dependencyResolver->getDefinitionItems()
         );
     }
 }
