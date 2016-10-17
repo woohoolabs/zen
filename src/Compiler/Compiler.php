@@ -24,8 +24,9 @@ class Compiler
     {
         foreach ($definitions as $definition) {
             foreach ($definition->getEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $entryPointClassName)
-                $this->dependencyResolver->resolve($entryPointClassName);
+                foreach ($entryPoint->getClassNames() as $entryPointClassName) {
+                    $this->dependencyResolver->resolve($entryPointClassName);
+                }
             }
 
             foreach ($definition->getDefinitionItems() as $key => $definitionItem) {
@@ -35,7 +36,7 @@ class Compiler
 
         $container = "<?php\n";
         if ($namespace) {
-           $container .= "namespace $namespace;\n";
+            $container .= "namespace $namespace;\n";
         }
         $container .= "\nclass $className\n";
         $container .= "{\n";
@@ -71,7 +72,7 @@ class Compiler
         $containerItem .= "$indent                \$item = new \\" . $definitionItem->getClassName() . "(\n";
         $constructorParams = [];
         foreach ($definitionItem->getConstructorParams() as $constructorParam) {
-            if (isset ($constructorParam["class"])) {
+            if (isset($constructorParam["class"])) {
                 $constructorParams[] = "$indent                    \$this->items[\"" . addslashes($constructorParam["class"]) . "\"]()";
             } elseif (array_key_exists("default", $constructorParam)) {
                 $constructorParams[] = "$indent                    " . ($this->convertValuetoString($constructorParam["default"]));
