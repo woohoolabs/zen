@@ -23,7 +23,7 @@ class DefinitionItem
      */
     private $properties;
 
-    public static function singleton($className)
+    public static function singleton(string $className)
     {
         $self = new self($className);
         $self->setSingletonScope();
@@ -31,7 +31,7 @@ class DefinitionItem
         return $self;
     }
 
-    public static function prototype($className)
+    public static function prototype(string $className)
     {
         $self = new self($className);
         $self->setPrototypeScope();
@@ -66,12 +66,14 @@ class DefinitionItem
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getScope(): string
     {
         return $this->scope;
+    }
+
+    public function isSingletonScope(): bool
+    {
+        return $this->scope === "singleton";
     }
 
     public function getConstructorParams(): array

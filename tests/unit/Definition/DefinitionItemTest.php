@@ -89,6 +89,26 @@ class DefinitionItemTest extends TestCase
     /**
      * @test
      */
+    public function isSingletonScopeTrue()
+    {
+        $item = new DefinitionItem("Class");
+
+        self::assertTrue($item->isSingletonScope());
+    }
+
+    /**
+     * @test
+     */
+    public function isSingletonScopeFalse()
+    {
+        $item = DefinitionItem::prototype("Class");
+
+        self::assertFalse($item->isSingletonScope());
+    }
+
+    /**
+     * @test
+     */
     public function addRequiredConstructorParams()
     {
         $item = DefinitionItem::singleton("Class1")

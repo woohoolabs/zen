@@ -60,18 +60,31 @@ class Compiler
     private function compileDefinitionItem(DefinitionItem $definitionItem)
     {
         $containerItem = "function () {\n";
-        $containerItem .= "                \$item = new \\" . $definitionItem->getClassName() . "(\n";
+
+        $indent = "";
+        if ($definitionItem->isSingletonScope()) {
+            $containerItem .= "                static \$item = null;\n\n";
+            $containerItem .= "                if (\$item === null) {\n";
+            $indent = "    ";
+        }
+
+        $containerItem .= "$indent                \$item = new \\" . $definitionItem->getClassName() . "(\n";
         $constructorParams = [];
         foreach ($definitionItem->getConstructorParams() as $constructorParam) {
             if (isset ($constructorParam["class"])) {
-                $constructorParams[] = "                    \$this->items[\"" . addslashes($constructorParam["class"]) . "\"]()";
+                $constructorParams[] = "$indent                    \$this->items[\"" . addslashes($constructorParam["class"]) . "\"]()";
             } elseif (array_key_exists("default", $constructorParam)) {
-                $constructorParams[] = "                    " . ($this->convertValuetoString($constructorParam["default"]));
+                $constructorParams[] = "$indent                    " . ($this->convertValuetoString($constructorParam["default"]));
             }
         }
         $containerItem .= implode(",\n", $constructorParams);
-        $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "                );\n\n";
-        $containerItem .= "                return \$item;\n";
+        $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "$indent                );\n";
+
+        if ($definitionItem->isSingletonScope()) {
+            $containerItem .= "                }\n";
+        }
+
+        $containerItem .= "\n                return \$item;\n";
         $containerItem .= "            }";
 
         return $containerItem;
