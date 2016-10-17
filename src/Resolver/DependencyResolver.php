@@ -5,6 +5,7 @@ namespace WoohooLabs\Dicone\Resolver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use WoohooLabs\Dicone\Annotation\Inject;
@@ -116,12 +117,13 @@ class DependencyResolver
         }
     }
 
-    private function getAnnotationReader(): AnnotationReader
+    private function getAnnotationReader(): SimpleAnnotationReader
     {
         if ($this->annotationReader === null) {
-            $this->annotationReader = new AnnotationReader();
-
-            AnnotationRegistry::registerFile(realpath(__DIR__ . "/../Annotation/Inject.php"));
+            //AnnotationRegistry::registerAutoloadNamespace('WoohooLabs\Dicone\Annotation', realpath(__DIR__ . '/../Annotation/'));
+            AnnotationRegistry::registerFile(realpath(__DIR__ . '/../Annotation/Inject.php'));
+            $this->annotationReader = new SimpleAnnotationReader();
+            $this->annotationReader->addNamespace('WoohooLabs\Dicone\Annotation');
         }
 
         return $this->annotationReader;

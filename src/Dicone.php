@@ -9,12 +9,13 @@ use WoohooLabs\Dicone\Exception\DiconeNotFoundException;
 class Dicone implements ContainerInterface
 {
     /**
-     * @var array
+     * @var ItemContainerInterface
      */
-    private $container = [];
+    private $container;
 
-    public function __construct()
+    public function __construct(ItemContainerInterface $itemContainer)
     {
+        $this->container = $itemContainer;
     }
 
     public function setContainer(string $filename)
@@ -24,7 +25,7 @@ class Dicone implements ContainerInterface
 
     public function has($id)
     {
-        return isset($this->container[$id]);
+        return $this->container->hasItem($id);
     }
 
     public function get($id)
@@ -33,6 +34,6 @@ class Dicone implements ContainerInterface
             throw new DiconeNotFoundException($id);
         }
 
-        return $this->container;
+        return $this->container->getItem($id);
     }
 }

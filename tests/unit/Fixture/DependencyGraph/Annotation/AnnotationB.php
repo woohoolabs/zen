@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation;
 
-use WoohooLabs\Dicone\Annotation\Inject;
-
 class AnnotationB extends AnnotationC
 {
     /**
