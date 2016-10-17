@@ -1,18 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation;
 
-use WoohooLabs\Dicone\Resolver\Annotation\Dependency;
+use WoohooLabs\Dicone\Annotation\Inject;
 
 class AnnotationA
 {
     /**
-     * @Dependency
+     * @Inject
      * @var AnnotationB
      */
     private $b;
 
     /**
-     * @Dependency
+     * @Inject
      * @var AnnotationC
      */
     private $c;

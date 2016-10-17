@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor;
 
 class ConstructorA
@@ -8,7 +10,7 @@ class ConstructorA
      * @param bool $d
      * @param null $e
      */
-    public function __construct(ConstructorB $b, $c, bool $d = true, $e = null)
+    public function __construct(ConstructorB $b, $c, bool $d = true, string $e = null)
     {
     }
 }

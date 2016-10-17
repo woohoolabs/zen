@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Compiler;
 
 use WoohooLabs\Dicone\Definition\DefinitionInterface;
@@ -38,14 +40,22 @@ class Compiler
         if ($namespace) {
             $container .= "namespace $namespace;\n";
         }
-        $container .= "\nclass $className\n";
+        $container .= "\nclass $className implements \WoohooLabs\Dicone\ItemContainerInterface\n";
         $container .= "{\n";
         $container .= "    private \$items = [];\n\n";
         $container .= "    public function __construct()\n";
         $container .= "    {\n";
         $container .= "        \$this->items = \$this->getItems();\n";
         $container .= "    }\n\n";
-        $container .= "    protected function getItems()\n";
+        $container .= "    public function hasItem(string \$id): bool\n";
+        $container .= "    {\n";
+        $container .= "        return isset(\$this->items[\$id]);\n";
+        $container .= "    }\n\n";
+        $container .= "    public function getItem(string \$id)\n";
+        $container .= "    {\n";
+        $container .= "        return \$this->items[\$id]();\n";
+        $container .= "    }\n\n";
+        $container .= "    private function getItems()\n";
         $container .= "    {\n";
         $container .= "        return [\n";
         foreach ($this->dependencyResolver->getDefinitionItems() as $key => $definitionItem) {
@@ -75,7 +85,7 @@ class Compiler
             if (isset($constructorParam["class"])) {
                 $constructorParams[] = "$indent                    \$this->items[\"" . addslashes($constructorParam["class"]) . "\"]()";
             } elseif (array_key_exists("default", $constructorParam)) {
-                $constructorParams[] = "$indent                    " . ($this->convertValuetoString($constructorParam["default"]));
+                $constructorParams[] = "$indent                    " . ($this->convertValueToString($constructorParam["default"]));
             }
         }
         $containerItem .= implode(",\n", $constructorParams);
@@ -101,7 +111,7 @@ class Compiler
         return $containerItem;
     }
 
-    private function convertValuetoString($value): string
+    private function convertValueToString($value): string
     {
         if (is_string($value)) {
             return '"' . $value . '"';

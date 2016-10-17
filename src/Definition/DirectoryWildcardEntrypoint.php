@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Definition;
 
 use RecursiveDirectoryIterator;
@@ -41,9 +43,8 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
         $it = new RecursiveIteratorIterator($di);
 
         foreach ($it as $file) {
-            $extension = pathinfo($file, PATHINFO_EXTENSION);
-            if ($extension === "php" || $extension === "hhvm") {
-                $files[] = $file;
+            if ($file->getExtension() === "php" || $file->getExtension() === "hhvm") {
+                $files[] = $file->getPathname();
             }
         }
 
@@ -61,9 +62,10 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
         for ($i = 2; $i < $count; $i++) {
             if ((isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpnamespace" || $tokens[$i - 2][1] === "namespace")) ||
                 ($dlm && $tokens[$i - 1][0] == T_NS_SEPARATOR && $tokens[$i][0] == T_STRING)) {
-                if (!$dlm) {
+                if ($dlm === false) {
                     $namespace = 0;
                 }
+
                 if (isset($tokens[$i][1])) {
                     $namespace = $namespace ? $namespace . "\\" . $tokens[$i][1] : $tokens[$i][1];
                     $dlm = true;
@@ -72,10 +74,11 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
                 $dlm = false;
             }
 
-            if (($tokens[$i - 2][0] === T_CLASS || $tokens[$i - 2][0] === T_INTERFACE) || (isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpclass" || $tokens[$i - 2][1] === "phpinterface"))
+            if (($tokens[$i - 2][0] === T_CLASS || $tokens[$i - 2][0] === T_INTERFACE || $tokens[$i - 2][0] === T_TRAIT)
+                || (isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpclass" || $tokens[$i - 2][1] === "phpinterface" || $tokens[$i - 2][1] === "phptrait"))
                 && $tokens[$i - 1][0] === T_WHITESPACE && $tokens[$i][0] === T_STRING) {
                 $class_name = $tokens[$i][1];
-                if (!isset($classes[$namespace])) {
+                if (isset($classes[$namespace]) === false) {
                     $classes[$namespace] = [];
                 }
                 $classes[$namespace][] = $class_name;

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Resolver;
 
-use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PhpDocReader\PhpDocReader;
@@ -10,7 +11,7 @@ use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
-use WoohooLabs\Dicone\Resolver\Annotation\Dependency;
+use WoohooLabs\Dicone\Annotation\Inject;
 
 class DependencyResolver
 {
@@ -65,7 +66,7 @@ class DependencyResolver
         }
     }
 
-    public function addDefinitionItem($key, DefinitionItem $definitionItem)
+    public function addDefinitionItem(string $key, DefinitionItem $definitionItem)
     {
         $this->definitionItems[$key] = $definitionItem;
     }
@@ -99,8 +100,8 @@ class DependencyResolver
         $class = new ReflectionClass($item->getClassName());
 
         foreach ($class->getProperties() as $property) {
-            /** @var Dependency $annotation */
-            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, Dependency::class);
+            /** @var Inject $annotation */
+            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, Inject::class);
             if ($annotation === null) {
                 continue;
             }
@@ -120,7 +121,7 @@ class DependencyResolver
         if ($this->annotationReader === null) {
             $this->annotationReader = new AnnotationReader();
 
-            AnnotationRegistry::registerFile(__DIR__ . "/Annotation/Dependency.php");
+            AnnotationRegistry::registerFile(realpath(__DIR__ . "/../Annotation/Inject.php"));
         }
 
         return $this->annotationReader;

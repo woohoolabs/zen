@@ -1,7 +1,7 @@
 <?php
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Container;
 
-class TestContainerMixed
+class TestContainerMixed implements \WoohooLabs\Dicone\ItemContainerInterface
 {
     private $items = [];
 
@@ -10,7 +10,17 @@ class TestContainerMixed
         $this->items = $this->getItems();
     }
 
-    protected function getItems()
+    public function hasItem(string $id): bool
+    {
+        return isset($this->items[$id]);
+    }
+
+    public function getItem(string $id)
+    {
+        return $this->items[$id]();
+    }
+
+    private function getItems()
     {
         return [
             "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Container\\Entrypoint\\EntrypointA" => function () {

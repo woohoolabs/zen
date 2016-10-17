@@ -20,7 +20,7 @@
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "^5.0.0",
+        "phpunit/PHPUnit": "^5.4.0",
         "squizlabs/php_codesniffer": "^2.1.1",
         "doctrine/annotations": "^1.2.6"
     },
@@ -40,5 +40,11 @@
             "WoohooLabs\\Dicone\\Tests\\Unit\\": "tests/unit",
             "WoohooLabs\\Dicone\\Examples\\": "examples/"
         }
+    },
+    "bin": [
+        "bin/dicone"
+    ],
+    "scripts": {
+        "test": "phpunit"
     }
 }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace WoohooLabs\Dicone\Tests\Unit\Resolver;
 
 use PHPUnit\Framework\TestCase;

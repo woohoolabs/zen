@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+use WoohooLabs\Dicone\Compiler\Compiler;
+use WoohooLabs\Dicone\Compiler\CompilerConfig;
+use WoohooLabs\Dicone\Resolver\DependencyResolver;
+
+if (version_compare("7.0.0", PHP_VERSION, ">")) {
+    fwrite(
+        STDERR,
+        "Woohoo Labs. Dicone requires PHP 7.0 or later." . PHP_EOL
+    );
+
+    die(1);
+}
+
+foreach ([__DIR__ . "/../../autoload.php", __DIR__ . "/../vendor/autoload.php", __DIR__ . "/vendor/autoload.php"] as $file) {
+    if (file_exists($file)) {
+        define("DICONE_COMPOSER_INSTALL", $file);
+
+        break;
+    }
+}
+
+unset($file);
+
+if (defined("DICONE_COMPOSER_INSTALL") === false) {
+    fwrite(STDERR, "You need Composer to set up the project dependencies!" . PHP_EOL);
+    die(1);
+}
+
+require DICONE_COMPOSER_INSTALL;
+
+$containerFilePath = $argv[1];
+$containerNamespace = $argv[2];
+$containerClassName = $argv[3];
+
+$definitions = [];
+for ($i = 4; $i < $argc; $i++) {
+    $definitions[] = new $argv[$i];
+}
+
+$compiler = new Compiler(new DependencyResolver(new CompilerConfig(true, true)));
+$container = $compiler->compileDefinitions($containerNamespace, $containerClassName, $definitions);
+file_put_contents($containerFilePath, $container);
