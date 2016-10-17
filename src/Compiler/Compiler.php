@@ -80,6 +80,16 @@ class Compiler
         $containerItem .= implode(",\n", $constructorParams);
         $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "$indent                );\n";
 
+        if (empty($definitionItem->getProperties()) === false) {
+            $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
+
+            foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
+                $containerItem .= "$indent                \$reflectionProperty = \$reflectionObject->getProperty(\"" . $propertyName . "\");\n";
+                $containerItem .= "$indent                \$reflectionProperty->setAccessible(true);\n";
+                $containerItem .= "$indent                \$reflectionProperty->setValue(null, \$this->items[\"" . addslashes($propertyValue) . "\"]()" . ");\n";
+            }
+        }
+
         if ($definitionItem->isSingletonScope()) {
             $containerItem .= "                }\n";
         }

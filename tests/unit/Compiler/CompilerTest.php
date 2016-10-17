@@ -85,7 +85,7 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler(
             new DependencyResolver(
-                new CompilerConfig(true, false)
+                new CompilerConfig(true, true)
             )
         );
 

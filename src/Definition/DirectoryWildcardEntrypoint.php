@@ -1,6 +1,9 @@
 <?php
 namespace WoohooLabs\Dicone\Definition;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 class DirectoryWildcardEntrypoint implements EntrypointInterface
 {
     /**
@@ -20,7 +23,7 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
     {
         $items = [];
 
-        foreach (glob($this->directoryName . "/*.{php,hhvm}", GLOB_BRACE) as $filePath) {
+        foreach ($this->getSourceFilesInDirectory($this->directoryName) as $filePath) {
             foreach ($this->getClassesInFile($filePath) as $namespace => $classes) {
                 foreach ($classes as $class) {
                     $items[] = is_string($namespace) ? $namespace . "\\" . $class : $class;
@@ -31,6 +34,22 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
         return $items;
     }
 
+    private function getSourceFilesInDirectory(string $directory): array
+    {
+        $files = [];
+        $di = new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS);
+        $it = new RecursiveIteratorIterator($di);
+
+        foreach($it as $file) {
+           $extension = pathinfo($file, PATHINFO_EXTENSION);
+            if ($extension === "php" || $extension === "hhvm") {
+                $files[] = $file;
+            }
+        }
+
+        return $files;
+    }
+
     private function getClassesInFile($filePath) {
         $classes = [];
         $namespace = 0;
@@ -39,7 +58,7 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
         $dlm = false;
 
         for ($i = 2; $i < $count; $i++) {
-            if ((isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] == "phpnamespace" || $tokens[$i - 2][1] == "namespace")) ||
+            if ((isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpnamespace" || $tokens[$i - 2][1] === "namespace")) ||
                 ($dlm && $tokens[$i - 1][0] == T_NS_SEPARATOR && $tokens[$i][0] == T_STRING)) {
                 if (!$dlm) $namespace = 0;
                 if (isset($tokens[$i][1])) {
@@ -50,8 +69,8 @@ class DirectoryWildcardEntrypoint implements EntrypointInterface
                 $dlm = false;
             }
 
-            if (($tokens[$i - 2][0] == T_CLASS || (isset($tokens[$i - 2][1]) && $tokens[$i - 2][1] == "phpclass"))
-                && $tokens[$i - 1][0] == T_WHITESPACE && $tokens[$i][0] == T_STRING) {
+            if (($tokens[$i - 2][0] === T_CLASS || $tokens[$i - 2][0] === T_INTERFACE) || (isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpclass" || $tokens[$i - 2][1] === "phpinterface"))
+                && $tokens[$i - 1][0] === T_WHITESPACE && $tokens[$i][0] === T_STRING) {
                 $class_name = $tokens[$i][1];
                 if (!isset($classes[$namespace])) $classes[$namespace] = array();
                 $classes[$namespace][] = $class_name;
