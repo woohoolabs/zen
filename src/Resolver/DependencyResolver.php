@@ -120,7 +120,6 @@ class DependencyResolver
     private function getAnnotationReader(): SimpleAnnotationReader
     {
         if ($this->annotationReader === null) {
-            //AnnotationRegistry::registerAutoloadNamespace('WoohooLabs\Dicone\Annotation', realpath(__DIR__ . '/../Annotation/'));
             AnnotationRegistry::registerFile(realpath(__DIR__ . '/../Annotation/Inject.php'));
             $this->annotationReader = new SimpleAnnotationReader();
             $this->annotationReader->addNamespace('WoohooLabs\Dicone\Annotation');
