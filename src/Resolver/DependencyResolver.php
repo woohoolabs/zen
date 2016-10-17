@@ -7,11 +7,11 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
+use WoohooLabs\Dicone\Annotation\Inject;
 use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
-use WoohooLabs\Dicone\Annotation\Inject;
 
 class DependencyResolver
 {

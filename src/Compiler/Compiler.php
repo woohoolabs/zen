@@ -40,7 +40,7 @@ class Compiler
         if ($namespace) {
             $container .= "namespace $namespace;\n";
         }
-        $container .= "\nclass $className implements \WoohooLabs\Dicone\ItemContainerInterface\n";
+        $container .= "\nclass $className implements \\WoohooLabs\\Dicone\\ItemContainerInterface\n";
         $container .= "{\n";
         $container .= "    private \$items = [];\n\n";
         $container .= "    public function __construct()\n";
