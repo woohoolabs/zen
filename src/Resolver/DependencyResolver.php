@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Resolver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
@@ -22,7 +21,7 @@ class DependencyResolver
     private $config;
 
     /**
-     * @var AnnotationReader|null
+     * @var SimpleAnnotationReader|null
      */
     private $annotationReader;
 
