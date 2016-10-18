@@ -5,7 +5,7 @@ namespace WoohooLabs\Dicone\Examples\Service;
 
 use WoohooLabs\Dicone\Examples\Utils\AnimalUtil;
 
-class AnimalService
+class AnimalService implements AnimalServiceInterface
 {
     /**
      * @var AnimalUtil

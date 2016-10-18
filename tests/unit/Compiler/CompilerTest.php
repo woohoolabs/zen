@@ -5,8 +5,6 @@ namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Dicone\Compiler\Compiler;
-use WoohooLabs\Dicone\Compiler\CompilerConfig;
-use WoohooLabs\Dicone\Compiler\DependencyResolver;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionConstructor;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionEmpty;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionMixed;
@@ -18,11 +16,7 @@ class CompilerTest extends TestCase
      */
     public function compileDefinitionsWithoutDefinitions()
     {
-        $compiler = new Compiler(
-            new DependencyResolver(
-                new CompilerConfig(true, false)
-            )
-        );
+        $compiler = new Compiler();
 
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerEmpty.php"),
@@ -39,11 +33,7 @@ class CompilerTest extends TestCase
      */
     public function compileDefinitionsWithEmptyEntrypoints()
     {
-        $compiler = new Compiler(
-            new DependencyResolver(
-                new CompilerConfig(true, false)
-            )
-        );
+        $compiler = new Compiler();
 
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerEmpty.php"),
@@ -62,11 +52,7 @@ class CompilerTest extends TestCase
      */
     public function compileDefinitionsWithConstructorInjection()
     {
-        $compiler = new Compiler(
-            new DependencyResolver(
-                new CompilerConfig(true, false)
-            )
-        );
+        $compiler = new Compiler();
 
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerConstructor.php"),
@@ -85,11 +71,7 @@ class CompilerTest extends TestCase
      */
     public function compileDefinitions()
     {
-        $compiler = new Compiler(
-            new DependencyResolver(
-                new CompilerConfig(true, true)
-            )
-        );
+        $compiler = new Compiler();
 
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerMixed.php"),

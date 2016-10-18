@@ -8,8 +8,8 @@ use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use WoohooLabs\Dicone\Annotation\Inject;
+use WoohooLabs\Dicone\Definition\DefinitionHint;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
-use WoohooLabs\Dicone\Examples\Definition;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
 
@@ -21,7 +21,17 @@ class DependencyResolver
     private $config;
 
     /**
-     * @var SimpleAnnotationReader|null
+     * @var DefinitionHint[]
+     */
+    private $definitionHints;
+
+    /**
+     * @var DefinitionItem[]
+     */
+    private $definitionItems;
+
+    /**
+     * @var SimpleAnnotationReader
      */
     private $annotationReader;
 
@@ -31,25 +41,15 @@ class DependencyResolver
     private $typeHintReader;
 
     /**
-     * @var DefinitionItem[]
+     * @param DefinitionHint[] $definitionHints
      */
-    private $definitionItems = [];
-
-    /**
-     * @param Definition[] $definitions
-     */
-    public function __construct(CompilerConfig $config)
+    public function __construct(CompilerConfig $config, array $definitionHints)
     {
         $this->config = $config;
+        $this->definitionHints = $definitionHints;
+        $this->definitionItems = [];
+        $this->setAnnotationReader();
         $this->typeHintReader = new PhpDocReader();
-    }
-
-    /**
-     * @return DefinitionItem[]
-     */
-    public function getDefinitionItems(): array
-    {
-        return $this->definitionItems;
     }
 
     public function resolve(string $className)
@@ -58,7 +58,11 @@ class DependencyResolver
             return;
         }
 
-        $this->definitionItems[$className] = new DefinitionItem($className);
+        if (isset($this->definitionHints[$className])) {
+            $this->definitionItems[$className] = $this->definitionHints[$className]->toDefinitionItem();
+        } else {
+            $this->definitionItems[$className] = new DefinitionItem($className);
+        }
 
         if ($this->config->useConstructorTypeHints()) {
             $this->resolveConstructorDependencies($this->definitionItems[$className]);
@@ -67,11 +71,16 @@ class DependencyResolver
         if ($this->config->usePropertyAnnotation()) {
             $this->resolvePropertyAnnotationDependencies($this->definitionItems[$className]);
         }
+
+        return;
     }
 
-    public function addDefinitionItem(string $key, DefinitionItem $definitionItem)
+    /**
+     * @return DefinitionItem[]
+     */
+    public function getDefinitionItems(): array
     {
-        $this->definitionItems[$key] = $definitionItem;
+        return $this->definitionItems;
     }
 
     private function resolveConstructorDependencies(DefinitionItem $item)
@@ -104,7 +113,7 @@ class DependencyResolver
 
         foreach ($class->getProperties() as $property) {
             /** @var Inject $annotation */
-            $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, Inject::class);
+            $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
             if ($annotation === null) {
                 continue;
             }
@@ -119,14 +128,10 @@ class DependencyResolver
         }
     }
 
-    private function getAnnotationReader(): SimpleAnnotationReader
+    private function setAnnotationReader()
     {
-        if ($this->annotationReader === null) {
-            AnnotationRegistry::registerFile(realpath(__DIR__ . '/../Annotation/Inject.php'));
-            $this->annotationReader = new SimpleAnnotationReader();
-            $this->annotationReader->addNamespace('WoohooLabs\Dicone\Annotation');
-        }
-
-        return $this->annotationReader;
+        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../Annotation/Inject.php'));
+        $this->annotationReader = new SimpleAnnotationReader();
+        $this->annotationReader->addNamespace('WoohooLabs\Dicone\Annotation');
     }
 }

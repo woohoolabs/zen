@@ -11,7 +11,7 @@ interface DefinitionInterface
     public function getEntryPoints(): array;
 
     /**
-     * @return DefinitionItem[]
+     * @return DefinitionHint[]
      */
-    public function getDefinitionItems(): array;
+    public function getDefinitionHints(): array;
 }

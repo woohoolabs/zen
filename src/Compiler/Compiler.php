@@ -3,38 +3,15 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Compiler;
 
-use WoohooLabs\Dicone\Definition\DefinitionInterface;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 
 class Compiler
 {
     /**
-     * @var DependencyResolver
+     * @param DefinitionItem[] $definitions
      */
-    private $dependencyResolver;
-
-    public function __construct(DependencyResolver $dependencyResolver)
+    public function compileDefinitions(string $namespace, string $className, array $definitionItems): string
     {
-        $this->dependencyResolver = $dependencyResolver;
-    }
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function compileDefinitions(string $namespace, string $className, array $definitions): string
-    {
-        foreach ($definitions as $definition) {
-            foreach ($definition->getEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $entryPointClassName) {
-                    $this->dependencyResolver->resolve($entryPointClassName);
-                }
-            }
-
-            foreach ($definition->getDefinitionItems() as $key => $definitionItem) {
-                $this->dependencyResolver->addDefinitionItem($key, $definitionItem);
-            }
-        }
-
         $container = "<?php\n";
         if ($namespace) {
             $container .= "namespace $namespace;\n";
@@ -45,7 +22,7 @@ class Compiler
         $container .= "    protected function getItems()\n";
         $container .= "    {\n";
         $container .= "        return [\n";
-        foreach ($this->dependencyResolver->getDefinitionItems() as $key => $definitionItem) {
+        foreach ($definitionItems as $key => $definitionItem) {
             $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
         }
         $container .= "        ];\n";

@@ -25,26 +25,10 @@ class DefinitionItem
      */
     private $properties;
 
-    public static function singleton(string $className)
-    {
-        $self = new self($className);
-        $self->setSingletonScope();
-
-        return $self;
-    }
-
-    public static function prototype(string $className)
-    {
-        $self = new self($className);
-        $self->setPrototypeScope();
-
-        return $self;
-    }
-
-    public function __construct(string $className)
+    public function __construct(string $className, string $scope = "singleton")
     {
         $this->className = $className;
-        $this->setSingletonScope();
+        $this->scope = $scope;
         $this->constructorParams = [];
         $this->properties = [];
     }
@@ -52,20 +36,6 @@ class DefinitionItem
     public function getClassName(): string
     {
         return $this->className;
-    }
-
-    public function setSingletonScope()
-    {
-        $this->scope = "singleton";
-
-        return $this;
-    }
-
-    public function setPrototypeScope()
-    {
-        $this->scope = "prototype";
-
-        return $this;
     }
 
     public function getScope(): string

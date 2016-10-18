@@ -5,7 +5,7 @@ namespace WoohooLabs\Dicone\Examples\Service;
 
 use WoohooLabs\Dicone\Examples\Utils\PlantUtil;
 
-class PlantService
+class PlantService implements PlantServiceInterface
 {
     /**
      * @var PlantUtil

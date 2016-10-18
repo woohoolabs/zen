@@ -17,12 +17,12 @@
     "require": {
         "php":"^7.0.0",
         "container-interop/container-interop":"^1.1.0",
+        "doctrine/annotations": "^1.2.6",
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
         "phpunit/PHPUnit": "^5.4.0",
-        "squizlabs/php_codesniffer": "^2.1.1",
-        "doctrine/annotations": "^1.2.6"
+        "squizlabs/php_codesniffer": "^2.1.1"
     },
     "suggest": {
         "doctrine/annotations": "^1.2.0"
