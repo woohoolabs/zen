@@ -6,7 +6,7 @@ namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Dicone\Compiler\Compiler;
 use WoohooLabs\Dicone\Compiler\CompilerConfig;
-use WoohooLabs\Dicone\Resolver\DependencyResolver;
+use WoohooLabs\Dicone\Compiler\DependencyResolver;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionConstructor;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionEmpty;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionMixed;

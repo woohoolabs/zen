@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Resolver;
+namespace WoohooLabs\Dicone\Compiler;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use WoohooLabs\Dicone\Annotation\Inject;
-use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
+use WoohooLabs\Dicone\Examples\Definition;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
 
@@ -31,10 +31,13 @@ class DependencyResolver
     private $typeHintReader;
 
     /**
-     * @var array
+     * @var DefinitionItem[]
      */
     private $definitionItems = [];
 
+    /**
+     * @param Definition[] $definitions
+     */
     public function __construct(CompilerConfig $config)
     {
         $this->config = $config;

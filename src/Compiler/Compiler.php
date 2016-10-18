@@ -5,7 +5,6 @@ namespace WoohooLabs\Dicone\Compiler;
 
 use WoohooLabs\Dicone\Definition\DefinitionInterface;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
-use WoohooLabs\Dicone\Resolver\DependencyResolver;
 
 class Compiler
 {
@@ -40,26 +39,14 @@ class Compiler
         if ($namespace) {
             $container .= "namespace $namespace;\n";
         }
-        $container .= "\nclass $className implements \\WoohooLabs\\Dicone\\ItemContainerInterface\n";
+        $container .= "\nuse \\WoohooLabs\\Dicone\\AbstractContainer;\n\n";
+        $container .= "class $className extends AbstractContainer\n";
         $container .= "{\n";
-        $container .= "    private \$items = [];\n\n";
-        $container .= "    public function __construct()\n";
-        $container .= "    {\n";
-        $container .= "        \$this->items = \$this->getItems();\n";
-        $container .= "    }\n\n";
-        $container .= "    public function hasItem(string \$id): bool\n";
-        $container .= "    {\n";
-        $container .= "        return isset(\$this->items[\$id]);\n";
-        $container .= "    }\n\n";
-        $container .= "    public function getItem(string \$id)\n";
-        $container .= "    {\n";
-        $container .= "        return \$this->items[\$id]();\n";
-        $container .= "    }\n\n";
-        $container .= "    private function getItems()\n";
+        $container .= "    protected function getItems()\n";
         $container .= "    {\n";
         $container .= "        return [\n";
         foreach ($this->dependencyResolver->getDefinitionItems() as $key => $definitionItem) {
-            $container .= "            \"" . addslashes($key) . "\" => " . $this->compileDefinitionItem($definitionItem) . ",\n";
+            $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
         }
         $container .= "        ];\n";
         $container .= "    }\n";
@@ -83,7 +70,7 @@ class Compiler
         $constructorParams = [];
         foreach ($definitionItem->getConstructorParams() as $constructorParam) {
             if (isset($constructorParam["class"])) {
-                $constructorParams[] = "$indent                    \$this->items[\"" . addslashes($constructorParam["class"]) . "\"]()";
+                $constructorParams[] = "$indent                    \$this->getItem('" . $constructorParam["class"] . "')";
             } elseif (array_key_exists("default", $constructorParam)) {
                 $constructorParams[] = "$indent                    " . ($this->convertValueToString($constructorParam["default"]));
             }
@@ -93,11 +80,8 @@ class Compiler
 
         if (empty($definitionItem->getProperties()) === false) {
             $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
-
             foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
-                $containerItem .= "$indent                \$reflectionProperty = \$reflectionObject->getProperty(\"" . $propertyName . "\");\n";
-                $containerItem .= "$indent                \$reflectionProperty->setAccessible(true);\n";
-                $containerItem .= "$indent                \$reflectionProperty->setValue(null, \$this->items[\"" . addslashes($propertyValue) . "\"]()" . ");\n";
+                $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, '$propertyName', '$propertyValue');\n";
             }
         }
 

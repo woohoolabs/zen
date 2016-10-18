@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Resolver;
+namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Dicone\Compiler\CompilerConfig;
+use WoohooLabs\Dicone\Compiler\DependencyResolver;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
-use WoohooLabs\Dicone\Resolver\DependencyResolver;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;

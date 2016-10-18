@@ -2,9 +2,7 @@
 <?php
 declare(strict_types=1);
 
-use WoohooLabs\Dicone\Compiler\Compiler;
-use WoohooLabs\Dicone\Compiler\CompilerConfig;
-use WoohooLabs\Dicone\Resolver\DependencyResolver;
+use WoohooLabs\Dicone\Builder\ContainerBuilder;
 
 if (version_compare("7.0.0", PHP_VERSION, ">")) {
     fwrite(
@@ -40,6 +38,5 @@ for ($i = 4; $i < $argc; $i++) {
     $definitions[] = new $argv[$i];
 }
 
-$compiler = new Compiler(new DependencyResolver(new CompilerConfig(true, true)));
-$container = $compiler->compileDefinitions($containerNamespace, $containerClassName, $definitions);
-file_put_contents($containerFilePath, $container);
+$builder = new ContainerBuilder();
+$builder->build($containerFilePath, $containerNamespace, $containerClassName, $definitions);

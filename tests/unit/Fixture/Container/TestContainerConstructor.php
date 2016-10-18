@@ -1,35 +1,20 @@
 <?php
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Container;
 
-class TestContainerConstructor implements \WoohooLabs\Dicone\ItemContainerInterface
+use \WoohooLabs\Dicone\AbstractContainer;
+
+class TestContainerConstructor extends AbstractContainer
 {
-    private $items = [];
-
-    public function __construct()
-    {
-        $this->items = $this->getItems();
-    }
-
-    public function hasItem(string $id): bool
-    {
-        return isset($this->items[$id]);
-    }
-
-    public function getItem(string $id)
-    {
-        return $this->items[$id]();
-    }
-
-    private function getItems()
+    protected function getItems()
     {
         return [
-            "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorA" => function () {
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA' => function () {
                 static $item = null;
 
                 if ($item === null) {
                     $item = new \WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA(
-                        $this->items["WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorB"](),
-                        $this->items["WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorC"](),
+                        $this->getItem('WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB'),
+                        $this->getItem('WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC'),
                         true,
                         null
                     );
@@ -37,7 +22,7 @@ class TestContainerConstructor implements \WoohooLabs\Dicone\ItemContainerInterf
 
                 return $item;
             },
-            "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorB" => function () {
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB' => function () {
                 static $item = null;
 
                 if ($item === null) {
@@ -47,18 +32,18 @@ class TestContainerConstructor implements \WoohooLabs\Dicone\ItemContainerInterf
 
                 return $item;
             },
-            "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorC" => function () {
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC' => function () {
                 static $item = null;
 
                 if ($item === null) {
                     $item = new \WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC(
-                        $this->items["WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorD"]()
+                        $this->getItem('WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD')
                     );
                 }
 
                 return $item;
             },
-            "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\DependencyGraph\\Constructor\\ConstructorD" => function () {
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD' => function () {
                 static $item = null;
 
                 if ($item === null) {

@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Definition;
 
-use WoohooLabs\Dicone\Definition\ClassEntrypoint;
 use WoohooLabs\Dicone\Definition\DefinitionInterface;
 use WoohooLabs\Dicone\Definition\DefinitionItem;
 use WoohooLabs\Dicone\Definition\DirectoryWildcardEntrypoint;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Container\ClassC;
 
 class TestDefinitionMixed implements DefinitionInterface
