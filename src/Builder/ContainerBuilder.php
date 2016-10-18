@@ -20,7 +20,8 @@ class ContainerBuilder
             $definitionHints = array_merge($definitionHints, $definition->getDefinitionHints());
         }
 
-        $dependencyResolver = new DependencyResolver(new CompilerConfig(true, true), $definitionHints);
+        $config = new CompilerConfig($namespace, $className, true, true);
+        $dependencyResolver = new DependencyResolver($config, $definitionHints);
 
         foreach ($definitions as $definition) {
             foreach ($definition->getEntryPoints() as $entryPoint) {
@@ -31,7 +32,7 @@ class ContainerBuilder
         }
 
         $compiler = new Compiler();
-        $container = $compiler->compileDefinitions($namespace, $className, $dependencyResolver->getDefinitionItems());
+        $container = $compiler->compileDefinitions($config, $dependencyResolver->getDefinitionItems());
         file_put_contents($filePath, $container);
     }
 }

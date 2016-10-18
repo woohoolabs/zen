@@ -5,9 +5,12 @@ use \WoohooLabs\Dicone\AbstractContainer;
 
 class TestContainerEmpty extends AbstractContainer
 {
-    protected function getItems()
+    protected function getItems(): array
     {
         return [
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerEmpty' => function () {
+                return $this;
+            },
         ];
     }
 }

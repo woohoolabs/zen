@@ -5,7 +5,7 @@ use \WoohooLabs\Dicone\AbstractContainer;
 
 class TestContainerConstructor extends AbstractContainer
 {
-    protected function getItems()
+    protected function getItems(): array
     {
         return [
             'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA' => function () {
@@ -52,6 +52,9 @@ class TestContainerConstructor extends AbstractContainer
                 }
 
                 return $item;
+            },
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerConstructor' => function () {
+                return $this;
             },
         ];
     }

@@ -19,7 +19,7 @@ abstract class AbstractContainer implements ContainerInterface
         $this->items = $this->getItems();
     }
 
-    abstract protected function getItems();
+    abstract protected function getItems(): array;
 
     public function has($id)
     {

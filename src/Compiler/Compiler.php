@@ -8,23 +8,27 @@ use WoohooLabs\Dicone\Definition\DefinitionItem;
 class Compiler
 {
     /**
-     * @param DefinitionItem[] $definitions
+     * @param DefinitionItem[] $definitionItems
      */
-    public function compileDefinitions(string $namespace, string $className, array $definitionItems): string
+    public function compileDefinitions(CompilerConfig $config, array $definitionItems): string
     {
         $container = "<?php\n";
-        if ($namespace) {
-            $container .= "namespace $namespace;\n";
+        if ($config->getContainerNamespace()) {
+            $container .= "namespace " . $config->getContainerNamespace() . ";\n";
         }
         $container .= "\nuse \\WoohooLabs\\Dicone\\AbstractContainer;\n\n";
-        $container .= "class $className extends AbstractContainer\n";
+        $container .= "class " . $config->getContainerClassName() . " extends AbstractContainer\n";
         $container .= "{\n";
-        $container .= "    protected function getItems()\n";
+        $container .= "    protected function getItems(): array\n";
         $container .= "    {\n";
         $container .= "        return [\n";
         foreach ($definitionItems as $key => $definitionItem) {
             $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
         }
+        $container .= "            '" . $config->getContainerFqcn() . "' => function () {\n";
+        $container .= "                return \$this;\n";
+        $container .= "            },\n";
+        ;
         $container .= "        ];\n";
         $container .= "    }\n";
         $container .= "}\n";
