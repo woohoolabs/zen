@@ -22,13 +22,12 @@ class Compiler
         $container .= "    protected function getItems(): array\n";
         $container .= "    {\n";
         $container .= "        return [\n";
-        foreach ($definitionItems as $key => $definitionItem) {
-            $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
-        }
         $container .= "            '" . $config->getContainerFqcn() . "' => function () {\n";
         $container .= "                return \$this;\n";
         $container .= "            },\n";
-        ;
+        foreach ($definitionItems as $key => $definitionItem) {
+            $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
+        }
         $container .= "        ];\n";
         $container .= "    }\n";
         $container .= "}\n";

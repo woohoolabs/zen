@@ -8,6 +8,9 @@ class TestContainerConstructor extends AbstractContainer
     protected function getItems(): array
     {
         return [
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerConstructor' => function () {
+                return $this;
+            },
             'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA' => function () {
                 static $item = null;
 
@@ -52,9 +55,6 @@ class TestContainerConstructor extends AbstractContainer
                 }
 
                 return $item;
-            },
-            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerConstructor' => function () {
-                return $this;
             },
         ];
     }
