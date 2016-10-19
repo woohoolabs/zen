@@ -16,7 +16,7 @@ class Compiler
         if ($config->getContainerNamespace()) {
             $container .= "namespace " . $config->getContainerNamespace() . ";\n";
         }
-        $container .= "\nuse \\WoohooLabs\\Dicone\\AbstractContainer;\n\n";
+        $container .= "\nuse WoohooLabs\\Dicone\\AbstractContainer;\n\n";
         $container .= "class " . $config->getContainerClassName() . " extends AbstractContainer\n";
         $container .= "{\n";
         $container .= "    protected function getItems(): array\n";
