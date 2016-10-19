@@ -64,7 +64,7 @@ class Compiler
             if (empty($definitionItem->getProperties()) === false) {
                 $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
                 foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
-                    $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, '$propertyName', '$propertyValue');\n";
+                    $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, \$item, '$propertyName', '$propertyValue');\n";
                 }
             }
 

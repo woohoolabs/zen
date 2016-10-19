@@ -40,9 +40,9 @@ abstract class AbstractContainer implements ContainerInterface
         return $this->items[$id]();
     }
 
-    protected function setPropertyValue(ReflectionObject $object, string $name, string $item)
+    protected function setPropertyValue(ReflectionObject $reflectionObject, $object, string $name, string $item)
     {
-        $property = $object->getProperty($name);
+        $property = $reflectionObject->getProperty($name);
         $property->setAccessible(true);
         $property->setValue($object, $this->getItem($item));
     }
