@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Examples;
 
+use Interop\Container\ContainerInterface;
 use WoohooLabs\Dicone\Definition\DefinitionHint;
 use WoohooLabs\Dicone\Definition\DefinitionInterface;
 use WoohooLabs\Dicone\Definition\DirectoryWildcardEntrypoint;
@@ -23,6 +24,7 @@ class Definition implements DefinitionInterface
     public function getDefinitionHints(): array
     {
         return [
+            ContainerInterface::class => DefinitionHint::singleton(Container::class),
             AnimalServiceInterface::class => DefinitionHint::singleton(AnimalService::class),
             PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
         ];

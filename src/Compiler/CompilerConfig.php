@@ -49,13 +49,7 @@ class CompilerConfig
 
     public function getContainerFqcn(): string
     {
-        $fqcn = "";
-
-        if ($this->containerNamespace) {
-            $fqcn = $this->containerNamespace . "\\";
-        }
-
-        return $fqcn . $this->containerClassName;
+        return ($this->containerNamespace ? $this->containerNamespace . "\\" : "") . $this->containerClassName;
     }
 
     public function useConstructorTypeHints(): bool

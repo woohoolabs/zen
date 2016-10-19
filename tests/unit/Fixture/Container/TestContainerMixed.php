@@ -8,9 +8,6 @@ class TestContainerMixed extends AbstractContainer
     protected function getItems(): array
     {
         return [
-            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerEmpty' => function () {
-                return $this;
-            },
             'WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Container\Entrypoint\EntrypointA' => function () {
                 static $item = null;
 
@@ -50,6 +47,9 @@ class TestContainerMixed extends AbstractContainer
                 );
 
                 return $item;
+            },
+            'WoohooLabs\Dicone\Tests\Unit\Fixture\Container\TestContainerEmpty' => function () {
+                return $this;
             },
         ];
     }

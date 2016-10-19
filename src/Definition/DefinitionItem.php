@@ -16,6 +16,11 @@ class DefinitionItem
     private $scope;
 
     /**
+     * @var bool
+     */
+    private $isReference;
+
+    /**
      * @var array
      */
     private $constructorParams;
@@ -25,10 +30,11 @@ class DefinitionItem
      */
     private $properties;
 
-    public function __construct(string $className, string $scope = "singleton")
+    public function __construct(string $className, string $scope = "singleton", $isReference = false)
     {
         $this->className = $className;
         $this->scope = $scope;
+        $this->isReference = $isReference;
         $this->constructorParams = [];
         $this->properties = [];
     }
@@ -46,6 +52,11 @@ class DefinitionItem
     public function isSingletonScope(): bool
     {
         return $this->scope === "singleton";
+    }
+
+    public function isReference(): bool
+    {
+        return $this->isReference;
     }
 
     public function getConstructorParams(): array

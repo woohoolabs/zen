@@ -22,12 +22,12 @@ class Compiler
         $container .= "    protected function getItems(): array\n";
         $container .= "    {\n";
         $container .= "        return [\n";
-        $container .= "            '" . $config->getContainerFqcn() . "' => function () {\n";
-        $container .= "                return \$this;\n";
-        $container .= "            },\n";
         foreach ($definitionItems as $key => $definitionItem) {
             $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
         }
+        $container .= "            '" . $config->getContainerFqcn() . "' => function () {\n";
+        $container .= "                return \$this;\n";
+        $container .= "            },\n";
         $container .= "        ];\n";
         $container .= "    }\n";
         $container .= "}\n";
@@ -39,37 +39,41 @@ class Compiler
     {
         $containerItem = "function () {\n";
 
-        $indent = "";
-        if ($definitionItem->isSingletonScope()) {
-            $containerItem .= "                static \$item = null;\n\n";
-            $containerItem .= "                if (\$item === null) {\n";
-            $indent = "    ";
-        }
-
-        $containerItem .= "$indent                \$item = new \\" . $definitionItem->getClassName() . "(\n";
-        $constructorParams = [];
-        foreach ($definitionItem->getConstructorParams() as $constructorParam) {
-            if (isset($constructorParam["class"])) {
-                $constructorParams[] = "$indent                    \$this->getItem('" . $constructorParam["class"] . "')";
-            } elseif (array_key_exists("default", $constructorParam)) {
-                $constructorParams[] = "$indent                    " . ($this->convertValueToString($constructorParam["default"]));
+        if ($definitionItem->isReference()) {
+            $containerItem .= "                return \$this->getItem('" . $definitionItem->getClassName() . "');\n";
+        } else {
+            $indent = "";
+            if ($definitionItem->isSingletonScope()) {
+                $containerItem .= "                static \$item = null;\n\n";
+                $containerItem .= "                if (\$item === null) {\n";
+                $indent = "    ";
             }
-        }
-        $containerItem .= implode(",\n", $constructorParams);
-        $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "$indent                );\n";
 
-        if (empty($definitionItem->getProperties()) === false) {
-            $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
-            foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
-                $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, '$propertyName', '$propertyValue');\n";
+            $containerItem .= "$indent                \$item = new \\" . $definitionItem->getClassName() . "(\n";
+            $constructorParams = [];
+            foreach ($definitionItem->getConstructorParams() as $constructorParam) {
+                if (isset($constructorParam["class"])) {
+                    $constructorParams[] = "$indent                    \$this->getItem('" . $constructorParam["class"] . "')";
+                } elseif (array_key_exists("default", $constructorParam)) {
+                    $constructorParams[] = "$indent                    " . ($this->convertValueToString($constructorParam["default"]));
+                }
             }
-        }
+            $containerItem .= implode(",\n", $constructorParams);
+            $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "$indent                );\n";
 
-        if ($definitionItem->isSingletonScope()) {
-            $containerItem .= "                }\n";
-        }
+            if (empty($definitionItem->getProperties()) === false) {
+                $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
+                foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
+                    $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, '$propertyName', '$propertyValue');\n";
+                }
+            }
 
-        $containerItem .= "\n                return \$item;\n";
+            if ($definitionItem->isSingletonScope()) {
+                $containerItem .= "                }\n";
+            }
+
+            $containerItem .= "\n                return \$item;\n";
+        }
         $containerItem .= "            }";
 
         return $containerItem;

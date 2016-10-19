@@ -50,6 +50,6 @@ class DefinitionHint
 
     public function toDefinitionItem(): DefinitionItem
     {
-        return new DefinitionItem($this->className, $this->scope);
+        return new DefinitionItem($this->className, $this->scope, true);
     }
 }

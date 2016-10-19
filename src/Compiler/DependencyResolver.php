@@ -54,15 +54,17 @@ class DependencyResolver
 
     public function resolve(string $className)
     {
-        if (isset($this->definitionItems[$className])) {
+        if (isset($this->definitionItems[$className]) || $className === $this->config->getContainerFqcn()) {
             return;
         }
 
         if (isset($this->definitionHints[$className])) {
             $this->definitionItems[$className] = $this->definitionHints[$className]->toDefinitionItem();
-        } else {
-            $this->definitionItems[$className] = new DefinitionItem($className);
+            $this->resolve($this->definitionItems[$className]->getClassName());
+            return;
         }
+
+        $this->definitionItems[$className] = new DefinitionItem($className);
 
         if ($this->config->useConstructorTypeHints()) {
             $this->resolveConstructorDependencies($this->definitionItems[$className]);
