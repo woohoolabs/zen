@@ -1,9 +1,9 @@
 <?php
 namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Container;
 
-use \WoohooLabs\Dicone\AbstractContainer;
+use \WoohooLabs\Dicone\AbstractArrayMapContainer;
 
-class TestContainerMixed extends AbstractContainer
+class TestContainerMixed extends AbstractArrayMapContainer
 {
     protected function getItems(): array
     {

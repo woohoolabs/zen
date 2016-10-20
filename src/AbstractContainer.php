@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone;
 
+use Closure;
 use Interop\Container\ContainerInterface;
-use ReflectionObject;
 use WoohooLabs\Dicone\Exception\DiconeNotFoundException;
 
 abstract class AbstractContainer implements ContainerInterface
@@ -12,38 +12,45 @@ abstract class AbstractContainer implements ContainerInterface
     /**
      * @var array
      */
-    private $items;
-
-    final public function __construct()
-    {
-        $this->items = $this->getItems();
-    }
-
-    abstract protected function getItems(): array;
+    protected $singletonEntries;
 
     public function has($id)
     {
-        return array_key_exists($id, $this->items);
+        return $this->hasEntry($this->getEntryHash($id));
     }
 
     public function get($id)
     {
-        if ($this->has($id) === false) {
+        $entry = $this->getEntryHash($id);
+
+        if ($this->hasEntry($entry) === false) {
             throw new DiconeNotFoundException($id);
         }
 
-        return $this->getItem($id);
+        return $this->getEntry($entry);
     }
 
-    protected function getItem(string $id)
+    protected function getEntry(string $entry)
     {
-        return $this->items[$id]();
+        return $this->singletonEntries[$entry] ?? $entry();
     }
 
-    protected function setPropertyValue(ReflectionObject $reflectionObject, $object, string $name, string $item)
+    private function hasEntry(string $entry): bool
     {
-        $property = $reflectionObject->getProperty($name);
-        $property->setAccessible(true);
-        $property->setValue($object, $this->getItem($item));
+        return method_exists($this, $entry);
+    }
+
+    private function getEntryHash(string $id): string
+    {
+        return str_replace("\\", "__", $id);
+    }
+
+    protected function setPropertyValue($object, string $name, string $entry)
+    {
+        function ($object, string $name, string $entry) {
+            Closure::bind(function () use ($name, $entry) {
+                $this->$name = $this->getEntry($entry);
+            }, $object, $object)->__invoke();
+        };
     }
 }

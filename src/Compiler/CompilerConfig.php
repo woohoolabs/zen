@@ -5,6 +5,11 @@ namespace WoohooLabs\Dicone\Compiler;
 
 class CompilerConfig
 {
+    /*
+     * @var string
+     */
+    private $hash;
+
     /**
      * @var string
      */
@@ -33,8 +38,14 @@ class CompilerConfig
     ) {
         $this->containerNamespace = $containerNamespace;
         $this->containerClassName = $containerClassName;
+        $this->hash = str_replace("\\", "__", $this->getContainerFqcn());
         $this->useConstructorTypeHints = $useConstructorTypeHints;
         $this->usePropertyAnnotations = $usePropertyAnnotations;
+    }
+
+    public function getHash(): string
+    {
+        return $this->hash;
     }
 
     public function getContainerNamespace(): string

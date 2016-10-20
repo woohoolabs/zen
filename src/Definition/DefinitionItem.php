@@ -8,6 +8,11 @@ class DefinitionItem
     /**
      * @var string
      */
+    private $hash;
+
+    /**
+     * @var string
+     */
     private $className;
 
     /**
@@ -30,13 +35,19 @@ class DefinitionItem
      */
     private $properties;
 
-    public function __construct(string $className, string $scope = "singleton", $isReference = false)
+    public function __construct(string $className, string $scope = "singleton", bool $isReference = false)
     {
+        $this->hash = str_replace("\\", "__", $className);
         $this->className = $className;
         $this->scope = $scope;
         $this->isReference = $isReference;
         $this->constructorParams = [];
         $this->properties = [];
+    }
+
+    public function getHash(): string
+    {
+        return $this->hash;
     }
 
     public function getClassName(): string

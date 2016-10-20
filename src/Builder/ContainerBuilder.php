@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Dicone\Builder;
 
-use WoohooLabs\Dicone\Compiler\Compiler;
 use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Compiler\DependencyResolver;
+use WoohooLabs\Dicone\Compiler\Compiler;
 use WoohooLabs\Dicone\Definition\DefinitionInterface;
 
 class ContainerBuilder

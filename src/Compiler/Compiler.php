@@ -19,17 +19,13 @@ class Compiler
         $container .= "\nuse WoohooLabs\\Dicone\\AbstractContainer;\n\n";
         $container .= "class " . $config->getContainerClassName() . " extends AbstractContainer\n";
         $container .= "{\n";
-        $container .= "    protected function getItems(): array\n";
-        $container .= "    {\n";
-        $container .= "        return [\n";
+
         foreach ($definitionItems as $key => $definitionItem) {
-            $container .= "            '" . $key . "' => " . $this->compileDefinitionItem($definitionItem) . ",\n";
+            $container .= $this->compileDefinitionItem($definitionItem);
         }
-        $container .= "            '" . $config->getContainerFqcn() . "' => function () {\n";
-        $container .= "                return \$this;\n";
-        $container .= "            },\n";
-        $container .= "        ];\n";
-        $container .= "    }\n";
+        $container .= $config->getHash() . "()\n";
+        $container .= "{\n";
+        $container .= "    return \$this;\n";
         $container .= "}\n";
 
         return $container;
@@ -37,44 +33,38 @@ class Compiler
 
     private function compileDefinitionItem(DefinitionItem $definitionItem)
     {
-        $containerItem = "function () {\n";
+        $containerItem = "    protected function " . $definitionItem->getHash() . "()\n    {\n";
 
         if ($definitionItem->isReference()) {
-            $containerItem .= "                return \$this->getItem('" . $definitionItem->getClassName() . "');\n";
+            $containerItem .= "        return \$this->getEntry('" . $definitionItem->getClassName() . "');\n";
         } else {
-            $indent = "";
-            if ($definitionItem->isSingletonScope()) {
-                $containerItem .= "                static \$item = null;\n\n";
-                $containerItem .= "                if (\$item === null) {\n";
-                $indent = "    ";
-            }
+            $containerItem .= "        \$entry = new \\" . $definitionItem->getClassName() . "(\n";
 
-            $containerItem .= "$indent                \$item = new \\" . $definitionItem->getClassName() . "(\n";
             $constructorParams = [];
             foreach ($definitionItem->getConstructorParams() as $constructorParam) {
                 if (isset($constructorParam["class"])) {
-                    $constructorParams[] = "$indent                    \$this->getItem('" . $constructorParam["class"] . "')";
-                } elseif (array_key_exists("default", $constructorParam)) {
-                    $constructorParams[] = "$indent                    " . ($this->convertValueToString($constructorParam["default"]));
+                    $constructorParams[] = "        \$this->getEntry('" . $constructorParam["class"] . "')";
+                } elseif (isset($constructorParam["default"])) {
+                    $constructorParams[] = "        " . ($this->convertValueToString($constructorParam["default"]));
                 }
             }
             $containerItem .= implode(",\n", $constructorParams);
-            $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "$indent                );\n";
+            $containerItem .= (empty($constructorParams) === false ? "\n" : "") . "        );\n";
 
             if (empty($definitionItem->getProperties()) === false) {
-                $containerItem .= "\n$indent                \$reflectionObject = new \\ReflectionObject(\$item);\n";
+                $containerItem .= "\n";
                 foreach ($definitionItem->getProperties() as $propertyName => $propertyValue) {
-                    $containerItem .= "$indent                \$this->setPropertyValue(\$reflectionObject, \$item, '$propertyName', '$propertyValue');\n";
+                    $containerItem .= "        \$this->setPropertyValue(\$entry, '$propertyName', '$propertyValue');\n";
                 }
             }
 
             if ($definitionItem->isSingletonScope()) {
-                $containerItem .= "                }\n";
+                $containerItem .= "\n        \$this->singletonEntries['" . $definitionItem->getHash() . "'] = \$entry;\n\n";
             }
 
-            $containerItem .= "\n                return \$item;\n";
+            $containerItem .= "        return \$entry;\n";
         }
-        $containerItem .= "            }";
+        $containerItem .= "    }\n\n";
 
         return $containerItem;
     }
