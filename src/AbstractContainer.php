@@ -12,45 +12,47 @@ abstract class AbstractContainer implements ContainerInterface
     /**
      * @var array
      */
-    protected $singletonEntries;
+    protected $singletonEntries = [];
 
-    public function has($id)
+    public function has($id): bool
     {
-        return $this->hasEntry($this->getEntryHash($id));
+        return $this->hasEntry($this->getHash($id));
     }
 
     public function get($id)
     {
-        $entry = $this->getEntryHash($id);
+        $hash = $this->getHash($id);
 
-        if ($this->hasEntry($entry) === false) {
+        if ($this->hasEntry($hash) === false) {
             throw new DiconeNotFoundException($id);
         }
 
-        return $this->getEntry($entry);
+        return $this->getEntry($hash);
     }
 
-    protected function getEntry(string $entry)
+    protected function getEntry(string $hash)
     {
-        return $this->singletonEntries[$entry] ?? $entry();
+        return $this->singletonEntries[$hash] ?? $hash();
     }
 
-    private function hasEntry(string $entry): bool
+    private function hasEntry(string $hash): bool
     {
-        return method_exists($this, $entry);
+        return method_exists($this, $hash);
     }
 
-    private function getEntryHash(string $id): string
+    private function getHash(string $id): string
     {
         return str_replace("\\", "__", $id);
     }
 
-    protected function setPropertyValue($object, string $name, string $entry)
+    protected function setPropertyValue($object, string $name, string $hash)
     {
-        function ($object, string $name, string $entry) {
-            Closure::bind(function () use ($name, $entry) {
-                $this->$name = $this->getEntry($entry);
-            }, $object, $object)->__invoke();
-        };
+        Closure::bind(
+            function () use ($object, $name, $hash) {
+                $this->$name = $this->getEntry($hash);
+            },
+            $object,
+            $object
+        )->__invoke();
     }
 }

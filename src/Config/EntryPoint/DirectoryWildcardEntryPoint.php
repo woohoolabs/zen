@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Definition;
+namespace WoohooLabs\Dicone\Config\EntryPoint;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class DirectoryWildcardEntrypoint implements EntrypointInterface
+class DirectoryWildcardEntryPoint implements EntryPointInterface
 {
     /**
      * @var string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Dicone\Tests\Unit\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Definition\ClassEntrypoint;
+use WoohooLabs\Dicone\Definition\ClassEntryPoint;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Entrypoint\EntrypointA;
 
 class ClassEntrypointTest extends TestCase
@@ -14,7 +14,7 @@ class ClassEntrypointTest extends TestCase
      */
     public function getDefinitionItems()
     {
-        $entrypoint = new ClassEntrypoint(EntrypointA::class);
+        $entrypoint = new ClassEntryPoint(EntrypointA::class);
 
         $this->assertEquals(
             [

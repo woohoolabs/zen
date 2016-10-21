@@ -1,7 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Definition;
+namespace WoohooLabs\Dicone\Config\DefinitionHint;
+
+use WoohooLabs\Dicone\Container\Definition\ClassDefinition;
+use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
+use WoohooLabs\Dicone\Container\Definition\ReferenceDefinition;
 
 class DefinitionHint
 {
@@ -48,8 +52,12 @@ class DefinitionHint
         return $this;
     }
 
-    public function toDefinitionItem(): DefinitionItem
+    public function toDefinition(string $id): DefinitionInterface
     {
-        return new DefinitionItem($this->className, $this->scope, true);
+        if ($this->className === $id) {
+            return new ClassDefinition($this->className, $this->scope);
+        }
+
+        return new ReferenceDefinition($id, $this->className, $this->scope);
     }
 }

@@ -18,6 +18,7 @@
 * [Examples](#examples)
 * [Versioning](#versioning)
 * [Change Log](#change-log)
+* [Testing](#testing)
 * [Contributing](#contributing)
 * [Credits](#credits)
 * [License](#license)
@@ -49,6 +50,17 @@ This library follows [SemVer v2.0.0](http://semver.org/).
 ## Change Log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+## Testing
+
+Woohoo Labs. Dicone has a PHPUnit test suite. To run the tests, run the following command from the project folder
+after you have copied phpunit.xml.dist to phpunit.xml:
+
+``` bash
+$ phpunit
+```
+
+Additionally, you may run `docker-compose up` in order to execute the tests.
 
 ## Contributing
 

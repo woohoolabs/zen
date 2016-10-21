@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Definition;
+namespace WoohooLabs\Dicone\Config\EntryPoint;
 
-interface EntrypointInterface
+interface EntryPointInterface
 {
     /**
      * @return string[]

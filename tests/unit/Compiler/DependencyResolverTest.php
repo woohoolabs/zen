@@ -6,7 +6,7 @@ namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Dicone\Compiler\CompilerConfig;
 use WoohooLabs\Dicone\Compiler\DependencyResolver;
-use WoohooLabs\Dicone\Definition\DefinitionItem;
+use WoohooLabs\Dicone\Definition\Definition;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
 use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;
@@ -34,15 +34,15 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ConstructorA::class => DefinitionItem::singleton(ConstructorA::class)
+                ConstructorA::class => Definition::singleton(ConstructorA::class)
                     ->addRequiredConstructorParam(ConstructorB::class)
                     ->addRequiredConstructorParam(ConstructorC::class)
                     ->addOptionalConstructorParam(true)
                     ->addOptionalConstructorParam(null),
-                ConstructorB::class => DefinitionItem::singleton(ConstructorB::class),
-                ConstructorC::class => DefinitionItem::singleton(ConstructorC::class)
+                ConstructorB::class => Definition::singleton(ConstructorB::class),
+                ConstructorC::class => Definition::singleton(ConstructorC::class)
                     ->addRequiredConstructorParam(ConstructorD::class),
-                ConstructorD::class => DefinitionItem::singleton(ConstructorD::class),
+                ConstructorD::class => Definition::singleton(ConstructorD::class),
             ],
             $dependencyResolver->getDefinitionItems()
         );
@@ -59,17 +59,17 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                AnnotationA::class => DefinitionItem::singleton(AnnotationA::class)
+                AnnotationA::class => Definition::singleton(AnnotationA::class)
                     ->addProperty("b", AnnotationB::class)
                     ->addProperty("c", AnnotationC::class),
-                AnnotationB::class => DefinitionItem::singleton(AnnotationB::class)
+                AnnotationB::class => Definition::singleton(AnnotationB::class)
                     ->addProperty("e2", AnnotationE::class)
                     ->addProperty("d", AnnotationD::class),
-                AnnotationC::class => DefinitionItem::singleton(AnnotationC::class)
+                AnnotationC::class => Definition::singleton(AnnotationC::class)
                     ->addProperty("e1", AnnotationE::class)
                     ->addProperty("e2", AnnotationE::class),
-                AnnotationE::class => DefinitionItem::singleton(AnnotationE::class),
-                AnnotationD::class => DefinitionItem::singleton(AnnotationD::class),
+                AnnotationE::class => Definition::singleton(AnnotationE::class),
+                AnnotationD::class => Definition::singleton(AnnotationD::class),
             ],
             $dependencyResolver->getDefinitionItems()
         );
@@ -86,14 +86,14 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                MixedA::class => DefinitionItem::singleton(MixedA::class)
+                MixedA::class => Definition::singleton(MixedA::class)
                     ->addRequiredConstructorParam(MixedB::class)
                     ->addRequiredConstructorParam(MixedC::class)
                     ->addProperty("d", MixedD::class),
-                MixedB::class => DefinitionItem::singleton(MixedB::class)
+                MixedB::class => Definition::singleton(MixedB::class)
                     ->addRequiredConstructorParam(MixedD::class),
-                MixedD::class => DefinitionItem::singleton(MixedD::class),
-                MixedC::class => DefinitionItem::singleton(MixedC::class)
+                MixedD::class => Definition::singleton(MixedD::class),
+                MixedC::class => Definition::singleton(MixedC::class)
                     ->addProperty("b", MixedB::class),
             ],
             $dependencyResolver->getDefinitionItems()

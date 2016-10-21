@@ -17,7 +17,7 @@ class CompilerConfigTest extends TestCase
 
         $this->assertEquals(
             true,
-            $config->useConstructorTypeHints()
+            $config->useConstructorInjection()
         );
     }
 
@@ -30,7 +30,7 @@ class CompilerConfigTest extends TestCase
 
         $this->assertEquals(
             false,
-            $config->usePropertyAnnotation()
+            $config->usePropertyInjection()
         );
     }
 }

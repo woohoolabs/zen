@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 
-use WoohooLabs\Dicone\Builder\ContainerBuilder;
+use WoohooLabs\Dicone\Container\ContainerBuilder;
 
 if (version_compare("7.0.0", PHP_VERSION, ">")) {
     fwrite(

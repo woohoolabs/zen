@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Dicone\Tests\Unit\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Definition\DefinitionItem;
+use WoohooLabs\Dicone\Definition\Definition;
 
 class DefinitionItemTest extends TestCase
 {
@@ -13,7 +13,7 @@ class DefinitionItemTest extends TestCase
      */
     public function singleton()
     {
-        $item = DefinitionItem::singleton("Class");
+        $item = Definition::singleton("Class");
 
         self::assertEquals(
             "singleton",
@@ -26,7 +26,7 @@ class DefinitionItemTest extends TestCase
      */
     public function prototype()
     {
-        $item = DefinitionItem::prototype("Class");
+        $item = Definition::prototype("Class");
 
         self::assertEquals(
             "prototype",
@@ -39,7 +39,7 @@ class DefinitionItemTest extends TestCase
      */
     public function singletonByDefault()
     {
-        $item = new DefinitionItem("Class");
+        $item = new Definition("Class");
 
         self::assertEquals(
             "singleton",
@@ -52,7 +52,7 @@ class DefinitionItemTest extends TestCase
      */
     public function getClassName()
     {
-        $item = new DefinitionItem("Class");
+        $item = new Definition("Class");
 
         self::assertEquals(
             "Class",
@@ -65,7 +65,7 @@ class DefinitionItemTest extends TestCase
      */
     public function setSingletonScope()
     {
-        $item = new DefinitionItem("Class");
+        $item = new Definition("Class");
         $item->setSingletonScope();
 
         self::assertEquals(
@@ -79,7 +79,7 @@ class DefinitionItemTest extends TestCase
      */
     public function setPrototypeScope()
     {
-        $item = new DefinitionItem("Class");
+        $item = new Definition("Class");
         $item->setPrototypeScope();
 
         self::assertEquals(
@@ -93,7 +93,7 @@ class DefinitionItemTest extends TestCase
      */
     public function isSingletonScopeTrue()
     {
-        $item = new DefinitionItem("Class");
+        $item = new Definition("Class");
 
         self::assertTrue($item->isSingletonScope());
     }
@@ -103,7 +103,7 @@ class DefinitionItemTest extends TestCase
      */
     public function isSingletonScopeFalse()
     {
-        $item = DefinitionItem::prototype("Class");
+        $item = Definition::prototype("Class");
 
         self::assertFalse($item->isSingletonScope());
     }
@@ -113,7 +113,7 @@ class DefinitionItemTest extends TestCase
      */
     public function addRequiredConstructorParams()
     {
-        $item = DefinitionItem::singleton("Class1")
+        $item = Definition::singleton("Class1")
             ->addRequiredConstructorParam("Class2")
             ->addRequiredConstructorParam("Class3");
 
@@ -131,7 +131,7 @@ class DefinitionItemTest extends TestCase
      */
     public function addOptionalConstructorParams()
     {
-        $item = DefinitionItem::singleton("Class1")
+        $item = Definition::singleton("Class1")
             ->addOptionalConstructorParam(true)
             ->addOptionalConstructorParam([])
             ->addOptionalConstructorParam(null)
@@ -153,7 +153,7 @@ class DefinitionItemTest extends TestCase
      */
     public function addProperty()
     {
-        $item = DefinitionItem::singleton("Class1")
+        $item = Definition::singleton("Class1")
             ->addProperty("property1", "Class1")
             ->addProperty("property2", "Class2")
             ->addProperty("property3", "Class3");

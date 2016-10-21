@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Compiler;
+namespace WoohooLabs\Dicone\Config;
 
 class CompilerConfig
 {
@@ -23,24 +23,24 @@ class CompilerConfig
     /**
      * @var bool
      */
-    private $useConstructorTypeHints;
+    private $useConstructorInjection;
 
     /**
      * @var bool
      */
-    private $usePropertyAnnotations;
+    private $usePropertyInjection;
 
     public function __construct(
         string $containerNamespace,
         string $containerClassName,
-        bool $useConstructorTypeHints,
-        bool $usePropertyAnnotations
+        bool $useConstructorInjection,
+        bool $usePropertyInjection
     ) {
         $this->containerNamespace = $containerNamespace;
         $this->containerClassName = $containerClassName;
         $this->hash = str_replace("\\", "__", $this->getContainerFqcn());
-        $this->useConstructorTypeHints = $useConstructorTypeHints;
-        $this->usePropertyAnnotations = $usePropertyAnnotations;
+        $this->useConstructorInjection = $useConstructorInjection;
+        $this->usePropertyInjection = $usePropertyInjection;
     }
 
     public function getHash(): string
@@ -63,13 +63,13 @@ class CompilerConfig
         return ($this->containerNamespace ? $this->containerNamespace . "\\" : "") . $this->containerClassName;
     }
 
-    public function useConstructorTypeHints(): bool
+    public function useConstructorInjection(): bool
     {
-        return $this->useConstructorTypeHints;
+        return $this->useConstructorInjection;
     }
 
-    public function usePropertyAnnotation(): bool
+    public function usePropertyInjection(): bool
     {
-        return $this->usePropertyAnnotations;
+        return $this->usePropertyInjection;
     }
 }

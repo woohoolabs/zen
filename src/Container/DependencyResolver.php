@@ -1,16 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Compiler;
+namespace WoohooLabs\Dicone\Container;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use WoohooLabs\Dicone\Annotation\Inject;
-use WoohooLabs\Dicone\Definition\DefinitionHint;
-use WoohooLabs\Dicone\Definition\DefinitionItem;
+use WoohooLabs\Dicone\Config\CompilerConfig;
+use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Dicone\Container\Definition\ClassDefinition;
+use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
+use WoohooLabs\Dicone\Exception\ContainerConfigException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
 
 class DependencyResolver
@@ -18,7 +21,7 @@ class DependencyResolver
     /**
      * @var CompilerConfig
      */
-    private $config;
+    private $compilerConfig;
 
     /**
      * @var DefinitionHint[]
@@ -26,9 +29,9 @@ class DependencyResolver
     private $definitionHints;
 
     /**
-     * @var DefinitionItem[]
+     * @var DefinitionInterface[]
      */
-    private $definitionItems;
+    private $definitions;
 
     /**
      * @var SimpleAnnotationReader
@@ -45,49 +48,57 @@ class DependencyResolver
      */
     public function __construct(CompilerConfig $config, array $definitionHints)
     {
-        $this->config = $config;
+        $this->compilerConfig = $config;
         $this->definitionHints = $definitionHints;
-        $this->definitionItems = [];
+        $this->definitions = [];
         $this->setAnnotationReader();
         $this->typeHintReader = new PhpDocReader();
     }
 
-    public function resolve(string $className)
+    public function resolve(string $id)
     {
-        if (isset($this->definitionItems[$className]) || $className === $this->config->getContainerFqcn()) {
+        if (isset($this->definitions[$id]) || $id === $this->compilerConfig->getContainerFqcn()) {
             return;
         }
 
-        if (isset($this->definitionHints[$className])) {
-            $this->definitionItems[$className] = $this->definitionHints[$className]->toDefinitionItem();
-            $this->resolve($this->definitionItems[$className]->getClassName());
+        if (isset($this->definitionHints[$id])) {
+            $this->definitions[$id] = $this->definitionHints[$id]->toDefinition($id);
+
+            if ($this->definitions[$id] instanceof ClassDefinition) {
+                $this->resolve($this->definitions[$id]->getId());
+            }
+
             return;
         }
 
-        $this->definitionItems[$className] = new DefinitionItem($className);
+        $this->definitions[$id] = new ClassDefinition($id);
 
-        if ($this->config->useConstructorTypeHints()) {
-            $this->resolveConstructorDependencies($this->definitionItems[$className]);
+        if ($this->compilerConfig->useConstructorInjection()) {
+            $this->resolveConstructorArguments($this->definitions[$id]);
         }
 
-        if ($this->config->usePropertyAnnotation()) {
-            $this->resolvePropertyAnnotationDependencies($this->definitionItems[$className]);
+        if ($this->compilerConfig->usePropertyInjection()) {
+            $this->resolveAnnotatedProperties($this->definitions[$id]);
         }
 
         return;
     }
 
     /**
-     * @return DefinitionItem[]
+     * @return DefinitionInterface[]
      */
-    public function getDefinitionItems(): array
+    public function getDefinitions(): array
     {
-        return $this->definitionItems;
+        return $this->definitions;
     }
 
-    private function resolveConstructorDependencies(DefinitionItem $item)
+    private function resolveConstructorArguments(ClassDefinition $definition)
     {
-        $reflectionClass = new ReflectionClass($item->getClassName());
+        try {
+            $reflectionClass = new ReflectionClass($definition->getClassName());
+        } catch (\ReflectionException $e) {
+            throw new ContainerConfigException("Class '" . $definition->getClassName() . "' does not exists!");
+        }
 
         if ($reflectionClass->getConstructor() === null) {
             return;
@@ -95,23 +106,23 @@ class DependencyResolver
 
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
             if ($param->isOptional()) {
-                $item->addOptionalConstructorParam($param->getDefaultValue());
+                $definition->addOptionalConstructorParam($param->getDefaultValue());
                 continue;
             }
 
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
-                throw new ConstructorParamTypeHintException($item->getClassName(), $param->getName());
+                throw new ConstructorParamTypeHintException($definition->getClassName(), $param->getName());
             }
 
-            $item->addRequiredConstructorParam($paramClass);
+            $definition->addRequiredConstructorParam($paramClass);
             $this->resolve($paramClass);
         }
     }
 
-    private function resolvePropertyAnnotationDependencies(DefinitionItem $item)
+    private function resolveAnnotatedProperties(ClassDefinition $definition)
     {
-        $class = new ReflectionClass($item->getClassName());
+        $class = new ReflectionClass($definition->getClassName());
 
         foreach ($class->getProperties() as $property) {
             /** @var Inject $annotation */
@@ -122,10 +133,10 @@ class DependencyResolver
 
             $propertyClass = $this->typeHintReader->getPropertyClass($property);
             if ($propertyClass === null) {
-                throw new PropertyTypeHintException($item->getClassName(), $property->getName());
+                throw new PropertyTypeHintException($definition->getClassName(), $property->getName());
             }
 
-            $item->addProperty($property->getName(), $propertyClass);
+            $definition->addProperty($property->getName(), $propertyClass);
             $this->resolve($propertyClass);
         }
     }

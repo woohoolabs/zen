@@ -5,9 +5,9 @@ namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Dicone\Compiler\ArrayMapCompiler;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionConstructor;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionEmpty;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestDefinitionMixed;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigConstructor;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigEmpty;
+use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigMixed;
 
 class CompilerTest extends TestCase
 {
@@ -41,7 +41,7 @@ class CompilerTest extends TestCase
                 "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerEmpty",
                 [
-                    new TestDefinitionEmpty()
+                    new TestContainerConfigEmpty()
                 ]
             )
         );
@@ -60,7 +60,7 @@ class CompilerTest extends TestCase
                 "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerConstructor",
                 [
-                    new TestDefinitionConstructor()
+                    new TestContainerConfigConstructor()
                 ]
             )
         );
@@ -79,7 +79,7 @@ class CompilerTest extends TestCase
                 "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerMixed",
                 [
-                    new TestDefinitionMixed()
+                    new TestContainerConfigMixed()
                 ]
             )
         );

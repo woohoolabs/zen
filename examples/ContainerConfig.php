@@ -4,28 +4,28 @@ declare(strict_types=1);
 namespace WoohooLabs\Dicone\Examples;
 
 use Interop\Container\ContainerInterface;
-use WoohooLabs\Dicone\Definition\DefinitionHint;
-use WoohooLabs\Dicone\Definition\DefinitionInterface;
-use WoohooLabs\Dicone\Definition\DirectoryWildcardEntrypoint;
+use WoohooLabs\Dicone\Config\AbstractContainerConfig;
+use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Dicone\Config\EntryPoint\DirectoryWildcardEntryPoint;
 use WoohooLabs\Dicone\Examples\Service\AnimalService;
 use WoohooLabs\Dicone\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Dicone\Examples\Service\PlantService;
 use WoohooLabs\Dicone\Examples\Service\PlantServiceInterface;
 
-class Definition implements DefinitionInterface
+class ContainerConfig extends AbstractContainerConfig
 {
     public function getEntryPoints(): array
     {
         return [
-            new DirectoryWildcardEntrypoint(__DIR__ . "/Controller"),
+            new DirectoryWildcardEntryPoint(__DIR__ . "/Controller"),
         ];
     }
 
     public function getDefinitionHints(): array
     {
         return [
-            ContainerInterface::class => DefinitionHint::singleton(Container::class),
-            AnimalServiceInterface::class => DefinitionHint::singleton(AnimalService::class),
+            ContainerInterface::class => Container::class,
+            AnimalServiceInterface::class => AnimalService::class,
             PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
         ];
     }
