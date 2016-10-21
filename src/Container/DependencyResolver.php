@@ -12,6 +12,7 @@ use WoohooLabs\Dicone\Config\CompilerConfig;
 use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
 use WoohooLabs\Dicone\Container\Definition\ClassDefinition;
 use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
+use WoohooLabs\Dicone\Container\Definition\SelfDefinition;
 use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
 use WoohooLabs\Dicone\Exception\ContainerConfigException;
 use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
@@ -57,7 +58,11 @@ class DependencyResolver
 
     public function resolve(string $id)
     {
-        if (isset($this->definitions[$id]) || $id === $this->compilerConfig->getContainerFqcn()) {
+        if (empty($this->definitions)) {
+            $this->definitions[$this->compilerConfig->getContainerHash()] = new SelfDefinition($this->compilerConfig->getContainerFqcn());
+        }
+
+        if (isset($this->definitions[$id])) {
             return;
         }
 

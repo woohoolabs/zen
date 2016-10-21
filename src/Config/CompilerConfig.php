@@ -43,7 +43,7 @@ class CompilerConfig
         $this->usePropertyInjection = $usePropertyInjection;
     }
 
-    public function getHash(): string
+    public function getContainerHash(): string
     {
         return $this->hash;
     }
