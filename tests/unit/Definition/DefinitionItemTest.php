@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Definition;
+namespace WoohooLabs\Zen\Tests\Unit\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Definition\Definition;
+use WoohooLabs\Zen\Definition\Definition;
 
 class DefinitionItemTest extends TestCase
 {

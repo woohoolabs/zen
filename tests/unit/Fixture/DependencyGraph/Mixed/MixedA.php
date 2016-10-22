@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed;
+namespace WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed;
 
 class MixedA
 {

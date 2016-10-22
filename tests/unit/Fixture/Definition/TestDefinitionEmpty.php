@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Definition;
+namespace WoohooLabs\Zen\Tests\Unit\Fixture\Definition;
 
-use WoohooLabs\Dicone\Definition\ContainerConfigInterface;
+use WoohooLabs\Zen\Definition\ContainerConfigInterface;
 
 class TestContainerConfigEmpty implements ContainerConfigInterface
 {

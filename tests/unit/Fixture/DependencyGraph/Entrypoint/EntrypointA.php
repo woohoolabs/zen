@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Entrypoint;
+namespace WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Entrypoint;
 
 class EntrypointA
 {

@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Container;
+namespace WoohooLabs\Zen\Container;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionException;
-use WoohooLabs\Dicone\Annotation\Inject;
-use WoohooLabs\Dicone\Config\CompilerConfig;
-use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
-use WoohooLabs\Dicone\Container\Definition\ClassDefinition;
-use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
-use WoohooLabs\Dicone\Container\Definition\SelfDefinition;
-use WoohooLabs\Dicone\Exception\ConstructorParamTypeHintException;
-use WoohooLabs\Dicone\Exception\ContainerConfigException;
-use WoohooLabs\Dicone\Exception\PropertyTypeHintException;
+use WoohooLabs\Zen\Annotation\Inject;
+use WoohooLabs\Zen\Config\CompilerConfig;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Container\Definition\SelfDefinition;
+use WoohooLabs\Zen\Exception\ConstructorParamTypeHintException;
+use WoohooLabs\Zen\Exception\ContainerConfigException;
+use WoohooLabs\Zen\Exception\PropertyTypeHintException;
 
 class DependencyResolver
 {
@@ -146,6 +146,6 @@ class DependencyResolver
     {
         AnnotationRegistry::registerFile(realpath(__DIR__ . '/../Annotation/Inject.php'));
         $this->annotationReader = new SimpleAnnotationReader();
-        $this->annotationReader->addNamespace('WoohooLabs\Dicone\Annotation');
+        $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
     }
 }

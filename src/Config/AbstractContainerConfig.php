@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Config;
+namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
-use WoohooLabs\Dicone\Config\EntryPoint\ClassEntryPoint;
-use WoohooLabs\Dicone\Config\EntryPoint\EntryPointInterface;
-use WoohooLabs\Dicone\Exception\ContainerConfigException;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
+use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
+use WoohooLabs\Zen\Exception\ContainerConfigException;
 
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {

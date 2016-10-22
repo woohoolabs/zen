@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\Controller\Authentication;
+namespace WoohooLabs\Zen\Examples\Controller\Authentication;
 
-use WoohooLabs\Dicone\Examples\Service\AuthenticationService;
+use WoohooLabs\Zen\Examples\Service\AuthenticationService;
 
 class AuthenticationController
 {

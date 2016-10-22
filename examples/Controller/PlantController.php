@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\Controller;
+namespace WoohooLabs\Zen\Examples\Controller;
 
-use WoohooLabs\Dicone\Examples\Service\PlantServiceInterface;
-use WoohooLabs\Dicone\Examples\Utils\PlantUtil;
-use WoohooLabs\Dicone\Examples\View\PlantView;
+use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
+use WoohooLabs\Zen\Examples\Utils\PlantUtil;
+use WoohooLabs\Zen\Examples\View\PlantView;
 
 class PlantController
 {

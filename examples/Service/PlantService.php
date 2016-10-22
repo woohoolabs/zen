@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\Service;
+namespace WoohooLabs\Zen\Examples\Service;
 
-use WoohooLabs\Dicone\Examples\Utils\PlantUtil;
+use WoohooLabs\Zen\Examples\Utils\PlantUtil;
 
 class PlantService implements PlantServiceInterface
 {

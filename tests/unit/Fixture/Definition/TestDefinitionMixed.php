@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Fixture\Definition;
+namespace WoohooLabs\Zen\Tests\Unit\Fixture\Definition;
 
-use WoohooLabs\Dicone\Definition\ContainerConfigInterface;
-use WoohooLabs\Dicone\Definition\Definition;
-use WoohooLabs\Dicone\Definition\DirectoryWildcardEntryPoint;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Container\ClassC;
+use WoohooLabs\Zen\Definition\ContainerConfigInterface;
+use WoohooLabs\Zen\Definition\Definition;
+use WoohooLabs\Zen\Definition\DirectoryWildcardEntryPoint;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Container\ClassC;
 
 class TestContainerConfigMixed implements ContainerConfigInterface
 {

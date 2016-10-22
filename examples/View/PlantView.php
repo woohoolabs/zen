@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\View;
+namespace WoohooLabs\Zen\Examples\View;
 
 class PlantView
 {

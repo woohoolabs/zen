@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\Controller;
+namespace WoohooLabs\Zen\Examples\Controller;
 
-use WoohooLabs\Dicone\Examples\Service\AuthenticationService;
-use WoohooLabs\Dicone\Examples\Service\UserService;
-use WoohooLabs\Dicone\Examples\View\UserView;
+use WoohooLabs\Zen\Examples\Service\AuthenticationService;
+use WoohooLabs\Zen\Examples\Service\UserService;
+use WoohooLabs\Zen\Examples\View\UserView;
 
 class UserController extends AuthenticationService
 {

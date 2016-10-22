@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Container;
+namespace WoohooLabs\Zen\Container;
 
-use WoohooLabs\Dicone\Config\CompilerConfig;
-use WoohooLabs\Dicone\Config\ContainerConfigInterface;
+use WoohooLabs\Zen\Config\CompilerConfig;
+use WoohooLabs\Zen\Config\ContainerConfigInterface;
 
 class ContainerBuilder
 {

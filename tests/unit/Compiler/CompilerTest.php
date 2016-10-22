@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
+namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Compiler\ArrayMapCompiler;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigConstructor;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigEmpty;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\Definition\TestContainerConfigMixed;
+use WoohooLabs\Zen\Compiler\ArrayMapCompiler;
+use WoohooLabs\Zen\Tests\Unit\Fixture\Definition\TestContainerConfigConstructor;
+use WoohooLabs\Zen\Tests\Unit\Fixture\Definition\TestContainerConfigEmpty;
+use WoohooLabs\Zen\Tests\Unit\Fixture\Definition\TestContainerConfigMixed;
 
 class CompilerTest extends TestCase
 {
@@ -21,7 +21,7 @@ class CompilerTest extends TestCase
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerEmpty.php"),
             $compiler->compileDefinitions(
-                "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
+                "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerEmpty",
                 []
             )
@@ -38,7 +38,7 @@ class CompilerTest extends TestCase
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerEmpty.php"),
             $compiler->compileDefinitions(
-                "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
+                "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerEmpty",
                 [
                     new TestContainerConfigEmpty()
@@ -57,7 +57,7 @@ class CompilerTest extends TestCase
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerConstructor.php"),
             $compiler->compileDefinitions(
-                "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
+                "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerConstructor",
                 [
                     new TestContainerConfigConstructor()
@@ -76,7 +76,7 @@ class CompilerTest extends TestCase
         $this->assertEquals(
             $this->getCompiledContainerSourceCode("TestContainerMixed.php"),
             $compiler->compileDefinitions(
-                "WoohooLabs\\Dicone\\Tests\\Unit\\Fixture\\Container",
+                "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
                 "TestContainerMixed",
                 [
                     new TestContainerConfigMixed()

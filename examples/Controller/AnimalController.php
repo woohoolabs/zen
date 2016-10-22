@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples\Controller;
+namespace WoohooLabs\Zen\Examples\Controller;
 
-use WoohooLabs\Dicone\Examples\Service\AnimalServiceInterface;
-use WoohooLabs\Dicone\Examples\Utils\AnimalUtil;
+use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
+use WoohooLabs\Zen\Examples\Utils\AnimalUtil;
 
 class AnimalController
 {

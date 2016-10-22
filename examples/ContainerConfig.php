@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Examples;
+namespace WoohooLabs\Zen\Examples;
 
 use Interop\Container\ContainerInterface;
-use WoohooLabs\Dicone\Config\AbstractContainerConfig;
-use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
-use WoohooLabs\Dicone\Config\EntryPoint\DirectoryWildcardEntryPoint;
-use WoohooLabs\Dicone\Examples\Service\AnimalService;
-use WoohooLabs\Dicone\Examples\Service\AnimalServiceInterface;
-use WoohooLabs\Dicone\Examples\Service\PlantService;
-use WoohooLabs\Dicone\Examples\Service\PlantServiceInterface;
+use WoohooLabs\Zen\Config\AbstractContainerConfig;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\EntryPoint\DirectoryWildcardEntryPoint;
+use WoohooLabs\Zen\Examples\Service\AnimalService;
+use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
+use WoohooLabs\Zen\Examples\Service\PlantService;
+use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
 
 class ContainerConfig extends AbstractContainerConfig
 {

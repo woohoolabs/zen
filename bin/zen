@@ -2,12 +2,12 @@
 <?php
 declare(strict_types=1);
 
-use WoohooLabs\Dicone\Container\ContainerBuilder;
+use WoohooLabs\Zen\Container\ContainerBuilder;
 
 if (version_compare("7.0.0", PHP_VERSION, ">")) {
     fwrite(
         STDERR,
-        "Woohoo Labs. Dicone requires PHP 7.0 or later." . PHP_EOL
+        "Woohoo Labs. Zen requires PHP 7.0 or later." . PHP_EOL
     );
 
     die(1);
@@ -21,19 +21,19 @@ $autoloadPaths = [
 
 foreach ($autoloadPaths as $file) {
     if (file_exists($file)) {
-        define("DICONE_COMPOSER_INSTALL", $file);
+        define("ZEN_COMPOSER_INSTALL", $file);
         break;
     }
 }
 
 unset($file);
 
-if (defined("DICONE_COMPOSER_INSTALL") === false) {
+if (defined("ZEN_COMPOSER_INSTALL") === false) {
     fwrite(STDERR, "You need Composer to set up the project dependencies!" . PHP_EOL);
     die(1);
 }
 
-require DICONE_COMPOSER_INSTALL;
+require ZEN_COMPOSER_INSTALL;
 
 $containerFilePath = $argv[1];
 $containerNamespace = $argv[2];

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Config\DefinitionHint;
+namespace WoohooLabs\Zen\Config\DefinitionHint;
 
-use WoohooLabs\Dicone\Container\Definition\ClassDefinition;
-use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
-use WoohooLabs\Dicone\Container\Definition\ReferenceDefinition;
+use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 
 class DefinitionHint
 {

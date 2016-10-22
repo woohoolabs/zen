@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
+namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Compiler\CompilerConfig;
+use WoohooLabs\Zen\Compiler\CompilerConfig;
 
 class CompilerConfigTest extends TestCase
 {

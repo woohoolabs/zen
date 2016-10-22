@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Compiler;
+namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Compiler\CompilerConfig;
-use WoohooLabs\Dicone\Compiler\DependencyResolver;
-use WoohooLabs\Dicone\Definition\Definition;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationD;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationE;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedA;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedB;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedC;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedD;
+use WoohooLabs\Zen\Compiler\CompilerConfig;
+use WoohooLabs\Zen\Compiler\DependencyResolver;
+use WoohooLabs\Zen\Definition\Definition;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationD;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationE;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedA;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedB;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedC;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedD;
 
 class DependencyResolverTest extends TestCase
 {

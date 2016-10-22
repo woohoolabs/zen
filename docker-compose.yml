@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  dicone-php:
-    container_name: dicone-php
+  zen-php:
+    container_name: zen-php
     image: php:7.0-cli
     volumes:
       - .:/var/www

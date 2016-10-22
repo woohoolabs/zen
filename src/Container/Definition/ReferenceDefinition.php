@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Container\Definition;
+namespace WoohooLabs\Zen\Container\Definition;
 
 class ReferenceDefinition extends AbstractDefinition
 {

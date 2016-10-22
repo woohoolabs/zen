@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone;
+namespace WoohooLabs\Zen;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use WoohooLabs\Dicone\Exception\DiconeNotFoundException;
+use WoohooLabs\Zen\Exception\ZenNotFoundException;
 
 abstract class AbstractContainer implements ContainerInterface
 {
@@ -24,7 +24,7 @@ abstract class AbstractContainer implements ContainerInterface
         $hash = $this->getHash($id);
 
         if ($this->hasEntry($hash) === false) {
-            throw new DiconeNotFoundException($id);
+            throw new ZenNotFoundException($id);
         }
 
         return $this->getEntry($hash);

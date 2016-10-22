@@ -1,6 +1,6 @@
 {
-    "name": "woohoolabs/dicone",
-    "description": "Woohoo Labs. DI Container",
+    "name": "woohoolabs/zen",
+    "description": "Woohoo Labs. Zen DI Container",
     "type": "library",
     "keywords": ["Woohoo Labs.", "DI", "DIC"],
     "license": "MIT",
@@ -11,8 +11,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/woohoolabs/dicone/issues",
-        "source": "https://github.com/woohoolabs/dicone"
+        "issues": "https://github.com/woohoolabs/zen/issues",
+        "source": "https://github.com/woohoolabs/zen"
     },
     "require": {
         "php":"^7.0.0",
@@ -32,17 +32,17 @@
     },
     "autoload": {
         "psr-4": {
-            "WoohooLabs\\Dicone\\": "src/"
+            "WoohooLabs\\Zen\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "WoohooLabs\\Dicone\\Tests\\Unit\\": "tests/unit",
-            "WoohooLabs\\Dicone\\Examples\\": "examples/"
+            "WoohooLabs\\Zen\\Tests\\Unit\\": "tests/unit",
+            "WoohooLabs\\Zen\\Examples\\": "examples/"
         }
     },
     "bin": [
-        "bin/dicone"
+        "bin/zen"
     ],
     "scripts": {
         "test": "phpunit"

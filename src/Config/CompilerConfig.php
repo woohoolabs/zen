@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Config;
+namespace WoohooLabs\Zen\Config;
 
 class CompilerConfig
 {

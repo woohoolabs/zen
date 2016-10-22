@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Tests\Unit\Definition;
+namespace WoohooLabs\Zen\Tests\Unit\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Dicone\Definition\ClassEntryPoint;
-use WoohooLabs\Dicone\Tests\Unit\Fixture\DependencyGraph\Entrypoint\EntrypointA;
+use WoohooLabs\Zen\Definition\ClassEntryPoint;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Entrypoint\EntrypointA;
 
 class ClassEntrypointTest extends TestCase
 {

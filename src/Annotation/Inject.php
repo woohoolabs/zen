@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Annotation;
+namespace WoohooLabs\Zen\Annotation;
 
 /**
  * @Annotation

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Container;
+namespace WoohooLabs\Zen\Container;
 
-use WoohooLabs\Dicone\Config\CompilerConfig;
-use WoohooLabs\Dicone\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Config\CompilerConfig;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 class Compiler
 {
@@ -17,7 +17,7 @@ class Compiler
         if ($compilerConfig->getContainerNamespace()) {
             $container .= "namespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
-        $container .= "\nuse WoohooLabs\\Dicone\\AbstractContainer;\n\n";
+        $container .= "\nuse WoohooLabs\\Zen\\AbstractContainer;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractContainer\n";
         $container .= "{";
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Dicone\Config\EntryPoint;
+namespace WoohooLabs\Zen\Config\EntryPoint;
 
 class ClassEntryPoint implements EntryPointInterface
 {
