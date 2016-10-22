@@ -75,9 +75,14 @@ class ClassDefinition extends AbstractDefinition
         }
 
         if (empty($this->properties) === false) {
+            $code .= "        \$this->setProperties(\n";
+            $code .= "            \$entry,\n";
+            $code .= "            [\n";
             foreach ($this->properties as $propertyName => $propertyHash) {
-                $code .= "        \$this->setPropertyValue(\$entry, '$propertyName', '$propertyHash');\n";
+                $code .= "                '$propertyName', '$propertyHash',\n";
             }
+            $code .= "            ]\n";
+            $code .= "        );\n";
         }
 
         if ($this->scope === "singleton") {

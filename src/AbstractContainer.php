@@ -45,13 +45,15 @@ abstract class AbstractContainer implements ContainerInterface
         return str_replace("\\", "__", $id);
     }
 
-    protected function setPropertyValue($object, string $name, string $hash)
+    protected function setProperties($object, array $properties)
     {
-        $value = $this->getEntry($hash);
+        $self = $this;
 
         Closure::bind(
-            function () use ($name, $value) {
-                $this->$name = $value;
+            function () use ($self, $properties) {
+                foreach ($properties as $name => $hash) {
+                    $this->$name = $self->getEntry($hash);
+                }
             },
             $object,
             $object
