@@ -50,7 +50,7 @@ abstract class AbstractContainer implements ContainerInterface
         $value = $this->getEntry($hash);
 
         Closure::bind(
-            function () use ($object, $name, $value) {
+            function () use ($name, $value) {
                 $this->$name = $value;
             },
             $object,
