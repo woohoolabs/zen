@@ -140,17 +140,17 @@ class DependencyResolver
         $class = new ReflectionClass($definition->getClassName());
 
         foreach ($class->getProperties() as $property) {
+            /** @var Inject $annotation */
+            $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
+            if ($annotation === null) {
+                continue;
+            }
+
             if ($property->isStatic()) {
                 throw new ContainerException(
                     "Property '" . $class->getName() . "::$" . $property->getName() .
                     "' is static and can't be injected on!"
                 );
-            }
-
-            /** @var Inject $annotation */
-            $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
-            if ($annotation === null) {
-                continue;
             }
 
             $propertyClass = $this->typeHintReader->getPropertyClass($property);
