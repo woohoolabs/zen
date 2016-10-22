@@ -13,9 +13,12 @@ class DirectoryWildcardEntryPoint implements EntryPointInterface
      */
     private $directoryName;
 
-    public function __construct(string $directoryName)
+    private $onlyConcreteClasses;
+
+    public function __construct(string $directoryName, bool $onlyConcreteClasses = true)
     {
         $this->directoryName = rtrim($directoryName, "\\/");
+        $this->onlyConcreteClasses = $onlyConcreteClasses;
     }
 
     /**
@@ -60,8 +63,7 @@ class DirectoryWildcardEntryPoint implements EntryPointInterface
         $dlm = false;
 
         for ($i = 2; $i < $count; $i++) {
-            if ((isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpnamespace" || $tokens[$i - 2][1] === "namespace")) ||
-                ($dlm && $tokens[$i - 1][0] == T_NS_SEPARATOR && $tokens[$i][0] == T_STRING)) {
+            if ($this->isNamespace($tokens, $i, $dlm)) {
                 if ($dlm === false) {
                     $namespace = 0;
                 }
@@ -74,17 +76,42 @@ class DirectoryWildcardEntryPoint implements EntryPointInterface
                 $dlm = false;
             }
 
-            if (($tokens[$i - 2][0] === T_CLASS || $tokens[$i - 2][0] === T_INTERFACE || $tokens[$i - 2][0] === T_TRAIT)
-                || (isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === "phpclass" || $tokens[$i - 2][1] === "phpinterface" || $tokens[$i - 2][1] === "phptrait"))
-                && $tokens[$i - 1][0] === T_WHITESPACE && $tokens[$i][0] === T_STRING) {
-                $class_name = $tokens[$i][1];
+            if ($this->isRequiredClass($tokens, $i)) {
+                $className = $tokens[$i][1];
                 if (isset($classes[$namespace]) === false) {
                     $classes[$namespace] = [];
                 }
-                $classes[$namespace][] = $class_name;
+                $classes[$namespace][] = $className;
             }
         }
 
         return $classes;
+    }
+
+    private function isNamespace(array $tokens, int $position, bool $dlm)
+    {
+        return (isset($tokens[$position - 2][1]) && $tokens[$position - 2][1] === "namespace") ||
+            ($dlm && $tokens[$position - 1][0] == T_NS_SEPARATOR && $tokens[$position][0] == T_STRING);
+    }
+
+    private function isRequiredClass(array $tokens, int $position): bool
+    {
+        if ($this->onlyConcreteClasses) {
+            return $this->isClass($tokens, $position, [T_CLASS], true);
+        }
+
+        return $this->isClass($tokens, $position, [T_CLASS, T_INTERFACE], false);
+    }
+
+    private function isClass(array $tokens, int $position, array $allowedClassTokens, bool $onlyConcreteClasses): bool
+    {
+        $type = $tokens[$position - 4][0] ?? null;
+        $class = $tokens[$position - 2][0];
+        $whitespace = $tokens[$position - 1][0];
+        $name = $tokens[$position][0];
+
+        $result = in_array($class, $allowedClassTokens) && $whitespace === T_WHITESPACE && $name === T_STRING;
+
+        return $result && ($onlyConcreteClasses === false || $type !== T_ABSTRACT);
     }
 }

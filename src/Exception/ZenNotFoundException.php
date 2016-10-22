@@ -8,8 +8,8 @@ use Interop\Container\Exception\NotFoundException;
 
 class ZenNotFoundException extends Exception implements NotFoundException
 {
-    public function __construct(string $entry)
+    public function __construct(string $id)
     {
-        parent::__construct("Entry with name '$entry' was not found by Zen in the compiled container!");
+        parent::__construct("Entry with ID '$id' was not found by Zen in the compiled container!");
     }
 }

@@ -7,7 +7,7 @@ use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
 use WoohooLabs\Zen\Examples\Utils\PlantUtil;
 use WoohooLabs\Zen\Examples\View\PlantView;
 
-class PlantController
+class PlantController extends AbstractController
 {
     /**
      * @Inject

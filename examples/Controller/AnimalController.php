@@ -6,7 +6,7 @@ namespace WoohooLabs\Zen\Examples\Controller;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Zen\Examples\Utils\AnimalUtil;
 
-class AnimalController
+class AnimalController extends AbstractController
 {
     /**
      * @Inject
