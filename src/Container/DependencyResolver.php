@@ -7,6 +7,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
+use ReflectionException;
 use WoohooLabs\Dicone\Annotation\Inject;
 use WoohooLabs\Dicone\Config\CompilerConfig;
 use WoohooLabs\Dicone\Config\DefinitionHint\DefinitionHint;
@@ -47,31 +48,26 @@ class DependencyResolver
     /**
      * @param DefinitionHint[] $definitionHints
      */
-    public function __construct(CompilerConfig $config, array $definitionHints)
+    public function __construct(CompilerConfig $compilerConfig, array $definitionHints)
     {
-        $this->compilerConfig = $config;
+        $this->compilerConfig = $compilerConfig;
         $this->definitionHints = $definitionHints;
-        $this->definitions = [];
+        $this->definitions = [
+            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn())
+        ];
         $this->setAnnotationReader();
         $this->typeHintReader = new PhpDocReader();
     }
 
     public function resolve(string $id)
     {
-        if (empty($this->definitions)) {
-            $this->definitions[$this->compilerConfig->getContainerHash()] = new SelfDefinition($this->compilerConfig->getContainerFqcn());
-        }
-
         if (isset($this->definitions[$id])) {
             return;
         }
 
         if (isset($this->definitionHints[$id])) {
             $this->definitions[$id] = $this->definitionHints[$id]->toDefinition($id);
-
-            if ($this->definitions[$id] instanceof ClassDefinition) {
-                $this->resolve($this->definitions[$id]->getId());
-            }
+            $this->resolve($this->definitions[$id]->getId());
 
             return;
         }
@@ -101,7 +97,7 @@ class DependencyResolver
     {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             throw new ContainerConfigException("Class '" . $definition->getClassName() . "' does not exists!");
         }
 

@@ -32,7 +32,7 @@ abstract class AbstractContainer implements ContainerInterface
 
     protected function getEntry(string $hash)
     {
-        return $this->singletonEntries[$hash] ?? $hash();
+        return $this->singletonEntries[$hash] ?? $this->$hash();
     }
 
     private function hasEntry(string $hash): bool
