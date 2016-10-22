@@ -22,6 +22,15 @@ class ReferenceDefinition extends AbstractDefinition
         $this->scope = $scope;
     }
 
+    public function needsDependencyResolution(): bool
+    {
+        return false;
+    }
+
+    public function resolveDependencies()
+    {
+    }
+
     public function toPhpCode(): string
     {
         $code = "        \$entry = \$this->getEntry('" . $this->getHash() . "');\n";

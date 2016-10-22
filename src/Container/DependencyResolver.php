@@ -10,7 +10,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\CompilerConfig;
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
@@ -24,7 +24,7 @@ class DependencyResolver
     private $compilerConfig;
 
     /**
-     * @var DefinitionHint[]
+     * @var DefinitionHintInterface[]
      */
     private $definitionHints;
 
@@ -44,7 +44,7 @@ class DependencyResolver
     private $typeHintReader;
 
     /**
-     * @param DefinitionHint[] $definitionHints
+     * @param DefinitionHintInterface[] $definitionHints
      */
     public function __construct(CompilerConfig $compilerConfig, array $definitionHints)
     {
@@ -60,17 +60,32 @@ class DependencyResolver
     public function resolve(string $id)
     {
         if (isset($this->definitions[$id])) {
+            if ($this->definitions[$id]->needsDependencyResolution()) {
+                $this->resolveDependencies($id);
+            }
             return;
         }
 
         if (isset($this->definitionHints[$id])) {
-            $this->definitions[$id] = $this->definitionHints[$id]->toDefinition($id);
-            $this->resolve($this->definitions[$id]->getId());
+            $definitions = $this->definitionHints[$id]->toDefinitions($id);
+            foreach ($definitions as $definitionId => $definition) {
+                /** @var DefinitionInterface $definition */
+                if (isset($this->definitions[$definitionId]) === false) {
+                    $this->definitions[$definitionId] = $definition;
+                }
+                $this->resolve($definitionId);
+            }
 
             return;
         }
 
         $this->definitions[$id] = new ClassDefinition($id);
+        $this->resolveDependencies($id);
+    }
+
+    private function resolveDependencies(string $id)
+    {
+        $this->definitions[$id]->resolveDependencies();
 
         if ($this->compilerConfig->useConstructorInjection()) {
             $this->resolveConstructorArguments($this->definitions[$id]);
@@ -79,8 +94,6 @@ class DependencyResolver
         if ($this->compilerConfig->usePropertyInjection()) {
             $this->resolveAnnotatedProperties($this->definitions[$id]);
         }
-
-        return;
     }
 
     /**
@@ -105,7 +118,7 @@ class DependencyResolver
 
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
             if ($param->isOptional()) {
-                $definition->addOptionalConstructorParam($param->getDefaultValue());
+                $definition->addOptionalConstructorArgument($param->getDefaultValue());
                 continue;
             }
 
@@ -117,7 +130,7 @@ class DependencyResolver
                 );
             }
 
-            $definition->addRequiredConstructorParam($paramClass);
+            $definition->addRequiredConstructorArgument($paramClass);
             $this->resolve($paramClass);
         }
     }

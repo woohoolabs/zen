@@ -9,5 +9,9 @@ interface DefinitionInterface
 
     public function getHash(): string;
 
+    public function needsDependencyResolution(): bool;
+
+    public function resolveDependencies();
+
     public function toPhpCode(): string;
 }

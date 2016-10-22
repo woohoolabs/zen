@@ -5,7 +5,7 @@ namespace WoohooLabs\Zen\Examples;
 
 use Interop\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\DefinitionHint\ClassDefinitionHint;
 use WoohooLabs\Zen\Config\EntryPoint\DirectoryWildcardEntryPoint;
 use WoohooLabs\Zen\Examples\Service\AnimalService;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
@@ -26,7 +26,7 @@ class ContainerConfig extends AbstractContainerConfig
         return [
             ContainerInterface::class => Container::class,
             AnimalServiceInterface::class => AnimalService::class,
-            PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
+            PlantServiceInterface::class => ClassDefinitionHint::prototype(PlantService::class),
         ];
     }
 }

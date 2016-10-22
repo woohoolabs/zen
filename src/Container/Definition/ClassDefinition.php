@@ -13,24 +13,27 @@ class ClassDefinition extends AbstractDefinition
     /**
      * @var array
      */
-    private $constructorParams;
+    private $constructorArguments;
 
     /**
      * @var array
      */
     private $properties;
 
+    private $needsDependencyResolution;
+
     public function __construct(string $className, string $scope = "singleton")
     {
         parent::__construct($className, str_replace("\\", "__", $className));
         $this->scope = $scope;
-        $this->constructorParams = [];
+        $this->constructorArguments = [];
         $this->properties = [];
+        $this->needsDependencyResolution = true;
     }
 
-    public function addRequiredConstructorParam(string $className)
+    public function addRequiredConstructorArgument(string $className)
     {
-        $this->constructorParams[] = ["class" => $className, "hash" => str_replace("\\", "__", $className)];
+        $this->constructorArguments[] = ["class" => $className, "hash" => str_replace("\\", "__", $className)];
 
         return $this;
     }
@@ -40,9 +43,9 @@ class ClassDefinition extends AbstractDefinition
         return $this->getId();
     }
 
-    public function addOptionalConstructorParam($defaultValue)
+    public function addOptionalConstructorArgument($defaultValue)
     {
-        $this->constructorParams[] = ["default" => $defaultValue];
+        $this->constructorArguments[] = ["default" => $defaultValue];
 
         return $this;
     }
@@ -54,23 +57,33 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
+    public function needsDependencyResolution(): bool
+    {
+        return $this->needsDependencyResolution;
+    }
+
+    public function resolveDependencies()
+    {
+        $this->needsDependencyResolution = false;
+    }
+
     public function toPhpCode(): string
     {
         $code = "        \$entry = new \\" . $this->getClassName() . "(";
 
-        $constructorParams = [];
-        foreach ($this->constructorParams as $constructorParam) {
-            if (isset($constructorParam["class"])) {
-                $constructorParams[] = "            \$this->getEntry('" . $constructorParam["hash"] . "')";
-            } elseif (isset($constructorParam["default"])) {
-                $constructorParams[] = "            " . ($this->convertValueToString($constructorParam["default"]));
+        $constructorArguments = [];
+        foreach ($this->constructorArguments as $constructorArgument) {
+            if (isset($constructorArgument["class"])) {
+                $constructorArguments[] = "            \$this->getEntry('" . $constructorArgument["hash"] . "')";
+            } elseif (isset($constructorArgument["default"])) {
+                $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
         }
-        if (empty($constructorParams)) {
+        if (empty($constructorArguments)) {
             $code .= ");\n";
         } else {
             $code .= "\n";
-            $code .= implode(",\n", $constructorParams);
+            $code .= implode(",\n", $constructorArguments);
             $code .= "\n        );\n";
         }
 

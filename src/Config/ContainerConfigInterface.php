@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 
 interface ContainerConfigInterface
@@ -14,7 +14,7 @@ interface ContainerConfigInterface
     public function createEntryPoints(): array;
 
     /**
-     * @return DefinitionHint[]
+     * @return DefinitionHintInterface[]
      */
     public function createDefinitionHints(): array;
 }

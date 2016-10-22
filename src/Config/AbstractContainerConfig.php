@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
+use WoohooLabs\Zen\Config\DefinitionHint\ClassDefinitionHint;
+use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Exception\ContainerException;
@@ -42,18 +43,18 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     }
 
     /**
-     * @return DefinitionHint[]
+     * @return DefinitionHintInterface[]
      */
     public function createDefinitionHints(): array
     {
         return array_map(
-            function ($definitionHint): DefinitionHint {
-                if ($definitionHint instanceof DefinitionHint) {
+            function ($definitionHint): DefinitionHintInterface {
+                if ($definitionHint instanceof DefinitionHintInterface) {
                     return $definitionHint;
                 }
 
                 if (is_string($definitionHint)) {
-                    return new DefinitionHint($definitionHint);
+                    return new ClassDefinitionHint($definitionHint);
                 }
 
                 throw new ContainerException("A definition hint must be either a string or a DefinitionHint object");
