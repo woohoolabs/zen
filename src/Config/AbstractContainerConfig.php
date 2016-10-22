@@ -6,7 +6,7 @@ namespace WoohooLabs\Zen\Config;
 use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
-use WoohooLabs\Zen\Exception\ContainerConfigException;
+use WoohooLabs\Zen\Exception\ContainerException;
 
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {
@@ -35,7 +35,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return new ClassEntryPoint($entryPoint);
                 }
 
-                throw new ContainerConfigException("An entry point must be either a string or an EntryPoint object!");
+                throw new ContainerException("An entry point must be either a string or an EntryPoint object!");
             },
             $this->getEntryPoints()
         );
@@ -56,9 +56,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return new DefinitionHint($definitionHint);
                 }
 
-                throw new ContainerConfigException(
-                    "A definition hint must be either a string or a DefinitionHint object"
-                );
+                throw new ContainerException("A definition hint must be either a string or a DefinitionHint object");
             },
             $this->getDefinitionHints()
         );

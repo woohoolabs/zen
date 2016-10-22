@@ -14,9 +14,7 @@ use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
-use WoohooLabs\Zen\Exception\ConstructorParamTypeHintException;
-use WoohooLabs\Zen\Exception\ContainerConfigException;
-use WoohooLabs\Zen\Exception\PropertyTypeHintException;
+use WoohooLabs\Zen\Exception\ContainerException;
 
 class DependencyResolver
 {
@@ -98,7 +96,7 @@ class DependencyResolver
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
         } catch (ReflectionException $e) {
-            throw new ContainerConfigException("Class '" . $definition->getClassName() . "' does not exists!");
+            throw new ContainerException("Class '" . $definition->getClassName() . "' does not exists!");
         }
 
         if ($reflectionClass->getConstructor() === null) {
@@ -113,7 +111,10 @@ class DependencyResolver
 
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
-                throw new ConstructorParamTypeHintException($definition->getClassName(), $param->getName());
+                throw new ContainerException(
+                    "Type hint or '@param' PHPDoc comment for constructor parameter '" . $param->getName() . "' in '" .
+                    "class '" . $definition->getClassName() . "' is missing or it is not a class!"
+                );
             }
 
             $definition->addRequiredConstructorParam($paramClass);
@@ -126,6 +127,13 @@ class DependencyResolver
         $class = new ReflectionClass($definition->getClassName());
 
         foreach ($class->getProperties() as $property) {
+            if ($property->isStatic()) {
+                throw new ContainerException(
+                    "Property '" . $class->getName() . "::$" . $property->getName() .
+                    "' is static and can't be injected on!"
+                );
+            }
+
             /** @var Inject $annotation */
             $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
             if ($annotation === null) {
@@ -134,7 +142,10 @@ class DependencyResolver
 
             $propertyClass = $this->typeHintReader->getPropertyClass($property);
             if ($propertyClass === null) {
-                throw new PropertyTypeHintException($definition->getClassName(), $property->getName());
+                throw new ContainerException(
+                    "'@var' PHPDoc comment for property '" . $definition->getClassName() . "::$" . $property->getName() .
+                    "' is missing or it is not a class!"
+                );
             }
 
             $definition->addProperty($property->getName(), $propertyClass);

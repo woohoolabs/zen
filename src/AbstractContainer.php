@@ -5,7 +5,7 @@ namespace WoohooLabs\Zen;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use WoohooLabs\Zen\Exception\ZenNotFoundException;
+use WoohooLabs\Zen\Exception\NotFoundException;
 
 abstract class AbstractContainer implements ContainerInterface
 {
@@ -24,7 +24,7 @@ abstract class AbstractContainer implements ContainerInterface
         $hash = $this->getHash($id);
 
         if ($this->hasEntry($hash) === false) {
-            throw new ZenNotFoundException($id);
+            throw new NotFoundException($id);
         }
 
         return $this->getEntry($hash);
