@@ -30,7 +30,7 @@ abstract class AbstractContainer implements ContainerInterface
         return $this->getEntry($hash);
     }
 
-    protected function getEntry(string $hash)
+    public function getEntry(string $hash)
     {
         return $this->singletonEntries[$hash] ?? $this->$hash();
     }
