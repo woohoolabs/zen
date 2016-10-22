@@ -47,9 +47,11 @@ abstract class AbstractContainer implements ContainerInterface
 
     protected function setPropertyValue($object, string $name, string $hash)
     {
+        $value = $this->getEntry($hash);
+
         Closure::bind(
-            function () use ($object, $name, $hash) {
-                $this->$name = $this->getEntry($hash);
+            function () use ($object, $name, $value) {
+                $this->$name = $value;
             },
             $object,
             $object

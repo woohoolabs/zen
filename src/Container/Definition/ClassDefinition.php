@@ -47,9 +47,9 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
-    public function addProperty(string $name, string $type)
+    public function addProperty(string $name, string $className)
     {
-        $this->properties[$name] = $type;
+        $this->properties[$name] = str_replace("\\", "__", $className);
 
         return $this;
     }
@@ -75,8 +75,8 @@ class ClassDefinition extends AbstractDefinition
         }
 
         if (empty($this->properties) === false) {
-            foreach ($this->properties as $propertyName => $propertyValue) {
-                $code .= "        \$this->setPropertyValue(\$entry, '$propertyName', '$propertyValue');\n";
+            foreach ($this->properties as $propertyName => $propertyHash) {
+                $code .= "        \$this->setPropertyValue(\$entry, '$propertyName', '$propertyHash');\n";
             }
         }
 
