@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 
-use WoohooLabs\Zen\Container\ContainerBuilder;
+use WoohooLabs\Zen\Container\Builder\FileSystemContainerBuilder;
 
 if (version_compare("7.0.0", PHP_VERSION, ">")) {
     fwrite(
@@ -36,13 +36,7 @@ if (defined("ZEN_COMPOSER_INSTALL") === false) {
 require ZEN_COMPOSER_INSTALL;
 
 $containerFilePath = $argv[1];
-$containerNamespace = $argv[2];
-$containerClassName = $argv[3];
+$compilerConfig = new $argv[2]();
 
-$definitions = [];
-for ($i = 4; $i < $argc; $i++) {
-    $definitions[] = new $argv[$i];
-}
-
-$builder = new ContainerBuilder();
-$builder->build($containerFilePath, $containerNamespace, $containerClassName, $definitions);
+$builder = new FileSystemContainerBuilder();
+$builder->build($containerFilePath, $compilerConfig);

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use WoohooLabs\Zen\Config\CompilerConfig;
+use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 class Compiler
@@ -11,7 +11,7 @@ class Compiler
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function compileDefinitions(CompilerConfig $compilerConfig, array $definitions): string
+    public function compileDefinitions(AbstractCompilerConfig $compilerConfig, array $definitions): string
     {
         $container = "<?php\n";
         if ($compilerConfig->getContainerNamespace()) {

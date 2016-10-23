@@ -9,7 +9,7 @@ use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
-use WoohooLabs\Zen\Config\CompilerConfig;
+use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
@@ -19,7 +19,7 @@ use WoohooLabs\Zen\Exception\ContainerException;
 class DependencyResolver
 {
     /**
-     * @var CompilerConfig
+     * @var AbstractCompilerConfig
      */
     private $compilerConfig;
 
@@ -46,7 +46,7 @@ class DependencyResolver
     /**
      * @param DefinitionHintInterface[] $definitionHints
      */
-    public function __construct(CompilerConfig $compilerConfig, array $definitionHints)
+    public function __construct(AbstractCompilerConfig $compilerConfig, array $definitionHints)
     {
         $this->compilerConfig = $compilerConfig;
         $this->definitionHints = $definitionHints;

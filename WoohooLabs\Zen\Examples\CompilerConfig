@@ -1,0 +1,210 @@
+<?php
+namespace WoohooLabs\Zen\Examples;
+
+use WoohooLabs\Zen\AbstractContainer;
+
+class Container extends AbstractContainer
+{
+    protected function WoohooLabs__Zen__Examples__Container()
+    {
+        return $this;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Controller__AnimalController()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Controller\AnimalController();
+        $this->setProperties(
+            $entry,
+            [
+                'repository' => 'WoohooLabs__Zen__Examples__Domain__AnimalRepositoryInterface',
+                'service' => 'WoohooLabs__Zen__Examples__Service__AnimalServiceInterface',
+                'authenticationService' => 'WoohooLabs__Zen__Examples__Service__AuthenticationService',
+            ]
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Controller__AnimalController'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Infrastructure__MysqlAnimalRepository()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Infrastructure\MysqlAnimalRepository(
+            $this->getEntry('WoohooLabs__Zen__Examples__Utils__AnimalUtil')
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Infrastructure__MysqlAnimalRepository'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Utils__AnimalUtil()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Utils\AnimalUtil();
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Utils__AnimalUtil'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Domain__AnimalRepositoryInterface()
+    {
+        $entry = $this->getEntry('WoohooLabs__Zen__Examples__Infrastructure__MysqlAnimalRepository');
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Domain__AnimalRepositoryInterface'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__AnimalService()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Service\AnimalService(
+            $this->getEntry('WoohooLabs__Zen__Examples__Utils__AnimalUtil')
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Service__AnimalService'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__AnimalServiceInterface()
+    {
+        $entry = $this->getEntry('WoohooLabs__Zen__Examples__Service__AnimalService');
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Service__AnimalServiceInterface'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__AuthenticationService()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Service\AuthenticationService(
+            $this->getEntry('WoohooLabs__Zen__Examples__Utils__UserUtil')
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Service__AuthenticationService'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Utils__UserUtil()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Utils\UserUtil();
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Utils__UserUtil'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Controller__Authentication__AuthenticationController()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Controller\Authentication\AuthenticationController();
+        $this->setProperties(
+            $entry,
+            [
+                'service' => 'WoohooLabs__Zen__Examples__Service__AuthenticationService',
+            ]
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Controller__Authentication__AuthenticationController'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Controller__PlantController()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Controller\PlantController();
+        $this->setProperties(
+            $entry,
+            [
+                'util' => 'WoohooLabs__Zen__Examples__Utils__PlantUtil',
+                'service' => 'WoohooLabs__Zen__Examples__Service__PlantServiceInterface',
+                'view' => 'WoohooLabs__Zen__Examples__View__PlantView',
+                'authenticationService' => 'WoohooLabs__Zen__Examples__Service__AuthenticationService',
+            ]
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Controller__PlantController'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Utils__PlantUtil()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Utils\PlantUtil(
+            $this->getEntry('Interop__Container__ContainerInterface')
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Utils__PlantUtil'] = $entry;
+
+        return $entry;
+    }
+
+    protected function Interop__Container__ContainerInterface()
+    {
+        $entry = $this->getEntry('WoohooLabs__Zen__Examples__Container');
+
+        $this->singletonEntries['Interop__Container__ContainerInterface'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__PlantService()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Service\PlantService(
+            $this->getEntry('WoohooLabs__Zen__Examples__Utils__PlantUtil')
+        );
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__PlantServiceInterface()
+    {
+        $entry = $this->getEntry('WoohooLabs__Zen__Examples__Service__PlantService');
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__View__PlantView()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\View\PlantView();
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__View__PlantView'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Controller__UserController()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Controller\UserController();
+        $this->setProperties(
+            $entry,
+            [
+                'service' => 'WoohooLabs__Zen__Examples__Service__UserService',
+                'view' => 'WoohooLabs__Zen__Examples__View__UserView',
+                'authenticationService' => 'WoohooLabs__Zen__Examples__Service__AuthenticationService',
+            ]
+        );
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Controller__UserController'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__Service__UserService()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\Service\UserService();
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__Service__UserService'] = $entry;
+
+        return $entry;
+    }
+
+    protected function WoohooLabs__Zen__Examples__View__UserView()
+    {
+        $entry = new \WoohooLabs\Zen\Examples\View\UserView();
+
+        $this->singletonEntries['WoohooLabs__Zen__Examples__View__UserView'] = $entry;
+
+        return $entry;
+    }
+}
