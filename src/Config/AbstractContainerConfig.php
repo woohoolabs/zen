@@ -3,23 +3,29 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Zen\Config\DefinitionHint\ClassDefinitionHint;
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
+use WoohooLabs\Zen\Config\Hint\DefinitionHint;
+use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
+use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 use WoohooLabs\Zen\Exception\ContainerException;
 
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {
     /**
-     * @return array
+     * @return EntryPointInterface[]
      */
     abstract protected function getEntryPoints();
 
     /**
-     * @return array
+     * @return DefinitionHintInterface[]|string[]
      */
     abstract protected function getDefinitionHints();
+
+    /**
+     * @return WildcardHintInterface[]
+     */
+    abstract protected function getWildcardHints();
 
     /**
      * @return EntryPointInterface[]
@@ -47,19 +53,25 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
      */
     public function createDefinitionHints(): array
     {
-        return array_map(
+        $definitionHints = array_map(
             function ($definitionHint): DefinitionHintInterface {
                 if ($definitionHint instanceof DefinitionHintInterface) {
                     return $definitionHint;
                 }
 
                 if (is_string($definitionHint)) {
-                    return new ClassDefinitionHint($definitionHint);
+                    return new DefinitionHint($definitionHint);
                 }
 
                 throw new ContainerException("A definition hint must be either a string or a DefinitionHint object");
             },
             $this->getDefinitionHints()
         );
+
+        foreach ($this->getWildcardHints() as $wildcardHint) {
+            $definitionHints = array_merge($definitionHints, $wildcardHint->getDefinitionHints());
+        }
+
+        return $definitionHints;
     }
 }

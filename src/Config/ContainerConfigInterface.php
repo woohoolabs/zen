@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
+use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 
 interface ContainerConfigInterface

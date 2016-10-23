@@ -10,7 +10,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\CompilerConfig;
-use WoohooLabs\Zen\Config\DefinitionHint\DefinitionHintInterface;
+use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
@@ -109,7 +109,7 @@ class DependencyResolver
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
         } catch (ReflectionException $e) {
-            throw new ContainerException("Class '" . $definition->getClassName() . "' does not exists!");
+            throw new ContainerException("Class '" . $definition->getClassName() . "' does not exist!");
         }
 
         if ($reflectionClass->getConstructor() === null) {

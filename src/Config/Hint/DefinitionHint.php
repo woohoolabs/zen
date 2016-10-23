@@ -1,23 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Config\DefinitionHint;
+namespace WoohooLabs\Zen\Config\Hint;
 
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 
-class DefinitionHint
+class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 {
     /**
      * @var string
      */
     private $className;
-
-    /**
-     * @var string
-     */
-    private $scope;
 
     public static function singleton(string $className)
     {
@@ -34,30 +29,24 @@ class DefinitionHint
 
     public function __construct(string $className)
     {
+        parent::__construct();
         $this->className = $className;
         $this->setSingletonScope();
     }
 
-    public function setSingletonScope()
+    /**
+     * @return DefinitionInterface[]
+     */
+    public function toDefinitions(string $id): array
     {
-        $this->scope = "singleton";
+        $result = [
+            $this->className => new ClassDefinition($this->className, $this->getScope())
+        ];
 
-        return $this;
-    }
-
-    public function setPrototypeScope()
-    {
-        $this->scope = "prototype";
-
-        return $this;
-    }
-
-    public function toDefinition(string $id): DefinitionInterface
-    {
-        if ($this->className === $id) {
-            return new ClassDefinition($this->className, $this->scope);
+        if ($this->className !== $id) {
+            $result[$id] = new ReferenceDefinition($id, $this->className, $this->getScope());
         }
 
-        return new ReferenceDefinition($id, $this->className, $this->scope);
+        return $result;
     }
 }

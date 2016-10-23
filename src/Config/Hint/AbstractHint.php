@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Config\DefinitionHint;
+namespace WoohooLabs\Zen\Config\Hint;
 
-abstract class AbstractDefinitionHint implements DefinitionHintInterface
+abstract class AbstractHint
 {
     /**
      * @var string

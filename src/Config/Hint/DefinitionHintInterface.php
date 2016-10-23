@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Config\DefinitionHint;
+namespace WoohooLabs\Zen\Config\Hint;
 
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 

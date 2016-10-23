@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
+use WoohooLabs\Zen\Config\AbstractContainerConfig;
 use WoohooLabs\Zen\Config\CompilerConfig;
-use WoohooLabs\Zen\Config\ContainerConfigInterface;
 
 class ContainerBuilder
 {
     /**
-     * @param ContainerConfigInterface[] $containerConfigs
+     * @param AbstractContainerConfig[] $containerConfigs
      */
     public function build(string $filePath, string $namespace, string $className, array $containerConfigs)
     {
