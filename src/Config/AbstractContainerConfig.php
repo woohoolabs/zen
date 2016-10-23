@@ -15,17 +15,17 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     /**
      * @return EntryPointInterface[]
      */
-    abstract protected function getEntryPoints();
+    abstract protected function getEntryPoints(): array;
 
     /**
      * @return DefinitionHintInterface[]|string[]
      */
-    abstract protected function getDefinitionHints();
+    abstract protected function getDefinitionHints(): array;
 
     /**
      * @return WildcardHintInterface[]
      */
-    abstract protected function getWildcardHints();
+    abstract protected function getWildcardHints(): array;
 
     /**
      * @return EntryPointInterface[]
