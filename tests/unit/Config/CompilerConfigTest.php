@@ -4,16 +4,16 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Compiler\CompilerConfig;
+use WoohooLabs\Zen\Tests\Unit\Double\StubCompilerConfig;
 
 class CompilerConfigTest extends TestCase
 {
     /**
      * @test
      */
-    public function useConstructorTypeHints()
+    public function useConstructorInjection()
     {
-        $config = new CompilerConfig(true, true);
+        $config = new StubCompilerConfig([], "", "", true, true);
 
         $this->assertEquals(
             true,
@@ -24,9 +24,9 @@ class CompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function usePropertyAnnotations()
+    public function usePropertyInjection()
     {
-        $config = new CompilerConfig(true, false);
+        $config = new StubCompilerConfig([], "", "", false, false);
 
         $this->assertEquals(
             false,

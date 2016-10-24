@@ -22,6 +22,16 @@ class ClassDefinition extends AbstractDefinition
 
     private $needsDependencyResolution;
 
+    public static function singleton(string $className): ClassDefinition
+    {
+        return new self($className);
+    }
+
+    public static function prototype(string $className): ClassDefinition
+    {
+        return new self($className, "prototype");
+    }
+
     public function __construct(string $className, string $scope = "singleton")
     {
         parent::__construct($className, str_replace("\\", "__", $className));
@@ -31,26 +41,26 @@ class ClassDefinition extends AbstractDefinition
         $this->needsDependencyResolution = true;
     }
 
-    public function addRequiredConstructorArgument(string $className)
+    public function getClassName(): string
+    {
+        return $this->getId();
+    }
+
+    public function addRequiredConstructorArgument(string $className): ClassDefinition
     {
         $this->constructorArguments[] = ["class" => $className, "hash" => str_replace("\\", "__", $className)];
 
         return $this;
     }
 
-    public function getClassName(): string
-    {
-        return $this->getId();
-    }
-
-    public function addOptionalConstructorArgument($defaultValue)
+    public function addOptionalConstructorArgument($defaultValue): ClassDefinition
     {
         $this->constructorArguments[] = ["default" => $defaultValue];
 
         return $this;
     }
 
-    public function addProperty(string $name, string $className)
+    public function addProperty(string $name, string $className): ClassDefinition
     {
         $this->properties[$name] = str_replace("\\", "__", $className);
 
@@ -65,6 +75,8 @@ class ClassDefinition extends AbstractDefinition
     public function resolveDependencies()
     {
         $this->needsDependencyResolution = false;
+
+        return $this;
     }
 
     public function toPhpCode(): string
@@ -131,6 +143,6 @@ class ClassDefinition extends AbstractDefinition
             return $array;
         }
 
-        return $value;
+        return  '"' . $value . '"';
     }
 }

@@ -28,6 +28,6 @@ abstract class AbstractContainerBuilder
 
         $compiler = new Compiler();
 
-        return $compiler->compileDefinitions($compilerConfig, $dependencyResolver->getDefinitions());
+        return $compiler->compile($compilerConfig, $dependencyResolver->getDefinitions());
     }
 }

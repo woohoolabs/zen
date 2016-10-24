@@ -11,7 +11,7 @@ class Compiler
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function compileDefinitions(AbstractCompilerConfig $compilerConfig, array $definitions): string
+    public function compile(AbstractCompilerConfig $compilerConfig, array $definitions): string
     {
         $container = "<?php\n";
         if ($compilerConfig->getContainerNamespace()) {
@@ -25,6 +25,10 @@ class Compiler
             $container .= "\n    protected function " . $this->getHash($id) . "()\n    {\n";
             $container .= $definition->toPhpCode();
             $container .= "    }\n";
+        }
+
+        if (empty($definitions)) {
+            $container .= "\n";
         }
 
         $container .= "}\n";

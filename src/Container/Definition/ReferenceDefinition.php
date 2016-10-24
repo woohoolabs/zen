@@ -15,10 +15,20 @@ class ReferenceDefinition extends AbstractDefinition
      */
     private $scope;
 
-    public function __construct(string $referencedId, string $className, string $scope = "singleton")
+    public static function singleton(string $referrerId, string $referencedClassName): ReferenceDefinition
     {
-        parent::__construct($className, str_replace("\\", "__", $className));
-        $this->referencedHash = str_replace("\\", "__", $referencedId);
+        return new self($referrerId, $referencedClassName);
+    }
+
+    public static function prototype(string $referrerId, string $referencedClassName): ReferenceDefinition
+    {
+        return new self($referrerId, $referencedClassName, "prototype");
+    }
+
+    public function __construct(string $referrerId, string $referencedClassName, string $scope = "singleton")
+    {
+        parent::__construct($referencedClassName, str_replace("\\", "__", $referencedClassName));
+        $this->referencedHash = str_replace("\\", "__", $referrerId);
         $this->scope = $scope;
     }
 
@@ -29,6 +39,7 @@ class ReferenceDefinition extends AbstractDefinition
 
     public function resolveDependencies()
     {
+        return $this;
     }
 
     public function toPhpCode(): string

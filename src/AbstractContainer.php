@@ -40,7 +40,7 @@ abstract class AbstractContainer implements ContainerInterface
         return method_exists($this, $hash);
     }
 
-    private function getHash(string $id): string
+    protected function getHash(string $id): string
     {
         return str_replace("\\", "__", $id);
     }
