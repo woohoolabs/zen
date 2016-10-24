@@ -35,8 +35,14 @@ if (defined("ZEN_COMPOSER_INSTALL") === false) {
 
 require ZEN_COMPOSER_INSTALL;
 
-$containerFilePath = $argv[1];
-$compilerConfig = new $argv[2]();
+if (isset($argv[1]) === false) {
+    die(1);
+}
 
-$builder = new FileSystemContainerBuilder();
-$builder->build($containerFilePath, $compilerConfig);
+if ($argv[1] === "build") {
+    $containerFilePath = $argv[2];
+    $compilerConfig = new $argv[3]();
+
+    $builder = new FileSystemContainerBuilder();
+    $builder->build($containerFilePath, $compilerConfig);
+}
