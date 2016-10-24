@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\EntryPoint;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
 
 class WildcardEntryPoint implements EntryPointInterface
