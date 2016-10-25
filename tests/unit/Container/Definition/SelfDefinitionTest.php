@@ -15,9 +15,11 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $phpCode = <<<HERE
-        return \$this;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
+        $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $definition->toPhpCode());
+    }
+
+    private function getDefinitionSourceCode(string $fileName)
+    {
+        return str_replace("<?php\n", "", file_get_contents(realpath(__DIR__ . "/../../Fixture/Definition/" . $fileName)));
     }
 }

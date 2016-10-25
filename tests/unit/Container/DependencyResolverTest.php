@@ -6,6 +6,8 @@ namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
+use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
@@ -36,6 +38,7 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
+                "" => new SelfDefinition(""),
                 ConstructorA::class => ClassDefinition::singleton(ConstructorA::class)
                     ->addRequiredConstructorArgument(ConstructorB::class)
                     ->addRequiredConstructorArgument(ConstructorC::class)
@@ -65,6 +68,7 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
+                "" => new SelfDefinition(""),
                 AnnotationA::class => ClassDefinition::singleton(AnnotationA::class)
                     ->addProperty("b", AnnotationB::class)
                     ->addProperty("c", AnnotationC::class)
@@ -97,6 +101,7 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
+                "" => new SelfDefinition(""),
                 MixedA::class => ClassDefinition::singleton(MixedA::class)
                     ->addRequiredConstructorArgument(MixedB::class)
                     ->addRequiredConstructorArgument(MixedC::class)
@@ -130,7 +135,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ConstructorD::class => ClassDefinition::prototype(ConstructorE::class)
+                "" => new SelfDefinition(""),
+                ConstructorD::class => ClassDefinition::prototype(ConstructorD::class)
                     ->resolveDependencies(),
             ],
             $dependencyResolver->getDefinitions()
@@ -152,13 +158,13 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
+                "" => new SelfDefinition(""),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addRequiredConstructorArgument(ConstructorD::class)
                     ->resolveDependencies(),
-                ConstructorD::class => ClassDefinition::singleton(ConstructorE::class)
-                    ->resolveDependencies(),
                 ConstructorE::class => ClassDefinition::singleton(ConstructorE::class)
                     ->resolveDependencies(),
+                ConstructorD::class => ReferenceDefinition::singleton(ConstructorD::class, ConstructorE::class),
             ],
             $dependencyResolver->getDefinitions()
         );

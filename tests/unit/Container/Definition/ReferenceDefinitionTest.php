@@ -15,14 +15,10 @@ class ReferenceDefinitionTest extends TestCase
     {
         $definition = ReferenceDefinition::singleton("A", "B");
 
-        $phpCode = <<<HERE
-        \$entry = \$this->getEntry('B');
-
-        $this->singletonEntries['A'] = \$entry;
-
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ReferenceDefinitionSingleton.php"),
+            $definition->toPhpCode()
+        );
     }
 
     /**
@@ -32,13 +28,14 @@ HERE;
     {
         $definition = ReferenceDefinition::prototype("A", "B");
 
-        $phpCode = <<<HERE
-        \$entry = \$this->getEntry('B');
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ReferenceDefinitionPrototype.php"),
+            $definition->toPhpCode()
+        );
+    }
 
-        $this->singletonEntries['A'] = \$entry;
-
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
+    private function getDefinitionSourceCode(string $fileName)
+    {
+        return str_replace("<?php\n", "", file_get_contents(realpath(__DIR__ . "/../../Fixture/Definition/" . $fileName)));
     }
 }

@@ -62,14 +62,10 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("A");
 
-        $phpCode = <<<HERE
-        \$entry = new \A();
-        
-        \$this->singletonEntries['A'] = \$entry;
-        
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionSingleton.php"),
+            $definition->toPhpCode()
+        );
     }
 
     /**
@@ -81,15 +77,10 @@ HERE;
             ->addRequiredConstructorArgument("B")
             ->addRequiredConstructorArgument("C");
 
-        $phpCode = <<<HERE
-        \$entry = new \A(
-            \$this->getEntry('B'),
-            \$this->getEntry('C')
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
+            $definition->toPhpCode()
         );
-        
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
     }
 
     /**
@@ -100,22 +91,16 @@ HERE;
         $definition = ClassDefinition::prototype("A")
             ->addOptionalConstructorArgument("")
             ->addOptionalConstructorArgument(true)
+            ->addOptionalConstructorArgument(0)
             ->addOptionalConstructorArgument(1)
+            ->addOptionalConstructorArgument(1345.999)
             ->addOptionalConstructorArgument(null)
             ->addOptionalConstructorArgument(["a" => false]);
 
-        $phpCode = <<<HERE
-        \$entry = new \A(
-            "",
-            true,
-            1,
-            null,
-            ["a" => false,]
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"),
+            $definition->toPhpCode()
         );
-        
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
     }
 
     /**
@@ -127,18 +112,14 @@ HERE;
             ->addProperty("b", "B")
             ->addProperty("c", "C");
 
-        $phpCode = <<<HERE
-        \$entry = new \A();
-        \$this->setProperties(
-            \$entry,
-            [
-                'b' => 'B',
-                'c' => 'C',
-            ]
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),
+            $definition->toPhpCode()
         );
-        
-        return \$entry;
-HERE;
-        $this->assertEquals($phpCode, $definition->toPhpCode());
+    }
+
+    private function getDefinitionSourceCode(string $fileName)
+    {
+        return str_replace("<?php\n", "", file_get_contents(realpath(__DIR__ . "/../../Fixture/Definition/" . $fileName)));
     }
 }

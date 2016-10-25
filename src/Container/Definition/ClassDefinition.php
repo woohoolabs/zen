@@ -87,7 +87,7 @@ class ClassDefinition extends AbstractDefinition
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
                 $constructorArguments[] = "            \$this->getEntry('" . $constructorArgument["hash"] . "')";
-            } elseif (isset($constructorArgument["default"])) {
+            } elseif (array_key_exists("default", $constructorArgument)) {
                 $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
         }
@@ -110,8 +110,10 @@ class ClassDefinition extends AbstractDefinition
             $code .= "        );\n";
         }
 
+        $code .= "\n";
+
         if ($this->scope === "singleton") {
-            $code .= "\n        \$this->singletonEntries['" . $this->getHash() . "'] = \$entry;\n\n";
+            $code .= "        \$this->singletonEntries['" . $this->getHash() . "'] = \$entry;\n\n";
         }
 
         $code .= "        return \$entry;\n";
@@ -143,6 +145,6 @@ class ClassDefinition extends AbstractDefinition
             return $array;
         }
 
-        return  '"' . $value . '"';
+        return (string) $value;
     }
 }
