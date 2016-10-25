@@ -17,12 +17,12 @@ class StubContainer extends AbstractContainer
         $this->isSingleton = $isSingleton;
     }
 
-    protected function WoohooLabs__Zen__Tests__Unit__Double__DummyContainerEntry()
+    protected function WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry()
     {
-        $entry = new DummyContainerEntry();
+        $entry = new StubContainerEntry();
 
         if ($this->isSingleton) {
-            $this->singletonEntries[$this->getHash(DummyContainerEntry::class)] = $entry;
+            $this->singletonEntries[$this->getHash(StubContainerEntry::class)] = $entry;
         }
 
         return $entry;

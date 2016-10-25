@@ -7,7 +7,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\NotFoundException;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainer;
-use WoohooLabs\Zen\Tests\Unit\Double\DummyContainerEntry;
+use WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry;
+use WoohooLabs\Zen\Tests\Unit\Fixture\Container\ContainerWithInjectedProperty;
 
 class AbstractContainerTest extends TestCase
 {
@@ -16,7 +17,7 @@ class AbstractContainerTest extends TestCase
      */
     public function hasReturnsFalse()
     {
-        $container = $this->createContainer();
+        $container = $this->createStubContainer();
 
         $this->assertFalse($container->has("TestContainerEntry"));
     }
@@ -26,9 +27,9 @@ class AbstractContainerTest extends TestCase
      */
     public function hasReturnsTrue()
     {
-        $container = $this->createContainer();
+        $container = $this->createStubContainer();
 
-        $this->assertTrue($container->has(DummyContainerEntry::class));
+        $this->assertTrue($container->has(StubContainerEntry::class));
     }
 
     /**
@@ -36,7 +37,7 @@ class AbstractContainerTest extends TestCase
      */
     public function getThrowsNotFoundException()
     {
-        $container = $this->createContainer();
+        $container = $this->createStubContainer();
 
         $this->expectException(NotFoundException::class);
         $container->get("TestContainerEntry");
@@ -47,10 +48,10 @@ class AbstractContainerTest extends TestCase
      */
     public function getReturnsPrototypeEntry()
     {
-        $container = $this->createContainer();
+        $container = $this->createStubContainer();
 
-        $this->assertInstanceOf(DummyContainerEntry::class, $container->get(DummyContainerEntry::class));
-        $this->assertNotSame($container->get(DummyContainerEntry::class), $container->get(DummyContainerEntry::class));
+        $this->assertInstanceOf(StubContainerEntry::class, $container->get(StubContainerEntry::class));
+        $this->assertNotSame($container->get(StubContainerEntry::class), $container->get(StubContainerEntry::class));
     }
 
     /**
@@ -58,12 +59,22 @@ class AbstractContainerTest extends TestCase
      */
     public function getReturnsSingletonEntry()
     {
-        $container = $this->createContainer(true);
+        $container = $this->createStubContainer(true);
 
-        $this->assertSame($container->get(DummyContainerEntry::class), $container->get(DummyContainerEntry::class));
+        $this->assertSame($container->get(StubContainerEntry::class), $container->get(StubContainerEntry::class));
     }
 
-    private function createContainer(bool $isSingleton = false): ContainerInterface
+    /**
+     * @test
+     */
+    public function setProperty()
+    {
+        $container = new ContainerWithInjectedProperty();
+
+        $this->assertTrue($container->getProperty());
+    }
+
+    private function createStubContainer(bool $isSingleton = false): ContainerInterface
     {
         return new StubContainer($isSingleton);
     }

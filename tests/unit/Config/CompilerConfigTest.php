@@ -33,4 +33,17 @@ class CompilerConfigTest extends TestCase
             $config->usePropertyInjection()
         );
     }
+
+    /**
+     * @test
+     */
+    public function getContainerHash()
+    {
+        $config = new StubCompilerConfig([], "A\\B\\C", "D");
+
+        $this->assertEquals(
+            "A__B__C__D",
+            $config->getContainerHash()
+        );
+    }
 }

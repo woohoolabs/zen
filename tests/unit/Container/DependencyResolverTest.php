@@ -20,6 +20,12 @@ use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorC;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorD;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorE;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionA;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionB;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionC;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionD;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionE;
+use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Exception\ExceptionF;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedA;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedB;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedC;
@@ -179,6 +185,54 @@ class DependencyResolverTest extends TestCase
 
         $this->expectException(ContainerException::class);
         $dependencyResolver->resolve("InexistentClass");
+    }
+
+    public function throwExceptionForPropertyWithoutTypeHint()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionA::class);
+    }
+
+    public function throwExceptionForPropertyWithScalarTypeHint()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionB::class);
+    }
+
+    public function throwExceptionForParameterWithScalarTypeHint()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionC::class);
+    }
+
+    public function throwExceptionForParameterWithScalarDocBlock()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionD::class);
+    }
+
+    public function throwExceptionForPropertyWithoutTypeInfo()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionE::class);
+    }
+
+    public function throwExceptionForStaticProperty()
+    {
+        $dependencyResolver = $this->createDependencyResolver();
+
+        $this->expectException(ContainerException::class);
+        $dependencyResolver->resolve(ExceptionF::class);
     }
 
     private function createDependencyResolver(array $definitionHints = []): DependencyResolver
