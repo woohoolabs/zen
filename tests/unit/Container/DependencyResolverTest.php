@@ -187,6 +187,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve("InexistentClass");
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForPropertyWithoutTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver();
@@ -195,6 +198,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve(ExceptionA::class);
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForPropertyWithScalarTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver();
@@ -203,6 +209,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve(ExceptionB::class);
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForParameterWithScalarTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver();
@@ -211,6 +220,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve(ExceptionC::class);
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForParameterWithScalarDocBlock()
     {
         $dependencyResolver = $this->createDependencyResolver();
@@ -219,6 +231,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve(ExceptionD::class);
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForPropertyWithoutTypeInfo()
     {
         $dependencyResolver = $this->createDependencyResolver();
@@ -227,6 +242,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolve(ExceptionE::class);
     }
 
+    /**
+     * @test
+     */
     public function throwExceptionForStaticProperty()
     {
         $dependencyResolver = $this->createDependencyResolver();
