@@ -18,26 +18,6 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getAllClassNames()
-    {
-        $this->assertEquals(
-            [
-                EntryPointA::class,
-                "EntryPointB",
-                EntryPointC1::class,
-                EntryPointC2::class,
-                EntryPointD1::class,
-                EntryPointD2::class,
-                EntryPointEInterface::class,
-                EntryPointGAbstract::class,
-            ],
-            FileSystemUtil::getClassesInPath(realpath(__DIR__ . "/../Fixture/DependencyGraph/EntryPoint"), false)
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getConcreteClassNames()
     {
         $this->assertEquals(
@@ -51,5 +31,16 @@ class FileSystemUtilTest extends TestCase
             ],
             FileSystemUtil::getClassesInPath(realpath(__DIR__ . "/../Fixture/DependencyGraph/EntryPoint"), true)
         );
+    }
+
+    /**
+     * @test
+     */
+    public function getAllClassNames()
+    {
+        $classes = FileSystemUtil::getClassesInPath(realpath(__DIR__ . "/../Fixture/DependencyGraph/EntryPoint"), false);
+
+        $this->assertContains(EntryPointEInterface::class, $classes);
+        $this->assertContains(EntryPointGAbstract::class, $classes);
     }
 }
