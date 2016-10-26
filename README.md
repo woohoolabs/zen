@@ -25,36 +25,54 @@
 
 ## Introduction
 
+### Rationale
+
 Although Dependency Injection is one of the most fundamental principles of Object Oriented Programming, it doesn't
 get as much attention as it should. To make things even worse, there are quite some misbeliefs around the topic which
 can prevent people from applying the theory correctly.
 
 Besides Service Location, the biggest misbelief certainly is that Dependency Injection requires very complex tools
-called DI Containers. And we all know well that their performance is ridiculously low. Woohoo Labs. Zen was born after
-the realization of the fact that these fears prove to be real indeed, or at least our current ecosystem endorses
-more-complex-than-necessary and slower-than-necessary tools.
+called DI Containers. And we all well know that their performance is ridiculously low. Woohoo Labs. Zen was born after
+the realization of the fact that these fallacies seem to be true indeed, or at least our current ecosystem endorses
+unnecessarily complex tools, sometimes offering degraded performance.
 
 I believe that in the vast majority of the cases, very-very simple tools could do the job faster and more importantly,
-while remaining less challenging mentally than a competing tool offering everything and more out of the box. I consider
+while remaining less challenging mentally than a competing tool offering "everything and more" out of the box. I consider
 this phenomenon as part of the [simple vs. easy problem](https://www.infoq.com/presentations/Simple-Made-Easy).
 
 Zen doesn't - and probably will never - feature all the capabilities of the most famous DI Containers currently available.
 There are things that aren't worth the hassle. On the other hand, it will try hard to enforce the correct usage of
 Dependency Injection, and to make the configuration as evident and convenient as possible.
 
+### Features
+
+- [Container-Interop](https://github.com/container-interop/container-interop) (PSR-11) compliance
+- Supports constructor and property injection
+- Supports the notion of scopes (Singleton and Prototype)
+- Supports autowiring, but only objects can be injected
+- Generates a single class
+- No caching is needed to get ultimate speed
+
+### Use Cases of Woohoo Labs. Zen
+
+As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration, but not requiring
+the majority of usual DI techniques, like method or scalar value injection. If performance is not a concern for you,
+but you want a fully featured container, please choose another project. In this case, I would recommend you to check out
+the awesome [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
+
 ## Install
 
 The steps of this process are quite straightforward. The only thing you need is [Composer](http://getcomposer.org).
-
-#### Add Zen to your composer.json:
-
 Run the command below to get the latest version of Zen:
 
 ```bash
 $ composer require woohoolabs/zen
 ```
+The library requires PHP 7.0+.
 
 ## Basic Usage
+
+### Building the container
 
 Zen is a compiled DI Container which means that every time you update a dependency of a class, you have to recompile
 the container in order for it to reflect the changes. This is a major weakness of compiled containers (Zen will
@@ -75,8 +93,10 @@ Virtualbox FS) can affect the time consumption of the compilation as well the pe
 On the other hand, it's much more convenient to put the container in a place where it is easily reachable as you will
 occasionally need to debug it.
 
-What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be a class name which extends the
-`WoohooLabs\Zen\Config\AbstractCompilerConfig` class. Let's see an
+### Configuring the compiler
+
+What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be the name of a class which extends
+`AbstractCompilerConfig`. Let's see an
 [example](https://github.com/woohoolabs/zen/blob/master/Config/AbstractCompilerConfig.php)!
 
 ```php
@@ -111,13 +131,129 @@ class MyCompilerConfig extends AbstractCompilerConfig
 }
 ```
 
-By providing the prior config to the previous `zen build` command, a `MyApp\Config\Container` class will be generated
-and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
+By providing the prior configuration to the previous `zen build` command, a `MyApp\Config\Container` class will be
+generated and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
 dependencies marked by annotations.
+
+### Configuring the container
+
+We only mentioned so far how to configure the compilation, but we haven't talked about container configuration. This can
+be done by returning an array of objects extending the `AbstractContainerConfig` class in the `getContainerConfigs()`
+method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/Config/AbstractContainerConfig.php))
+for the `MyContainerConfig` class too!
+
+```php
+class MyContainerConfig extends AbstractContainerConfig
+{
+    protected function getEntryPoints(): array
+    {
+        return [
+            new WildcardEntryPoint(__DIR__ . "/Controller"),
+        ];
+    }
+
+    protected function getDefinitionHints(): array
+    {
+        return [
+            ContainerInterface::class => MyContainer::class,
+        ];
+    }
+
+    protected function getWildcardHints(): array
+    {
+        return [
+            new WildcardHint(
+                __DIR__ . "/Domain",
+                'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
+                'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
+            )
+        ];
+    }
+}
+```
+
+Configuring the container consist of the 2 things: defining your Entry Points (in the `getEntryPoints()` method) and
+passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHints()` methods).
+
+### Entry Points
+
+Entry Points are such classes that can be directly retrieved from the DI Container. Ideally, you should only retrieve
+these classes with the `$container->get()` method. Dependencies of them are automatically discovered during the
+compilation phase (this feature is usually called "autowiring"), resulting in your full object graph.
+
+The following example will recursively search for all classes in the `Controller` directory (only concrete classes are
+included by default).
+ 
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        new WildcardEntryPoint(__DIR__ . "/Controller"),
+    ];
+}
+```
+
+But you are able to define Entry Points individually too:
+ 
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        new ClassEntryPoint(UserController::class),
+    ];
+}
+```
+
+The first method is the preferred one, because it needs much less configuration.
+
+### Hints
+
+Hints instruct the compiler how to properly resolve a dependency. This can be necessary when you depend on an
+interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
+implementations to your interfaces or concretions to your abstract classes. The following example binds the
+`MyContainer` class to `ContainerInterface`.
+
+```php
+protected function getDefinitionHints(): array
+{
+    return [
+        ContainerInterface::class => MyContainer::class,
+    ];
+}
+```
+
+Wildcard Hints can be used when you want to bind your classes in masses. Basically, they recursively search for all your
+classes in a directory specified by the first parameter, and bind those classes together which can be matched by the
+provided patterns. The following example
+
+```php
+protected function getWildcardHints(): array
+{
+    return [
+        new WildcardHint(
+            __DIR__ . "/Domain",
+            'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
+            'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
+        )
+    ];
+}
+```
+
+will bind
+
+`WoohooLabs\Zen\Examples\Domain\UserRepositoryInterface` to `WoohooLabs\Zen\Examples\Infrastructure\MysqlUserRepository`.
+
+### Scopes
+
+Zen can control the lifetime of your classes via the notion of scopes. By default, all classes retrieved from the
+controller have the `Singleton` scope.
 
 ## Advanced Usage
 
 ## Examples
+
+Please have a look at the [examples folder](https://github.com/woohoolabs/zen/tree/master/examples) folder for a
+complete example!
 
 ## Versioning
 

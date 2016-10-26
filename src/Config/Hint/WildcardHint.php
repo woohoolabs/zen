@@ -10,6 +10,11 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
     /**
      * @var string
      */
+    private $sourcePath;
+
+    /**
+     * @var string
+     */
     private $sourcePattern;
 
     /**
@@ -17,30 +22,25 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
      */
     private $targetPattern;
 
-    /**
-     * @var string
-     */
-    private $sourcePath;
-
-    public static function singleton(string $sourcePattern, string $targetPattern, string $sourcePath)
+    public static function singleton(string $sourcePath, string $sourcePattern, string $targetPattern)
     {
-        return new self($sourcePattern, $targetPattern, $sourcePath);
+        return new self($sourcePath, $sourcePattern, $targetPattern);
     }
 
-    public static function prototype(string $sourcePattern, string $targetPattern, string $sourcePath)
+    public static function prototype(string $sourcePath, string $sourcePattern, string $targetPattern)
     {
-        $self = new self($sourcePattern, $targetPattern, $sourcePath);
+        $self = new self($sourcePath, $sourcePattern, $targetPattern);
         $self->setPrototypeScope();
 
         return $self;
     }
 
-    public function __construct(string $sourcePattern, string $targetPattern, string $sourcePath)
+    public function __construct(string $sourcePath, string $sourcePattern, string $targetPattern)
     {
         parent::__construct();
+        $this->sourcePath = $sourcePath;
         $this->sourcePattern = $sourcePattern;
         $this->targetPattern = $targetPattern;
-        $this->sourcePath = $sourcePath;
     }
 
     public function getDefinitionHints(): array
