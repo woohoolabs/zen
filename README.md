@@ -72,6 +72,12 @@ The library requires PHP 7.0+.
 
 ## Basic Usage
 
+### Using the container
+
+Zen is a Container-Interop (PSR-11) compliant container and that's why it supports the `$container->has()` and
+`$container->get()` methods as defined by the
+[`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php)
+
 ### Building the container
 
 Zen is a compiled DI Container which means that every time you update a dependency of a class, you have to recompile
@@ -245,8 +251,24 @@ will bind
 
 ### Scopes
 
-Zen can control the lifetime of your classes via the notion of scopes. By default, all classes retrieved from the
-controller have the `Singleton` scope.
+Zen is able control the lifetime of your container entries via the notion of scopes. By default, all entries retrieved
+from the container have `Singleton` scope, meaning that they are only instantiated at the first retrieval, and the same
+instance will be returned on the subsequent fetches. `Singleton` scopes only works well for stateless objects. 
+
+On the other hand, container entries of `Prototype` scope are instantiated at every retrievals, so that is makes it
+possible to store stateful objects in the container. You can hint a container entry as `Prototype` with the
+`DefinitionHint::prototype()` construct as follows:
+
+```php
+protected function getDefinitionHints(): array
+{
+    return [
+        ContainerInterface::class => DefinitioHint::prototype(MyContainer::class),
+    ];
+}
+```
+
+You can use `WildcardHints::prototype()` to hint your Wildcard Hints the same way too.
 
 ## Advanced Usage
 
