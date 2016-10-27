@@ -31,7 +31,7 @@ Although Dependency Injection is one of the most fundamental principles of Objec
 get as much attention as it should. To make things even worse, there are quite some misbeliefs around the topic which
 can prevent people from applying the theory correctly.
 
-Besides Service Location, the biggest misbelief certainly is that Dependency Injection requires very complex tools
+Besides using Service Location, the biggest misbelief certainly is that Dependency Injection requires very complex tools
 called DI Containers. And we all well know that their performance is ridiculously low. Woohoo Labs. Zen was born after
 the realization of the fact that these fallacies seem to be true indeed, or at least our current ecosystem endorses
 unnecessarily complex tools, sometimes offering degraded performance.
@@ -76,14 +76,14 @@ The library requires PHP 7.0+.
 
 Zen is a Container-Interop (PSR-11) compliant container and that's why it supports the `$container->has()` and
 `$container->get()` methods as defined by the
-[`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php)
+[`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php).
 
 ### Building the container
 
 Zen is a compiled DI Container which means that every time you update a dependency of a class, you have to recompile
 the container in order for it to reflect the changes. This is a major weakness of compiled containers (Zen will
-certainly see major improvements in this regard in the future), but the trade-off had to be taken in order to gain
-more speed compared to the "dynamic" Containers.
+certainly see major improvements in this regard in the future), but the trade-off had to be taken in order to be more
+performant than "dynamic" Containers.
 
 Compilation is possible by running the following command:
 
@@ -93,6 +93,10 @@ $ vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 
 This results in a new file `CONTAINER_PATH` which can be directly instantiated (assuming proper autoloading) in your
 project. No other configuration is needed during runtime.
+
+```php
+$container = new MyContainer();
+```
 
 It's up to you where you generate the container but please be aware that file system speed (referring to the
 Virtualbox FS) can affect the time consumption of the compilation as well the performance of your application.
@@ -146,7 +150,7 @@ dependencies marked by annotations.
 We only mentioned so far how to configure the compilation, but we haven't talked about container configuration. This can
 be done by returning an array of objects extending the `AbstractContainerConfig` class in the `getContainerConfigs()`
 method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/Config/AbstractContainerConfig.php))
-for the `MyContainerConfig` class too!
+for the container configuration too!
 
 ```php
 class MyContainerConfig extends AbstractContainerConfig
@@ -247,7 +251,7 @@ protected function getWildcardHints(): array
 
 will bind
 
-`WoohooLabs\Zen\Examples\Domain\UserRepositoryInterface` to `WoohooLabs\Zen\Examples\Infrastructure\MysqlUserRepository`.
+`UserRepositoryInterface` to `MysqlUserRepository`.
 
 ### Scopes
 
@@ -255,7 +259,7 @@ Zen is able control the lifetime of your container entries via the notion of sco
 from the container have `Singleton` scope, meaning that they are only instantiated at the first retrieval, and the same
 instance will be returned on the subsequent fetches. `Singleton` scopes only works well for stateless objects. 
 
-On the other hand, container entries of `Prototype` scope are instantiated at every retrievals, so that is makes it
+On the other hand, container entries of `Prototype` scope are instantiated at every retrieval, so that is makes it
 possible to store stateful objects in the container. You can hint a container entry as `Prototype` with the
 `DefinitionHint::prototype()` construct as follows:
 
