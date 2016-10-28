@@ -48,7 +48,7 @@ Dependency Injection, and to make the configuration as evident and convenient as
 
 - [Container-Interop](https://github.com/container-interop/container-interop) (PSR-11) compliance
 - Supports constructor and property injection
-- Supports the notion of (Singleton and Prototype)
+- Supports the notion of scopes (Singleton and Prototype)
 - Supports autowiring, but only objects can be injected
 - Generates a single class
 - No caching is needed to get ultimate speed
