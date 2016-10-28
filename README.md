@@ -279,7 +279,7 @@ You can use `WildcardHints::prototype()` to hint your Wildcard Hints the same wa
 
 ## Examples
 
-Please have a look at the [examples folder](https://github.com/woohoolabs/zen/tree/master/examples) folder for a
+Please have a look at the [examples folder](https://github.com/woohoolabs/zen/tree/master/examples) for a
 complete example!
 
 ## Versioning
