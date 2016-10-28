@@ -68,7 +68,7 @@ Run the command below to get the latest version of Zen:
 ```bash
 $ composer require woohoolabs/zen
 ```
-The library requires PHP 7.0+.
+This library needs PHP 7.0+.
 
 ## Basic Usage
 
