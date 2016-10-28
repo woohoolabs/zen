@@ -74,7 +74,7 @@ The library requires PHP 7.0+.
 
 ### Using the container
 
-Zen is a Container-Interop (PSR-11) compliant container and that's why it supports the `$container->has()` and
+As Zen is a Container-Interop (PSR-11) compliant container, it supports the `$container->has()` and
 `$container->get()` methods as defined by the
 [`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php).
 
@@ -191,8 +191,7 @@ Entry Points are such classes that can be directly retrieved from the DI Contain
 these classes with the `$container->get()` method. Dependencies of them are automatically discovered during the
 compilation phase (this feature is usually called "autowiring"), resulting in your full object graph.
 
-The following example will recursively search for all classes in the `Controller` directory (only concrete classes are
-included by default).
+The following example will recursively search for all classes in the `Controller` directory. Please note that only concrete classes are included by default.
  
 ```php
 protected function getEntryPoints(): array
