@@ -48,7 +48,7 @@ Dependency Injection, and to make the configuration as evident and convenient as
 
 - [Container-Interop](https://github.com/container-interop/container-interop) (PSR-11) compliance
 - Supports constructor and property injection
-- Supports the notion of scopes (Singleton and Prototype)
+- Supports the notion of (Singleton and Prototype)
 - Supports autowiring, but only objects can be injected
 - Generates a single class
 - No caching is needed to get ultimate speed
@@ -252,11 +252,13 @@ will bind
 
 `UserRepositoryInterface` to `MysqlUserRepository`.
 
+Currently, only `*` supported as a wildcard character because your patterns are much simpler to read this way than with real regex.
+
 ### Scopes
 
 Zen is able control the lifetime of your container entries via the notion of scopes. By default, all entries retrieved
 from the container have `Singleton` scope, meaning that they are only instantiated at the first retrieval, and the same
-instance will be returned on the subsequent fetches. `Singleton` scopes only works well for stateless objects. 
+instance will be returned on the subsequent fetches. `Singleton` scope only works well for stateless objects.
 
 On the other hand, container entries of `Prototype` scope are instantiated at every retrieval, so that is makes it
 possible to store stateful objects in the container. You can hint a container entry as `Prototype` with the
