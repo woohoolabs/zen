@@ -75,8 +75,36 @@ This library needs PHP 7.0+.
 ### Using the container
 
 As Zen is a Container-Interop (PSR-11) compliant container, it supports the `$container->has()` and
-`$container->get()` methods as defined by the
+`$container->get()` methods as defined by
 [`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php).
+
+### Types of injection
+
+Only constructor and property injection of objects are supported by Zen.
+
+In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a parameter has a default value then this value will be injected. Here is an example:
+
+```php
+/**
+ * @param B $b
+ */
+public function __construct(A $a, $b, $c = true)
+{
+    // ...
+}
+```
+
+In order to use property injection, you have to annotate your properties with `@Inject` and provide their type with a `@var` PHPDoc tag in the following way:
+
+```php
+/**
+ * @Inject
+ * @var A
+ */
+ private $a;
+```
+
+As a rule of thumb, you should only rely on constructor injection, because using test doubles in your unit tests instead of your real dependencies becomes much easier this way. Property injection can be acceptable for those classes that aren't unit tested. I prefer this type of injection in my controllers, but nowhere else.
 
 ### Building the container
 
