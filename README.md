@@ -94,7 +94,7 @@ public function __construct(A $a, $b, $c = true)
 }
 ```
 
-In order to use property injection, you have to annotate your properties with `@Inject` and provide their type with a `@var` PHPDoc tag in the following way:
+In order to use property injection, you have to annotate your properties with `@Inject` (mind the case-sensitivity) and provide their type with a `@var` PHPDoc tag in the following way:
 
 ```php
 /**
