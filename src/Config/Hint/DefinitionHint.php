@@ -35,7 +35,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
-     * @param DefinitionHint[] $definitionHints
+     * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
     public function toDefinitions(array $definitionHints, string $id): array

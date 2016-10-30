@@ -8,7 +8,7 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 interface DefinitionHintInterface
 {
     /**
-     * @param DefinitionHint[] $definitionHints
+     * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
     public function toDefinitions(array $definitionHints, string $id): array;
