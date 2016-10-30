@@ -67,7 +67,7 @@ class DependencyResolver
         }
 
         if (isset($this->definitionHints[$id])) {
-            $definitions = $this->definitionHints[$id]->toDefinitions($id);
+            $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id);
             foreach ($definitions as $definitionId => $definition) {
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {

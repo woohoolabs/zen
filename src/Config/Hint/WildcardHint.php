@@ -47,7 +47,7 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
     {
         $sourceRegex = "/" . str_replace([".", "\\", "*"], ["\\.", "\\\\", "(.*)"], $this->sourcePattern) . "/";
 
-        $definitions = [];
+        $definitionHints = [];
         foreach (FileSystemUtil::getClassesInPath($this->sourcePath, false) as $sourceClass) {
             $matches = [];
             preg_match_all($sourceRegex, $sourceClass, $matches);
@@ -66,9 +66,9 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
                 $definitionHint->setPrototypeScope();
             }
 
-            $definitions[$sourceClass] = $definitionHint;
+            $definitionHints[$sourceClass] = $definitionHint;
         }
 
-        return $definitions;
+        return $definitionHints;
     }
 }

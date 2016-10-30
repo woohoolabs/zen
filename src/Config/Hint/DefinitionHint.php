@@ -35,16 +35,28 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
+     * @param DefinitionHint[] $definitionHints
      * @return DefinitionInterface[]
      */
-    public function toDefinitions(string $id): array
+    public function toDefinitions(array $definitionHints, string $id): array
     {
+        if ($this->className === $id) {
+            return [
+                $id => new ClassDefinition($this->className, $this->getScope())
+            ];
+        }
+
         $result = [
-            $this->className => new ClassDefinition($this->className, $this->getScope())
+            $id => new ReferenceDefinition($id, $this->className, $this->getScope())
         ];
 
-        if ($this->className !== $id) {
-            $result[$id] = new ReferenceDefinition($id, $this->className, $this->getScope());
+        if (isset($definitionHints[$this->className])) {
+            $result = array_merge(
+                $result,
+                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className)
+            );
+        } else {
+            $result[$this->className] = new ClassDefinition($this->className, $this->getScope());
         }
 
         return $result;
