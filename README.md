@@ -32,7 +32,7 @@ get as much attention as it should. To make things even worse, there are quite s
 can prevent people from applying the theory correctly.
 
 Besides using Service Location, the biggest misbelief certainly is that Dependency Injection requires very complex tools
-called DI Containers. And we all well know that their performance is ridiculously low. Woohoo Labs. Zen was born after
+called DI Containers. And we all deem to know that their performance is ridiculously low. Woohoo Labs. Zen was born after
 the realization of the fact that these fallacies seem to be true indeed, or at least our current ecosystem endorses
 unnecessarily complex tools, sometimes offering degraded performance.
 
@@ -55,7 +55,7 @@ Dependency Injection, and to make the configuration as evident and convenient as
 
 ### Use Cases of Woohoo Labs. Zen
 
-As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration, but not requiring
+As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration but not requiring
 the majority of usual DI techniques, like method or scalar value injection. If performance is not a concern for you,
 but you want a fully featured container, please choose another project. In this case, I would recommend you to check out
 the awesome [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
@@ -82,7 +82,7 @@ As Zen is a Container-Interop (PSR-11) compliant container, it supports the `$co
 
 Only constructor and property injection of objects are supported by Zen.
 
-In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a parameter has a default value then this value will be injected. Here is an example:
+In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a parameter has a default value then this value will be injected. Here is an example of a valid constructor:
 
 ```php
 /**
@@ -133,7 +133,7 @@ occasionally need to debug it.
 
 ### Configuring the compiler
 
-What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be the name of a class which extends
+What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be the fully qualified name of a class which extends
 `AbstractCompilerConfig`. Let's see an
 [example](https://github.com/woohoolabs/zen/blob/master/Config/AbstractCompilerConfig.php)!
 
@@ -175,8 +175,8 @@ dependencies marked by annotations.
 
 ### Configuring the container
 
-We only mentioned so far how to configure the compilation, but we haven't talked about container configuration. This can
-be done by returning an array of objects extending the `AbstractContainerConfig` class in the `getContainerConfigs()`
+So far we only mentioned how to configure the compiler, but we haven't talked about container configuration. This can
+be done by returning an array of `AbstractContainerConfig` child instances in the `getContainerConfigs()`
 method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/Config/AbstractContainerConfig.php))
 for the container configuration too!
 
@@ -286,7 +286,7 @@ Currently, only `*` supported as a wildcard character because your patterns are 
 
 Zen is able control the lifetime of your container entries via the notion of scopes. By default, all entries retrieved
 from the container have `Singleton` scope, meaning that they are only instantiated at the first retrieval, and the same
-instance will be returned on the subsequent fetches. `Singleton` scope only works well for stateless objects.
+instance will be returned on the subsequent fetches. `Singleton` scope works well for stateless objects.
 
 On the other hand, container entries of `Prototype` scope are instantiated at every retrieval, so that is makes it
 possible to store stateful objects in the container. You can hint a container entry as `Prototype` with the
