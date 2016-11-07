@@ -210,7 +210,7 @@ class MyContainerConfig extends AbstractContainerConfig
 }
 ```
 
-Configuring the container consist of the 2 things: defining your Entry Points (in the `getEntryPoints()` method) and
+Configuring the container consist of the following two things: defining your Entry Points (in the `getEntryPoints()` method) and
 passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHints()` methods).
 
 ### Entry Points
