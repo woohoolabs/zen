@@ -248,7 +248,7 @@ The first method is the preferred one, because it needs much less configuration.
 Hints instruct the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
 implementations to your interfaces or concretions to your abstract classes. The following example binds the
-`MyContainer` class to `ContainerInterface`.
+`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind them together, because this configuration is automatically set during compilation).
 
 ```php
 protected function getDefinitionHints(): array
