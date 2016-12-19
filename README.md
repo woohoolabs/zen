@@ -217,11 +217,12 @@ passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHi
 
 ### Entry Points
 
-Entry Points are such classes that can be directly retrieved from the DI Container. Ideally, you should only retrieve
-these classes with the `$container->get()` method. Dependencies of them are automatically discovered during the
-compilation phase (this feature is usually called "autowiring"), resulting in your full object graph.
+Entry Points are such classes that are to be directly retrieved from the DI Container (for instance Controllers and Middleware
+usually fall in this category). You should only retrieve Entry Points from the Container with the `$container->get()`
+method. But because the dependencies of these classes are automatically discovered during the compilation phase (this
+feature is usually called "autowiring"), which results in your full object graph, that's why you are able (but discouraged) to get other classes directly from the container too.
 
-The following example will recursively search for all classes in the `Controller` directory. Please note that only concrete classes are included by default.
+The following example shows a configuration which instructs the compiler to recursively search for all classes in the `Controller` directory (please note that only concrete classes are included by default) and discover all of their dependencies.
  
 ```php
 protected function getEntryPoints(): array
@@ -247,10 +248,10 @@ The first method is the preferred one, because it needs much less configuration.
 
 ### Hints
 
-Hints instruct the compiler how to properly resolve a dependency. This can be necessary when you depend on an
+Hints tell the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
 implementations to your interfaces or concretions to your abstract classes. The following example binds the
-`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind them together, because this configuration is automatically set during compilation).
+`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind these two classes together, because this very configuration is automatically set during compilation).
 
 ```php
 protected function getDefinitionHints(): array
