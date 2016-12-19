@@ -219,8 +219,8 @@ passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHi
 
 Entry Points are such classes that are to be directly retrieved from the DI Container (for instance Controllers and Middleware
 usually fall in this category). You should only retrieve Entry Points from the Container with the `$container->get()`
-method. But because the dependencies of these classes are automatically discovered during the compilation phase (this
-feature is usually called "autowiring"), which results in your full object graph, that's why you are able (but discouraged) to get other classes directly from the container too.
+method. But as dependencies of these classes are automatically discovered during the compilation phase, resulting in your
+full object graph (this feature is usually called "autowiring"), you are able to get other classes directly from the container too (we discourage this practice however).
 
 The following example shows a configuration which instructs the compiler to recursively search for all classes in the `Controller` directory (please note that only concrete classes are included by default) and discover all of their dependencies.
  
