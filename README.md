@@ -60,6 +60,8 @@ the majority of usual DI techniques, like method or scalar value injection. If p
 but you want a fully featured container, please choose another project. In this case, I would recommend you to check out
 the awesome [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
 
+But if constructor and property injection of objects is enough for you then Zen will amaze you with its simplicity (the core of the project only consists of cc. 600 lines of code) and high speed (it can't be further improved substantially).
+
 ## Install
 
 The steps of this process are quite straightforward. The only thing you need is [Composer](http://getcomposer.org).
