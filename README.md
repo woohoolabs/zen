@@ -299,7 +299,7 @@ possible to store stateful objects in the container. You can hint a container en
 protected function getDefinitionHints(): array
 {
     return [
-        ContainerInterface::class => DefinitioHint::prototype(MyContainer::class),
+        ContainerInterface::class => DefinitionHint::prototype(MyContainer::class),
     ];
 }
 ```
