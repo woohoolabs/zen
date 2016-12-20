@@ -56,11 +56,11 @@ Dependency Injection, and to make the configuration as evident and convenient as
 ### Use Cases of Woohoo Labs. Zen
 
 As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration but not requiring
-the majority of usual DI techniques, like method or scalar value injection. If performance is not a concern for you,
+the some common DI techniques, like method or scalar value injection. If performance is not a concern for you,
 but you want a fully featured container, please choose another project. In this case, I would recommend you to check out
 the awesome [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
 
-But if constructor and property injection of objects is enough for you then Zen will amaze you with its simplicity (the core of the project only consists of cc. 600 lines of code), high performance (it has similar speed when you manually instantiate your objects) and its easy configuration (Zen was designed to work with the least amount of configuration).
+But if the functionality offered By Zen is enough for you then Zen will amaze you with its simplicity (the core of the project only consists of cc. 600 lines of code), high performance (it has similar speed when you manually instantiate your objects) and its easy configuration (Zen was designed to work with the least amount of configuration).
 
 ## Install
 
