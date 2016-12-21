@@ -129,7 +129,7 @@ $container = new MyContainer();
 ```
 
 It's up to you where you generate the container but please be aware that file system speed (referring to the
-Virtualbox FS) can affect the time consumption of the compilation as well the performance of your application.
+Virtualbox FS) can affect the time consumption of the compilation as well as the performance of your application.
 On the other hand, it's much more convenient to put the container in a place where it is easily reachable as you will
 occasionally need to debug it.
 
@@ -171,13 +171,13 @@ class MyCompilerConfig extends AbstractCompilerConfig
 }
 ```
 
-By providing the prior configuration to the previous `zen build` command, a `MyApp\Config\Container` class will be
+By providing the prior configuration to the `zen build` command, a `MyApp\Config\Container` class will be
 generated and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
 dependencies marked by annotations.
 
 ### Configuring the container
 
-So far we only mentioned how to configure the compiler, but we haven't talked about container configuration. This can
+We only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
 be done by returning an array of `AbstractContainerConfig` child instances in the `getContainerConfigs()`
 method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/Config/AbstractContainerConfig.php))
 for the container configuration too!
@@ -287,7 +287,7 @@ Currently, only `*` supported as a wildcard character because your patterns are 
 
 ### Scopes
 
-Zen is able control the lifetime of your container entries via the notion of scopes. By default, all entries retrieved
+Zen is able to control the lifetime of your container entries via the notion of scopes. By default, all entries retrieved
 from the container have `Singleton` scope, meaning that they are only instantiated at the first retrieval, and the same
 instance will be returned on the subsequent fetches. `Singleton` scope works well for stateless objects.
 
