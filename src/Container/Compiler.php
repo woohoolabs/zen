@@ -38,10 +38,6 @@ class Compiler
             $container .= "    }\n";
         }
 
-        if (empty($definitions)) {
-            $container .= "\n";
-        }
-
         $container .= "}\n";
 
         return $container;

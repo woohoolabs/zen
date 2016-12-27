@@ -5,4 +5,9 @@ use WoohooLabs\Zen\AbstractContainer;
 
 class EmptyContainerWithNamespace extends AbstractContainer
 {
+    /**
+     * @var string[]
+     */
+    protected $hashMap = [
+    ];
 }

@@ -12,6 +12,13 @@ class StubContainer extends AbstractContainer
      */
     private $isSingleton;
 
+    /**
+     * @var string[]
+     */
+    protected $hashMap = [
+        StubContainerEntry::class => "WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry",
+    ];
+
     public function __construct(bool $isSingleton)
     {
         $this->isSingleton = $isSingleton;
@@ -22,7 +29,7 @@ class StubContainer extends AbstractContainer
         $entry = new StubContainerEntry();
 
         if ($this->isSingleton) {
-            $this->singletonEntries[$this->getHash(StubContainerEntry::class)] = $entry;
+            $this->singletonEntries["WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry"] = $entry;
         }
 
         return $entry;
