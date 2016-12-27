@@ -8,7 +8,6 @@ REMOVED:
 
 FIXED:
 
-
 ## 1.1.0 - 2016-12-27
 
 CHANGED:
