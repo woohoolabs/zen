@@ -19,7 +19,18 @@ class Compiler
         }
         $container .= "\nuse WoohooLabs\\Zen\\AbstractContainer;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractContainer\n";
-        $container .= "{";
+        $container .= "{\n";
+
+        $container .= "    /**\n";
+        $container .= "     * @var string[]\n";
+        $container .= "     */\n";
+        $container .= "    protected \$hashMap = [\n";
+
+        foreach ($definitions as $id => $definition) {
+            $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
+        }
+
+        $container .= "    ];\n";
 
         foreach ($definitions as $id => $definition) {
             $container .= "\n    protected function " . $this->getHash($id) . "()\n    {\n";

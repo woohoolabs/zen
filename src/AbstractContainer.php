@@ -14,35 +14,28 @@ abstract class AbstractContainer implements ContainerInterface
      */
     protected $singletonEntries = [];
 
+    /**
+     * @var string[]
+     */
+    protected $hashMap = [];
+
     public function has($id): bool
     {
-        return $this->hasEntry($this->getHash($id));
+        return isset($this->hashMap[$id]);
     }
 
     public function get($id)
     {
-        $hash = $this->getHash($id);
-
-        if ($this->hasEntry($hash) === false) {
+        if (isset($this->hashMap[$id]) === false) {
             throw new NotFoundException($id);
         }
 
-        return $this->getEntry($hash);
+        return $this->getEntry($this->hashMap[$id]);
     }
 
     public function getEntry(string $hash)
     {
         return $this->singletonEntries[$hash] ?? $this->$hash();
-    }
-
-    private function hasEntry(string $hash): bool
-    {
-        return method_exists($this, $hash);
-    }
-
-    protected function getHash(string $id): string
-    {
-        return str_replace("\\", "__", $id);
     }
 
     protected function setProperties($object, array $properties)

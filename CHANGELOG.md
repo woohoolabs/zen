@@ -4,6 +4,10 @@ ADDED:
 
 CHANGED:
 
+- Improved performance
+
+REMOVED:
+
 FIXED:
 
 ## 1.0.1 - 2016-10-30

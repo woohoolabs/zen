@@ -35,9 +35,9 @@ class ContainerConfig extends AbstractContainerConfig
     {
         return [
             WildcardHint::singleton(
+                __DIR__ . "/Domain",
                 'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
-                'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository',
-                __DIR__ . "/Domain"
+                'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
             )
         ];
     }
