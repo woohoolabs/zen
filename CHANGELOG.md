@@ -1,14 +1,19 @@
-## 1.1.0 - unreleased
+## 1.2.0 - unreleased
 
 ADDED:
 
 CHANGED:
 
-- Improved performance
-
 REMOVED:
 
 FIXED:
+
+
+## 1.1.0 - 2016-12-27
+
+CHANGED:
+
+- Improved performance
 
 ## 1.0.1 - 2016-10-30
 
