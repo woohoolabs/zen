@@ -304,7 +304,7 @@ protected function getDefinitionHints(): array
 }
 ```
 
-You can use `WildcardHints::prototype()` to hint your Wildcard Hints the same way too.
+You can use `WildcardHint::prototype()` to hint your Wildcard Hints the same way too.
 
 ## Advanced Usage
 
