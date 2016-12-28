@@ -42,7 +42,9 @@ this phenomenon as part of the [simple vs. easy problem](https://www.infoq.com/p
 
 Zen doesn't - and probably will never - feature all the capabilities of the most famous DI Containers currently available.
 There are things that aren't worth the hassle. On the other hand, it will try hard to enforce the correct usage of
-Dependency Injection, and to make the configuration as evident and convenient as possible.
+Dependency Injection, and to make the configuration as evident and convenient as possible while providing an
+[outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) according to
+[my benchmarks](https://github.com/kocsismate/php-di-container-benchmarks).
 
 ### Features
 
@@ -51,16 +53,19 @@ Dependency Injection, and to make the configuration as evident and convenient as
 - Supports the notion of scopes (Singleton and Prototype)
 - Supports autowiring, but only objects can be injected
 - Generates a single class
-- No caching is needed to get ultimate speed
+- No caching is needed to get [ultimate speed](https://github.com/kocsismate/php-di-container-benchmarks)
 
 ### Use Cases of Woohoo Labs. Zen
 
-As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration but not requiring some
-common DI techniques, like method or scalar value injection. If performance is not a concern for you,
-but you want a fully featured container, please choose another project. In this case, I would recommend you to check out
-the awesome [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
+As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration but not requiring
+some common DI techniques, like method or scalar value injection. If performance is not a concern for you, but you want
+a fully featured container, please choose another project. In this case, I would recommend you to check out the awesome
+[PHP-DI](https://github.com/php-di/php-di) instead of Zen.
 
-But if the functionality offered By Zen is enough for you then Zen will amaze you with its simplicity (the core of the project only consists of cc. 600 lines of code), high performance (it has similar speed when you manually instantiate your objects) and its easy configuration (Zen was designed to work with the least amount of configuration).
+But if the functionality offered By Zen is enough for you then Zen will amaze you with its simplicity (the core of the
+project only consists of cc. 600 lines of code), high performance (it has
+[similar speed](https://github.com/kocsismate/php-di-container-benchmarks) when you manually instantiate your objects)
+and its easy configuration (Zen was designed to work with the least amount of configuration).
 
 ## Install
 
