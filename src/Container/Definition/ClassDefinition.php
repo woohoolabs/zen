@@ -113,10 +113,10 @@ class ClassDefinition extends AbstractDefinition
         $code .= "\n";
 
         if ($this->scope === "singleton") {
-            $code .= "        \$this->singletonEntries['" . $this->getHash() . "'] = \$entry;\n\n";
+            $code .= "        return \$this->singletonEntries['" . $this->getHash() . "'] = \$entry;\n";
+        } else {
+            $code .= "        return \$entry;\n";
         }
-
-        $code .= "        return \$entry;\n";
 
         return $code;
     }
