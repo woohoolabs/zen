@@ -1,5 +1,5 @@
 <?php
-        $entry = new \A(
+        return new \A(
             "",
             true,
             0,
@@ -8,5 +8,3 @@
             null,
             ["a" => false,]
         );
-
-        return $entry;
