@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 1.2.1 - 2017-01-05
+
+FIXED:
+
+- Fixed code formatting of the generated container
+
 ## 1.2.0 - 2017-01-05
 
 CHANGED:
