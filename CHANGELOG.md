@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 1.2.2 - 2017-01-05
+
+CHANGED:
+
+- Improved property injection performance
+
 ## 1.2.1 - 2017-01-05
 
 FIXED:
