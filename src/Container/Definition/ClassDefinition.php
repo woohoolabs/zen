@@ -105,7 +105,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= "            \$entry,\n";
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $propertyHash) {
-                $code .= "                '$propertyName' => '$propertyHash',\n";
+                $code .= "                '$propertyName' => " . $this->getEntryToPhp($propertyHash) . ",\n";
             }
             $code .= "            ]\n";
             $code .= "        );\n";

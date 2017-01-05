@@ -3,8 +3,8 @@
         $this->setProperties(
             $entry,
             [
-                'b' => 'B',
-                'c' => 'C',
+                'b' => $this->singletonEntries['B'] ?? $this->B(),
+                'c' => $this->singletonEntries['C'] ?? $this->C(),
             ]
         );
 

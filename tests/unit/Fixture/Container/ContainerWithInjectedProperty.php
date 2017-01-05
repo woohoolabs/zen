@@ -14,7 +14,7 @@ class ContainerWithInjectedProperty extends AbstractContainer
     public function getProperty(): bool
     {
         $entry = new StubContainerEntry();
-        $this->setProperties($entry, ["a" => "A"]);
+        $this->setProperties($entry, ["a" => $this->singletonEntries['A'] ?? $this->A()]);
 
         return $entry->getA();
     }

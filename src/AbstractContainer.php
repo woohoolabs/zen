@@ -30,11 +30,8 @@ abstract class AbstractContainer implements ContainerInterface
             throw new NotFoundException($id);
         }
 
-        return $this->getEntry($this->hashMap[$id]);
-    }
+        $hash = $this->hashMap[$id];
 
-    public function getEntry(string $hash)
-    {
         return $this->singletonEntries[$hash] ?? $this->$hash();
     }
 
@@ -44,8 +41,8 @@ abstract class AbstractContainer implements ContainerInterface
 
         Closure::bind(
             function () use ($self, $properties) {
-                foreach ($properties as $name => $hash) {
-                    $this->$name = $self->getEntry($hash);
+                foreach ($properties as $name => $value) {
+                    $this->$name = $value;
                 }
             },
             $object,
