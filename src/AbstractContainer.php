@@ -37,10 +37,8 @@ abstract class AbstractContainer implements ContainerInterface
 
     protected function setProperties($object, array $properties)
     {
-        $self = $this;
-
         Closure::bind(
-            function () use ($self, $properties) {
+            function () use ($properties) {
                 foreach ($properties as $name => $value) {
                     $this->$name = $value;
                 }
