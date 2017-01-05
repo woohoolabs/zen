@@ -1,4 +1,4 @@
-## 1.2.0 - unreleased
+## 1.3.0 - unreleased
 
 ADDED:
 
@@ -7,6 +7,13 @@ CHANGED:
 REMOVED:
 
 FIXED:
+
+## 1.2.0 - 2017-01-05
+
+CHANGED:
+
+- Improved performance even more
+- The generated container became more consize
 
 ## 1.1.0 - 2016-12-27
 
