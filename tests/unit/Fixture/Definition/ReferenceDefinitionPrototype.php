@@ -1,4 +1,3 @@
 <?php
-        $entry = $this->getEntry('B');
 
-        return $entry;
+        return $this->singletonEntries['B'] ?? $this->B();

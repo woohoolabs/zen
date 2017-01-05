@@ -1,7 +1,7 @@
 <?php
         $entry = new \A(
-            $this->getEntry('B'),
-            $this->getEntry('C')
+            $this->singletonEntries['B'] ?? $this->B(),
+            $this->singletonEntries['C'] ?? $this->C()
         );
 
         return $entry;

@@ -30,4 +30,9 @@ abstract class AbstractDefinition implements DefinitionInterface
     {
         return $this->hash;
     }
+
+    protected function getEntryToPhp($hash): string
+    {
+        return "\$this->singletonEntries['$hash'] ?? \$this->$hash()";
+    }
 }

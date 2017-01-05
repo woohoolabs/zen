@@ -86,7 +86,7 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
-                $constructorArguments[] = "            \$this->getEntry('" . $constructorArgument["hash"] . "')";
+                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["hash"]);
             } elseif (array_key_exists("default", $constructorArgument)) {
                 $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
