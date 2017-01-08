@@ -17,20 +17,20 @@ abstract class AbstractContainer implements ContainerInterface
     /**
      * @var string[]
      */
-    protected $hashMap = [];
+    protected $entryPoints = [];
 
     public function has($id): bool
     {
-        return isset($this->hashMap[$id]);
+        return isset($this->entryPoints[$id]);
     }
 
     public function get($id)
     {
-        if (isset($this->hashMap[$id]) === false) {
+        if (isset($this->entryPoints[$id]) === false) {
             throw new NotFoundException($id);
         }
 
-        $hash = $this->hashMap[$id];
+        $hash = $this->entryPoints[$id];
 
         return $this->singletonEntries[$hash] ?? $this->$hash();
     }

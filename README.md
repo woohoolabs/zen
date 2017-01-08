@@ -89,7 +89,8 @@ As Zen is a Container-Interop (PSR-11) compliant container, it supports the `$co
 
 Only constructor and property injection of objects are supported by Zen.
 
-In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a parameter has a default value then this value will be injected. Here is an example of a valid constructor:
+In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a
+parameter has a default value then this value will be injected. Here is an example of a valid constructor:
 
 ```php
 /**
@@ -101,7 +102,8 @@ public function __construct(A $a, $b, $c = true)
 }
 ```
 
-In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity) and provide their type with a `@var` PHPDoc tag in the following way:
+In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity) and
+provide their type with a `@var` PHPDoc tag in the following way:
 
 ```php
 /**
@@ -111,7 +113,9 @@ In order to use property injection, you have to annotate your properties with `@
  private $a;
 ```
 
-As a rule of thumb, you should only rely on constructor injection, because using test doubles in your unit tests instead of your real dependencies becomes much easier this way. Property injection can be acceptable for those classes that aren't unit tested. I prefer this type of injection in my controllers, but nowhere else.
+As a rule of thumb, you should only rely on constructor injection, because using test doubles in your unit tests
+instead of your real dependencies becomes much easier this way. Property injection can be acceptable for those classes
+that aren't unit tested. I prefer this type of injection in my controllers, but nowhere else.
 
 ### Building the container
 
@@ -217,17 +221,21 @@ class MyContainerConfig extends AbstractContainerConfig
 }
 ```
 
-Configuring the container consist of the following two things: defining your Entry Points (in the `getEntryPoints()` method) and
-passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHints()` methods).
+Configuring the container consist of the following two things: defining your Entry Points (in the `getEntryPoints()`
+method) and passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHints()` methods).
 
 ### Entry Points
 
-Entry Points are such classes that are to be directly retrieved from the DI Container (for instance Controllers and Middleware
-usually fall in this category). You should only retrieve Entry Points from the Container with the `$container->get()`
-method. But as dependencies of these classes are automatically discovered during the compilation phase, resulting in your
-full object graph (this feature is usually called "autowiring"), you are able to get other classes directly from the container too (we discourage this practice however).
+Entry Points are such classes that are to be directly retrieved from the DI Container (for instance Controllers and
+Middleware usually fall in this category). This means that you _can only_ fetch Entry Points from the Container with
+the `$container->get()` method.
 
-The following example shows a configuration which instructs the compiler to recursively search for all classes in the `Controller` directory (please note that only concrete classes are included by default) and discover all of their dependencies.
+Entry Points are important because their dependencies are automatically discovered during the compilation phase
+resulting in your full object graph (this feature is usually called "autowiring").
+
+The following example shows a configuration which instructs the compiler to recursively search for all classes in the
+`Controller` directory (please note that only concrete classes are included by default) and discover all of their
+dependencies.
  
 ```php
 protected function getEntryPoints(): array
@@ -239,7 +247,7 @@ protected function getEntryPoints(): array
 ```
 
 But you are able to define Entry Points individually too:
- 
+
 ```php
 protected function getEntryPoints(): array
 {
@@ -256,7 +264,8 @@ The first method is the preferred one, because it needs much less configuration.
 Hints tell the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
 implementations to your interfaces or concretions to your abstract classes. The following example binds the
-`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind these two classes together, because this very configuration is automatically set during compilation).
+`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind these two classes together, because this
+very configuration is automatically set during compilation).
 
 ```php
 protected function getDefinitionHints(): array
@@ -288,7 +297,8 @@ will bind
 
 `UserRepositoryInterface` to `MysqlUserRepository`.
 
-Currently, only `*` supported as a wildcard character because your patterns are much simpler to read this way than with real regex.
+Currently, only `*` supported as a wildcard character because your patterns are much simpler to read this way than with
+real regex.
 
 ### Scopes
 

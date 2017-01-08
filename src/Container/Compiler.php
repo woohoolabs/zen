@@ -24,10 +24,14 @@ class Compiler
         $container .= "    /**\n";
         $container .= "     * @var string[]\n";
         $container .= "     */\n";
-        $container .= "    protected \$hashMap = [\n";
+        $container .= "    protected \$entryPoints = [\n";
 
-        foreach ($definitions as $id => $definition) {
-            $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
+        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
+            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
+                foreach ($entryPoint->getClassNames() as $id) {
+                    $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
+                }
+            }
         }
 
         $container .= "    ];\n";

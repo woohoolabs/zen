@@ -7,6 +7,6 @@ class EmptyContainerWithoutNamespace extends AbstractContainer
     /**
      * @var string[]
      */
-    protected $hashMap = [
+    protected $entryPoints = [
     ];
 }
