@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 1.2.3 - 2017-01-08
+
+FIXED:
+
+- Only Entry Points can be retrieved from the container
+
 ## 1.2.2 - 2017-01-05
 
 CHANGED:
