@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 1.2.5 - 2017-01-08
+
+FIXED:
+
+- Regression when `ContainerInterface` can't be retrieved
+
 ## 1.2.4 - 2017-01-08
 
 FIXED:
