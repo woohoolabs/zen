@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Container;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Interop\Container\ContainerInterface;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionException;
@@ -34,6 +35,11 @@ class DependencyResolver
     private $definitions;
 
     /**
+     * @var array
+     */
+    private $entryPoints;
+
+    /**
      * @var SimpleAnnotationReader
      */
     private $annotationReader;
@@ -50,14 +56,34 @@ class DependencyResolver
     {
         $this->compilerConfig = $compilerConfig;
         $this->definitionHints = $definitionHints;
-        $this->definitions = [
-            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn())
-        ];
         $this->setAnnotationReader();
         $this->typeHintReader = new PhpDocReader();
+
+        $this->definitions = [
+            ContainerInterface::class => new SelfDefinition($this->compilerConfig->getContainerFqcn())
+        ];
+
+        $this->entryPoints = [
+            ContainerInterface::class
+        ];
+
+        foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
+            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
+                foreach ($entryPoint->getClassNames() as $id) {
+                    $this->entryPoints[] = $id;
+                }
+            }
+        }
     }
 
-    public function resolve(string $id)
+    public function resolveEntryPoints()
+    {
+        foreach ($this->entryPoints as $id) {
+            $this->resolve($id);
+        }
+    }
+
+    private function resolve(string $id)
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {

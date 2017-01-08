@@ -17,14 +17,7 @@ abstract class AbstractContainerBuilder
         }
 
         $dependencyResolver = new DependencyResolver($compilerConfig, $definitionHints);
-
-        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
-            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $id) {
-                    $dependencyResolver->resolve($id);
-                }
-            }
-        }
+        $dependencyResolver->resolveEntryPoints();
 
         $compiler = new Compiler();
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
+use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
@@ -10,6 +11,7 @@ use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\Tests\Unit\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationC;
@@ -39,12 +41,12 @@ class DependencyResolverTest extends TestCase
      */
     public function resolveConstructorDependencies()
     {
-        $dependencyResolver = $this->createDependencyResolver();
-        $dependencyResolver->resolve(ConstructorA::class);
+        $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
+        $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
-                "" => new SelfDefinition(""),
+                ContainerInterface::class => new SelfDefinition(""),
                 ConstructorA::class => ClassDefinition::singleton(ConstructorA::class)
                     ->addRequiredConstructorArgument(ConstructorB::class)
                     ->addRequiredConstructorArgument(ConstructorC::class)
@@ -68,13 +70,13 @@ class DependencyResolverTest extends TestCase
      */
     public function resolvePropertyDependencies()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(AnnotationA::class);
 
-        $dependencyResolver->resolve(AnnotationA::class);
+        $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
-                "" => new SelfDefinition(""),
+                ContainerInterface::class => new SelfDefinition(""),
                 AnnotationA::class => ClassDefinition::singleton(AnnotationA::class)
                     ->addProperty("b", AnnotationB::class)
                     ->addProperty("c", AnnotationC::class)
@@ -101,13 +103,13 @@ class DependencyResolverTest extends TestCase
      */
     public function resolveAllDependencies()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(MixedA::class);
 
-        $dependencyResolver->resolve(MixedA::class);
+        $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
-                "" => new SelfDefinition(""),
+                ContainerInterface::class => new SelfDefinition(""),
                 MixedA::class => ClassDefinition::singleton(MixedA::class)
                     ->addRequiredConstructorArgument(MixedB::class)
                     ->addRequiredConstructorArgument(MixedC::class)
@@ -132,16 +134,17 @@ class DependencyResolverTest extends TestCase
     public function resolvePrototypeDependency()
     {
         $dependencyResolver = $this->createDependencyResolver(
+            ConstructorD::class,
             [
                 ConstructorD::class => DefinitionHint::prototype(ConstructorD::class)
             ]
         );
 
-        $dependencyResolver->resolve(ConstructorD::class);
+        $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
-                "" => new SelfDefinition(""),
+                ContainerInterface::class => new SelfDefinition(""),
                 ConstructorD::class => ClassDefinition::prototype(ConstructorD::class)
                     ->resolveDependencies(),
             ],
@@ -155,16 +158,17 @@ class DependencyResolverTest extends TestCase
     public function resolveAliasedDependency()
     {
         $dependencyResolver = $this->createDependencyResolver(
+            ConstructorC::class,
             [
                 ConstructorD::class => new DefinitionHint(ConstructorE::class)
             ]
         );
 
-        $dependencyResolver->resolve(ConstructorC::class);
+        $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
-                "" => new SelfDefinition(""),
+                ContainerInterface::class => new SelfDefinition(""),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addRequiredConstructorArgument(ConstructorD::class)
                     ->resolveDependencies(),
@@ -181,10 +185,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionOnInexistentClass()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver("InexistentClass");
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve("InexistentClass");
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -192,10 +196,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForPropertyWithoutTypeHint()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionA::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionA::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -203,10 +207,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForPropertyWithScalarTypeHint()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionB::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionB::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -214,10 +218,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForParameterWithScalarTypeHint()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionC::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionC::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -225,10 +229,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForParameterWithScalarDocBlock()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionD::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionD::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -236,10 +240,10 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForPropertyWithoutTypeInfo()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionE::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionE::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
     /**
@@ -247,14 +251,17 @@ class DependencyResolverTest extends TestCase
      */
     public function throwExceptionForStaticProperty()
     {
-        $dependencyResolver = $this->createDependencyResolver();
+        $dependencyResolver = $this->createDependencyResolver(ExceptionF::class);
 
         $this->expectException(ContainerException::class);
-        $dependencyResolver->resolve(ExceptionF::class);
+        $dependencyResolver->resolveEntryPoints();
     }
 
-    private function createDependencyResolver(array $definitionHints = []): DependencyResolver
+    private function createDependencyResolver(string $entryPoint, array $definitionHints = []): DependencyResolver
     {
-        return new DependencyResolver(new StubCompilerConfig(), $definitionHints);
+        return new DependencyResolver(
+            new StubCompilerConfig([new StubContainerConfig([$entryPoint])]),
+            $definitionHints
+        );
     }
 }
