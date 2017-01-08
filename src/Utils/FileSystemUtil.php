@@ -9,7 +9,7 @@ use RegexIterator;
 
 class FileSystemUtil
 {
-    public static function getClassesInPath(string $path, bool $onlyConcreteClasses)
+    public static function getClassesInPath(string $path, bool $onlyConcreteClasses): array
     {
         $result = [];
 
