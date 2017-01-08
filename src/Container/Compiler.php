@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
+use Interop\Container\ContainerInterface;
+use Traversable;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
@@ -26,12 +28,8 @@ class Compiler
         $container .= "     */\n";
         $container .= "    protected \$entryPoints = [\n";
 
-        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
-            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $id) {
-                    $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
-                }
-            }
+        foreach ($this->getEntryPoints($compilerConfig) as $id) {
+            $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
         }
 
         $container .= "    ];\n";
@@ -45,6 +43,19 @@ class Compiler
         $container .= "}\n";
 
         return $container;
+    }
+
+    private function getEntryPoints(AbstractCompilerConfig $compilerConfig): Traversable
+    {
+        yield ContainerInterface::class;
+
+        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
+            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
+                foreach ($entryPoint->getClassNames() as $id) {
+                    yield $id;
+                }
+            }
+        }
     }
 
     private function getHash(string $id): string

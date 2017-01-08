@@ -35,11 +35,6 @@ class DependencyResolver
     private $definitions;
 
     /**
-     * @var array
-     */
-    private $entryPoints;
-
-    /**
      * @var SimpleAnnotationReader
      */
     private $annotationReader;
@@ -62,24 +57,16 @@ class DependencyResolver
         $this->definitions = [
             ContainerInterface::class => new SelfDefinition($this->compilerConfig->getContainerFqcn())
         ];
-
-        $this->entryPoints = [
-            ContainerInterface::class
-        ];
-
-        foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
-            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $id) {
-                    $this->entryPoints[] = $id;
-                }
-            }
-        }
     }
 
     public function resolveEntryPoints()
     {
-        foreach ($this->entryPoints as $id) {
-            $this->resolve($id);
+        foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
+            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
+                foreach ($entryPoint->getClassNames() as $id) {
+                    $this->resolve($id);
+                }
+            }
         }
     }
 
