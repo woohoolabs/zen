@@ -24,9 +24,6 @@
         "phpunit/PHPUnit": "^5.4.0",
         "squizlabs/php_codesniffer": "^2.1.1"
     },
-    "suggest": {
-        "doctrine/annotations": "^1.2.0"
-    },
     "provide": {
         "container-interop/container-interop-implementation": "^1.0"
     },
