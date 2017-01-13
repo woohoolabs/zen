@@ -55,7 +55,8 @@ class DependencyResolver
         $this->typeHintReader = new PhpDocReader();
 
         $this->definitions = [
-            ContainerInterface::class => new SelfDefinition($this->compilerConfig->getContainerFqcn())
+            ContainerInterface::class => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
+            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn())
         ];
     }
 
