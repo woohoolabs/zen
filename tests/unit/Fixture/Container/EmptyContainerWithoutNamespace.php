@@ -8,7 +8,7 @@ class EmptyContainerWithoutNamespace extends AbstractContainer
      * @var string[]
      */
     protected $entryPoints = [
-        \Interop\Container\ContainerInterface::class => 'Interop__Container__ContainerInterface',
         \EmptyContainerWithoutNamespace::class => 'EmptyContainerWithoutNamespace',
+        \Interop\Container\ContainerInterface::class => 'Interop__Container__ContainerInterface',
     ];
 }

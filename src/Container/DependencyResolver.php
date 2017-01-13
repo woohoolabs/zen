@@ -14,6 +14,7 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
 
@@ -55,8 +56,10 @@ class DependencyResolver
         $this->typeHintReader = new PhpDocReader();
 
         $this->definitions = [
-            ContainerInterface::class => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
-            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn())
+            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
+            ContainerInterface::class => new ReferenceDefinition(
+                ContainerInterface::class,
+                $this->compilerConfig->getContainerFqcn())
         ];
     }
 

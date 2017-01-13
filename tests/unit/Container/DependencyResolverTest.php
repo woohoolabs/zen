@@ -46,8 +46,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ContainerInterface::class => new SelfDefinition(""),
                 "" => new SelfDefinition(""),
+                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 ConstructorA::class => ClassDefinition::singleton(ConstructorA::class)
                     ->addRequiredConstructorArgument(ConstructorB::class)
                     ->addRequiredConstructorArgument(ConstructorC::class)
@@ -77,8 +77,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ContainerInterface::class => new SelfDefinition(""),
                 "" => new SelfDefinition(""),
+                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 AnnotationA::class => ClassDefinition::singleton(AnnotationA::class)
                     ->addProperty("b", AnnotationB::class)
                     ->addProperty("c", AnnotationC::class)
@@ -111,8 +111,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ContainerInterface::class => new SelfDefinition(""),
                 "" => new SelfDefinition(""),
+                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 MixedA::class => ClassDefinition::singleton(MixedA::class)
                     ->addRequiredConstructorArgument(MixedB::class)
                     ->addRequiredConstructorArgument(MixedC::class)
@@ -147,8 +147,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ContainerInterface::class => new SelfDefinition(""),
                 "" => new SelfDefinition(""),
+                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 ConstructorD::class => ClassDefinition::prototype(ConstructorD::class)
                     ->resolveDependencies(),
             ],
@@ -172,8 +172,8 @@ class DependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                ContainerInterface::class => new SelfDefinition(""),
                 "" => new SelfDefinition(""),
+                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addRequiredConstructorArgument(ConstructorD::class)
                     ->resolveDependencies(),

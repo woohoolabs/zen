@@ -47,8 +47,8 @@ class Compiler
 
     private function getEntryPoints(AbstractCompilerConfig $compilerConfig): Traversable
     {
-        yield ContainerInterface::class;
         yield $compilerConfig->getContainerFqcn();
+        yield ContainerInterface::class;
 
         foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {

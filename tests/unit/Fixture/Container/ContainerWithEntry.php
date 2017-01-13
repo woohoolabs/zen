@@ -9,8 +9,8 @@ class ContainerWithEntry extends AbstractContainer
      * @var string[]
      */
     protected $entryPoints = [
-        \Interop\Container\ContainerInterface::class => 'Interop__Container__ContainerInterface',
         \WoohooLabs\Zen\Tests\Unit\Fixture\Container\ContainerWithEntry::class => 'WoohooLabs__Zen__Tests__Unit__Fixture__Container__ContainerWithEntry',
+        \Interop\Container\ContainerInterface::class => 'Interop__Container__ContainerInterface',
     ];
 
     protected function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
