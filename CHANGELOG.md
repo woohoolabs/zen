@@ -8,6 +8,14 @@ REMOVED:
 
 FIXED:
 
+## 1.2.6 - 2017-01-13
+
+FIXED:
+
+- Regression when the container itself can't be retrieved
+- `ContainerInterface` entry references the container entry properly
+- Removed unnecessary "suggest" block from composer.json
+
 ## 1.2.5 - 2017-01-08
 
 FIXED:
