@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Woohoo Labs. Zen is a very simple, PSR-11 compliant DI Container offering outstanding performance.**
+**Woohoo Labs. Zen is a very fast simple, PSR-11 compliant DI Container.**
 
 ## Table of Contents
 
@@ -260,7 +260,7 @@ protected function getEntryPoints(): array
 
 The first method is the preferred one, because it needs much less configuration.
 
-### Definition Hints
+### Hints
 
 Hints tell the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
