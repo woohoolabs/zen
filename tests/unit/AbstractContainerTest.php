@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\NotFoundException;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainer;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry;
 use WoohooLabs\Zen\Tests\Unit\Fixture\Container\ContainerWithInjectedProperty;

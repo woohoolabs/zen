@@ -5,8 +5,8 @@ namespace WoohooLabs\Zen\Container;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
-use Interop\Container\ContainerInterface;
 use PhpDocReader\PhpDocReader;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;

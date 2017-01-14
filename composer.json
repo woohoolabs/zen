@@ -16,7 +16,7 @@
     },
     "require": {
         "php":"^7.0.0",
-        "container-interop/container-interop":"^1.1.0",
+        "psr/container": "^1.0.0@dev",
         "doctrine/annotations": "^1.2.6",
         "php-di/phpdoc-reader": "^2.0.1"
     },
@@ -25,7 +25,7 @@
         "squizlabs/php_codesniffer": "^2.1.1"
     },
     "provide": {
-        "container-interop/container-interop-implementation": "^1.0"
+        "psr/container-implementation": "1.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -34,8 +34,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "WoohooLabs\\Zen\\Tests\\Unit\\": "tests/unit",
-            "WoohooLabs\\Zen\\Examples\\": "examples/"
+            "WoohooLabs\\Zen\\Examples\\": "examples/",
+            "WoohooLabs\\Zen\\Tests\\Unit\\": "tests/unit"
         }
     },
     "bin": [

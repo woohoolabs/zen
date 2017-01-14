@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Exception;
 
 use Exception;
-use Interop\Container\Exception\NotFoundException as InteropNotFoundException;
+use Psr\Container\NotFoundExceptionInterface as PsrNotFoundExceptionInterface;
 
-class NotFoundException extends Exception implements InteropNotFoundException
+class NotFoundException extends Exception implements PsrNotFoundExceptionInterface
 {
     public function __construct(string $id)
     {

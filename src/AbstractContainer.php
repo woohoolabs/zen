@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen;
 
 use Closure;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Exception\NotFoundException;
 
 abstract class AbstractContainer implements ContainerInterface

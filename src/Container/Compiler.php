@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Traversable;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;

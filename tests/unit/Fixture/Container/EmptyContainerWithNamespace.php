@@ -10,6 +10,6 @@ class EmptyContainerWithNamespace extends AbstractContainer
      */
     protected $entryPoints = [
         \WoohooLabs\Zen\Tests\Unit\Fixture\Container\EmptyContainerWithNamespace::class => 'WoohooLabs__Zen__Tests__Unit__Fixture__Container__EmptyContainerWithNamespace',
-        \Interop\Container\ContainerInterface::class => 'Interop__Container__ContainerInterface',
+        \Psr\Container\ContainerInterface::class => 'Psr__Container__ContainerInterface',
     ];
 }

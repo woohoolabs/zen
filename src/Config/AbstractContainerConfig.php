@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
-use WoohooLabs\Zen\Config\Hint\DefinitionHint;
-use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
+use WoohooLabs\Zen\Config\Hint\DefinitionHint;
+use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 use WoohooLabs\Zen\Exception\ContainerException;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Examples\Utils;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class PlantUtil
 {

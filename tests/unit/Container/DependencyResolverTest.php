@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Unit\Compiler;
 
-use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\Tests\Unit\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationA;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Annotation\AnnotationB;
@@ -32,7 +33,6 @@ use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedA;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedB;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedC;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Mixed\MixedD;
-use WoohooLabs\Zen\Tests\Unit\Double\StubCompilerConfig;
 
 class DependencyResolverTest extends TestCase
 {

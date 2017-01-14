@@ -2,9 +2,13 @@
 
 ADDED:
 
+- Support for PSR-11
+
 CHANGED:
 
 REMOVED:
+
+- Support for Container-Interop
 
 FIXED:
 
