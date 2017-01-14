@@ -69,13 +69,14 @@ and its easy configuration (Zen was designed to work with the least amount of co
 
 ## Install
 
-The steps of this process are quite straightforward. The only thing you need is [Composer](http://getcomposer.org).
-Run the command below to get the latest version of Zen:
+The only thing you need is [Composer](http://getcomposer.org) before getting started. Then run the command below to get
+the latest version:
 
 ```bash
 $ composer require woohoolabs/zen
 ```
-This library needs PHP 7.0+.
+
+Zen requires PHP 7.0 at least.
 
 ## Basic Usage
 
