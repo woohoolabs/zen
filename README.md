@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Woohoo Labs. Zen is a very fast simple, PSR-11 compliant DI Container.**
+**Woohoo Labs. Zen is a very fast and simple, PSR-11 (formerly known as Container-Interop) compliant DI Container.**
 
 ## Table of Contents
 
