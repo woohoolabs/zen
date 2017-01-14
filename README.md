@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Woohoo Labs. Zen is a very fast and simple, Container-Interop (PSR-11) compliant DI Container.**
+**Woohoo Labs. Zen is a very simple, PSR-11 compliant DI Container offering outstanding performance.**
 
 ## Table of Contents
 
@@ -48,12 +48,12 @@ Dependency Injection, and to make the configuration as evident and convenient as
 
 ### Features
 
-- [Container-Interop](https://github.com/container-interop/container-interop) (PSR-11) compliance
+- [PSR-11](https://github.com/php-fig/fig-standards/blob/master/proposed/container.md) (former Container-Interop) compliance
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
-- Supports autowiring, but only objects can be injected
+- Supports autowiring (but only objects can be injected)
 - Generates a single class
-- No caching is needed to get [ultimate speed](https://github.com/kocsismate/php-di-container-benchmarks)
+- [Outstanding performance](https://github.com/kocsismate/php-di-container-benchmarks)
 
 ### Use Cases of Woohoo Labs. Zen
 
@@ -82,9 +82,9 @@ Zen requires PHP 7.0 at least.
 
 ### Using the container
 
-As Zen is a Container-Interop (PSR-11) compliant container, it supports the `$container->has()` and
+As Zen is a PSR-11 (former Container-Interop) compliant container, it supports the `$container->has()` and
 `$container->get()` methods as defined by
-[`ContainerInterface`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php).
+[`ContainerInterface`](https://github.com/php-fig/fig-standards/blob/master/proposed/container.md).
 
 ### Types of injection
 
@@ -260,7 +260,7 @@ protected function getEntryPoints(): array
 
 The first method is the preferred one, because it needs much less configuration.
 
-### Hints
+### Definition Hints
 
 Hints tell the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
