@@ -6,6 +6,8 @@ ADDED:
 
 CHANGED:
 
+- Optimized `$entryPoints` array
+
 REMOVED:
 
 - Support for Container-Interop

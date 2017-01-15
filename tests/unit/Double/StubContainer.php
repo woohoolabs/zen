@@ -15,7 +15,7 @@ class StubContainer extends AbstractContainer
     /**
      * @var string[]
      */
-    protected $entryPoints = [
+    protected static $entryPoints = [
         StubContainerEntry::class => "WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry",
     ];
 

@@ -8,7 +8,7 @@ class ContainerWithEntry extends AbstractContainer
     /**
      * @var string[]
      */
-    protected $entryPoints = [
+    protected static $entryPoints = [
         \WoohooLabs\Zen\Tests\Unit\Fixture\Container\ContainerWithEntry::class => 'WoohooLabs__Zen__Tests__Unit__Fixture__Container__ContainerWithEntry',
         \Psr\Container\ContainerInterface::class => 'Psr__Container__ContainerInterface',
     ];

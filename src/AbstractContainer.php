@@ -17,20 +17,20 @@ abstract class AbstractContainer implements ContainerInterface
     /**
      * @var string[]
      */
-    protected $entryPoints = [];
+    protected static $entryPoints = [];
 
     public function has($id): bool
     {
-        return isset($this->entryPoints[$id]);
+        return isset(static::$entryPoints[$id]);
     }
 
     public function get($id)
     {
-        if (isset($this->entryPoints[$id]) === false) {
+        if (isset(static::$entryPoints[$id]) === false) {
             throw new NotFoundException($id);
         }
 
-        $hash = $this->entryPoints[$id];
+        $hash = static::$entryPoints[$id];
 
         return $this->singletonEntries[$hash] ?? $this->$hash();
     }
@@ -38,12 +38,12 @@ abstract class AbstractContainer implements ContainerInterface
     protected function setProperties($object, array $properties)
     {
         Closure::bind(
-            function () use ($properties) {
+            function () use ($object, $properties) {
                 foreach ($properties as $name => $value) {
-                    $this->$name = $value;
+                    $object->$name = $value;
                 }
             },
-            $object,
+            null,
             $object
         )->__invoke();
     }

@@ -26,7 +26,7 @@ class Compiler
         $container .= "    /**\n";
         $container .= "     * @var string[]\n";
         $container .= "     */\n";
-        $container .= "    protected \$entryPoints = [\n";
+        $container .= "    protected static \$entryPoints = [\n";
 
         foreach ($this->getEntryPoints($compilerConfig) as $id) {
             $container .= "        \\$id::class => '" . $this->getHash($id) . "',\n";
