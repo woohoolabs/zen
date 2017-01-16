@@ -53,7 +53,7 @@ Dependency Injection, and to make the configuration as evident and convenient as
 - Supports the notion of scopes (Singleton and Prototype)
 - Supports autowiring (but only objects can be injected)
 - Generates a single class
-- [Outstanding performance](https://github.com/kocsismate/php-di-container-benchmarks)
+- [Outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
 
 ### Use Cases of Woohoo Labs. Zen
 
@@ -64,7 +64,7 @@ a fully featured container, please choose another project. In this case, I would
 
 But if the functionality offered By Zen is enough for you then Zen will amaze you with its simplicity (the core of the
 project only consists of cc. 600 lines of code), high performance (it has
-[similar speed](https://github.com/kocsismate/php-di-container-benchmarks) when you manually instantiate your objects)
+[similar speed](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) when you manually instantiate your objects)
 and its easy configuration (Zen was designed to work with the least amount of configuration).
 
 ## Install
