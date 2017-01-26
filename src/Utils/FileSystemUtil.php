@@ -31,7 +31,7 @@ class FileSystemUtil
         $files = new RegexIterator($it, '#.*\.(php|hhvm)$#');
 
         $result = [];
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $result[] = $file->getPathname();
         }
 
