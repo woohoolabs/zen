@@ -116,7 +116,7 @@ class ClassDefinition extends AbstractDefinition
 
         if ($this->scope === "singleton") {
             $code .= "\n        return \$this->singletonEntries['" . $this->getId() . "'] = \$entry;\n";
-        } elseif($this->scope === "prototype" && empty($this->properties) === false) {
+        } elseif ($this->scope === "prototype" && empty($this->properties) === false) {
             $code .= "\n        return \$entry;\n";
         }
 
