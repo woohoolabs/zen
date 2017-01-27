@@ -1,4 +1,4 @@
 <?php
-        $entry = $this->singletonEntries['B'] ?? $this->B();
+        $entry = $this->singletonEntries['X\B'] ?? $this->X__B();
 
-        return $this->singletonEntries['A'] = $entry;
+        return $this->singletonEntries['X\A'] = $entry;

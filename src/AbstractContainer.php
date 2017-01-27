@@ -30,9 +30,7 @@ abstract class AbstractContainer implements ContainerInterface
             throw new NotFoundException($id);
         }
 
-        $hash = static::$entryPoints[$id];
-
-        return $this->singletonEntries[$hash] ?? $this->$hash();
+        return $this->singletonEntries[$id] ?? $this->{static::$entryPoints[$id]}();
     }
 
     protected function setProperties($object, array $properties)

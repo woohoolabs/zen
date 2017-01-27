@@ -16,7 +16,7 @@ class StubContainer extends AbstractContainer
      * @var string[]
      */
     protected static $entryPoints = [
-        StubContainerEntry::class => "WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry",
+        StubContainerEntry::class => 'WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry',
     ];
 
     public function __construct(bool $isSingleton)
@@ -29,7 +29,7 @@ class StubContainer extends AbstractContainer
         $entry = new StubContainerEntry();
 
         if ($this->isSingleton) {
-            $this->singletonEntries["WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry"] = $entry;
+            $this->singletonEntries['WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry'] = $entry;
         }
 
         return $entry;

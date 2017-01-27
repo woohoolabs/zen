@@ -13,7 +13,7 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function singletonToPhpCode()
     {
-        $definition = ReferenceDefinition::singleton("A", "B");
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ReferenceDefinitionSingleton.php"),
@@ -26,7 +26,7 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function prototypeToPhpCode()
     {
-        $definition = ReferenceDefinition::prototype("A", "B");
+        $definition = ReferenceDefinition::prototype("X\\A", "X\\B");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ReferenceDefinitionPrototype.php"),

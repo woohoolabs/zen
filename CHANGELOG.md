@@ -7,6 +7,7 @@ ADDED:
 CHANGED:
 
 - Optimized `$entryPoints` array
+- Optimized look-up of Singleton entries
 
 REMOVED:
 

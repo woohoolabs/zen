@@ -62,7 +62,10 @@ class ClassDefinition extends AbstractDefinition
 
     public function addProperty(string $name, string $className): ClassDefinition
     {
-        $this->properties[$name] = str_replace("\\", "__", $className);
+        $this->properties[$name] = [
+            "class" => $className,
+            "hash" => str_replace("\\", "__", $className),
+        ];
 
         return $this;
     }
@@ -87,7 +90,7 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
-                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["hash"]);
+                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["class"], $constructorArgument["hash"]);
             } elseif (array_key_exists("default", $constructorArgument)) {
                 $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
@@ -104,15 +107,15 @@ class ClassDefinition extends AbstractDefinition
             $code .= "        \$this->setProperties(\n";
             $code .= "            \$entry,\n";
             $code .= "            [\n";
-            foreach ($this->properties as $propertyName => $propertyHash) {
-                $code .= "                '$propertyName' => " . $this->getEntryToPhp($propertyHash) . ",\n";
+            foreach ($this->properties as $propertyName => $property) {
+                $code .= "                '$propertyName' => " . $this->getEntryToPhp($property["class"], $property["hash"]) . ",\n";
             }
             $code .= "            ]\n";
             $code .= "        );\n";
         }
 
         if ($this->scope === "singleton") {
-            $code .= "\n        return \$this->singletonEntries['" . $this->getHash() . "'] = \$entry;\n";
+            $code .= "\n        return \$this->singletonEntries['" . $this->getId() . "'] = \$entry;\n";
         } elseif($this->scope === "prototype" && empty($this->properties) === false) {
             $code .= "\n        return \$entry;\n";
         }

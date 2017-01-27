@@ -60,7 +60,7 @@ class ClassDefinitionTest extends TestCase
      */
     public function singletonClassToPhpCode()
     {
-        $definition = new ClassDefinition("A");
+        $definition = new ClassDefinition("X\\A");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionSingleton.php"),
@@ -73,9 +73,9 @@ class ClassDefinitionTest extends TestCase
      */
     public function prototypeWithRequiredConstructorDependenciesToPhpCode()
     {
-        $definition = ClassDefinition::prototype("A")
-            ->addRequiredConstructorArgument("B")
-            ->addRequiredConstructorArgument("C");
+        $definition = ClassDefinition::prototype("X\\A")
+            ->addRequiredConstructorArgument("X\\B")
+            ->addRequiredConstructorArgument("X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
@@ -88,7 +88,7 @@ class ClassDefinitionTest extends TestCase
      */
     public function prototypeWithOptionalConstructorDependenciesToPhpCode()
     {
-        $definition = ClassDefinition::prototype("A")
+        $definition = ClassDefinition::prototype("X\\A")
             ->addOptionalConstructorArgument("")
             ->addOptionalConstructorArgument(true)
             ->addOptionalConstructorArgument(0)
@@ -108,9 +108,9 @@ class ClassDefinitionTest extends TestCase
      */
     public function prototypeWithPropertyDependenciesToPhpCode()
     {
-        $definition = ClassDefinition::prototype("A")
-            ->addProperty("b", "B")
-            ->addProperty("c", "C");
+        $definition = ClassDefinition::prototype("X\\A")
+            ->addProperty("b", "X\\B")
+            ->addProperty("c", "X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),

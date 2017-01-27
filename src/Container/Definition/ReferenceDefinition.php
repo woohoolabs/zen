@@ -8,7 +8,7 @@ class ReferenceDefinition extends AbstractDefinition
     /**
      * @var string
      */
-    private $referencedHash;
+    private $referrerId;
 
     /**
      * @var string
@@ -28,7 +28,7 @@ class ReferenceDefinition extends AbstractDefinition
     public function __construct(string $referrerId, string $referencedClassName, string $scope = "singleton")
     {
         parent::__construct($referencedClassName, str_replace("\\", "__", $referencedClassName));
-        $this->referencedHash = str_replace("\\", "__", $referrerId);
+        $this->referrerId = $referrerId;
         $this->scope = $scope;
     }
 
@@ -45,12 +45,12 @@ class ReferenceDefinition extends AbstractDefinition
     public function toPhpCode(): string
     {
         if ($this->scope === "singleton") {
-            $code = "        \$entry = " . $this->getEntryToPhp($this->getHash()) . ";\n\n";
-            $code .= "        return \$this->singletonEntries['" . $this->referencedHash . "'] = \$entry;\n";
+            $code = "        \$entry = " . $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n\n";
+            $code .= "        return \$this->singletonEntries['" . $this->referrerId . "'] = \$entry;\n";
 
             return $code;
         }
 
-        return "        return " . $this->getEntryToPhp($this->getHash()) . ";\n";
+        return "        return " . $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n";
     }
 }

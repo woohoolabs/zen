@@ -1,5 +1,5 @@
 <?php
-        return new \A(
+        return new \X\A(
             "",
             true,
             0,
