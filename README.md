@@ -125,7 +125,7 @@ the container in order for it to reflect the changes. This is a major weakness o
 certainly see major improvements in this regard in the future), but the trade-off had to be taken in order to be more
 performant than "dynamic" Containers.
 
-Compilation is possible by running the following command:
+Compilation is possible by running the following command from the project root directory:
 
 ```bash
 $ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
@@ -134,14 +134,14 @@ $ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 > Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` parameter when using namespaces like below:
 
 ```bash
-./vendor/bin/zen build /var/www/app/MyContainer.php "MyApp\\Config\\MyCompilerConfig"
+./vendor/bin/zen build /var/www/app/Container/Container.php "App\\Container\\CompilerConfig"
 ```
 
-This results in a new file `CONTAINER_PATH` (e.g.: "/var/www/app/MyContainer.php") which can be directly
+This results in a new file `CONTAINER_PATH` (e.g.: "/var/www/app/Container/Container.php") which can be directly
 instantiated (assuming proper autoloading) in your project. No other configuration is needed during runtime.
 
 ```php
-$container = new MyContainer();
+$container = new Container();
 ```
 
 It's up to you where you generate the container but please be aware that file system speed (referring to the
@@ -153,14 +153,14 @@ occasionally need to debug it.
 
 What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be the fully qualified name of a class which extends
 `AbstractCompilerConfig`. Let's see an
-[example](https://github.com/woohoolabs/zen/blob/master/Config/AbstractCompilerConfig.php)!
+[example](https://github.com/woohoolabs/zen/blob/master/examples/CompilerConfig.php)!
 
 ```php
-class MyCompilerConfig extends AbstractCompilerConfig
+class CompilerConfig extends AbstractCompilerConfig
 {
     public function getContainerNamespace(): string
     {
-        return "MyApp\\Config";
+        return "App\\Container";
     }
     
     public function getContainerClassName(): string
@@ -181,13 +181,13 @@ class MyCompilerConfig extends AbstractCompilerConfig
     public function getContainerConfigs(): array
     {
         return [
-            new MyContainerConfig()
+            new ContainerConfig()
         ];
     }
 }
 ```
 
-By providing the prior configuration to the `zen build` command, a `MyApp\Config\Container` class will be
+By providing the prior configuration to the `zen build` command, an `App\Container\Container` class will be
 generated and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
 dependencies marked by annotations.
 
@@ -195,11 +195,11 @@ dependencies marked by annotations.
 
 We only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
 be done by returning an array of `AbstractContainerConfig` child instances in the `getContainerConfigs()`
-method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/Config/AbstractContainerConfig.php))
+method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/examples/ContainerConfig.php))
 for the container configuration too!
 
 ```php
-class MyContainerConfig extends AbstractContainerConfig
+class ContainerConfig extends AbstractContainerConfig
 {
     protected function getEntryPoints(): array
     {
@@ -211,7 +211,7 @@ class MyContainerConfig extends AbstractContainerConfig
     protected function getDefinitionHints(): array
     {
         return [
-            ContainerInterface::class => MyContainer::class,
+            ContainerInterface::class => Container::class,
         ];
     }
 
@@ -271,14 +271,14 @@ The first method is the preferred one, because it needs much less configuration.
 Hints tell the compiler how to properly resolve a dependency. This can be necessary when you depend on an
 interface or an abstract class because they are obviously not instantiatable. With hints, you are able to bind
 implementations to your interfaces or concretions to your abstract classes. The following example binds the
-`MyContainer` class to `ContainerInterface` (in fact, you don't have to bind these two classes together, because this
+`Container` class to `ContainerInterface` (in fact, you don't have to bind these two classes together, because this
 very configuration is automatically set during compilation).
 
 ```php
 protected function getDefinitionHints(): array
 {
     return [
-        ContainerInterface::class => MyContainer::class,
+        ContainerInterface::class => Container::class,
     ];
 }
 ```
@@ -321,7 +321,7 @@ possible to store stateful objects in the container. You can hint a container en
 protected function getDefinitionHints(): array
 {
     return [
-        ContainerInterface::class => DefinitionHint::prototype(MyContainer::class),
+        ContainerInterface::class => DefinitionHint::prototype(Container::class),
     ];
 }
 ```
