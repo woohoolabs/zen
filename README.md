@@ -131,8 +131,14 @@ Compilation is possible by running the following command:
 $ vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 ```
 
-This results in a new file `CONTAINER_PATH` which can be directly instantiated (assuming proper autoloading) in your
-project. No other configuration is needed during runtime.
+> Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` argument when using namespaces. Here is a good example:
+
+```bash
+./vendor/bin/zen build /var/www/app/MyContainer.php "MyApp\\Config\\MyCompilerConfig"
+```
+
+This results in a new file `CONTAINER_PATH` (e.g.: "/var/www/app/MyContainer.php") which can be directly
+instantiated (assuming proper autoloading) in your project. No other configuration is needed during runtime.
 
 ```php
 $container = new MyContainer();
