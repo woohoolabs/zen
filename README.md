@@ -128,10 +128,10 @@ performant than "dynamic" Containers.
 Compilation is possible by running the following command:
 
 ```bash
-$ vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
+$ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 ```
 
-> Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` argument when using namespaces. Here is a good example:
+> Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` parameter when using namespaces like below:
 
 ```bash
 ./vendor/bin/zen build /var/www/app/MyContainer.php "MyApp\\Config\\MyCompilerConfig"
