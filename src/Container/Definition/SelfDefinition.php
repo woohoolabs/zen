@@ -15,7 +15,7 @@ class SelfDefinition extends AbstractDefinition
         return false;
     }
 
-    public function resolveDependencies()
+    public function resolveDependencies(): DefinitionInterface
     {
         return $this;
     }

@@ -11,10 +11,7 @@ interface DefinitionInterface
 
     public function needsDependencyResolution(): bool;
 
-    /**
-     * @return $this
-     */
-    public function resolveDependencies();
+    public function resolveDependencies(): DefinitionInterface;
 
     public function toPhpCode(): string;
 }

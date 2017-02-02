@@ -75,7 +75,7 @@ class ClassDefinition extends AbstractDefinition
         return $this->needsDependencyResolution;
     }
 
-    public function resolveDependencies()
+    public function resolveDependencies(): DefinitionInterface
     {
         $this->needsDependencyResolution = false;
 

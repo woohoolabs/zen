@@ -37,7 +37,7 @@ class ReferenceDefinition extends AbstractDefinition
         return false;
     }
 
-    public function resolveDependencies()
+    public function resolveDependencies(): DefinitionInterface
     {
         return $this;
     }

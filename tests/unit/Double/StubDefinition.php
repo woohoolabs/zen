@@ -22,8 +22,9 @@ class StubDefinition implements DefinitionInterface
         return false;
     }
 
-    public function resolveDependencies()
+    public function resolveDependencies(): DefinitionInterface
     {
+        return $this;
     }
 
     public function toPhpCode(): string
