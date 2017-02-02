@@ -11,6 +11,9 @@ interface DefinitionInterface
 
     public function needsDependencyResolution(): bool;
 
+    /**
+     * @return void
+     */
     public function resolveDependencies();
 
     public function toPhpCode(): string;
