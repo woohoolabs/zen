@@ -12,7 +12,7 @@ interface DefinitionInterface
     public function needsDependencyResolution(): bool;
 
     /**
-     * @return void
+     * @return $this
      */
     public function resolveDependencies();
 

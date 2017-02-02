@@ -78,6 +78,8 @@ class ClassDefinition extends AbstractDefinition
     public function resolveDependencies()
     {
         $this->needsDependencyResolution = false;
+
+        return $this;
     }
 
     public function toPhpCode(): string

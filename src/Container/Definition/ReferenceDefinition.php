@@ -39,6 +39,7 @@ class ReferenceDefinition extends AbstractDefinition
 
     public function resolveDependencies()
     {
+        return $this;
     }
 
     public function toPhpCode(): string

@@ -17,6 +17,7 @@ class SelfDefinition extends AbstractDefinition
 
     public function resolveDependencies()
     {
+        return $this;
     }
 
     public function toPhpCode(): string
