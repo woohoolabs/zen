@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-  zen-php:
-    container_name: zen-php
-    image: php:7.0-cli
-    volumes:
-      - .:/var/www
-    command: /bin/bash -c "cd /var/www; php vendor/bin/phpunit"
+    zen-php:
+        container_name: zen-php
+        image: php:7.0-cli
+        volumes:
+            - .:/var/www
+        command: /bin/bash -c "cd /var/www; php vendor/bin/phpunit"
