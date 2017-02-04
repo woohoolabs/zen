@@ -21,7 +21,7 @@
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "^5.4.0",
+        "phpunit/PHPUnit": "^6.0.0",
         "squizlabs/php_codesniffer": "^2.1.1"
     },
     "provide": {
