@@ -16,7 +16,7 @@
     },
     "require": {
         "php":"^7.0.0",
-        "psr/container": "^1.0.0@dev",
+        "psr/container": "^1.0.0",
         "doctrine/annotations": "^1.2.6",
         "php-di/phpdoc-reader": "^2.0.1"
     },

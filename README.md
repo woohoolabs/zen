@@ -48,7 +48,7 @@ Dependency Injection, and to make the configuration as evident and convenient as
 
 ### Features
 
-- [PSR-11](https://github.com/php-fig/fig-standards/blob/master/proposed/container.md) (former Container-Interop) compliance
+- [PSR-11](http://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
 - Supports autowiring (but only objects can be injected)
@@ -82,9 +82,9 @@ Zen requires PHP 7.0 at least.
 
 ### Using the container
 
-As Zen is a PSR-11 (former Container-Interop) compliant container, it supports the `$container->has()` and
+As Zen is a PSR-11 compliant container, it supports the `$container->has()` and
 `$container->get()` methods as defined by
-[`ContainerInterface`](https://github.com/php-fig/fig-standards/blob/master/proposed/container.md).
+[`ContainerInterface`](http://www.php-fig.org/psr/psr-11/).
 
 ### Types of injection
 
@@ -329,6 +329,12 @@ protected function getDefinitionHints(): array
 You can use `WildcardHint::prototype()` to hint your Wildcard Hints the same way too.
 
 ## Advanced Usage
+
+### Scalar injection
+
+Although Zen doesn't support scalar injection natively, you are yet able to use this technique: you have to
+extend the class which needs scalar values as constructor arguments, provide these values in the new constructor via
+`parent::__construct()` and then add the appropriate [definition hint](#hints) to the container configuration.
 
 ## Examples
 
