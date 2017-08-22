@@ -6,6 +6,7 @@
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
+[![Gitter][ico-gitter]][link-gitter]
 
 **Woohoo Labs. Zen is a very fast and simple, PSR-11 (former Container-Interop) compliant DI Container.**
 
@@ -20,6 +21,7 @@
 * [Change Log](#change-log)
 * [Testing](#testing)
 * [Contributing](#contributing)
+* [Support](#support)
 * [Credits](#credits)
 * [License](#license)
 
@@ -364,6 +366,10 @@ Additionally, you may run `docker-compose up` in order to execute the tests.
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
+## Support
+
+Please see [SUPPORT](SUPPORT.md) for details.
+
 ## Credits
 
 - [Máté Kocsis][link-author]
@@ -379,6 +385,7 @@ The MIT License (MIT). Please see the [License File](LICENSE.md) for more inform
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/woohoolabs/zen.svg
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/woohoolabs/zen.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/woohoolabs/zen.svg
+[ico-gitter]: https://badges.gitter.im/woohoolabs/zen.svg
 
 [link-packagist]: https://packagist.org/packages/woohoolabs/zen
 [link-travis]: https://travis-ci.org/woohoolabs/zen
@@ -387,3 +394,4 @@ The MIT License (MIT). Please see the [License File](LICENSE.md) for more inform
 [link-downloads]: https://packagist.org/packages/woohoolabs/zen
 [link-author]: https://github.com/kocsismate
 [link-contributors]: ../../contributors
+[link-gitter]: https://gitter.im/woohoolabs/zen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
