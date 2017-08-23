@@ -17,7 +17,7 @@
     "require": {
         "php":"^7.0.0",
         "psr/container": "^1.0.0",
-        "doctrine/annotations": "^1.2.6",
+        "doctrine/annotations": "^1.4.0",
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
@@ -43,5 +43,11 @@
     ],
     "scripts": {
         "test": "phpunit"
+    },
+    "config": {
+        "bin-compat": "full",
+        "platform": {
+            "php": "7.0"
+        }
     }
 }

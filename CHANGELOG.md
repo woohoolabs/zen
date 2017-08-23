@@ -5,6 +5,8 @@ ADDED:
 CHANGED:
 
 - Do not use the deprecated `AnnotationRegistry::registerFile()` method
+- Require `doctrine/annotations` v1.4.0 minimally
+
 REMOVED:
 
 FIXED:
