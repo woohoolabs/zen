@@ -4,6 +4,7 @@ ADDED:
 
 CHANGED:
 
+- Do not use the deprecated `AnnotationRegistry::registerFile()` method
 REMOVED:
 
 FIXED:
