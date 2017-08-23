@@ -185,7 +185,6 @@ class DependencyResolver
 
     private function setAnnotationReader()
     {
-        AnnotationRegistry::loadAnnotationClass(Inject::class);
         $this->annotationReader = new SimpleAnnotationReader();
         $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
     }
