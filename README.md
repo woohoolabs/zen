@@ -78,7 +78,7 @@ the latest version:
 $ composer require woohoolabs/zen
 ```
 
-Zen requires PHP 7.0 at least.
+Zen requires PHP 7.1 at least.
 
 ## Basic Usage
 

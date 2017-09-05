@@ -4,8 +4,9 @@ ADDED:
 
 CHANGED:
 
+- Increase minimum PHP version requirement to 7.1
+- Require `doctrine/annotations` v1.5.0 minimally
 - Do not use the deprecated `AnnotationRegistry::registerFile()` method
-- Require `doctrine/annotations` v1.4.0 minimally
 
 REMOVED:
 
