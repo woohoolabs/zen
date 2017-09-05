@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
@@ -63,7 +62,7 @@ class DependencyResolver
         ];
     }
 
-    public function resolveEntryPoints()
+    public function resolveEntryPoints(): void
     {
         foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
@@ -74,7 +73,7 @@ class DependencyResolver
         }
     }
 
-    private function resolve(string $id)
+    private function resolve(string $id): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
@@ -100,7 +99,7 @@ class DependencyResolver
         $this->resolveDependencies($id);
     }
 
-    private function resolveDependencies(string $id)
+    private function resolveDependencies(string $id): void
     {
         $this->definitions[$id]->resolveDependencies();
 
@@ -121,7 +120,7 @@ class DependencyResolver
         return $this->definitions;
     }
 
-    private function resolveConstructorArguments(ClassDefinition $definition)
+    private function resolveConstructorArguments(ClassDefinition $definition): void
     {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
@@ -152,7 +151,7 @@ class DependencyResolver
         }
     }
 
-    private function resolveAnnotatedProperties(ClassDefinition $definition)
+    private function resolveAnnotatedProperties(ClassDefinition $definition): void
     {
         $class = new ReflectionClass($definition->getClassName());
 
@@ -183,7 +182,7 @@ class DependencyResolver
         }
     }
 
-    private function setAnnotationReader()
+    private function setAnnotationReader(): void
     {
         $this->annotationReader = new SimpleAnnotationReader();
         $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');

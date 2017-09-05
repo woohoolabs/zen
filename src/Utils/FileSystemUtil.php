@@ -72,7 +72,7 @@ class FileSystemUtil
         return $classes;
     }
 
-    private static function isNamespace(array $tokens, int $position, bool $dlm)
+    private static function isNamespace(array $tokens, int $position, bool $dlm): bool
     {
         return (isset($tokens[$position - 2][1]) && $tokens[$position - 2][1] === "namespace") ||
         ($dlm && $tokens[$position - 1][0] == T_NS_SEPARATOR && $tokens[$position][0] == T_STRING);

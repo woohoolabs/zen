@@ -20,14 +20,14 @@ abstract class AbstractHint
         return $this->scope;
     }
 
-    public function setSingletonScope()
+    public function setSingletonScope(): void
     {
         $this->scope = "singleton";
 
         return $this;
     }
 
-    public function setPrototypeScope()
+    public function setPrototypeScope(): void
     {
         $this->scope = "prototype";
 

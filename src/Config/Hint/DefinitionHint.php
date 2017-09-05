@@ -14,12 +14,12 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
      */
     private $className;
 
-    public static function singleton(string $className)
+    public static function singleton(string $className): DefinitionHint
     {
         return new self($className);
     }
 
-    public static function prototype(string $className)
+    public static function prototype(string $className): DefinitionHint
     {
         $self = new self($className);
         $self->setPrototypeScope();

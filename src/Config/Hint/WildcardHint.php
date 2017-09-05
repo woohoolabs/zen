@@ -22,12 +22,12 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
      */
     private $targetPattern;
 
-    public static function singleton(string $sourcePath, string $sourcePattern, string $targetPattern)
+    public static function singleton(string $sourcePath, string $sourcePattern, string $targetPattern): WildcardHint
     {
         return new self($sourcePath, $sourcePattern, $targetPattern);
     }
 
-    public static function prototype(string $sourcePath, string $sourcePattern, string $targetPattern)
+    public static function prototype(string $sourcePath, string $sourcePattern, string $targetPattern): WildcardHint
     {
         $self = new self($sourcePath, $sourcePattern, $targetPattern);
         $self->setPrototypeScope();

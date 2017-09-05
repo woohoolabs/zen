@@ -9,7 +9,7 @@ use WoohooLabs\Zen\Container\DependencyResolver;
 
 abstract class AbstractContainerBuilder
 {
-    protected function getContainer(AbstractCompilerConfig $compilerConfig)
+    protected function getContainer(AbstractCompilerConfig $compilerConfig): string
     {
         $definitionHints = [];
         foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
