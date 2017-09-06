@@ -8,6 +8,8 @@ REMOVED:
 
 FIXED:
 
+- PHP version check in the zen binary
+
 ## 2.1.0 - 2017-09-05
 
 CHANGED:
