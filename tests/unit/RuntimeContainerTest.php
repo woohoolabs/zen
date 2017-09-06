@@ -77,7 +77,7 @@ class RuntimeContainerTest extends TestCase
                 [
                     new StubContainerConfig([$entryPoint], $definitionsHints)
                 ],
-                "",
+                "WoohooLabs\\Zen",
                 $className
             )
         );
