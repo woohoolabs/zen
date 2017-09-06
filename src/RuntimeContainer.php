@@ -19,7 +19,7 @@ class RuntimeContainer implements ContainerInterface
         $containerBuilder = new RuntimeContainerBuilder($compilerConfig);
         $containerBuilder->build();
 
-        $className = $compilerConfig->getContainerClassName();
+        $className = $compilerConfig->getContainerFqcn();
         $this->container = new $className();
     }
 
