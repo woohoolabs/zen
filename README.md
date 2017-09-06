@@ -44,18 +44,18 @@ this phenomenon as part of the [simple vs. easy problem](https://www.infoq.com/p
 
 Zen doesn't - and probably will never - feature all the capabilities of the most famous DI Containers currently available.
 There are things that aren't worth the hassle. On the other hand, it will try hard to enforce the correct usage of
-Dependency Injection, and to make the configuration as evident and convenient as possible while providing an
+Dependency Injection, and to make the configuration as evident and convenient as possible while providing
 [outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) according to
 [my benchmarks](https://github.com/kocsismate/php-di-container-benchmarks).
 
 ### Features
 
 - [PSR-11](http://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
+- Supports compilation for [maximum performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
+- Supports dynamic usage for development
+- Supports autowiring (but only objects can be injected)
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
-- Supports autowiring (but only objects can be injected)
-- Generates a single class
-- [Outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
 
 ### Use Cases of Woohoo Labs. Zen
 
@@ -123,11 +123,10 @@ that aren't unit tested. I prefer this type of injection in my controllers, but 
 ### Building the container
 
 Zen is a compiled DI Container which means that every time you update a dependency of a class, you have to recompile
-the container in order for it to reflect the changes. This is a major weakness of compiled containers (Zen will
-certainly see major improvements in this regard in the future), but the trade-off had to be taken in order to be more
-performant than "dynamic" Containers.
+the container in order for it to reflect the changes. This is a major weakness of compiled containers during development,
+but that's why Zen also offers a dynamic container implementation which is introduced [later](#dynamic-container).
 
-Compilation is possible by running the following command from the project root directory:
+Compilation is possible by running the following command from your project's root directory:
 
 ```bash
 $ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
@@ -331,6 +330,18 @@ protected function getDefinitionHints(): array
 You can use `WildcardHint::prototype()` to hint your Wildcard Hints the same way too.
 
 ## Advanced Usage
+
+### Dynamic container
+
+You probably don't want to recompile the container all the time during development. That's where a dynamic container
+helps you:
+
+```php
+$container = new RuntimeContainer(new CompilerConfig());
+```
+
+Please note that it is only suitable for development purposes, because its implementation is rather slow. Technically,
+it compiles a container in memory during runtime and then `eval`s it. It's ridiculous I know...
 
 ### Scalar injection
 
