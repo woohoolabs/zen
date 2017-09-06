@@ -117,19 +117,6 @@ class DependencyResolver
         }
     }
 
-    public function getCompilerConfig(): AbstractCompilerConfig
-    {
-        return $this->compilerConfig;
-    }
-
-    /**
-     * @return DefinitionHintInterface[]
-     */
-    public function getDefinitionHints(): array
-    {
-        return $this->definitionHints;
-    }
-
     /**
      * @return DefinitionInterface[]
      */
