@@ -47,8 +47,13 @@ class DependencyResolver
     /**
      * @param DefinitionHintInterface[] $definitionHints
      */
-    public function __construct(AbstractCompilerConfig $compilerConfig, array $definitionHints)
+    public function __construct(AbstractCompilerConfig $compilerConfig)
     {
+        $definitionHints = [];
+        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
+            $definitionHints = array_merge($definitionHints, $containerConfig->createDefinitionHints());
+        }
+
         $this->compilerConfig = $compilerConfig;
         $this->definitionHints = $definitionHints;
         $this->setAnnotationReader();
@@ -110,6 +115,19 @@ class DependencyResolver
         if ($this->compilerConfig->usePropertyInjection()) {
             $this->resolveAnnotatedProperties($this->definitions[$id]);
         }
+    }
+
+    public function getCompilerConfig(): AbstractCompilerConfig
+    {
+        return $this->compilerConfig;
+    }
+
+    /**
+     * @return DefinitionHintInterface[]
+     */
+    public function getDefinitionHints(): array
+    {
+        return $this->definitionHints;
     }
 
     /**
