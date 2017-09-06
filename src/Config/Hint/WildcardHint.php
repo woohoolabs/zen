@@ -43,6 +43,9 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
         $this->targetPattern = $targetPattern;
     }
 
+    /**
+     * @return DefinitionHintInterface[]
+     */
     public function getDefinitionHints(): array
     {
         $sourceRegex = "/" . str_replace([".", "\\", "*"], ["\\.", "\\\\", "(.*)"], $this->sourcePattern) . "/";

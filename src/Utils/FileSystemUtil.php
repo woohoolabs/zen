@@ -9,6 +9,9 @@ use RegexIterator;
 
 class FileSystemUtil
 {
+    /**
+     * @return string[]
+     */
     public static function getClassesInPath(string $path, bool $onlyConcreteClasses): array
     {
         $result = [];
@@ -24,6 +27,9 @@ class FileSystemUtil
         return $result;
     }
 
+    /**
+     * @return string[]
+     */
     private static function getSourceFilesInPath(string $path): array
     {
         $di = new RecursiveDirectoryIterator($path);
@@ -38,6 +44,9 @@ class FileSystemUtil
         return $result;
     }
 
+    /**
+     * @return string[][]
+     */
     private static function getClassesInFile($filePath, bool $onlyConcreteClasses): array
     {
         $classes = [];
