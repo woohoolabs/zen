@@ -5,22 +5,29 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DependencyResolver;
 
-abstract class AbstractContainerBuilder
+abstract class AbstractContainerBuilder implements ContainerBuilderInterface
 {
-    protected function getContainer(AbstractCompilerConfig $compilerConfig): string
-    {
-        $definitionHints = [];
-        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
-            $definitionHints = array_merge($definitionHints, $containerConfig->createDefinitionHints());
-        }
+    /**
+     * @var AbstractCompilerConfig
+     */
+    protected $compilerConfig;
 
-        $dependencyResolver = new DependencyResolver($compilerConfig, $definitionHints);
+    public function __construct(AbstractCompilerConfig $compilerConfig)
+    {
+        $this->compilerConfig = $compilerConfig;
+    }
+
+    /**
+     * @return DefinitionInterface[]
+     */
+    protected function getDefinitions(): array
+    {
+        $dependencyResolver = new DependencyResolver($this->compilerConfig);
         $dependencyResolver->resolveEntryPoints();
 
-        $compiler = new Compiler();
-
-        return $compiler->compile($compilerConfig, $dependencyResolver->getDefinitions());
+        return $dependencyResolver->getDefinitions();
     }
 }

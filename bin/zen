@@ -43,6 +43,6 @@ if ($argv[1] === "build") {
     $containerFilePath = $argv[2];
     $compilerConfig = new $argv[3]();
 
-    $builder = new FileSystemContainerBuilder();
-    $builder->build($containerFilePath, $compilerConfig);
+    $builder = new FileSystemContainerBuilder($compilerConfig, $containerFilePath);
+    $builder->build();
 }
