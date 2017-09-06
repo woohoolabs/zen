@@ -44,9 +44,6 @@ class DependencyResolver
      */
     private $typeHintReader;
 
-    /**
-     * @param DefinitionHintInterface[] $definitionHints
-     */
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
         $definitionHints = [];
