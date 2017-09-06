@@ -19,8 +19,8 @@ class Compiler
         if ($compilerConfig->getContainerNamespace()) {
             $container .= "namespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
-        $container .= "\nuse WoohooLabs\\Zen\\AbstractContainer;\n\n";
-        $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractContainer\n";
+        $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n\n";
+        $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractCompiledContainer\n";
         $container .= "{\n";
 
         $container .= "    /**\n";

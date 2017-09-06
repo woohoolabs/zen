@@ -91,6 +91,6 @@ class CompilerTest extends TestCase
 
     private function getCompiledContainerSourceCode(string $fileName)
     {
-        return file_get_contents(realpath(__DIR__ . "/../Fixture/Container/" . $fileName));
+        return file_get_contents(dirname(__DIR__) . "/Fixture/Container/" . $fileName);
     }
 }

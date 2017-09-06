@@ -1,8 +1,8 @@
 <?php
 
-use WoohooLabs\Zen\AbstractContainer;
+use WoohooLabs\Zen\AbstractCompiledContainer;
 
-class EmptyContainerWithoutNamespace extends AbstractContainer
+class EmptyContainerWithoutNamespace extends AbstractCompiledContainer
 {
     /**
      * @var string[]

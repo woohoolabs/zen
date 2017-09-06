@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Unit\Double;
 
-use WoohooLabs\Zen\AbstractContainer;
+use WoohooLabs\Zen\AbstractCompiledContainer;
 
-class StubContainer extends AbstractContainer
+class StubContainer extends AbstractCompiledContainer
 {
     /**
      * @var bool

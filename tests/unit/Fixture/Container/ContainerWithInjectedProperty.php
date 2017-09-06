@@ -1,10 +1,10 @@
 <?php
 namespace WoohooLabs\Zen\Tests\Unit\Fixture\Container;
 
-use WoohooLabs\Zen\AbstractContainer;
+use WoohooLabs\Zen\AbstractCompiledContainer;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry;
 
-class ContainerWithInjectedProperty extends AbstractContainer
+class ContainerWithInjectedProperty extends AbstractCompiledContainer
 {
     protected function A()
     {

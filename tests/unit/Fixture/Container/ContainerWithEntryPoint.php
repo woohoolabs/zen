@@ -1,9 +1,9 @@
 <?php
 namespace WoohooLabs\Zen\Tests\Unit\Fixture\Container;
 
-use WoohooLabs\Zen\AbstractContainer;
+use WoohooLabs\Zen\AbstractCompiledContainer;
 
-class ContainerWithEntryPoint extends AbstractContainer
+class ContainerWithEntryPoint extends AbstractCompiledContainer
 {
     /**
      * @var string[]

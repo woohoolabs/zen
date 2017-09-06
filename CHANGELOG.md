@@ -6,6 +6,8 @@ ADDED:
 
 CHANGED:
 
+- Renamed `AbstractContainer` to `AbstractCompiledContainer`
+
 REMOVED:
 
 FIXED:

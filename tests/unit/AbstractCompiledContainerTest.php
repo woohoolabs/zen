@@ -10,7 +10,7 @@ use WoohooLabs\Zen\Tests\Unit\Double\StubContainer;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry;
 use WoohooLabs\Zen\Tests\Unit\Fixture\Container\ContainerWithInjectedProperty;
 
-class AbstractContainerTest extends TestCase
+class AbstractCompiledContainerTest extends TestCase
 {
     /**
      * @test

@@ -7,7 +7,7 @@ use Closure;
 use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Exception\NotFoundException;
 
-abstract class AbstractContainer implements ContainerInterface
+abstract class AbstractCompiledContainer implements ContainerInterface
 {
     /**
      * @var array
