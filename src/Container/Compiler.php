@@ -35,7 +35,7 @@ class Compiler
         $container .= "    ];\n";
 
         foreach ($definitions as $id => $definition) {
-            $container .= "\n    protected function " . $this->getHash($id) . "()\n    {\n";
+            $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
             $container .= $definition->toPhpCode();
             $container .= "    }\n";
         }

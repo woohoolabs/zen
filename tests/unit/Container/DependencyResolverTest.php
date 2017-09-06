@@ -265,8 +265,11 @@ class DependencyResolverTest extends TestCase
     private function createDependencyResolver(string $entryPoint, array $definitionHints = []): DependencyResolver
     {
         return new DependencyResolver(
-            new StubCompilerConfig([new StubContainerConfig([$entryPoint])]),
-            $definitionHints
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig([$entryPoint], $definitionHints),
+                ]
+            )
         );
     }
 }

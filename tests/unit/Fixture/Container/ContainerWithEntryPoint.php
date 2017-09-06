@@ -14,7 +14,7 @@ class ContainerWithEntryPoint extends AbstractContainer
         \WoohooLabs\Zen\Tests\Unit\Double\StubDefinition::class => 'WoohooLabs__Zen__Tests__Unit__Double__StubDefinition',
     ];
 
-    protected function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
+    public function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
     {
         // This is a dummy definition.
     }

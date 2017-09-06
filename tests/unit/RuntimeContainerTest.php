@@ -9,7 +9,6 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Unit\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Unit\Double\StubContainerConfig;
-use WoohooLabs\Zen\Tests\Unit\Double\StubContainerEntry;
 use WoohooLabs\Zen\Tests\Unit\Fixture\DependencyGraph\Constructor\ConstructorA;
 
 class RuntimeContainerTest extends TestCase

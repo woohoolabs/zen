@@ -13,7 +13,7 @@ class ContainerWithEntry extends AbstractContainer
         \Psr\Container\ContainerInterface::class => 'Psr__Container__ContainerInterface',
     ];
 
-    protected function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
+    public function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
     {
         // This is a dummy definition.
     }
