@@ -63,7 +63,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
 
     public function usePropertyInjection(): bool
     {
-        return $this->useConstructorInjection;
+        return $this->usePropertyInjection;
     }
 
     public function getContainerConfigs(): array

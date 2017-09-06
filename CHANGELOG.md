@@ -2,6 +2,8 @@
 
 ADDED:
 
+- `RuntimeContainer` container implementation which doesn't need to be compiled
+
 CHANGED:
 
 REMOVED:
