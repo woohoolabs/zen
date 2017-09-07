@@ -25,6 +25,6 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
 
         $compiledContainer = $compiler->compile($this->compilerConfig, $this->getDefinitions());
 
-        file_put_contents($this->filePath, "<?php\n" . $compiledContainer);
+        file_put_contents($this->filePath, $compiledContainer);
     }
 }

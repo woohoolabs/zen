@@ -36,6 +36,6 @@ class ReferenceDefinitionTest extends TestCase
 
     private function getDefinitionSourceCode(string $fileName)
     {
-        return str_replace("<?php\n", "", file_get_contents(realpath(__DIR__ . "/../../Fixture/Definition/" . $fileName)));
+        return str_replace("<?php\n", "", file_get_contents(dirname(__DIR__, 2) . "/Fixture/Definition/" . $fileName));
     }
 }

@@ -29,7 +29,7 @@ class FileSystemUtilTest extends TestCase
                 EntryPointD1::class,
                 EntryPointD2::class,
             ],
-            FileSystemUtil::getClassesInPath(realpath(__DIR__ . "/../Fixture/DependencyGraph/EntryPoint"), true)
+            FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", true)
         );
     }
 
@@ -38,7 +38,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getAllClassNames()
     {
-        $classes = FileSystemUtil::getClassesInPath(realpath(__DIR__ . "/../Fixture/DependencyGraph/EntryPoint"), false);
+        $classes = FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", false);
 
         $this->assertContains(EntryPointEInterface::class, $classes);
         $this->assertContains(EntryPointGAbstract::class, $classes);
