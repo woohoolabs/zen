@@ -5,7 +5,6 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
-use WoohooLabs\Zen\Container\DependencyResolver;
 
 class RuntimeContainerBuilder extends AbstractContainerBuilder
 {
@@ -16,9 +15,7 @@ class RuntimeContainerBuilder extends AbstractContainerBuilder
 
     public function build(): void
     {
-        $dependencyResolver = new DependencyResolver($this->compilerConfig);
-        $dependencyResolver->resolveEntryPoints();
-        $definitions = $dependencyResolver->getDefinitions();
+        $definitions = $this->getDefinitions();
 
         $compiler = new Compiler();
         $compiledContainer = $compiler->compile($this->compilerConfig, $definitions);
