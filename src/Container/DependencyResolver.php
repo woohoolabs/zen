@@ -40,7 +40,7 @@ class DependencyResolver
     private $annotationReader;
 
     /**
-     * @var PhpDocReader|null
+     * @var PhpDocReader
      */
     private $typeHintReader;
 
