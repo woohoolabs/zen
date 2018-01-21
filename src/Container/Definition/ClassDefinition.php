@@ -125,7 +125,7 @@ class ClassDefinition extends AbstractDefinition
 
     private function convertValueToString($value): string
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return '"' . $value . '"';
         }
 
@@ -133,11 +133,11 @@ class ClassDefinition extends AbstractDefinition
             return "null";
         }
 
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value === true ? "true" : "false";
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $array = "[";
             foreach ($value as $k => $v) {
                 $array .= $this->convertValueToString($k) . " => " . $this->convertValueToString($v) . ",";

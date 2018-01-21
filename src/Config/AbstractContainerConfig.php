@@ -38,7 +38,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return $entryPoint;
                 }
 
-                if (is_string($entryPoint)) {
+                if (\is_string($entryPoint)) {
                     return new ClassEntryPoint($entryPoint);
                 }
 
@@ -59,7 +59,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return $definitionHint;
                 }
 
-                if (is_string($definitionHint)) {
+                if (\is_string($definitionHint)) {
                     return new DefinitionHint($definitionHint);
                 }
 

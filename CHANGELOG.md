@@ -7,6 +7,7 @@ ADDED:
 CHANGED:
 
 - Renamed `AbstractContainer` to `AbstractCompiledContainer`
+- Optimizing compilation time by using fully qualified function names
 
 REMOVED:
 

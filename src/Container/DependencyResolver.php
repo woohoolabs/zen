@@ -127,7 +127,7 @@ class DependencyResolver
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
         } catch (ReflectionException $e) {
-            throw new ContainerException("Class '" . $definition->getClassName() . "' does not exist!");
+            throw new ContainerException("Cannot inject class: " . $definition->getClassName());
         }
 
         if ($reflectionClass->getConstructor() === null) {
@@ -143,7 +143,7 @@ class DependencyResolver
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
                 throw new ContainerException(
-                    "Type hint or '@param' PHPDoc comment for constructor parameter '" . $param->getName() . "' in '" .
+                    "Type declaration or '@param' PHPDoc comment for constructor parameter '" . $param->getName() . "' in '" .
                     "class '" . $definition->getClassName() . "' is missing or it is not a class!"
                 );
             }

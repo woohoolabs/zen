@@ -19,7 +19,7 @@ class FileSystemUtil
         foreach (self::getSourceFilesInPath($path) as $filePath) {
             foreach (self::getClassesInFile($filePath, $onlyConcreteClasses) as $namespace => $classes) {
                 foreach ($classes as $class) {
-                    $result[] = is_string($namespace) ? $namespace . "\\" . $class : $class;
+                    $result[] = \is_string($namespace) ? $namespace . "\\" . $class : $class;
                 }
             }
         }
@@ -52,7 +52,7 @@ class FileSystemUtil
         $classes = [];
         $namespace = 0;
         $tokens = token_get_all(file_get_contents($filePath));
-        $count = count($tokens);
+        $count = \count($tokens);
         $dlm = false;
 
         for ($i = 2; $i < $count; $i++) {
@@ -107,7 +107,7 @@ class FileSystemUtil
         $whitespace = $tokens[$position - 1][0];
         $name = $tokens[$position][0];
 
-        $result = in_array($class, $allowedClassTokens) && $whitespace === T_WHITESPACE && $name === T_STRING;
+        $result = \in_array($class, $allowedClassTokens, true) && $whitespace === T_WHITESPACE && $name === T_STRING;
 
         return $result && ($onlyConcreteClasses === false || $type !== T_ABSTRACT);
     }
