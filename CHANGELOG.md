@@ -1,4 +1,14 @@
-## 2.2.0 - unreleased
+## 2.3.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
+## 2.2.0 - 2018-01-22
 
 ADDED:
 
@@ -8,8 +18,6 @@ CHANGED:
 
 - Renamed `AbstractContainer` to `AbstractCompiledContainer`
 - Optimizing compilation time by using fully qualified function names
-
-REMOVED:
 
 FIXED:
 
