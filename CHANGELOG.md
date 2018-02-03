@@ -4,6 +4,8 @@ ADDED:
 
 CHANGED:
 
+- PHPUnit 7 is minimally required to run tests
+
 REMOVED:
 
 FIXED:

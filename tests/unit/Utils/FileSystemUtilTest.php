@@ -29,7 +29,11 @@ class FileSystemUtilTest extends TestCase
                 EntryPointD1::class,
                 EntryPointD2::class,
             ],
-            FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", true)
+            FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", true),
+            "",
+            0.0,
+            10,
+            true
         );
     }
 
