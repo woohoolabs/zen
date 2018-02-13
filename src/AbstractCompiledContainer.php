@@ -37,7 +37,7 @@ abstract class AbstractCompiledContainer implements ContainerInterface
         return $this->{static::$entryPoints[$id]}();
     }
 
-    protected function setProperties($object, array $properties)
+    protected function setProperties($object, array $properties): void
     {
         Closure::bind(
             function () use ($object, $properties) {

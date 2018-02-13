@@ -20,6 +20,9 @@ class ClassDefinition extends AbstractDefinition
      */
     private $properties;
 
+    /**
+     * @var bool
+     */
     private $needsDependencyResolution;
 
     public static function singleton(string $className): ClassDefinition
@@ -134,7 +137,7 @@ class ClassDefinition extends AbstractDefinition
         }
 
         if (\is_bool($value)) {
-            return $value === true ? "true" : "false";
+            return $value ? "true" : "false";
         }
 
         if (\is_array($value)) {
