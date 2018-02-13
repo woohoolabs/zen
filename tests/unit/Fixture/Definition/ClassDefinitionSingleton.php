@@ -1,4 +1,2 @@
 <?php
-        $entry = new \X\A();
-
-        return $this->singletonEntries['X\A'] = $entry;
+        return $this->singletonEntries['X\A'] = new \X\A();

@@ -87,8 +87,15 @@ class ClassDefinition extends AbstractDefinition
 
     public function toPhpCode(): string
     {
-        $code = "        " . ($this->scope === "prototype" && empty($this->properties) ? "return" : "\$entry =");
-        $code .= " new \\" . $this->getClassName() . "(";
+        if ($this->scope === "singleton") {
+            $code = "        return \$this->singletonEntries['{$this->getId()}'] = ";
+        } elseif ($this->scope === "prototype" && empty($this->properties) === false) {
+            $code = "        \$entry = ";
+        } else {
+            $code = "        return ";
+        }
+
+        $code .= "new \\" . $this->getClassName() . "(";
 
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
@@ -117,9 +124,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= "        );\n";
         }
 
-        if ($this->scope === "singleton") {
-            $code .= "\n        return \$this->singletonEntries['" . $this->getId() . "'] = \$entry;\n";
-        } elseif ($this->scope === "prototype" && empty($this->properties) === false) {
+        if ($this->scope === "prototype" && empty($this->properties) === false) {
             $code .= "\n        return \$entry;\n";
         }
 

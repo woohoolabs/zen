@@ -45,8 +45,8 @@ class ReferenceDefinition extends AbstractDefinition
     public function toPhpCode(): string
     {
         if ($this->scope === "singleton") {
-            $code = "        \$entry = " . $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n\n";
-            $code .= "        return \$this->singletonEntries['" . $this->referrerId . "'] = \$entry;\n";
+            $code = "        return \$this->singletonEntries['{$this->referrerId}'] = ";
+            $code .= $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n\n";
 
             return $code;
         }
