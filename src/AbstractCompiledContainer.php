@@ -26,15 +26,12 @@ abstract class AbstractCompiledContainer implements ContainerInterface
 
     public function get($id)
     {
-        if (isset($this->singletonEntries[$id])) {
-            return $this->singletonEntries[$id];
-        }
+        return $this->singletonEntries[$id] ?? ($this->{static::$entryPoints[$id]}() ?? $this->throwNotFoundException($id));
+    }
 
-        if (isset(static::$entryPoints[$id]) === false) {
-            throw new NotFoundException($id);
-        }
-
-        return $this->{static::$entryPoints[$id]}();
+    private function throwNotFoundException(string $id): void
+    {
+        throw new NotFoundException($id);
     }
 
     protected function setProperties($object, array $properties): void
