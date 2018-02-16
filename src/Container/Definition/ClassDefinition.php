@@ -6,11 +6,6 @@ namespace WoohooLabs\Zen\Container\Definition;
 class ClassDefinition extends AbstractDefinition
 {
     /**
-     * @var string
-     */
-    private $scope;
-
-    /**
      * @var array
      */
     private $constructorArguments;
@@ -42,8 +37,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function __construct(string $className, string $scope = "singleton", bool $autoloaded = false)
     {
-        parent::__construct($className, str_replace("\\", "__", $className));
-        $this->scope = $scope;
+        parent::__construct($className, str_replace("\\", "__", $className), $scope);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
@@ -118,11 +112,14 @@ class ClassDefinition extends AbstractDefinition
         return $dependencies;
     }
 
-    public function toPhpCode(): string
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string
     {
         $code = "";
         if (empty($this->properties)) {
-            if ($this->scope === "singleton") {
+            if ($this->getScope() === "singleton") {
                 $code .= "        return \$this->singletonEntries['{$this->getId()}'] = ";
             } else {
                 $code .= "        return ";
@@ -136,7 +133,7 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
-                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["class"], $constructorArgument["hash"]);
+                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["class"], $constructorArgument["hash"], $definitions[$constructorArgument["class"]]->getScope());
             } elseif (array_key_exists("default", $constructorArgument)) {
                 $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
@@ -154,14 +151,14 @@ class ClassDefinition extends AbstractDefinition
             $code .= "            \$entry,\n";
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $property) {
-                $code .= "                '$propertyName' => " . $this->getEntryToPhp($property["class"], $property["hash"]) . ",\n";
+                $code .= "                '$propertyName' => " . $this->getEntryToPhp($property["class"], $property["hash"], $definitions[$property["class"]]->getScope()) . ",\n";
             }
             $code .= "            ]\n";
             $code .= "        );\n";
         }
 
         if (empty($this->properties) === false) {
-            if ($this->scope === "singleton") {
+            if ($this->getScope() === "singleton") {
                 $code .= "        return \$this->singletonEntries['{$this->getId()}'] = \$entry;\n";
             } else {
                 $code .= "\n        return \$entry;\n";

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Unit\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
+use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 
 class ReferenceDefinitionTest extends TestCase
@@ -17,7 +18,11 @@ class ReferenceDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ReferenceDefinitionSingleton.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode(
+                [
+                    $definition->getId() => $definition,
+                ]
+            )
         );
     }
 
@@ -30,7 +35,12 @@ class ReferenceDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ReferenceDefinitionPrototype.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode(
+                [
+                    $definition->getId() => $definition,
+                    "X\\B" => ClassDefinition::prototype("X\\B"),
+                ]
+            )
         );
     }
 

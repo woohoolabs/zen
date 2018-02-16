@@ -27,6 +27,11 @@ class StubDefinition implements DefinitionInterface
         return str_replace("\\", "__", $this->getId());
     }
 
+    public function getScope(): string
+    {
+        return "";
+    }
+
     public function needsDependencyResolution(): bool
     {
         return false;
@@ -47,7 +52,10 @@ class StubDefinition implements DefinitionInterface
         return [];
     }
 
-    public function toPhpCode(): string
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string
     {
         return "        // This is a dummy definition.\n";
     }

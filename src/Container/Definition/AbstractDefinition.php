@@ -15,10 +15,16 @@ abstract class AbstractDefinition implements DefinitionInterface
      */
     private $hash;
 
-    public function __construct(string $id, string $hash)
+    /**
+     * @var string
+     */
+    private $scope;
+
+    public function __construct(string $id, string $hash, string $scope)
     {
         $this->id = $id;
         $this->hash = $hash;
+        $this->scope = $scope;
     }
 
     public function getId(): string
@@ -31,8 +37,17 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->hash;
     }
 
-    protected function getEntryToPhp(string $id, string $hash): string
+    public function getScope(): string
     {
-        return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
+        return $this->scope;
+    }
+
+    protected function getEntryToPhp(string $id, string $hash, string $scope): string
+    {
+        if ($scope === "singleton") {
+            return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
+        }
+
+        return "\$this->$hash()";
     }
 }

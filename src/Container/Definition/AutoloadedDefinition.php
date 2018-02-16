@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
-use Exception;
-use ReflectionClass;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
 
@@ -16,11 +14,6 @@ final class AutoloadedDefinition extends AbstractDefinition
     private $autoloadConfig;
 
     /**
-     * @var DefinitionInterface[]
-     */
-    private $definitions;
-
-    /**
      * @var string
      */
     private $id;
@@ -28,12 +21,16 @@ final class AutoloadedDefinition extends AbstractDefinition
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function __construct(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id)
+    public function __construct(AutoloadConfigInterface $autoloadConfig, string $id)
     {
         $this->autoloadConfig = $autoloadConfig;
-        $this->definitions = $definitions;
         $this->id = $id;
-        parent::__construct($id, str_replace("\\", "__", $id));
+        parent::__construct($id, str_replace("\\", "__", $id), "");
+    }
+
+    public function getScope(): string
+    {
+        return "";
     }
 
     public function needsDependencyResolution(): bool
@@ -48,7 +45,7 @@ final class AutoloadedDefinition extends AbstractDefinition
 
     public function resolveDependencies(): DefinitionInterface
     {
-        return $this->definitions[$this->id];
+        return $this;
     }
 
     public function getClassDependencies(): array
@@ -59,12 +56,12 @@ final class AutoloadedDefinition extends AbstractDefinition
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function toPhpCode(): string
+    public function toPhpCode(array $definitions): string
     {
-        $definition = $this->definitions[$this->id];
+        $definition = $definitions[$this->id];
         $id = $definition->getId();
 
-        $code = $this->includeDependency($this->definitions, $this->id);
+        $code = $this->includeDependency($definitions, $this->id);
 
         $code .= "\n";
         $code .= "        self::\$entryPoints[\\$id::class] = '{$definition->getHash()}';\n\n";

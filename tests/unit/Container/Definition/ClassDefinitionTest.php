@@ -64,7 +64,7 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionSingleton.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode([$definition->getId() => $definition])
         );
     }
 
@@ -79,7 +79,13 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode(
+                [
+                    $definition->getId() => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B"),
+                    "X\\C" => ClassDefinition::singleton("X\\C"),
+                ]
+            )
         );
     }
 
@@ -99,7 +105,11 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode(
+                [
+                    $definition->getId() => $definition,
+                ]
+            )
         );
     }
 
@@ -114,7 +124,13 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),
-            $definition->toPhpCode()
+            $definition->toPhpCode(
+                [
+                    $definition->getId() => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B"),
+                    "X\\C" => ClassDefinition::singleton("X\\C"),
+                ]
+            )
         );
     }
 

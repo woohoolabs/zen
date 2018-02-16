@@ -9,6 +9,8 @@ interface DefinitionInterface
 
     public function getHash(): string;
 
+    public function getScope(): string;
+
     public function needsDependencyResolution(): bool;
 
     public function isAutoloaded(): bool;
@@ -20,5 +22,8 @@ interface DefinitionInterface
      */
     public function getClassDependencies(): array;
 
-    public function toPhpCode(): string;
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string;
 }

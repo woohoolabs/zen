@@ -1,2 +1,2 @@
 <?php
-        return $this->singletonEntries['X\B'] ?? $this->X__B();
+        return $this->X__B();

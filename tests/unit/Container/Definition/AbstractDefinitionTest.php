@@ -13,7 +13,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getId()
     {
-        $definition = new TestDefinition("A", "B");
+        $definition = new TestDefinition("A", "B", "");
 
         $this->assertEquals("A", $definition->getId());
     }
@@ -23,7 +23,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getHash()
     {
-        $definition = new TestDefinition("A", "B");
+        $definition = new TestDefinition("A", "B", "");
 
         $this->assertEquals("B", $definition->getHash());
     }

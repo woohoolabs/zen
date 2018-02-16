@@ -7,7 +7,7 @@ class SelfDefinition extends AbstractDefinition
 {
     public function __construct(string $className)
     {
-        parent::__construct($className, str_replace("\\", "__", $className));
+        parent::__construct($className, str_replace("\\", "__", $className), "");
     }
 
     public function needsDependencyResolution(): bool
@@ -30,7 +30,10 @@ class SelfDefinition extends AbstractDefinition
         return [];
     }
 
-    public function toPhpCode(): string
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string
     {
         return "        return \$this;\n";
     }

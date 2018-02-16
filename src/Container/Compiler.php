@@ -69,17 +69,17 @@ class Compiler
                 continue;
             }
 
-            $autoloadedDefinition = new AutoloadedDefinition($compilerConfig->getAutoloadConfig(), $definitions, $id);
+            $autoloadedDefinition = new AutoloadedDefinition($compilerConfig->getAutoloadConfig(), $id);
 
             $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
-            $container .= $autoloadedDefinition->toPhpCode();
+            $container .= $autoloadedDefinition->toPhpCode($definitions);
             $container .= "    }\n";
         }
 
         // Container definitions
         foreach ($definitions as $id => $definition) {
             $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-            $container .= $definition->toPhpCode();
+            $container .= $definition->toPhpCode($definitions);
             $container .= "    }\n";
         }
 

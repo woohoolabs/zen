@@ -15,7 +15,7 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $definition->toPhpCode());
+        $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $definition->toPhpCode([]));
     }
 
     private function getDefinitionSourceCode(string $fileName)

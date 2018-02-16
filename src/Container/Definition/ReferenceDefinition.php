@@ -10,11 +10,6 @@ class ReferenceDefinition extends AbstractDefinition
      */
     private $referrerId;
 
-    /**
-     * @var string
-     */
-    private $scope;
-
     public static function singleton(string $referrerId, string $referencedClassName): ReferenceDefinition
     {
         return new self($referrerId, $referencedClassName);
@@ -27,9 +22,8 @@ class ReferenceDefinition extends AbstractDefinition
 
     public function __construct(string $referrerId, string $referencedClassName, string $scope = "singleton")
     {
-        parent::__construct($referencedClassName, str_replace("\\", "__", $referencedClassName));
+        parent::__construct($referencedClassName, str_replace("\\", "__", $referencedClassName), $scope);
         $this->referrerId = $referrerId;
-        $this->scope = $scope;
     }
 
     public function needsDependencyResolution(): bool
@@ -54,15 +48,17 @@ class ReferenceDefinition extends AbstractDefinition
         ];
     }
 
-    public function toPhpCode(): string
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string
     {
-        if ($this->scope === "singleton") {
-            $code = "        return \$this->singletonEntries['{$this->referrerId}'] = ";
-            $code .= $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n";
-
-            return $code;
+        $code = "        return ";
+        if ($this->getScope() === "singleton") {
+            $code .= "\$this->singletonEntries['{$this->referrerId}'] = ";
         }
+        $code .= $this->getEntryToPhp($this->getId(), $this->getHash(), $definitions[$this->getId()]->getScope()) . ";\n";
 
-        return "        return " . $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n";
+        return $code;
     }
 }

@@ -28,7 +28,10 @@ class TestDefinition extends AbstractDefinition
         return [];
     }
 
-    public function toPhpCode(): string
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    public function toPhpCode(array $definitions): string
     {
         return "";
     }
