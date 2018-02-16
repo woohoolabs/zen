@@ -8,7 +8,7 @@ CHANGED:
 
 - Optimized error handling in `AbstractCompiledContainer::get()` method
 - Optimized generation of compiled container by removing unnecessary variables
-- Optimized retrieval of prototype container entries by removing unnecessary checks 
+- Optimized retrieval of prototype container entries by removing unnecessary checks
 - PHPUnit 7 is minimally required to run tests
 
 REMOVED:
