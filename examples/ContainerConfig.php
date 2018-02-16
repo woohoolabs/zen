@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Examples;
 
-use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
 use WoohooLabs\Zen\Config\EntryPoint\WildcardEntryPoint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
@@ -25,7 +24,6 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getDefinitionHints(): array
     {
         return [
-            ContainerInterface::class => Container::class,
             AnimalServiceInterface::class => AnimalService::class,
             PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
         ];
