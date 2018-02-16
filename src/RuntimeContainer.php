@@ -14,13 +14,13 @@ class RuntimeContainer implements ContainerInterface
      */
     private $container;
 
-    public function __construct(AbstractCompilerConfig $compilerConfig)
+    public function __construct(AbstractCompilerConfig $compilerConfig, string $rootDirectory = "")
     {
         $containerBuilder = new RuntimeContainerBuilder($compilerConfig);
         $containerBuilder->build();
 
         $className = $compilerConfig->getContainerFqcn();
-        $this->container = new $className();
+        $this->container = new $className($rootDirectory);
     }
 
     public function has($id): bool

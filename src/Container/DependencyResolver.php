@@ -10,6 +10,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
@@ -60,7 +61,8 @@ class DependencyResolver
             $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
             ContainerInterface::class => new ReferenceDefinition(
                 ContainerInterface::class,
-                $this->compilerConfig->getContainerFqcn())
+                $this->compilerConfig->getContainerFqcn()
+            ),
         ];
     }
 
@@ -69,13 +71,13 @@ class DependencyResolver
         foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
-                    $this->resolve($id);
+                    $this->resolve($id, $entryPoint);
                 }
             }
         }
     }
 
-    private function resolve(string $id): void
+    private function resolve(string $id, ?EntryPointInterface $entryPoint = null): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
@@ -84,8 +86,21 @@ class DependencyResolver
             return;
         }
 
+        $isAutoloaded = false;
+        if ($entryPoint && ($this->compilerConfig->getAutoloadConfig()->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
+            $isAutoloaded = true;
+        }
+
+        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
+            $isAutoloaded = false;
+        }
+
+        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
+            $isAutoloaded = false;
+        }
+
         if (isset($this->definitionHints[$id])) {
-            $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id);
+            $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id, $isAutoloaded);
             foreach ($definitions as $definitionId => $definition) {
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {
@@ -97,7 +112,7 @@ class DependencyResolver
             return;
         }
 
-        $this->definitions[$id] = new ClassDefinition($id);
+        $this->definitions[$id] = new ClassDefinition($id, "singleton", $isAutoloaded);
         $this->resolveDependencies($id);
     }
 

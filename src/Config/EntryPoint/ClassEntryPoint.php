@@ -10,9 +10,27 @@ class ClassEntryPoint implements EntryPointInterface
      */
     private $className;
 
+    /**
+     * @var bool
+     */
+    private $autoloaded;
+
+    public static function create(string $className): ClassEntryPoint
+    {
+        return new ClassEntryPoint($className);
+    }
+
     public function __construct(string $className)
     {
         $this->className = $className;
+        $this->autoloaded = false;
+    }
+
+    public function autoload(): ClassEntryPoint
+    {
+        $this->autoloaded = true;
+
+        return $this;
     }
 
     /**
@@ -21,7 +39,12 @@ class ClassEntryPoint implements EntryPointInterface
     public function getClassNames(): array
     {
         return [
-            $this->className
+            $this->className,
         ];
+    }
+
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
     }
 }

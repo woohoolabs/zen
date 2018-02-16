@@ -11,7 +11,14 @@ interface DefinitionInterface
 
     public function needsDependencyResolution(): bool;
 
+    public function isAutoloaded(): bool;
+
     public function resolveDependencies(): DefinitionInterface;
+
+    /**
+     * @return string[]
+     */
+    public function getClassDependencies(): array;
 
     public function toPhpCode(): string;
 }

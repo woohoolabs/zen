@@ -37,16 +37,28 @@ class ReferenceDefinition extends AbstractDefinition
         return false;
     }
 
+    public function isAutoloaded(): bool
+    {
+        return false;
+    }
+
     public function resolveDependencies(): DefinitionInterface
     {
         return $this;
+    }
+
+    public function getClassDependencies(): array
+    {
+        return [
+            $this->getId(),
+        ];
     }
 
     public function toPhpCode(): string
     {
         if ($this->scope === "singleton") {
             $code = "        return \$this->singletonEntries['{$this->referrerId}'] = ";
-            $code .= $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n\n";
+            $code .= $this->getEntryToPhp($this->getId(), $this->getHash()) . ";\n";
 
             return $code;
         }

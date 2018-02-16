@@ -55,7 +55,7 @@ class CompilerTest extends TestCase
             $compiler->compile(
                 new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container", "ContainerWithEntry"),
                 [
-                    StubDefinition::class => new StubDefinition()
+                    StubDefinition::class => new StubDefinition(),
                 ]
             )
         );
@@ -75,7 +75,7 @@ class CompilerTest extends TestCase
                     [
                         new StubContainerConfig(
                             [
-                                StubDefinition::class
+                                StubDefinition::class,
                             ]
                         ),
                     ],
@@ -83,13 +83,70 @@ class CompilerTest extends TestCase
                     "ContainerWithEntryPoint"
                 ),
                 [
-                    StubDefinition::class => new StubDefinition()
+                    StubDefinition::class => new StubDefinition(),
                 ]
             )
         );
     }
 
-    private function getCompiledContainerSourceCode(string $fileName)
+    /**
+     * @test
+     */
+    public function compileContainerWithAlwaysAutoloadedClasses()
+    {
+        $compiler = new Compiler();
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithAlwaysAutoloadedClasses.php"),
+            $compiler->compile(
+                new StubCompilerConfig(
+                    [
+                        new StubContainerConfig(),
+                    ],
+                    "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
+                    "ContainerWithAlwaysAutoloadedClasses",
+                    true,
+                    true,
+                    true,
+                    [StubDefinition::class]
+                ),
+                []
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithAutoloadedEntryPoint()
+    {
+        $compiler = new Compiler();
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithAutoloadedEntryPoint.php"),
+            $compiler->compile(
+                new StubCompilerConfig(
+                    [
+                        new StubContainerConfig(
+                            [
+                                StubDefinition::class,
+                            ]
+                        ),
+                    ],
+                    "WoohooLabs\\Zen\\Tests\\Unit\\Fixture\\Container",
+                    "ContainerWithAutoloadedEntryPoint",
+                    true,
+                    true,
+                    true
+                ),
+                [
+                    StubDefinition::class => new StubDefinition(true),
+                ]
+            )
+        );
+    }
+
+    private function getCompiledContainerSourceCode(string $fileName): string
     {
         return file_get_contents(dirname(__DIR__) . "/Fixture/Container/" . $fileName);
     }

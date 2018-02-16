@@ -18,6 +18,16 @@ class TestDefinition extends AbstractDefinition
         return $this;
     }
 
+    public function isAutoloaded(): bool
+    {
+        return false;
+    }
+
+    public function getClassDependencies(): array
+    {
+        return [];
+    }
+
     public function toPhpCode(): string
     {
         return "";

@@ -14,6 +14,16 @@ class ContainerWithEntryPoint extends AbstractCompiledContainer
         \WoohooLabs\Zen\Tests\Unit\Double\StubDefinition::class => 'WoohooLabs__Zen__Tests__Unit__Double__StubDefinition',
     ];
 
+    /**
+     * @var string
+     */
+    protected $rootDirectory;
+
+    public function __construct(string $rootDirectory = '')
+    {
+        $this->rootDirectory = $rootDirectory;
+    }
+
     public function WoohooLabs__Zen__Tests__Unit__Double__StubDefinition()
     {
         // This is a dummy definition.

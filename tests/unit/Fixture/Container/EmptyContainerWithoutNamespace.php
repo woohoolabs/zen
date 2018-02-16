@@ -11,4 +11,14 @@ class EmptyContainerWithoutNamespace extends AbstractCompiledContainer
         \EmptyContainerWithoutNamespace::class => 'EmptyContainerWithoutNamespace',
         \Psr\Container\ContainerInterface::class => 'Psr__Container__ContainerInterface',
     ];
+
+    /**
+     * @var string
+     */
+    protected $rootDirectory;
+
+    public function __construct(string $rootDirectory = '')
+    {
+        $this->rootDirectory = $rootDirectory;
+    }
 }

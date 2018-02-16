@@ -2,6 +2,8 @@
 
 ADDED:
 
+- Support for built-in just-in-time autoloading of the dependency graph of Entry Points
+
 CHANGED:
 
 - Optimized error handling in `AbstractCompiledContainer::get()` method
@@ -11,6 +13,8 @@ CHANGED:
 REMOVED:
 
 FIXED:
+
+- Entry points can not be duplicated now
 
 ## 2.2.0 - 2018-01-22
 

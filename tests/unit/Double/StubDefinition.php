@@ -7,6 +7,16 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 class StubDefinition implements DefinitionInterface
 {
+    /**
+     * @var bool
+     */
+    private $isAutoloaded;
+
+    public function __construct(bool $isAutoloaded = false)
+    {
+        $this->isAutoloaded = $isAutoloaded;
+    }
+
     public function getId(): string
     {
         return StubDefinition::class;
@@ -25,6 +35,16 @@ class StubDefinition implements DefinitionInterface
     public function resolveDependencies(): DefinitionInterface
     {
         return $this;
+    }
+
+    public function isAutoloaded(): bool
+    {
+        return $this->isAutoloaded;
+    }
+
+    public function getClassDependencies(): array
+    {
+        return [];
     }
 
     public function toPhpCode(): string

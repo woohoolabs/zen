@@ -38,11 +38,11 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
-    public function toDefinitions(array $definitionHints, string $id): array
+    public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array
     {
         if ($this->className === $id) {
             return [
-                $id => new ClassDefinition($this->className, $this->getScope())
+                $id => new ClassDefinition($this->className, $this->getScope(), $isAutoloaded)
             ];
         }
 
@@ -53,10 +53,10 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         if (isset($definitionHints[$this->className])) {
             $result = array_merge(
                 $result,
-                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className)
+                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className, $isAutoloaded)
             );
         } else {
-            $result[$this->className] = new ClassDefinition($this->className, $this->getScope());
+            $result[$this->className] = new ClassDefinition($this->className, $this->getScope(), $isAutoloaded);
         }
 
         return $result;

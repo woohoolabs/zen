@@ -15,9 +15,19 @@ class SelfDefinition extends AbstractDefinition
         return false;
     }
 
+    public function isAutoloaded(): bool
+    {
+        return false;
+    }
+
     public function resolveDependencies(): DefinitionInterface
     {
         return $this;
+    }
+
+    public function getClassDependencies(): array
+    {
+        return [];
     }
 
     public function toPhpCode(): string

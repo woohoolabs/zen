@@ -349,6 +349,39 @@ Although Zen doesn't support scalar injection natively, you are yet able to use 
 extend the class which needs scalar values as constructor arguments, provide these values in the new constructor via
 `parent::__construct()` and then add the appropriate [definition hint](#hints) to the container configuration.
 
+### Built-in autoloading of entry points
+
+If you have big object graphs then autoloading can take relatively
+[much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
+[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers similar a functionality
+that tries to improve the situation: starting from Zen 2.3, you can configure the container to autoload your
+[Entry Points](#entry-points) and all their dependencies by including them (using `include_once`) just before their
+first retrieval.
+
+There are two ways of enabling this feature:
+
+- Globally: Configure your [Compiler Configuration](#configuring-the-compiler) by adding this method:
+```php
+public function getAutoloadConfig(): AutoloadConfigInterface
+{
+    return AutoloadConfig::enableGlobally("/var/www");
+}
+```
+This way, all your Entry Points will be autoladed by Zen. Note that the first parameter is the root directory of
+your project.
+
+- Selectively: You can choose which Entry Points are to be autoloaded.
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        WildcardEntryPoint::create(__DIR__ . "/Controller")->autoload(),
+        ClassEntryPoint::create(Class10::class)->autoload(),
+        // ...      
+    ];
+}
+```
+
 ## Examples
 
 Please have a look at the [examples folder](https://github.com/woohoolabs/zen/tree/master/examples) for a

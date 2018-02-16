@@ -16,7 +16,7 @@ class StubContainer extends AbstractCompiledContainer
      * @var string[]
      */
     protected static $entryPoints = [
-        StubContainerEntry::class => 'WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry',
+        StubContainerEntry::class => "WoohooLabs__Zen__Tests__Unit__Double__StubContainerEntry",
     ];
 
     public function __construct(bool $isSingleton)

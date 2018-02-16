@@ -3,12 +3,36 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Utils;
 
+use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use RegexIterator;
 
 class FileSystemUtil
 {
+    public static function getRelativeFilename(string $rootDirectory, string $className): string
+    {
+        // Get absolute filename
+        try {
+            $reflectionClass = new ReflectionClass($className);
+            $filename = $reflectionClass->getFileName();
+        } catch (Exception $e) {
+            return "";
+        }
+
+        if ($filename === false) {
+            return "";
+        }
+
+        // Make the filename relative to the project dir
+        if (strpos($filename, $rootDirectory) === 0) {
+            $filename = substr($filename, strlen($rootDirectory));
+        }
+
+        return $filename;
+    }
+
     /**
      * @return string[]
      */

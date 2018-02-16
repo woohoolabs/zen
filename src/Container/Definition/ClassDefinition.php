@@ -25,6 +25,11 @@ class ClassDefinition extends AbstractDefinition
      */
     private $needsDependencyResolution;
 
+    /**
+     * @var bool
+     */
+    private $autoloaded;
+
     public static function singleton(string $className): ClassDefinition
     {
         return new self($className);
@@ -35,13 +40,14 @@ class ClassDefinition extends AbstractDefinition
         return new self($className, "prototype");
     }
 
-    public function __construct(string $className, string $scope = "singleton")
+    public function __construct(string $className, string $scope = "singleton", bool $autoloaded = false)
     {
         parent::__construct($className, str_replace("\\", "__", $className));
         $this->scope = $scope;
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
+        $this->autoloaded = $autoloaded;
     }
 
     public function getClassName(): string
@@ -85,14 +91,44 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClassDependencies(): array
+    {
+        $dependencies = [];
+
+        foreach ($this->constructorArguments as $constructorArgument) {
+            if (isset($constructorArgument["class"])) {
+                $dependencies[] = $constructorArgument["class"];
+            }
+        }
+
+        foreach ($this->properties as $property) {
+            if (isset($property["class"])) {
+                $dependencies[] = $property["class"];
+            }
+        }
+
+        return $dependencies;
+    }
+
     public function toPhpCode(): string
     {
-        if ($this->scope === "singleton") {
-            $code = "        return \$this->singletonEntries['{$this->getId()}'] = ";
-        } elseif ($this->scope === "prototype" && empty($this->properties) === false) {
-            $code = "        \$entry = ";
+        $code = "";
+        if (empty($this->properties)) {
+            if ($this->scope === "singleton") {
+                $code .= "        return \$this->singletonEntries['{$this->getId()}'] = ";
+            } else {
+                $code .= "        return ";
+            }
         } else {
-            $code = "        return ";
+            $code .= "        \$entry = ";
         }
 
         $code .= "new \\" . $this->getClassName() . "(";
@@ -124,8 +160,12 @@ class ClassDefinition extends AbstractDefinition
             $code .= "        );\n";
         }
 
-        if ($this->scope === "prototype" && empty($this->properties) === false) {
-            $code .= "\n        return \$entry;\n";
+        if (empty($this->properties) === false) {
+            if ($this->scope === "singleton") {
+                $code .= "        return \$this->singletonEntries['{$this->getId()}'] = \$entry;\n";
+            } else {
+                $code .= "\n        return \$entry;\n";
+            }
         }
 
         return $code;

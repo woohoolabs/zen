@@ -9,4 +9,6 @@ interface EntryPointInterface
      * @return string[]
      */
     public function getClassNames(): array;
+
+    public function isAutoloaded(): bool;
 }

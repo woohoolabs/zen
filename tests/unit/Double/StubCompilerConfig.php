@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Unit\Double;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {
@@ -32,18 +34,32 @@ class StubCompilerConfig extends AbstractCompilerConfig
      */
     private $usePropertyInjection;
 
+    /**
+     * @var bool
+     */
+    private $useBuiltInAutoloading;
+
+    /**
+     * @var string[]
+     */
+    private $alwaysAutoloadedClasses;
+
     public function __construct(
         array $containerConfigs = [],
         string $namespace = "",
         string $className = "",
         bool $useConstructorInjection = true,
-        bool $usePropertyInjection = true
+        bool $usePropertyInjection = true,
+        bool $useBuiltInAutoloading = false,
+        array $alwaysAutoloadedClasses = []
     ) {
         $this->namespace = $namespace;
         $this->className = $className;
         $this->containerConfigs = $containerConfigs;
         $this->useConstructorInjection = $useConstructorInjection;
         $this->usePropertyInjection = $usePropertyInjection;
+        $this->useBuiltInAutoloading = $useBuiltInAutoloading;
+        $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
     }
 
     public function getContainerNamespace(): string
@@ -64,6 +80,12 @@ class StubCompilerConfig extends AbstractCompilerConfig
     public function usePropertyInjection(): bool
     {
         return $this->usePropertyInjection;
+    }
+
+    public function getAutoloadConfig(): AutoloadConfigInterface
+    {
+        return AutoloadConfig::create($this->useBuiltInAutoloading, \dirname(__DIR__, 3))
+            ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
     }
 
     public function getContainerConfigs(): array

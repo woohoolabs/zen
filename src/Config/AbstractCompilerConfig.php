@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
 
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+
 abstract class AbstractCompilerConfig
 {
     abstract public function getContainerNamespace(): string;
@@ -12,6 +15,11 @@ abstract class AbstractCompilerConfig
     abstract public function useConstructorInjection(): bool;
 
     abstract public function usePropertyInjection(): bool;
+
+    public function getAutoloadConfig(): AutoloadConfigInterface
+    {
+        return AutoloadConfig::disabledGlobally();
+    }
 
     /**
      * @return AbstractContainerConfig[]
