@@ -78,6 +78,9 @@ the latest version:
 $ composer require woohoolabs/zen
 ```
 
+> Note: The tests and examples won't be downloaded by default. You have to use `composer require woohoolabs/zen --prefer-source`
+or clone the repository if you need them.
+
 Zen requires PHP 7.1 at least.
 
 ## Basic Usage
