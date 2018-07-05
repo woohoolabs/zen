@@ -1,4 +1,14 @@
-## 2.3.0 - unreleased
+## 2.4.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
+## 2.3.0 - 2018-07-05
 
 ADDED:
 
@@ -10,8 +20,6 @@ CHANGED:
 - Optimized generation of compiled container by removing unnecessary variables
 - Optimized retrieval of prototype container entries by removing unnecessary checks
 - PHPUnit 7 is minimally required to run tests
-
-REMOVED:
 
 FIXED:
 
