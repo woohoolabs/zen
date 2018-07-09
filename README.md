@@ -356,7 +356,7 @@ extend the class which needs scalar values as constructor arguments, provide the
 
 If you have big object graphs then autoloading can take relatively
 [much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
-[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers similar a functionality
+[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers a similar functionality
 that tries to improve the situation: starting from Zen 2.3, you can configure the container to autoload your
 [Entry Points](#entry-points) and all their dependencies by including them (using `include_once`) just before their
 first retrieval.
