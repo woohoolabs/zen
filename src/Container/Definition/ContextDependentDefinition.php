@@ -11,14 +11,24 @@ class ContextDependentDefinition implements DefinitionInterface
     private $referrerId;
 
     /**
+     * @var DefinitionInterface|null
+     */
+    private $defaultDefinition;
+
+    /**
      * @var DefinitionInterface[]
      */
     private $definitions;
 
-    public function __construct(string $referrerId, array $definitions)
+    /**
+     * @param DefinitionInterface|null $defaultDefinition
+     * @param DefinitionInterface[] $contextDependentDefinitions
+     */
+    public function __construct(string $referrerId, ?DefinitionInterface $defaultDefinition, array $contextDependentDefinitions)
     {
         $this->referrerId = $referrerId;
-        $this->definitions = $definitions;
+        $this->defaultDefinition = $defaultDefinition;
+        $this->definitions = $contextDependentDefinitions;
     }
 
     public function getId(string $parentId): string
@@ -62,6 +72,15 @@ class ContextDependentDefinition implements DefinitionInterface
      */
     public function toPhpCode(array $definitions): string
     {
-        return "";
+        if ($this->defaultDefinition === null) {
+            return <<<EOF
+        throw new \WoohooLabs\Zen\Exception\ContainerException(
+            'Context-Dependent Definition with "{$this->referrerId}" ID doesn\'t have a default value, therefore it cannot be retrieved directly!'
+        );
+
+EOF;
+        }
+
+        return $this->defaultDefinition->toPhpCode($definitions);
     }
 }
