@@ -64,7 +64,7 @@ some common DI techniques, like method or scalar value injection. If performance
 a fully featured container, please choose another project. In this case, I would recommend you to check out the awesome
 [PHP-DI](https://github.com/php-di/php-di) instead of Zen.
 
-But if the functionality offered By Zen is enough for you then Zen will amaze you with its simplicity (the core of the
+But if the functionality offered by Zen is enough for you then Zen will amaze you with its simplicity (the core of the
 project only consists of cc. 600 lines of code), high performance (it has
 [similar speed](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) when you manually instantiate your objects)
 and its easy configuration (Zen was designed to work with the least amount of configuration).
@@ -309,7 +309,7 @@ will bind
 `UserRepositoryInterface` to `MysqlUserRepository`.
 
 Currently, only `*` supported as a wildcard character because your patterns are much simpler to read this way than with
-real regex.
+real regular expressions.
 
 ### Scopes
 
@@ -343,7 +343,7 @@ helps you:
 $container = new RuntimeContainer(new CompilerConfig());
 ```
 
-Please note that it is only suitable for development purposes, because its implementation is rather slow. Technically,
+Please note that it is only suitable for development purposes, because its implementation is extremely slow. Technically,
 it compiles a container in memory during runtime and then `eval`s it. It's ridiculous I know...
 
 ### Scalar injection
