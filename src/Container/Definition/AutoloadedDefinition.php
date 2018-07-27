@@ -14,21 +14,16 @@ final class AutoloadedDefinition extends AbstractDefinition
     private $autoloadConfig;
 
     /**
-     * @var string
-     */
-    private $id;
-
-    /**
      * @param DefinitionInterface[] $definitions
      */
     public function __construct(AutoloadConfigInterface $autoloadConfig, string $id)
     {
         $this->autoloadConfig = $autoloadConfig;
         $this->id = $id;
-        parent::__construct($id, str_replace("\\", "__", $id), "");
+        parent::__construct($id, "");
     }
 
-    public function getScope(): string
+    public function getScope(string $parentId): string
     {
         return "";
     }
@@ -59,13 +54,14 @@ final class AutoloadedDefinition extends AbstractDefinition
     public function toPhpCode(array $definitions): string
     {
         $definition = $definitions[$this->id];
-        $id = $definition->getId();
+        $id = $definition->getId("");
+        $hash = $definition->getHash("");
 
         $code = $this->includeDependency($definitions, $this->id);
 
         $code .= "\n";
-        $code .= "        self::\$entryPoints[\\$id::class] = '{$definition->getHash()}';\n\n";
-        $code .= "        return \$this->{$definition->getHash()}();\n";
+        $code .= "        self::\$entryPoints[\\$id::class] = '$hash';\n\n";
+        $code .= "        return \$this->$hash();\n";
 
         return $code;
     }
@@ -75,8 +71,6 @@ final class AutoloadedDefinition extends AbstractDefinition
      */
     private function includeDependency(array $definitions, string $id): string
     {
-        $definition = $definitions[$id];
-
         $dependencies = [];
         $this->collectDependencies($definitions, $id, $dependencies);
         $dependencies = array_reverse($dependencies);
@@ -91,7 +85,8 @@ final class AutoloadedDefinition extends AbstractDefinition
             $code .= "        include_once \$this->rootDirectory . '$filename';\n";
         }
 
-        $filename = FileSystemUtil::getRelativeFilename($this->autoloadConfig->getRootDirectory(), $definition->getId());
+        $definition = $definitions[$id];
+        $filename = FileSystemUtil::getRelativeFilename($this->autoloadConfig->getRootDirectory(), $definition->getId(""));
         if ($filename !== "") {
             $code .= "        include_once \$this->rootDirectory . '$filename';\n";
         }

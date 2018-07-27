@@ -42,12 +42,12 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     {
         if ($this->className === $id) {
             return [
-                $id => new ClassDefinition($this->className, $this->getScope(), $isAutoloaded)
+                $id => new ClassDefinition($this->className, $this->getScope(), $isAutoloaded),
             ];
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->getScope())
+            $id => new ReferenceDefinition($id, $this->className, $this->getScope()),
         ];
 
         if (isset($definitionHints[$this->className])) {
@@ -60,5 +60,10 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         return $result;
+    }
+
+    public function getClassName(): string
+    {
+        return $this->className;
     }
 }

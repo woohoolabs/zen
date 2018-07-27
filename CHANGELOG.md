@@ -2,6 +2,8 @@
 
 ADDED:
 
+- Support for Context-Dependent Dependency Injection
+
 CHANGED:
 
 REMOVED:

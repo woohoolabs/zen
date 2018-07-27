@@ -37,7 +37,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function __construct(string $className, string $scope = "singleton", bool $autoloaded = false)
     {
-        parent::__construct($className, str_replace("\\", "__", $className), $scope);
+        parent::__construct($className, $scope);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
@@ -46,12 +46,12 @@ class ClassDefinition extends AbstractDefinition
 
     public function getClassName(): string
     {
-        return $this->getId();
+        return $this->id;
     }
 
     public function addRequiredConstructorArgument(string $className): ClassDefinition
     {
-        $this->constructorArguments[] = ["class" => $className, "hash" => str_replace("\\", "__", $className)];
+        $this->constructorArguments[] = ["class" => $className];
 
         return $this;
     }
@@ -65,10 +65,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function addProperty(string $name, string $className): ClassDefinition
     {
-        $this->properties[$name] = [
-            "class" => $className,
-            "hash" => str_replace("\\", "__", $className),
-        ];
+        $this->properties[$name] = ["class" => $className];
 
         return $this;
     }
@@ -119,8 +116,8 @@ class ClassDefinition extends AbstractDefinition
     {
         $code = "";
         if (empty($this->properties)) {
-            if ($this->getScope() === "singleton") {
-                $code .= "        return \$this->singletonEntries['{$this->getId()}'] = ";
+            if ($this->scope === "singleton") {
+                $code .= "        return \$this->singletonEntries['{$this->id}'] = ";
             } else {
                 $code .= "        return ";
             }
@@ -133,7 +130,13 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
-                $constructorArguments[] = "            " . $this->getEntryToPhp($constructorArgument["class"], $constructorArgument["hash"], $definitions[$constructorArgument["class"]]->getScope());
+                $definition = $definitions[$constructorArgument["class"]];
+
+                $constructorArguments[] = "            " . $this->getEntryToPhp(
+                    $definition->getId($this->id),
+                    $definition->getHash($this->id),
+                    $definition->getScope($this->id)
+                );
             } elseif (array_key_exists("default", $constructorArgument)) {
                 $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
             }
@@ -151,15 +154,20 @@ class ClassDefinition extends AbstractDefinition
             $code .= "            \$entry,\n";
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $property) {
-                $code .= "                '$propertyName' => " . $this->getEntryToPhp($property["class"], $property["hash"], $definitions[$property["class"]]->getScope()) . ",\n";
+                $definition = $definitions[$property["class"]];
+
+                $code .= "                '$propertyName' => " . $this->getEntryToPhp(
+                    $definition->getId($this->id),
+                    $definition->getHash($this->id),
+                    $definition->getScope($this->id)) . ",\n";
             }
             $code .= "            ]\n";
             $code .= "        );\n";
         }
 
         if (empty($this->properties) === false) {
-            if ($this->getScope() === "singleton") {
-                $code .= "        return \$this->singletonEntries['{$this->getId()}'] = \$entry;\n";
+            if ($this->scope === "singleton") {
+                $code .= "        return \$this->singletonEntries['{$this->id}'] = \$entry;\n";
             } else {
                 $code .= "\n        return \$entry;\n";
             }

@@ -17,17 +17,17 @@ class StubDefinition implements DefinitionInterface
         $this->isAutoloaded = $isAutoloaded;
     }
 
-    public function getId(): string
+    public function getId(string $parentId): string
     {
         return StubDefinition::class;
     }
 
-    public function getHash(): string
+    public function getHash(string $parentId): string
     {
-        return str_replace("\\", "__", $this->getId());
+        return str_replace("\\", "__", $this->getId(""));
     }
 
-    public function getScope(): string
+    public function getScope(string $parentId): string
     {
         return "";
     }

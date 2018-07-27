@@ -13,9 +13,9 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getId()
     {
-        $definition = new TestDefinition("A", "B", "");
+        $definition = new TestDefinition("A", "");
 
-        $this->assertEquals("A", $definition->getId());
+        $this->assertEquals("A", $definition->getId(""));
     }
 
     /**
@@ -23,8 +23,18 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getHash()
     {
-        $definition = new TestDefinition("A", "B", "");
+        $definition = new TestDefinition("A", "");
 
-        $this->assertEquals("B", $definition->getHash());
+        $this->assertEquals("A", $definition->getHash(""));
+    }
+
+    /**
+     * @test
+     */
+    public function getFCQNHash()
+    {
+        $definition = new TestDefinition("A\\B", "");
+
+        $this->assertEquals("A__B", $definition->getHash(""));
     }
 }

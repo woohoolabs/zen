@@ -78,8 +78,13 @@ class Compiler
 
         // Container definitions
         foreach ($definitions as $id => $definition) {
+            $definitionCode = $definition->toPhpCode($definitions);
+            if ($definitionCode === ""){
+                continue;
+            }
+
             $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-            $container .= $definition->toPhpCode($definitions);
+            $container .= $definitionCode;
             $container .= "    }\n";
         }
 

@@ -8,36 +8,36 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @var string
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $hash;
+    protected $hash;
 
     /**
      * @var string
      */
-    private $scope;
+    protected $scope;
 
-    public function __construct(string $id, string $hash, string $scope)
+    public function __construct(string $id, string $scope)
     {
         $this->id = $id;
-        $this->hash = $hash;
+        $this->hash = $this->hash($id);
         $this->scope = $scope;
     }
 
-    public function getId(): string
+    public function getId(string $parentId): string
     {
         return $this->id;
     }
 
-    public function getHash(): string
+    public function getHash(string $parentId): string
     {
         return $this->hash;
     }
 
-    public function getScope(): string
+    public function getScope(string $parentId): string
     {
         return $this->scope;
     }
@@ -49,5 +49,10 @@ abstract class AbstractDefinition implements DefinitionInterface
         }
 
         return "\$this->$hash()";
+    }
+
+    private function hash(string $id): string
+    {
+        return str_replace("\\", "__", $id);
     }
 }

@@ -15,7 +15,7 @@ abstract class AbstractHint
         $this->setSingletonScope();
     }
 
-    protected function getScope(): string
+    public function getScope(): string
     {
         return $this->scope;
     }

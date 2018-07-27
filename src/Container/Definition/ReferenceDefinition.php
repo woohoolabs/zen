@@ -22,7 +22,7 @@ class ReferenceDefinition extends AbstractDefinition
 
     public function __construct(string $referrerId, string $referencedClassName, string $scope = "singleton")
     {
-        parent::__construct($referencedClassName, str_replace("\\", "__", $referencedClassName), $scope);
+        parent::__construct($referencedClassName, $scope);
         $this->referrerId = $referrerId;
     }
 
@@ -44,7 +44,7 @@ class ReferenceDefinition extends AbstractDefinition
     public function getClassDependencies(): array
     {
         return [
-            $this->getId(),
+            $this->id,
         ];
     }
 
@@ -54,10 +54,17 @@ class ReferenceDefinition extends AbstractDefinition
     public function toPhpCode(array $definitions): string
     {
         $code = "        return ";
-        if ($this->getScope() === "singleton") {
+        if ($this->scope === "singleton") {
             $code .= "\$this->singletonEntries['{$this->referrerId}'] = ";
         }
-        $code .= $this->getEntryToPhp($this->getId(), $this->getHash(), $definitions[$this->getId()]->getScope()) . ";\n";
+
+        $definition = $definitions[$this->id];
+
+        $code .= $this->getEntryToPhp(
+            $definition->getId($this->referrerId),
+            $definition->getHash($this->referrerId),
+            $definition->getScope($this->referrerId)
+        ) . ";\n";
 
         return $code;
     }

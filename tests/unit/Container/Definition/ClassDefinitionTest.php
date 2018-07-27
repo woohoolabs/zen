@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Tests\Unit\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 
 class ClassDefinitionTest extends TestCase
 {
@@ -17,7 +18,7 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             "A__B",
-            $definition->getHash()
+            $definition->getHash("")
         );
     }
 
@@ -64,7 +65,7 @@ class ClassDefinitionTest extends TestCase
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionSingleton.php"),
-            $definition->toPhpCode([$definition->getId() => $definition])
+            $definition->toPhpCode([$definition->getId("") => $definition])
         );
     }
 
@@ -81,9 +82,37 @@ class ClassDefinitionTest extends TestCase
             $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
             $definition->toPhpCode(
                 [
-                    $definition->getId() => $definition,
+                    $definition->getId("") => $definition,
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                     "X\\C" => ClassDefinition::singleton("X\\C"),
+                ]
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function contextDependentConstructorInjectionToPhpCode()
+    {
+        $definition = ClassDefinition::singleton("X\\A")
+            ->addRequiredConstructorArgument("X\\B")
+            ->addRequiredConstructorArgument("X\\C");
+
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentConstructorDependencies.php"),
+            $definition->toPhpCode(
+                [
+                    $definition->getId("") => $definition,
+                    "X\\B" => new ContextDependentDefinition(
+                        "X\\B",
+                        [
+                            "X\\A" => new ClassDefinition("X\\C", "singleton"),
+                            "X\\F" => new ClassDefinition("X\\D", "singleton"),
+                        ]
+                    ),
+                    "X\\C" => new ClassDefinition("X\\C", "singleton"),
+                    "X\\D" => new ClassDefinition("X\\D", "singleton"),
                 ]
             )
         );
@@ -107,7 +136,7 @@ class ClassDefinitionTest extends TestCase
             $this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"),
             $definition->toPhpCode(
                 [
-                    $definition->getId() => $definition,
+                    $definition->getId("") => $definition,
                 ]
             )
         );
@@ -126,9 +155,37 @@ class ClassDefinitionTest extends TestCase
             $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),
             $definition->toPhpCode(
                 [
-                    $definition->getId() => $definition,
+                    $definition->getId("") => $definition,
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                     "X\\C" => ClassDefinition::singleton("X\\C"),
+                ]
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function contextDependentPropertyInjectionToPhpCode()
+    {
+        $definition = ClassDefinition::singleton("X\\A")
+            ->addProperty("b", "X\\B")
+            ->addProperty("c", "X\\C");
+
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentPropertyDependencies.php"),
+            $definition->toPhpCode(
+                [
+                    $definition->getId("") => $definition,
+                    "X\\B" => new ContextDependentDefinition(
+                        "X\\B",
+                        [
+                            "X\\A" => new ClassDefinition("X\\C", "singleton"),
+                            "X\\F" => new ClassDefinition("X\\D", "singleton"),
+                        ]
+                    ),
+                    "X\\C" => new ClassDefinition("X\\C", "singleton"),
+                    "X\\D" => new ClassDefinition("X\\D", "singleton"),
                 ]
             )
         );

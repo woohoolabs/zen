@@ -5,11 +5,11 @@ namespace WoohooLabs\Zen\Container\Definition;
 
 interface DefinitionInterface
 {
-    public function getId(): string;
+    public function getId(string $parentId): string;
 
-    public function getHash(): string;
+    public function getHash(string $parentId): string;
 
-    public function getScope(): string;
+    public function getScope(string $parentId): string;
 
     public function needsDependencyResolution(): bool;
 
