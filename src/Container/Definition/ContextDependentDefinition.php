@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Exception\ContainerException;
+
 class ContextDependentDefinition implements DefinitionInterface
 {
     /**
@@ -33,17 +35,17 @@ class ContextDependentDefinition implements DefinitionInterface
 
     public function getId(string $parentId): string
     {
-        return $this->definitions[$parentId]->getId($parentId);
+        return $this->getDefinition($parentId)->getId($parentId);
     }
 
     public function getHash(string $parentId): string
     {
-        return $this->definitions[$parentId]->getHash($parentId);
+        return $this->getDefinition($parentId)->getHash($parentId);
     }
 
     public function getScope(string $parentId): string
     {
-        return $this->definitions[$parentId]->getScope($parentId);
+        return $this->getDefinition($parentId)->getScope($parentId);
     }
 
     public function needsDependencyResolution(): bool
@@ -82,5 +84,16 @@ EOF;
         }
 
         return $this->defaultDefinition->toPhpCode($definitions);
+    }
+
+    private function getDefinition(string $parentId): DefinitionInterface
+    {
+        if (isset($this->definitions[$parentId]) === false && $this->defaultDefinition === null) {
+            throw new ContainerException(
+                "The Context-Dependent definition with the '{$this->referrerId}' ID can't be injected for the '{$parentId}' class!"
+            );
+        }
+
+        return $this->definitions[$parentId] ?? $this->defaultDefinition;
     }
 }
