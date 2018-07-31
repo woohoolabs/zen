@@ -53,9 +53,9 @@ Dependency Injection, and to make the configuration as evident and convenient as
 - [PSR-11](http://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
 - Supports compilation for [maximum performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
 - Supports dynamic usage for development
-- Supports autowiring (but only objects can be injected)
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
+- Supports autowiring and context-dependent injection
 
 ### Use Cases of Woohoo Labs. Zen
 
@@ -384,6 +384,67 @@ protected function getEntryPoints(): array
     ];
 }
 ```
+
+### Context-dependent dependency injection
+
+Sometimes - usually for bigger projects - it can be useful to be able to inject different implementations of the same
+interface as dependency. Before Zen 2.4.0, you couldn't achieve this unless you used some trick (like extending the
+original interface and configure the container accordingly). Now, context-dependent injection is supported out of the
+box by Zen!
+
+Imagine the following case:
+
+```php
+class NewRelicHandler implements LoggerInterface {}
+
+class PhpConsoleHandler implements LoggerInterface {}
+
+class MailHandler implements LoggerInterface {}
+
+class ServiceA
+{
+    public function __construct(LoggerInterface $logger) {}
+}
+
+class ServiceB
+{
+    public function __construct(LoggerInterface $logger) {}
+}
+
+class ServiceC
+{
+    public function __construct(LoggerInterface $logger) {}
+}
+```
+
+If you would like to use `NewRelicHandler` in `ServiceA`, but `PhpConsoleHandler` in `ServiceB` and `MailHandler` in any
+other classes (like `ServiceC`) then you have to configure the [definition hints](#hints) this way:
+
+```php
+protected function getDefinitionHints(): array
+{
+    return [
+        LoggerInterface::class => ContextDependentDefinitionHint::create()
+            ->setClassContext(
+                NewRelicHandler::class,
+                [
+                    ServiceA::class,
+                ]
+            ),
+            ->setClassContext(
+                PhpConsoleHandler::class,
+                [
+                    ServiceB::class,
+                ]
+            )
+            ->setDefaultClass(MailHandler::class),
+    ];
+}
+```
+
+If you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
+then a `ContainerException` will be thrown if the interface is injected as a dependency by any class other than the listed
+"parent" classes (which are defined in the second parameter of the `setClassContext()` method calls).
 
 ## Examples
 
