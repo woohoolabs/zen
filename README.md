@@ -35,18 +35,18 @@ can prevent people from applying the theory correctly.
 
 Besides using Service Location, the biggest misbelief certainly is that Dependency Injection requires very complex tools
 called DI Containers. And we all deem to know that their performance is ridiculously low. Woohoo Labs. Zen was born after
-the realization of the fact that these fallacies seem to be true indeed, or at least our current ecosystem endorses
-unnecessarily complex tools, sometimes offering degraded performance.
+the realization of the fact that these fallacies were true indeed back in 2016.
 
-I believe that in the vast majority of the cases, very-very simple tools could do the job faster and more importantly,
-while remaining less challenging mentally than a competing tool offering "everything and more" out of the box. I consider
-this phenomenon as part of the [simple vs. easy problem](https://www.infoq.com/presentations/Simple-Made-Easy).
+That's why I tried to create a DI container which makes configuration as explicit and convenient as possible,
+which enforces the correct usage of Dependency Injection while providing
+[outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) according
+to [my benchmarks](https://github.com/kocsismate/php-di-container-benchmarks). That's how Zen was born. Although
+I imagined a very simple container initially, with only the essential feature set, over the time, Zen managed to feature
+the most important capabilities of the most popular DI Containers currently available.
 
-Zen doesn't - and probably will never - feature all the capabilities of the most famous DI Containers currently available.
-There are things that aren't worth the hassle. On the other hand, it will try hard to enforce the correct usage of
-Dependency Injection, and to make the configuration as evident and convenient as possible while providing
-[outstanding performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) according to
-[my benchmarks](https://github.com/kocsismate/php-di-container-benchmarks).
+Fortunately, since the birth of Zen a lot of progress have been made in the DI Container ecosystem: many containers almost
+doubled their performance, autowiring and compilation became more popular, but one thing didn't change: Zen is still
+one of the fastest PHP containers.
 
 ### Features
 
@@ -56,18 +56,6 @@ Dependency Injection, and to make the configuration as evident and convenient as
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
 - Supports autowiring and context-dependent injection
-
-### Use Cases of Woohoo Labs. Zen
-
-As mentioned before, Zen is suitable for projects needing maximum performance and easy configuration but not requiring
-some common DI techniques, like method or scalar value injection. If performance is not a concern for you, but you want
-a fully featured container, please choose another project. In this case, I would recommend you to check out the awesome
-[PHP-DI](https://github.com/php-di/php-di) instead of Zen.
-
-But if the functionality offered by Zen is enough for you then Zen will amaze you with its simplicity (the core of the
-project only consists of cc. 600 lines of code), high performance (it has
-[similar speed](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html) when you manually instantiate your objects)
-and its easy configuration (Zen was designed to work with the least amount of configuration).
 
 ## Install
 
