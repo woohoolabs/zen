@@ -173,7 +173,7 @@ class CompilerConfig extends AbstractCompilerConfig
     public function getContainerConfigs(): array
     {
         return [
-            new ContainerConfig()
+            new ContainerConfig(),
         ];
     }
 }
@@ -214,7 +214,7 @@ class ContainerConfig extends AbstractContainerConfig
                 __DIR__ . "/Domain",
                 'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
                 'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
-            )
+            ),
         ];
     }
 }
@@ -287,7 +287,7 @@ protected function getWildcardHints(): array
             __DIR__ . "/Domain",
             'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
             'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
-        )
+        ),
     ];
 }
 ```
@@ -377,7 +377,7 @@ protected function getEntryPoints(): array
 
 Sometimes - usually for bigger projects - it can be useful to be able to inject different implementations of the same
 interface as dependency. Before Zen 2.4.0, you couldn't achieve this unless you used some trick (like extending the
-original interface and configure the container accordingly). Now, context-dependent injection is supported out of the
+original interface and configuring the container accordingly). Now, context-dependent injection is supported out of the
 box by Zen!
 
 Imagine the following case:
