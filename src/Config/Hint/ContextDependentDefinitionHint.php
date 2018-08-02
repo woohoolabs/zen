@@ -68,7 +68,10 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     {
         $defaultDefinition = null;
         if ($this->defaultDefinitionHint) {
-            $defaultDefinition = new ClassDefinition($this->defaultDefinitionHint->getClassName(), $this->defaultDefinitionHint->getScope());
+            $defaultDefinition = new ClassDefinition(
+                $this->defaultDefinitionHint->getClassName(),
+                $this->defaultDefinitionHint->getScope()
+            );
         }
 
         $definitions = [];
