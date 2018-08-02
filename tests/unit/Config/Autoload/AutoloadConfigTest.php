@@ -34,7 +34,7 @@ class AutoloadConfigTest extends TestCase
      */
     public function create()
     {
-        $autoloadConfig = AutoloadConfig::create(true,"/var/www");
+        $autoloadConfig = AutoloadConfig::create(true, "/var/www");
 
         $this->assertTrue($autoloadConfig->isGlobalAutoloadEnabled());
         $this->assertEquals("/var/www", $autoloadConfig->getRootDirectory());
