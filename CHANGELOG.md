@@ -1,14 +1,18 @@
-## 2.4.0 - unreleased
+## 2.5.0 - unreleased
 
 ADDED:
-
-- Support for Context-Dependent Dependency Injection
 
 CHANGED:
 
 REMOVED:
 
 FIXED:
+
+## 2.4.0 - 2018-08-02
+
+ADDED:
+
+- Support for Context-Dependent Dependency Injection
 
 ## 2.3.0 - 2018-07-05
 
