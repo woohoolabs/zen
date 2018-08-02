@@ -16,6 +16,7 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
+            null,
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => new ClassDefinition("X\\E"),
@@ -36,6 +37,7 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
+            null,
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => new ClassDefinition("X\\E"),
@@ -56,6 +58,7 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
+            null,
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => ClassDefinition::prototype("X\\E"),
@@ -72,10 +75,11 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function toPhpCode()
+    public function toPhpCodeWithoutDefault()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
+            null,
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => new ClassDefinition("X\\E"),
@@ -84,7 +88,34 @@ class ContextDependentDefinitionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->getDefinitionSourceCode("ContextDependentDefinition.php"),
+            $this->getDefinitionSourceCode("ContextDependentDefinitionWithoutDefault.php"),
+            $definition->toPhpCode(
+                [
+                    "X\\B" => new ClassDefinition("X\\C"),
+                    "X\\D" => new ClassDefinition("X\\E"),
+                    "X\\F" => new ClassDefinition("X\\G"),
+                ]
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toPhpCodeWithDefault()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            new ClassDefinition("X\\H"),
+            [
+                "X\\B" => new ClassDefinition("X\\C"),
+                "X\\D" => new ClassDefinition("X\\E"),
+                "X\\F" => new ClassDefinition("X\\G"),
+            ]
+        );
+
+        $this->assertEquals(
+            $this->getDefinitionSourceCode("ContextDependentDefinitionWithDefault.php"),
             $definition->toPhpCode(
                 [
                     "X\\B" => new ClassDefinition("X\\C"),

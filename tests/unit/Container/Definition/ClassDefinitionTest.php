@@ -106,6 +106,7 @@ class ClassDefinitionTest extends TestCase
                     $definition->getId("") => $definition,
                     "X\\B" => new ContextDependentDefinition(
                         "X\\B",
+                        null,
                         [
                             "X\\A" => new ClassDefinition("X\\C", "singleton"),
                             "X\\F" => new ClassDefinition("X\\D", "singleton"),
@@ -179,6 +180,7 @@ class ClassDefinitionTest extends TestCase
                     $definition->getId("") => $definition,
                     "X\\B" => new ContextDependentDefinition(
                         "X\\B",
+                        null,
                         [
                             "X\\A" => new ClassDefinition("X\\C", "singleton"),
                             "X\\F" => new ClassDefinition("X\\D", "singleton"),
