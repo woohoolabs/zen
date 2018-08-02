@@ -70,13 +70,18 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         if ($this->defaultDefinitionHint) {
             $defaultDefinition = new ClassDefinition(
                 $this->defaultDefinitionHint->getClassName(),
-                $this->defaultDefinitionHint->getScope()
+                $this->defaultDefinitionHint->getScope(),
+                $isAutoloaded
             );
         }
 
         $definitions = [];
         foreach ($this->definitionHints as $parentId => $definitionHint) {
-            $definitions[$parentId] = new ClassDefinition($definitionHint->getClassName(), $definitionHint->getScope());
+            $definitions[$parentId] = new ClassDefinition(
+                $definitionHint->getClassName(),
+                $definitionHint->getScope(),
+                $isAutoloaded
+            );
         }
 
         $result = [

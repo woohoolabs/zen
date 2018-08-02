@@ -11,6 +11,26 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function needsDependencyResolution()
+    {
+        $definition = new SelfDefinition("");
+
+        $this->assertFalse($definition->needsDependencyResolution());
+    }
+
+    /**
+     * @test
+     */
+    public function getClassDependencies()
+    {
+        $definition = new SelfDefinition("");
+
+        $this->assertEmpty($definition->getClassDependencies());
+    }
+
+    /**
+     * @test
+     */
     public function ToPhpCode()
     {
         $definition = new SelfDefinition("");
