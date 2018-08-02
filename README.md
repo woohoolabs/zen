@@ -420,7 +420,7 @@ protected function getDefinitionHints(): array
                 ]
             ),
             ->setClassContext(
-                PhpConsoleHandler::class,
+                new DefinitionHint(PhpConsoleHandler::class),
                 [
                     ServiceB::class,
                 ]
@@ -430,9 +430,14 @@ protected function getDefinitionHints(): array
 }
 ```
 
-If you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
-then a `ContainerException` will be thrown if the interface is injected as a dependency by any class other than the listed
-"parent" classes (which are defined in the second parameter of the `setClassContext()` method calls).
+The code above can be read the following way: when the classes listed in the second parameter of the `setClassContext()` methods
+depend on the class/interface in the key of the current array item (`ServiceA` depends on `LoggerInterface` in the example),
+then the class/[definition hint](#hints) in the first parameter will be resolved by the container. If any other class depends
+on it, then the class/[definition hint](#hints) in the first parameter of the `setDefaultClass()` method will be resolved.
+
+> Note that if you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
+then a `ContainerException` will be thrown if the interface is injected as a dependency of any class other than the listed
+ones in the second parameter of the `setClassContext()` method calls.
 
 ## Examples
 
