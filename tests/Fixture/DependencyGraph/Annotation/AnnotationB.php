@@ -1,0 +1,18 @@
+<?php
+declare(strict_types=1);
+
+namespace WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation;
+
+class AnnotationB extends AnnotationC
+{
+    /**
+     * @Inject
+     * @var AnnotationD
+     */
+    public $d;
+
+    public function getD(): AnnotationD
+    {
+        return $this->d;
+    }
+}

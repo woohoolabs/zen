@@ -38,7 +38,7 @@
     "autoload-dev": {
         "psr-4": {
             "WoohooLabs\\Zen\\Examples\\": "examples/",
-            "WoohooLabs\\Zen\\Tests\\Unit\\": "tests/unit"
+            "WoohooLabs\\Zen\\Tests\\": "tests/"
         }
     },
     "bin": [
