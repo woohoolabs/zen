@@ -15,14 +15,20 @@ class ClassEntryPoint implements EntryPointInterface
      */
     private $autoloaded;
 
-    public static function create(string $className): ClassEntryPoint
+    /**
+     * @var array
+     */
+    private $constructorParams;
+
+    public static function create(string $className, array $constructorParams = []): ClassEntryPoint
     {
-        return new ClassEntryPoint($className);
+        return new ClassEntryPoint($className, $constructorParams);
     }
 
-    public function __construct(string $className)
+    public function __construct(string $className, array $constructorParams = [])
     {
         $this->className = $className;
+        $this->constructorParams = $constructorParams;
         $this->autoloaded = false;
     }
 
@@ -41,6 +47,24 @@ class ClassEntryPoint implements EntryPointInterface
         return [
             $this->className,
         ];
+    }
+
+    /**
+     * @param string $paramName
+     * @return bool
+     */
+    public function hasConstructorParam(string $paramName)
+    {
+        return array_key_exists($paramName, $this->constructorParams);
+    }
+
+    /**
+     * @param string $paramName
+     * @return mixed
+     */
+    public function getConstructorParam($paramName)
+    {
+        return $this->constructorParams[$paramName];
     }
 
     public function isAutoloaded(): bool

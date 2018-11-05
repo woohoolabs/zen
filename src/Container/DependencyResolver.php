@@ -10,6 +10,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
@@ -81,7 +82,7 @@ class DependencyResolver
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
-                $this->resolveDependencies($id);
+                $this->resolveDependencies($id, $entryPoint);
             }
             return;
         }
@@ -113,15 +114,15 @@ class DependencyResolver
         }
 
         $this->definitions[$id] = new ClassDefinition($id, "singleton", $isAutoloaded);
-        $this->resolveDependencies($id);
+        $this->resolveDependencies($id, $entryPoint);
     }
 
-    private function resolveDependencies(string $id): void
+    private function resolveDependencies(string $id, ?EntryPointInterface $entryPoint = null): void
     {
         $this->definitions[$id]->resolveDependencies();
 
         if ($this->compilerConfig->useConstructorInjection()) {
-            $this->resolveConstructorArguments($this->definitions[$id]);
+            $this->resolveConstructorArguments($this->definitions[$id], $entryPoint);
         }
 
         if ($this->compilerConfig->usePropertyInjection()) {
@@ -137,8 +138,10 @@ class DependencyResolver
         return $this->definitions;
     }
 
-    private function resolveConstructorArguments(ClassDefinition $definition): void
-    {
+    private function resolveConstructorArguments(
+        ClassDefinition $definition,
+        ?EntryPointInterface $entryPoint = null
+    ): void {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
         } catch (ReflectionException $e) {
@@ -150,6 +153,12 @@ class DependencyResolver
         }
 
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
+            if (!is_null($entryPoint) && $entryPoint instanceof ClassEntryPoint && $entryPoint->hasConstructorParam($param->getName())) {
+                $value = $entryPoint->getConstructorParam($param->getName());
+                $definition->addOptionalConstructorArgument($value);
+                continue;
+            }
+
             if ($param->isOptional()) {
                 $definition->addOptionalConstructorArgument($param->getDefaultValue());
                 continue;
