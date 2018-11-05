@@ -32,5 +32,4 @@ class NatureUtil
         $this->plantUtil = $plantUtil;
         $this->humansEnabled = $humansEnabled;
     }
-
 }
