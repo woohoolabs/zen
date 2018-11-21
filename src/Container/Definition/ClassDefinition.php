@@ -159,7 +159,8 @@ class ClassDefinition extends AbstractDefinition
                 $code .= "                '$propertyName' => " . $this->getEntryToPhp(
                     $definition->getId($this->id),
                     $definition->getHash($this->id),
-                    $definition->getScope($this->id)) . ",\n";
+                    $definition->getScope($this->id)
+                ) . ",\n";
             }
             $code .= "            ]\n";
             $code .= "        );\n";
