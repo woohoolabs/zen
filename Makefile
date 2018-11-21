@@ -29,10 +29,10 @@ cs:
 	    --encoding=UTF-8 \
 	    --report-full \
 	    --extensions=php \
-	   /var/www/src/ /var/www/tests/
+	   /var/www/src/
 
 cs-fix:
 	docker-compose -f docker-compose.yml run php /var/www/vendor/bin/phpcbf \
 	    --standard=/var/www/phpcs.xml \
 	    --extensions=php \
-	   /var/www/src/ /var/www/tests/
+	   /var/www/src/
