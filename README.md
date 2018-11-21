@@ -50,7 +50,7 @@ one of the fastest PHP containers.
 
 ### Features
 
-- [PSR-11](http://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
+- [PSR-11](https://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
 - Supports compilation for [maximum performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
 - Supports dynamic usage for development
 - Supports constructor and property injection
@@ -59,7 +59,7 @@ one of the fastest PHP containers.
 
 ## Install
 
-The only thing you need is [Composer](http://getcomposer.org) before getting started. Then run the command below to get
+The only thing you need is [Composer](https://getcomposer.org) before getting started. Then run the command below to get
 the latest version:
 
 ```bash
@@ -77,7 +77,7 @@ Zen requires PHP 7.1 at least.
 
 As Zen is a PSR-11 compliant container, it supports the `$container->has()` and
 `$container->get()` methods as defined by
-[`ContainerInterface`](http://www.php-fig.org/psr/psr-11/).
+[`ContainerInterface`](https://www.php-fig.org/psr/psr-11/).
 
 ### Types of injection
 
@@ -446,7 +446,7 @@ complete example!
 
 ## Versioning
 
-This library follows [SemVer v2.0.0](http://semver.org/).
+This library follows [SemVer v2.0.0](https://semver.org/).
 
 ## Change Log
 

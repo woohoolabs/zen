@@ -10,7 +10,7 @@ We accept contributions via Pull Requests on [Github](https://github.com/woohool
 
 - **Document any change in behaviour** - Make sure the `README.md` and any other relevant documentation are kept up-to-date.
 
-- **Consider our release cycle** - We try to follow [SemVer v2.0.0](http://semver.org/).
+- **Consider our release cycle** - We try to follow [SemVer v2.0.0](https://semver.org/).
 
 - **Create feature branches** - Don't ask us to pull from your master branch.
 
