@@ -10,9 +10,9 @@ abstract class AbstractHint
      */
     private $scope;
 
-    public function __construct()
+    public function __construct(string $scope)
     {
-        $this->setSingletonScope();
+        $this->scope = $scope === "prototype" ? "prototype" : "singleton";
     }
 
     public function getScope(): string
@@ -20,14 +20,20 @@ abstract class AbstractHint
         return $this->scope;
     }
 
-    public function setSingletonScope(): AbstractHint
+    /**
+     * @return $this
+     */
+    public function setSingletonScope()
     {
         $this->scope = "singleton";
 
         return $this;
     }
 
-    public function setPrototypeScope(): AbstractHint
+    /**
+     * @return $this
+     */
+    public function setPrototypeScope()
     {
         $this->scope = "prototype";
 
