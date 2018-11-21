@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    examples-php:
+        container_name: zen-examples-php
+        image: php:7.1-cli
+        volumes:
+            - .:/var/www
+        command: /bin/bash -c "cd /var/www; php ./bin/zen build /var/www/examples/Container.php \"WoohooLabs\\Zen\\Examples\\CompilerConfig\""
