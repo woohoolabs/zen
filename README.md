@@ -441,8 +441,14 @@ ones in the second parameter of the `setClassContext()` method calls.
 
 ## Examples
 
-Please have a look at the [examples folder](https://github.com/woohoolabs/zen/tree/master/examples) for a
-complete example!
+If you want to see how Zen works, have a look at the [examples](https://github.com/woohoolabs/yin/tree/master/examples)
+folder, where you can find an example configuration (`CompilerConfig`). If `docker-compose` and `make` is available
+on your system, then just run the following commands in order to build a container:
+
+```bash
+make composer-install  # Install the Composer dependencies
+make build             # Build the container into the examples/Container.php
+```
 
 ## Versioning
 
@@ -461,7 +467,7 @@ after you have copied phpunit.xml.dist to phpunit.xml:
 $ phpunit
 ```
 
-Additionally, you may run `docker-compose up` in order to execute the tests.
+Additionally, you may run `docker-compose up` or `make test` in order to execute the tests.
 
 ## Contributing
 
