@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-    php:
+    zen-php:
         container_name: zen-php
         image: php:7.1-cli
         volumes:
