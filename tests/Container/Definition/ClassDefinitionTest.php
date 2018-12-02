@@ -75,8 +75,8 @@ class ClassDefinitionTest extends TestCase
     public function prototypeWithRequiredConstructorDependenciesToPhpCode()
     {
         $definition = ClassDefinition::prototype("X\\A")
-            ->addRequiredConstructorArgument("X\\B")
-            ->addRequiredConstructorArgument("X\\C");
+            ->addConstructorArgumentFromClass("X\\B")
+            ->addConstructorArgumentFromClass("X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
@@ -96,8 +96,8 @@ class ClassDefinitionTest extends TestCase
     public function contextDependentConstructorInjectionToPhpCode()
     {
         $definition = ClassDefinition::singleton("X\\A")
-            ->addRequiredConstructorArgument("X\\B")
-            ->addRequiredConstructorArgument("X\\C");
+            ->addConstructorArgumentFromClass("X\\B")
+            ->addConstructorArgumentFromClass("X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentConstructorDependencies.php"),
@@ -125,13 +125,13 @@ class ClassDefinitionTest extends TestCase
     public function prototypeWithOptionalConstructorDependenciesToPhpCode()
     {
         $definition = ClassDefinition::prototype("X\\A")
-            ->addOptionalConstructorArgument("")
-            ->addOptionalConstructorArgument(true)
-            ->addOptionalConstructorArgument(0)
-            ->addOptionalConstructorArgument(1)
-            ->addOptionalConstructorArgument(1345.999)
-            ->addOptionalConstructorArgument(null)
-            ->addOptionalConstructorArgument(["a" => false]);
+            ->addConstructorArgumentFromValue("")
+            ->addConstructorArgumentFromValue(true)
+            ->addConstructorArgumentFromValue(0)
+            ->addConstructorArgumentFromValue(1)
+            ->addConstructorArgumentFromValue(1345.999)
+            ->addConstructorArgumentFromValue(null)
+            ->addConstructorArgumentFromValue(["a" => false]);
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"),
@@ -149,8 +149,8 @@ class ClassDefinitionTest extends TestCase
     public function prototypeWithPropertyDependenciesToPhpCode()
     {
         $definition = ClassDefinition::prototype("X\\A")
-            ->addProperty("b", "X\\B")
-            ->addProperty("c", "X\\C");
+            ->addPropertyFromClass("b", "X\\B")
+            ->addPropertyFromClass("c", "X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),
@@ -170,8 +170,8 @@ class ClassDefinitionTest extends TestCase
     public function contextDependentPropertyInjectionToPhpCode()
     {
         $definition = ClassDefinition::singleton("X\\A")
-            ->addProperty("b", "X\\B")
-            ->addProperty("c", "X\\C");
+            ->addPropertyFromClass("b", "X\\B")
+            ->addPropertyFromClass("c", "X\\C");
 
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentPropertyDependencies.php"),

@@ -49,21 +49,28 @@ class ClassDefinition extends AbstractDefinition
         return $this->id;
     }
 
-    public function addRequiredConstructorArgument(string $className): ClassDefinition
+    public function addConstructorArgumentFromClass(string $className): ClassDefinition
     {
         $this->constructorArguments[] = ["class" => $className];
 
         return $this;
     }
 
-    public function addOptionalConstructorArgument($defaultValue): ClassDefinition
+    public function addConstructorArgumentFromValue($value): ClassDefinition
     {
-        $this->constructorArguments[] = ["default" => $defaultValue];
+        $this->constructorArguments[] = ["value" => $value];
 
         return $this;
     }
 
-    public function addProperty(string $name, string $className): ClassDefinition
+    public function addConstructorArgumentFromOverride(string $name): ClassDefinition
+    {
+        $this->constructorArguments[] = ["value" => $this->overriddenConstructorParameters[$name] ?? null];
+
+        return $this;
+    }
+
+    public function addPropertyFromClass(string $name, string $className): ClassDefinition
     {
         $this->properties[$name] = ["class" => $className];
 
@@ -137,8 +144,8 @@ class ClassDefinition extends AbstractDefinition
                     $definition->getHash($this->id),
                     $definition->getScope($this->id)
                 );
-            } elseif (array_key_exists("default", $constructorArgument)) {
-                $constructorArguments[] = "            " . ($this->convertValueToString($constructorArgument["default"]));
+            } elseif (array_key_exists("value", $constructorArgument)) {
+                $constructorArguments[] = "            " . $this->serializeValue($constructorArgument["value"]);
             }
         }
         if (empty($constructorArguments)) {
@@ -177,7 +184,7 @@ class ClassDefinition extends AbstractDefinition
         return $code;
     }
 
-    private function convertValueToString($value): string
+    private function serializeValue($value): string
     {
         if (\is_string($value)) {
             return '"' . $value . '"';
@@ -194,7 +201,7 @@ class ClassDefinition extends AbstractDefinition
         if (\is_array($value)) {
             $array = "[";
             foreach ($value as $k => $v) {
-                $array .= $this->convertValueToString($k) . " => " . $this->convertValueToString($v) . ",";
+                $array .= $this->serializeValue($k) . " => " . $this->serializeValue($v) . ",";
             }
             $array .= "]";
 

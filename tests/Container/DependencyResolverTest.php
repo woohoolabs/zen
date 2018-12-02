@@ -49,15 +49,15 @@ class DependencyResolverTest extends TestCase
                 "" => new SelfDefinition(""),
                 ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 ConstructorA::class => ClassDefinition::singleton(ConstructorA::class)
-                    ->addRequiredConstructorArgument(ConstructorB::class)
-                    ->addRequiredConstructorArgument(ConstructorC::class)
-                    ->addOptionalConstructorArgument(true)
-                    ->addOptionalConstructorArgument(null)
+                    ->addConstructorArgumentFromClass(ConstructorB::class)
+                    ->addConstructorArgumentFromClass(ConstructorC::class)
+                    ->addConstructorArgumentFromValue(true)
+                    ->addConstructorArgumentFromValue(null)
                     ->resolveDependencies(),
                 ConstructorB::class => ClassDefinition::singleton(ConstructorB::class)
                     ->resolveDependencies(),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
-                    ->addRequiredConstructorArgument(ConstructorD::class)
+                    ->addConstructorArgumentFromClass(ConstructorD::class)
                     ->resolveDependencies(),
                 ConstructorD::class => ClassDefinition::singleton(ConstructorD::class)
                     ->resolveDependencies(),
@@ -80,16 +80,16 @@ class DependencyResolverTest extends TestCase
                 "" => new SelfDefinition(""),
                 ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 AnnotationA::class => ClassDefinition::singleton(AnnotationA::class)
-                    ->addProperty("b", AnnotationB::class)
-                    ->addProperty("c", AnnotationC::class)
+                    ->addPropertyFromClass("b", AnnotationB::class)
+                    ->addPropertyFromClass("c", AnnotationC::class)
                     ->resolveDependencies(),
                 AnnotationB::class => ClassDefinition::singleton(AnnotationB::class)
-                    ->addProperty("e2", AnnotationE::class)
-                    ->addProperty("d", AnnotationD::class)
+                    ->addPropertyFromClass("e2", AnnotationE::class)
+                    ->addPropertyFromClass("d", AnnotationD::class)
                     ->resolveDependencies(),
                 AnnotationC::class => ClassDefinition::singleton(AnnotationC::class)
-                    ->addProperty("e1", AnnotationE::class)
-                    ->addProperty("e2", AnnotationE::class)
+                    ->addPropertyFromClass("e1", AnnotationE::class)
+                    ->addPropertyFromClass("e2", AnnotationE::class)
                     ->resolveDependencies(),
                 AnnotationE::class => ClassDefinition::singleton(AnnotationE::class)
                     ->resolveDependencies(),
@@ -114,17 +114,17 @@ class DependencyResolverTest extends TestCase
                 "" => new SelfDefinition(""),
                 ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 MixedA::class => ClassDefinition::singleton(MixedA::class)
-                    ->addRequiredConstructorArgument(MixedB::class)
-                    ->addRequiredConstructorArgument(MixedC::class)
-                    ->addProperty("d", MixedD::class)
+                    ->addConstructorArgumentFromClass(MixedB::class)
+                    ->addConstructorArgumentFromClass(MixedC::class)
+                    ->addPropertyFromClass("d", MixedD::class)
                     ->resolveDependencies(),
                 MixedB::class => ClassDefinition::singleton(MixedB::class)
-                    ->addRequiredConstructorArgument(MixedD::class)
+                    ->addConstructorArgumentFromClass(MixedD::class)
                     ->resolveDependencies(),
                 MixedD::class => ClassDefinition::singleton(MixedD::class)
                     ->resolveDependencies(),
                 MixedC::class => ClassDefinition::singleton(MixedC::class)
-                    ->addProperty("b", MixedB::class)
+                    ->addPropertyFromClass("b", MixedB::class)
                     ->resolveDependencies(),
             ],
             $dependencyResolver->getDefinitions()
@@ -175,7 +175,7 @@ class DependencyResolverTest extends TestCase
                 "" => new SelfDefinition(""),
                 ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
-                    ->addRequiredConstructorArgument(ConstructorD::class)
+                    ->addConstructorArgumentFromClass(ConstructorD::class)
                     ->resolveDependencies(),
                 ConstructorE::class => ClassDefinition::singleton(ConstructorE::class)
                     ->resolveDependencies(),

@@ -83,6 +83,7 @@ class DependencyResolver
             if ($this->definitions[$id]->needsDependencyResolution()) {
                 $this->resolveDependencies($id);
             }
+
             return;
         }
 
@@ -91,11 +92,11 @@ class DependencyResolver
             $isAutoloaded = true;
         }
 
-        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
+        if (\in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
             $isAutoloaded = false;
         }
 
-        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
+        if (\in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
             $isAutoloaded = false;
         }
 
@@ -151,19 +152,19 @@ class DependencyResolver
 
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
             if ($param->isOptional()) {
-                $definition->addOptionalConstructorArgument($param->getDefaultValue());
+                $definition->addConstructorArgumentFromValue($param->getDefaultValue());
                 continue;
             }
 
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
                 throw new ContainerException(
-                    "Type declaration or '@param' PHPDoc comment for constructor parameter '" . $param->getName() . "' in '" .
-                    "class '" . $definition->getClassName() . "' is missing or it is not a class!"
+                    "Type declaration or '@param' PHPDoc comment for constructor parameter '{$param->getName()}' in '" .
+                    "class '{$definition->getClassName()}' is missing or it is not a class!"
                 );
             }
 
-            $definition->addRequiredConstructorArgument($paramClass);
+            $definition->addConstructorArgumentFromClass($paramClass);
             $this->resolve($paramClass);
         }
     }
@@ -181,8 +182,7 @@ class DependencyResolver
 
             if ($property->isStatic()) {
                 throw new ContainerException(
-                    "Property '" . $class->getName() . "::$" . $property->getName() .
-                    "' is static and can't be injected on!"
+                    "Property '{$class->getName()}::\${$property->getName()}' is static and can't be injected upon!"
                 );
             }
 
@@ -194,7 +194,7 @@ class DependencyResolver
                 );
             }
 
-            $definition->addProperty($property->getName(), $propertyClass);
+            $definition->addPropertyFromClass($property->getName(), $propertyClass);
             $this->resolve($propertyClass);
         }
     }
