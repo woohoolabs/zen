@@ -176,7 +176,7 @@ class DependencyResolver
             $this->resolve($paramClass);
         }
 
-        $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenProperties(), $paramNames);
+        $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
         if (empty($invalidConstructorParameterOverrides) === false) {
             throw new ContainerException(
                 "Class '{$definition->getClassName()}' has the following overridden constructor parameters which don't exist: " .

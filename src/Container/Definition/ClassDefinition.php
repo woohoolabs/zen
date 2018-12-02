@@ -123,7 +123,7 @@ class ClassDefinition extends AbstractDefinition
         return isset($this->overriddenConstructorParameters[$name]);
     }
 
-    public function getOverriddenConstructorParameter(): array
+    public function getOverriddenConstructorParameters(): array
     {
         return array_keys($this->overriddenConstructorParameters);
     }
