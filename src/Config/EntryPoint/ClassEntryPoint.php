@@ -35,6 +35,7 @@ class ClassEntryPoint implements EntryPointInterface
 
     /**
      * @return string[]
+     * @internal
      */
     public function getClassNames(): array
     {
@@ -43,6 +44,9 @@ class ClassEntryPoint implements EntryPointInterface
         ];
     }
 
+    /**
+     * @internal
+     */
     public function isAutoloaded(): bool
     {
         return $this->autoloaded;

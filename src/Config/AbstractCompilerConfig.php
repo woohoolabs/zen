@@ -23,14 +23,21 @@ abstract class AbstractCompilerConfig
 
     /**
      * @return AbstractContainerConfig[]
+     * @internal
      */
     abstract public function getContainerConfigs(): array;
 
+    /**
+     * @internal
+     */
     public function getContainerHash(): string
     {
         return str_replace("\\", "__", $this->getContainerFqcn());
     }
 
+    /**
+     * @internal
+     */
     public function getContainerFqcn(): string
     {
         $namespace = $this->getContainerNamespace() ? $this->getContainerNamespace() . "\\" : "";

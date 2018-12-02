@@ -29,6 +29,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
 
     /**
      * @return EntryPointInterface[]
+     * @internal
      */
     public function createEntryPoints(): array
     {
@@ -50,6 +51,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
 
     /**
      * @return DefinitionHintInterface[]
+     * @internal
      */
     public function createDefinitionHints(): array
     {

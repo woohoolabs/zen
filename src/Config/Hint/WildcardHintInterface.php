@@ -7,6 +7,7 @@ interface WildcardHintInterface
 {
     /**
      * @return DefinitionHint[]
+     * @internal
      */
     public function getDefinitionHints(): array;
 }

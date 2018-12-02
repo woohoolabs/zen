@@ -10,6 +10,7 @@ interface DefinitionHintInterface
     /**
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
+     * @internal
      */
     public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array;
 }

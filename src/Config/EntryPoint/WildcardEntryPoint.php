@@ -43,12 +43,16 @@ class WildcardEntryPoint implements EntryPointInterface
 
     /**
      * @return string[]
+     * @internal
      */
     public function getClassNames(): array
     {
         return FileSystemUtil::getClassesInPath($this->directoryName, $this->onlyConcreteClasses);
     }
 
+    /**
+     * @internal
+     */
     public function isAutoloaded(): bool
     {
         return $this->autoloaded;

@@ -10,11 +10,13 @@ interface ContainerConfigInterface
 {
     /**
      * @return EntryPointInterface[]
+     * @internal
      */
     public function createEntryPoints(): array;
 
     /**
      * @return DefinitionHintInterface[]
+     * @internal
      */
     public function createDefinitionHints(): array;
 }

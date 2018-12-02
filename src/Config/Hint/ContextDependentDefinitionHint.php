@@ -63,6 +63,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     /**
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
+     * @internal
      */
     public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array
     {
@@ -104,6 +105,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
 
     /**
      * @param DefinitionHint|string|null $definitionHint
+     * @internal
      */
     private function createDefinitionHint($definitionHint): ?DefinitionHint
     {

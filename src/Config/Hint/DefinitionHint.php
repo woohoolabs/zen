@@ -33,6 +33,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     /**
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
+     * @internal
      */
     public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array
     {
@@ -58,6 +59,9 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         return $result;
     }
 
+    /**
+     * @internal
+     */
     public function getClassName(): string
     {
         return $this->className;

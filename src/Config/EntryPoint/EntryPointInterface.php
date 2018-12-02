@@ -7,8 +7,12 @@ interface EntryPointInterface
 {
     /**
      * @return string[]
+     * @internal
      */
     public function getClassNames(): array;
 
+    /**
+     * @internal
+     */
     public function isAutoloaded(): bool;
 }
