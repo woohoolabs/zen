@@ -26,6 +26,9 @@ class ContainerConfig extends AbstractContainerConfig
         return [
             AnimalServiceInterface::class => AnimalService::class,
             PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
+            PlantService::class => DefinitionHint::singleton(PlantService::class)
+                ->parameter("plantType", "sunflower")
+                ->property("plantType", "sunflower"),
         ];
     }
 
@@ -36,7 +39,7 @@ class ContainerConfig extends AbstractContainerConfig
                 __DIR__ . "/Domain",
                 'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
                 'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
-            )
+            ),
         ];
     }
 }

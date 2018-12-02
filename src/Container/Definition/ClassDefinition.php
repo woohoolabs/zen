@@ -25,6 +25,16 @@ class ClassDefinition extends AbstractDefinition
      */
     private $autoloaded;
 
+    /**
+     * @var array
+     */
+    private $overriddenConstructorParameters;
+
+    /**
+     * @var array
+     */
+    private $overriddenProperties;
+
     public static function singleton(string $className): ClassDefinition
     {
         return new self($className);
@@ -35,13 +45,20 @@ class ClassDefinition extends AbstractDefinition
         return new self($className, "prototype");
     }
 
-    public function __construct(string $className, string $scope = "singleton", bool $autoloaded = false)
-    {
+    public function __construct(
+        string $className,
+        string $scope = "singleton",
+        bool $autoloaded = false,
+        array $overriddenConstructorParameters = [],
+        array $overriddenProperties = []
+    ) {
         parent::__construct($className, $scope);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
         $this->autoloaded = $autoloaded;
+        $this->overriddenConstructorParameters = $overriddenConstructorParameters;
+        $this->overriddenProperties = $overriddenProperties;
     }
 
     public function getClassName(): string
@@ -77,6 +94,13 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
+    public function addPropertyFromOverride(string $name): ClassDefinition
+    {
+        $this->properties[$name] = ["value" => $this->overriddenProperties[$name] ?? null];
+
+        return $this;
+    }
+
     public function needsDependencyResolution(): bool
     {
         return $this->needsDependencyResolution;
@@ -92,6 +116,26 @@ class ClassDefinition extends AbstractDefinition
     public function isAutoloaded(): bool
     {
         return $this->autoloaded;
+    }
+
+    public function isConstructorParameterOverridden(string $name): bool
+    {
+        return isset($this->overriddenConstructorParameters[$name]);
+    }
+
+    public function getOverriddenConstructorParameter(): array
+    {
+        return array_keys($this->overriddenConstructorParameters);
+    }
+
+    public function isPropertyOverridden(string $name): bool
+    {
+        return array_key_exists($name, $this->overriddenProperties);
+    }
+
+    public function getOverriddenProperties(): array
+    {
+        return array_keys($this->overriddenProperties);
     }
 
     /**
@@ -161,13 +205,17 @@ class ClassDefinition extends AbstractDefinition
             $code .= "            \$entry,\n";
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $property) {
-                $definition = $definitions[$property["class"]];
+                if (isset($property["class"])) {
+                    $definition = $definitions[$property["class"]];
 
-                $code .= "                '$propertyName' => " . $this->getEntryToPhp(
-                    $definition->getId($this->id),
-                    $definition->getHash($this->id),
-                    $definition->getScope($this->id)
-                ) . ",\n";
+                    $code .= "                '$propertyName' => " . $this->getEntryToPhp(
+                            $definition->getId($this->id),
+                            $definition->getHash($this->id),
+                            $definition->getScope($this->id)
+                        ) . ",\n";
+                } elseif (array_key_exists("value", $property)) {
+                    $code .= "                '$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
+                }
             }
             $code .= "            ]\n";
             $code .= "        );\n";

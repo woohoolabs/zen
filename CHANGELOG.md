@@ -2,9 +2,9 @@
 
 ADDED:
 
-CHANGED:
+- Support for scalar injection
 
-- Run Travis tests on PHP 7.3 too
+CHANGED:
 
 REMOVED:
 

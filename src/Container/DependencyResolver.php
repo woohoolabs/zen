@@ -150,7 +150,15 @@ class DependencyResolver
             return;
         }
 
+        $paramNames = [];
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
+            $paramNames[] = $param->getName();
+
+            if ($definition->isConstructorParameterOverridden($param->getName())) {
+                $definition->addConstructorArgumentFromOverride($param->getName());
+                continue;
+            }
+
             if ($param->isOptional()) {
                 $definition->addConstructorArgumentFromValue($param->getDefaultValue());
                 continue;
@@ -167,13 +175,29 @@ class DependencyResolver
             $definition->addConstructorArgumentFromClass($paramClass);
             $this->resolve($paramClass);
         }
+
+        $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenProperties(), $paramNames);
+        if (empty($invalidConstructorParameterOverrides) === false) {
+            throw new ContainerException(
+                "Class '{$definition->getClassName()}' has the following overridden constructor parameters which don't exist: " .
+                implode(", ", $invalidConstructorParameterOverrides) . "!"
+            );
+        }
     }
 
     private function resolveAnnotatedProperties(ClassDefinition $definition): void
     {
         $class = new ReflectionClass($definition->getClassName());
 
+        $propertyNames = [];
         foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $property->getName();
+
+            if ($definition->isPropertyOverridden($property->getName())) {
+                $definition->addPropertyFromOverride($property->getName());
+                continue;
+            }
+
             /** @var Inject $annotation */
             $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
             if ($annotation === null) {
@@ -196,6 +220,14 @@ class DependencyResolver
 
             $definition->addPropertyFromClass($property->getName(), $propertyClass);
             $this->resolve($propertyClass);
+        }
+
+        $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
+        if (empty($invalidPropertyOverrides) === false) {
+            throw new ContainerException(
+                "Class '{$definition->getClassName()}' has the following overridden properties which don't exist: " .
+                implode(", ", $invalidPropertyOverrides) . "!"
+            );
         }
     }
 

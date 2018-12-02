@@ -12,8 +12,14 @@ class PlantService implements PlantServiceInterface
      */
     private $util;
 
-    public function __construct(PlantUtil $util)
+    /**
+     * @var string
+     */
+    private $plantType;
+
+    public function __construct(PlantUtil $util, string $plantType)
     {
         $this->util = $util;
+        $this->plantType = $plantType;
     }
 }
