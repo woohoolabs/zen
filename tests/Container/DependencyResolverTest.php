@@ -42,6 +42,7 @@ class DependencyResolverTest extends TestCase
     public function resolveConstructorDependencies()
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
+
         $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
@@ -139,7 +140,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(
             ConstructorD::class,
             [
-                ConstructorD::class => DefinitionHint::prototype(ConstructorD::class)
+                ConstructorD::class => DefinitionHint::prototype(ConstructorD::class),
             ]
         );
 
@@ -164,7 +165,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(
             ConstructorC::class,
             [
-                ConstructorD::class => new DefinitionHint(ConstructorE::class)
+                ConstructorD::class => new DefinitionHint(ConstructorE::class),
             ]
         );
 
@@ -193,6 +194,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver("InexistentClass");
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -204,6 +206,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionA::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -215,6 +218,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionB::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -226,6 +230,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionC::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -237,6 +242,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionD::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -248,6 +254,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionE::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 
@@ -259,6 +266,7 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver = $this->createDependencyResolver(ExceptionF::class);
 
         $this->expectException(ContainerException::class);
+
         $dependencyResolver->resolveEntryPoints();
     }
 

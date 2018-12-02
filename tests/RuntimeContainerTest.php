@@ -21,7 +21,9 @@ class RuntimeContainerTest extends TestCase
     {
         $container = $this->createRuntimeContainer(ConstructorA::class, [], "Container1");
 
-        $this->assertFalse($container->has("TestContainerEntry"));
+        $hasEntry = $container->has("TestContainerEntry");
+
+        $this->assertFalse($hasEntry);
     }
 
     /**
@@ -31,7 +33,9 @@ class RuntimeContainerTest extends TestCase
     {
         $container = $this->createRuntimeContainer(ConstructorA::class, [], "Container2");
 
-        $this->assertTrue($container->has(ConstructorA::class));
+        $hasEntry = $container->has(ConstructorA::class);
+
+        $this->assertTrue($hasEntry);
     }
 
     /**
@@ -42,6 +46,7 @@ class RuntimeContainerTest extends TestCase
         $container = $this->createRuntimeContainer(ConstructorA::class, [], "Container3");
 
         $this->expectException(NotFoundException::class);
+
         $container->get("TestContainerEntry");
     }
 
@@ -57,8 +62,12 @@ class RuntimeContainerTest extends TestCase
             ],
             "Container4");
 
-        $this->assertInstanceOf(ConstructorA::class, $container->get(ConstructorA::class));
-        $this->assertNotSame($container->get(ConstructorA::class), $container->get(ConstructorA::class));
+        $entry1 = $container->get(ConstructorA::class);
+        $entry2 = $container->get(ConstructorA::class);
+
+        $this->assertInstanceOf(ConstructorA::class, $entry1);
+        $this->assertInstanceOf(ConstructorA::class, $entry2);
+        $this->assertNotSame($entry1, $entry2);
     }
 
     /**
@@ -68,7 +77,9 @@ class RuntimeContainerTest extends TestCase
     {
         $container = $this->createRuntimeContainer(ConstructorA::class, [], "Container5");
 
-        $this->assertSame($container->get(ConstructorA::class), $container->get(ConstructorA::class));
+        $entry = $container->get(ConstructorA::class);
+
+        $this->assertSame($container->get(ConstructorA::class), $entry);
     }
 
     private function createRuntimeContainer(string $entryPoint, array $definitionsHints, string $className): ContainerInterface

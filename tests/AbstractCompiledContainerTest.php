@@ -19,7 +19,9 @@ class AbstractCompiledContainerTest extends TestCase
     {
         $container = $this->createStubContainer();
 
-        $this->assertFalse($container->has("TestContainerEntry"));
+        $hasEntry = $container->has("TestContainerEntry");
+
+        $this->assertFalse($hasEntry);
     }
 
     /**
@@ -29,7 +31,9 @@ class AbstractCompiledContainerTest extends TestCase
     {
         $container = $this->createStubContainer();
 
-        $this->assertTrue($container->has(StubContainerEntry::class));
+        $hasEntry = $container->has(StubContainerEntry::class);
+
+        $this->assertTrue($hasEntry);
     }
 
     /**
@@ -40,6 +44,7 @@ class AbstractCompiledContainerTest extends TestCase
         $container = $this->createStubContainer();
 
         $this->expectException(NotFoundException::class);
+
         $container->get("TestContainerEntry");
     }
 
@@ -50,8 +55,12 @@ class AbstractCompiledContainerTest extends TestCase
     {
         $container = $this->createStubContainer();
 
-        $this->assertInstanceOf(StubContainerEntry::class, $container->get(StubContainerEntry::class));
-        $this->assertNotSame($container->get(StubContainerEntry::class), $container->get(StubContainerEntry::class));
+        $entry1 = $container->get(StubContainerEntry::class);
+        $entry2 = $container->get(StubContainerEntry::class);
+
+        $this->assertInstanceOf(StubContainerEntry::class, $entry1);
+        $this->assertInstanceOf(StubContainerEntry::class, $entry2);
+        $this->assertNotSame($entry1, $entry2);
     }
 
     /**
@@ -61,7 +70,9 @@ class AbstractCompiledContainerTest extends TestCase
     {
         $container = $this->createStubContainer(true);
 
-        $this->assertSame($container->get(StubContainerEntry::class), $container->get(StubContainerEntry::class));
+        $entry = $container->get(StubContainerEntry::class);
+
+        $this->assertSame($container->get(StubContainerEntry::class), $entry);
     }
 
     /**
@@ -71,7 +82,9 @@ class AbstractCompiledContainerTest extends TestCase
     {
         $container = new ContainerWithInjectedProperty();
 
-        $this->assertTrue($container->getProperty());
+        $property = $container->getProperty();
+
+        $this->assertTrue($property);
     }
 
     private function createStubContainer(bool $isSingleton = false): ContainerInterface

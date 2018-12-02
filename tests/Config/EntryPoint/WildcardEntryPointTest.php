@@ -29,6 +29,8 @@ class WildcardEntryPointTest extends TestCase
     {
         $entryPoint = new WildcardEntryPoint($this->getSourcePath());
 
+        $classNames = $entryPoint->getClassNames();
+
         $this->assertEquals(
             [
                 AClass::class,
@@ -39,7 +41,7 @@ class WildcardEntryPointTest extends TestCase
                 ClassFImplementation::class,
                 G::class,
             ],
-            $entryPoint->getClassNames(),
+            $classNames,
             '',
             0.0,
             10,
@@ -50,11 +52,25 @@ class WildcardEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloaded()
+    public function autoloadWhenTrue()
     {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath())->autoload();
+        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
+
+        $entryPoint->autoload();
 
         $this->assertTrue($entryPoint->isAutoloaded());
+    }
+
+    /**
+     * @test
+     */
+    public function isAutoloadedWhenFalse()
+    {
+        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
+
+        $isAutoloaded = $entryPoint->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
     }
 
     /**
@@ -63,6 +79,8 @@ class WildcardEntryPointTest extends TestCase
     public function getAllClassNames()
     {
         $entryPoint = new WildcardEntryPoint($this->getSourcePath(), false);
+
+        $classNames = $entryPoint->getClassNames();
 
         $this->assertEquals(
             [
@@ -81,7 +99,7 @@ class WildcardEntryPointTest extends TestCase
                 InterfaceF::class,
                 InterfaceG::class,
             ],
-            $entryPoint->getClassNames(),
+            $classNames,
             '',
             0.0,
             10,

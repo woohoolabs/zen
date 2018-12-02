@@ -15,7 +15,9 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $this->assertFalse($definition->needsDependencyResolution());
+        $needsDependencyResolution = $definition->needsDependencyResolution();
+
+        $this->assertFalse($needsDependencyResolution);
     }
 
     /**
@@ -25,7 +27,9 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $this->assertEmpty($definition->getClassDependencies());
+        $classDependencies = $definition->getClassDependencies();
+
+        $this->assertEmpty($classDependencies);
     }
 
     /**
@@ -35,7 +39,9 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $definition->toPhpCode([]));
+        $phpCode = $definition->toPhpCode([]);
+
+        $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $phpCode);
     }
 
     private function getDefinitionSourceCode(string $fileName)

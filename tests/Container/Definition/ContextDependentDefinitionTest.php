@@ -25,10 +25,9 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            "X\\E",
-            $definition->getId("X\\D")
-        );
+        $id = $definition->getId("X\\D");
+
+        $this->assertEquals("X\\E", $id);
     }
 
     /**
@@ -64,10 +63,9 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            "X__E",
-            $definition->getHash("X\\D")
-        );
+        $hash = $definition->getHash("X\\D");
+
+        $this->assertEquals("X__E", $hash);
     }
 
     /**
@@ -85,10 +83,9 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            "prototype",
-            $definition->getScope("X\\D")
-        );
+        $scope = $definition->getScope("X\\D");
+
+        $this->assertEquals("prototype", $scope);
     }
 
 
@@ -100,7 +97,9 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition("", null, []);
 
-        $this->assertFalse($definition->needsDependencyResolution());
+        $needsDependencyResolution = $definition->needsDependencyResolution();
+
+        $this->assertFalse($needsDependencyResolution);
     }
 
     /**
@@ -110,7 +109,9 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition("", null, []);
 
-        $this->assertFalse($definition->isAutoloaded());
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
     }
 
     /**
@@ -120,7 +121,9 @@ class ContextDependentDefinitionTest extends TestCase
     {
         $definition = new ContextDependentDefinition("", null, []);
 
-        $this->assertEmpty($definition->getClassDependencies());
+        $classDependencies = $definition->getClassDependencies();
+
+        $this->assertEmpty($classDependencies);
     }
 
     /**
@@ -138,16 +141,15 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ContextDependentDefinitionWithoutDefault.php"),
-            $definition->toPhpCode(
-                [
-                    "X\\B" => new ClassDefinition("X\\C"),
-                    "X\\D" => new ClassDefinition("X\\E"),
-                    "X\\F" => new ClassDefinition("X\\G"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                "X\\B" => new ClassDefinition("X\\C"),
+                "X\\D" => new ClassDefinition("X\\E"),
+                "X\\F" => new ClassDefinition("X\\G"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWithoutDefault.php"), $phpCode);
     }
 
     /**
@@ -165,16 +167,15 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ContextDependentDefinitionWithDefault.php"),
-            $definition->toPhpCode(
-                [
-                    "X\\B" => new ClassDefinition("X\\C"),
-                    "X\\D" => new ClassDefinition("X\\E"),
-                    "X\\F" => new ClassDefinition("X\\G"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                "X\\B" => new ClassDefinition("X\\C"),
+                "X\\D" => new ClassDefinition("X\\E"),
+                "X\\F" => new ClassDefinition("X\\G"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWithDefault.php"), $phpCode);
     }
 
     private function getDefinitionSourceCode(string $fileName)

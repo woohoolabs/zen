@@ -16,7 +16,9 @@ class ClassEntryPointTest extends TestCase
     {
         $entryPoint = ClassEntryPoint::create(EntryPointA::class);
 
-        $this->assertFalse($entryPoint->isAutoloaded());
+        $isAutoloaded = $entryPoint->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
     }
 
     /**
@@ -24,8 +26,9 @@ class ClassEntryPointTest extends TestCase
      */
     public function autoload()
     {
-        $entryPoint = ClassEntryPoint::create(EntryPointA::class)
-            ->autoload();
+        $entryPoint = ClassEntryPoint::create(EntryPointA::class);
+
+        $entryPoint->autoload();
 
         $this->assertTrue($entryPoint->isAutoloaded());
     }
@@ -37,11 +40,8 @@ class ClassEntryPointTest extends TestCase
     {
         $entryPoint = new ClassEntryPoint(EntryPointA::class);
 
-        $this->assertEquals(
-            [
-                EntryPointA::class
-            ],
-            $entryPoint->getClassNames()
-        );
+        $classNames = $entryPoint->getClassNames();
+
+        $this->assertEquals([EntryPointA::class], $classNames);
     }
 }

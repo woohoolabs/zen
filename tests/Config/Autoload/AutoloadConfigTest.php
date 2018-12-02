@@ -16,7 +16,9 @@ class AutoloadConfigTest extends TestCase
     {
         $autoloadConfig = AutoloadConfig::disabledGlobally("");
 
-        $this->assertFalse($autoloadConfig->isGlobalAutoloadEnabled());
+        $isGlobalAutoloadEnabled = $autoloadConfig->isGlobalAutoloadEnabled();
+
+        $this->assertFalse($isGlobalAutoloadEnabled);
     }
 
     /**
@@ -26,7 +28,9 @@ class AutoloadConfigTest extends TestCase
     {
         $autoloadConfig = AutoloadConfig::enabledGlobally("");
 
-        $this->assertTrue($autoloadConfig->isGlobalAutoloadEnabled());
+        $isGlobalAutoloadEnabled = $autoloadConfig->isGlobalAutoloadEnabled();
+
+        $this->assertTrue($isGlobalAutoloadEnabled);
     }
 
     /**
@@ -36,8 +40,11 @@ class AutoloadConfigTest extends TestCase
     {
         $autoloadConfig = AutoloadConfig::create(true, "/var/www");
 
-        $this->assertTrue($autoloadConfig->isGlobalAutoloadEnabled());
-        $this->assertEquals("/var/www", $autoloadConfig->getRootDirectory());
+        $isGlobalAutoloadEnabled = $autoloadConfig->isGlobalAutoloadEnabled();
+        $rootDirectory = $autoloadConfig->getRootDirectory();
+
+        $this->assertTrue($isGlobalAutoloadEnabled);
+        $this->assertEquals("/var/www", $rootDirectory);
     }
 
     /**
@@ -46,6 +53,7 @@ class AutoloadConfigTest extends TestCase
     public function setRootDirectory()
     {
         $autoloadConfig = new AutoloadConfig(true);
+
         $autoloadConfig->setRootDirectory("/var/www");
 
         $this->assertEquals("/var/www", $autoloadConfig->getRootDirectory());
@@ -58,7 +66,9 @@ class AutoloadConfigTest extends TestCase
     {
         $autoloadConfig = new AutoloadConfig(true);
 
-        $this->assertEmpty($autoloadConfig->getExcludedClasses());
+        $excludedClasses = $autoloadConfig->getExcludedClasses();
+
+        $this->assertEmpty($excludedClasses);
     }
 
     /**
@@ -67,11 +77,9 @@ class AutoloadConfigTest extends TestCase
     public function setExcludedClasses()
     {
         $autoloadConfig = new AutoloadConfig(true);
+
         $autoloadConfig->setExcludedClasses([EntryPointA::class]);
 
-        $this->assertEquals(
-            [EntryPointA::class],
-            $autoloadConfig->getExcludedClasses()
-        );
+        $this->assertEquals([EntryPointA::class], $autoloadConfig->getExcludedClasses());
     }
 }

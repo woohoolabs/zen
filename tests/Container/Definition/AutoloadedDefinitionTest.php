@@ -16,7 +16,9 @@ class AutoloadedDefinitionTest extends TestCase
     {
         $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
 
-        $this->assertEquals("", $definition->getScope(""));
+        $scope = $definition->getScope("");
+
+        $this->assertEquals("", $scope);
     }
 
     /**
@@ -26,7 +28,9 @@ class AutoloadedDefinitionTest extends TestCase
     {
         $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
 
-        $this->assertFalse($definition->needsDependencyResolution());
+        $needsDependencyResolution = $definition->needsDependencyResolution();
+
+        $this->assertFalse($needsDependencyResolution);
     }
 
     /**
@@ -36,7 +40,9 @@ class AutoloadedDefinitionTest extends TestCase
     {
         $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
 
-        $this->assertTrue($definition->isAutoloaded());
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertTrue($isAutoloaded);
     }
 
     /**
@@ -46,6 +52,8 @@ class AutoloadedDefinitionTest extends TestCase
     {
         $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
 
-        $this->assertEmpty($definition->getClassDependencies());
+        $classDependencies = $definition->getClassDependencies();
+
+        $this->assertEmpty($classDependencies);
     }
 }

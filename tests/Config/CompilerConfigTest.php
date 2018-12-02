@@ -15,12 +15,11 @@ class CompilerConfigTest extends TestCase
      */
     public function useConstructorInjection()
     {
-        $config = new StubCompilerConfig([], "", "", true, true);
+        $config = new StubCompilerConfig([], "", "", true, false);
 
-        $this->assertEquals(
-            true,
-            $config->useConstructorInjection()
-        );
+        $useConstructorInjection = $config->useConstructorInjection();
+
+        $this->assertEquals(true, $useConstructorInjection);
     }
 
     /**
@@ -28,12 +27,11 @@ class CompilerConfigTest extends TestCase
      */
     public function usePropertyInjection()
     {
-        $config = new StubCompilerConfig([], "", "", false, false);
+        $config = new StubCompilerConfig([], "", "", true, false);
 
-        $this->assertEquals(
-            false,
-            $config->usePropertyInjection()
-        );
+        $usePropertyInjection = $config->usePropertyInjection();
+
+        $this->assertEquals(false, $usePropertyInjection);
     }
 
     /**
@@ -43,10 +41,9 @@ class CompilerConfigTest extends TestCase
     {
         $config = new StubCompilerConfig([], "A\\B\\C", "D");
 
-        $this->assertEquals(
-            "A__B__C__D",
-            $config->getContainerHash()
-        );
+        $containerHash = $config->getContainerHash();
+
+        $this->assertEquals("A__B__C__D", $containerHash);
     }
 
     /**
@@ -56,9 +53,8 @@ class CompilerConfigTest extends TestCase
     {
         $config = new DummyCompilerConfig();
 
-        $this->assertEquals(
-            AutoloadConfig::disabledGlobally(),
-            $config->getAutoloadConfig()
-        );
+        $autoloadConfig = $config->getAutoloadConfig();
+
+        $this->assertEquals(AutoloadConfig::disabledGlobally(), $autoloadConfig);
     }
 }

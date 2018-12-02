@@ -18,13 +18,9 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("EmptyContainerWithoutNamespace.php"),
-            $compiler->compile(
-                new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"),
-                []
-            )
-        );
+        $container = $compiler->compile(new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"), []);
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithoutNamespace.php"), $container);
     }
 
     /**
@@ -34,13 +30,12 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("EmptyContainerWithNamespace.php"),
-            $compiler->compile(
-                new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "EmptyContainerWithNamespace"),
-                []
-            )
+        $container = $compiler->compile(
+            new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "EmptyContainerWithNamespace"),
+            []
         );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithNamespace.php"), $container);
     }
 
     /**
@@ -50,15 +45,14 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("ContainerWithEntry.php"),
-            $compiler->compile(
-                new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "ContainerWithEntry"),
-                [
-                    StubDefinition::class => new StubDefinition(),
-                ]
-            )
+        $container = $compiler->compile(
+            new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "ContainerWithEntry"),
+            [
+                StubDefinition::class => new StubDefinition(),
+            ]
         );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntry.php"), $container);
     }
 
     /**
@@ -68,25 +62,24 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("ContainerWithEntryPoint.php"),
-            $compiler->compile(
-                new StubCompilerConfig(
-                    [
-                        new StubContainerConfig(
-                            [
-                                StubDefinition::class,
-                            ]
-                        ),
-                    ],
-                    "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
-                    "ContainerWithEntryPoint"
-                ),
+        $container = $compiler->compile(
+            new StubCompilerConfig(
                 [
-                    StubDefinition::class => new StubDefinition(),
-                ]
-            )
+                    new StubContainerConfig(
+                        [
+                            StubDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithEntryPoint"
+            ),
+            [
+                StubDefinition::class => new StubDefinition(),
+            ]
         );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntryPoint.php"), $container);
     }
 
     /**
@@ -96,23 +89,22 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("ContainerWithAlwaysAutoloadedClasses.php"),
-            $compiler->compile(
-                new StubCompilerConfig(
-                    [
-                        new StubContainerConfig(),
-                    ],
-                    "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
-                    "ContainerWithAlwaysAutoloadedClasses",
-                    true,
-                    true,
-                    true,
-                    [StubDefinition::class]
-                ),
-                []
-            )
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithAlwaysAutoloadedClasses",
+                true,
+                true,
+                true,
+                [StubDefinition::class]
+            ),
+            []
         );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithAlwaysAutoloadedClasses.php"), $container);
     }
 
     /**
@@ -122,28 +114,27 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $this->assertEquals(
-            $this->getCompiledContainerSourceCode("ContainerWithAutoloadedEntryPoint.php"),
-            $compiler->compile(
-                new StubCompilerConfig(
-                    [
-                        new StubContainerConfig(
-                            [
-                                StubDefinition::class,
-                            ]
-                        ),
-                    ],
-                    "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
-                    "ContainerWithAutoloadedEntryPoint",
-                    true,
-                    true,
-                    true
-                ),
+        $container = $compiler->compile(
+            new StubCompilerConfig(
                 [
-                    StubDefinition::class => new StubDefinition(true),
-                ]
-            )
+                    new StubContainerConfig(
+                        [
+                            StubDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithAutoloadedEntryPoint",
+                true,
+                true,
+                true
+            ),
+            [
+                StubDefinition::class => new StubDefinition(true),
+            ]
         );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithAutoloadedEntryPoint.php"), $container);
     }
 
     private function getCompiledContainerSourceCode(string $fileName): string

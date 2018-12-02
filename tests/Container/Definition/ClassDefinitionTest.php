@@ -16,10 +16,9 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("A\\B");
 
-        $this->assertEquals(
-            "A__B",
-            $definition->getHash("")
-        );
+        $hash = $definition->getHash("");
+
+        $this->assertEquals("A__B", $hash);
     }
 
     /**
@@ -29,10 +28,9 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("A\\B");
 
-        $this->assertEquals(
-            "A\\B",
-            $definition->getClassName()
-        );
+        $className = $definition->getClassName();
+
+        $this->assertEquals("A\\B", $className);
     }
 
     /**
@@ -42,7 +40,9 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("");
 
-        $this->assertTrue($definition->needsDependencyResolution());
+        $needsDependencyResolution = $definition->needsDependencyResolution();
+
+        $this->assertTrue($needsDependencyResolution);
     }
 
     /**
@@ -51,6 +51,7 @@ class ClassDefinitionTest extends TestCase
     public function resolveDependencies()
     {
         $definition = new ClassDefinition("");
+
         $definition->resolveDependencies();
 
         $this->assertFalse($definition->needsDependencyResolution());
@@ -63,10 +64,9 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("X\\A");
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionSingleton.php"),
-            $definition->toPhpCode([$definition->getId("") => $definition])
-        );
+        $phpCode = $definition->toPhpCode([$definition->getId("") => $definition]);
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionSingleton.php"), $phpCode);
     }
 
     /**
@@ -78,16 +78,15 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"),
-            $definition->toPhpCode(
-                [
-                    $definition->getId("") => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
-                    "X\\C" => ClassDefinition::singleton("X\\C"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                $definition->getId("") => $definition,
+                "X\\B" => ClassDefinition::singleton("X\\B"),
+                "X\\C" => ClassDefinition::singleton("X\\C"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWithRequiredConstructorDependencies.php"), $phpCode);
     }
 
     /**
@@ -99,24 +98,23 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentConstructorDependencies.php"),
-            $definition->toPhpCode(
-                [
-                    $definition->getId("") => $definition,
-                    "X\\B" => new ContextDependentDefinition(
-                        "X\\B",
-                        null,
-                        [
-                            "X\\A" => new ClassDefinition("X\\C", "singleton"),
-                            "X\\F" => new ClassDefinition("X\\D", "singleton"),
-                        ]
-                    ),
-                    "X\\C" => new ClassDefinition("X\\C", "singleton"),
-                    "X\\D" => new ClassDefinition("X\\D", "singleton"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                $definition->getId("") => $definition,
+                "X\\B" => new ContextDependentDefinition(
+                    "X\\B",
+                    null,
+                    [
+                        "X\\A" => new ClassDefinition("X\\C", "singleton"),
+                        "X\\F" => new ClassDefinition("X\\D", "singleton"),
+                    ]
+                ),
+                "X\\C" => new ClassDefinition("X\\C", "singleton"),
+                "X\\D" => new ClassDefinition("X\\D", "singleton"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWithContextDependentConstructorDependencies.php"), $phpCode);
     }
 
     /**
@@ -133,14 +131,13 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromValue(null)
             ->addConstructorArgumentFromValue(["a" => false]);
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"),
-            $definition->toPhpCode(
-                [
-                    $definition->getId("") => $definition,
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                $definition->getId("") => $definition,
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWithOptionalConstructorDependencies.php"), $phpCode);
     }
 
     /**
@@ -152,16 +149,15 @@ class ClassDefinitionTest extends TestCase
             ->addPropertyFromClass("b", "X\\B")
             ->addPropertyFromClass("c", "X\\C");
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"),
-            $definition->toPhpCode(
-                [
-                    $definition->getId("") => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
-                    "X\\C" => ClassDefinition::singleton("X\\C"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                $definition->getId("") => $definition,
+                "X\\B" => ClassDefinition::singleton("X\\B"),
+                "X\\C" => ClassDefinition::singleton("X\\C"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWithPropertyDependencies.php"), $phpCode);
     }
 
     /**
@@ -173,24 +169,23 @@ class ClassDefinitionTest extends TestCase
             ->addPropertyFromClass("b", "X\\B")
             ->addPropertyFromClass("c", "X\\C");
 
-        $this->assertEquals(
-            $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentPropertyDependencies.php"),
-            $definition->toPhpCode(
-                [
-                    $definition->getId("") => $definition,
-                    "X\\B" => new ContextDependentDefinition(
-                        "X\\B",
-                        null,
-                        [
-                            "X\\A" => new ClassDefinition("X\\C", "singleton"),
-                            "X\\F" => new ClassDefinition("X\\D", "singleton"),
-                        ]
-                    ),
-                    "X\\C" => new ClassDefinition("X\\C", "singleton"),
-                    "X\\D" => new ClassDefinition("X\\D", "singleton"),
-                ]
-            )
+        $phpCode = $definition->toPhpCode(
+            [
+                $definition->getId("") => $definition,
+                "X\\B" => new ContextDependentDefinition(
+                    "X\\B",
+                    null,
+                    [
+                        "X\\A" => new ClassDefinition("X\\C", "singleton"),
+                        "X\\F" => new ClassDefinition("X\\D", "singleton"),
+                    ]
+                ),
+                "X\\C" => new ClassDefinition("X\\C", "singleton"),
+                "X\\D" => new ClassDefinition("X\\D", "singleton"),
+            ]
         );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWithContextDependentPropertyDependencies.php"), $phpCode);
     }
 
     private function getDefinitionSourceCode(string $fileName)
