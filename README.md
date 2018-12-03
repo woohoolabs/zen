@@ -323,18 +323,6 @@ You can use `WildcardHint::prototype()` to hint your Wildcard Hints the same way
 
 ## Advanced Usage
 
-### Dynamic container
-
-You probably don't want to recompile the container all the time during development. That's where a dynamic container
-helps you:
-
-```php
-$container = new RuntimeContainer(new CompilerConfig());
-```
-
-Please note that it is only suitable for development purposes, because its implementation is extremely slow. Technically,
-it compiles a container in memory during runtime and then `eval`s it. It's ridiculous I know...
-
 ### Scalar injection
 
 Scalar injection makes it possible to pass scalar values to an object in the form of constructor arguments or properties.
@@ -355,7 +343,7 @@ protected function getDefinitionHints(): array
 ```
 
 Here, we instructed the DI Container to pass MySQL connection details as constructor arguments to the `MySqlUserRepository`
-class. Also, we initialized the `MySqlUserRepository::$mysqlModes` property with an array. That's all.
+class. Also, we initialized the `MySqlUserRepository::$mysqlModes` property with an array.
 
 Alternatively, you can use the following technique to simulate scalar injection: extend the class whose constructor parameters
 contain scalar types, and provide the arguments in question via `parent::__construct()` in the constructor of the child class.
@@ -460,6 +448,18 @@ on it, then the class/[definition hint](#hints) in the first parameter of the `s
 > Note that if you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
 then a `ContainerException` will be thrown if the interface is injected as a dependency of any class other than the listed
 ones in the second parameter of the `setClassContext()` method calls.
+
+### Dynamic container
+
+You probably don't want to recompile the container all the time during development. That's where a dynamic container
+helps you:
+
+```php
+$container = new RuntimeContainer(new CompilerConfig());
+```
+
+Please note that it is only suitable for development purposes, because its implementation is extremely slow. Technically,
+it compiles a container in memory during runtime and then `eval`s it. It's ridiculous I know...
 
 ## Examples
 
