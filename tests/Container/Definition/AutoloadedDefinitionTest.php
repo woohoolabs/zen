@@ -76,7 +76,7 @@ class AutoloadedDefinitionTest extends TestCase
     public function toPhpCode()
     {
         $definition = new AutoloadedDefinition(
-            new AutoloadConfig(true, dirname(__DIR__) . "/Fixture/DependencyGraph/Mixed"),
+            new AutoloadConfig(true, dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Mixed/"),
             MixedE::class
         );
 

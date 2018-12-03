@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Compiler;
 
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
-use WoohooLabs\Zen\Config\EntryPoint\WildcardEntryPoint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\WildcardHint;
 use WoohooLabs\Zen\Exception\ContainerException;

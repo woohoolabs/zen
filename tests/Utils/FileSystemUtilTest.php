@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Utils;
 
-use stdClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointC1;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointC2;
