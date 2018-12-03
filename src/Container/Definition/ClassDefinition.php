@@ -35,14 +35,22 @@ class ClassDefinition extends AbstractDefinition
      */
     private $overriddenProperties;
 
-    public static function singleton(string $className, bool $isAutoloaded = false): ClassDefinition
-    {
-        return new self($className, "singleton", $isAutoloaded);
+    public static function singleton(
+        string $className,
+        bool $isAutoloaded = false,
+        array $overriddenConstructorParameters = [],
+        array $overriddenProperties = []
+    ): ClassDefinition {
+        return new self($className, "singleton", $isAutoloaded, $overriddenConstructorParameters, $overriddenProperties);
     }
 
-    public static function prototype(string $className, bool $isAutoloaded = false): ClassDefinition
-    {
-        return new self($className, "prototype", $isAutoloaded);
+    public static function prototype(
+        string $className,
+        bool $isAutoloaded = false,
+        array $overriddenConstructorParameters = [],
+        array $overriddenProperties = []
+    ): ClassDefinition {
+        return new self($className, "prototype", $isAutoloaded, $overriddenConstructorParameters, $overriddenProperties);
     }
 
     public function __construct(

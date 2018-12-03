@@ -100,7 +100,13 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className, $isAutoloaded)
             );
         } else {
-            $result[$this->className] = new ClassDefinition($this->className, $this->getScope(), $isAutoloaded);
+            $result[$this->className] = new ClassDefinition(
+                $this->className,
+                $this->getScope(),
+                $isAutoloaded,
+                $this->parameters,
+                $this->properties
+            );
         }
 
         return $result;

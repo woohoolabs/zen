@@ -25,8 +25,7 @@ class ContainerConfig extends AbstractContainerConfig
     {
         return [
             AnimalServiceInterface::class => AnimalService::class,
-            PlantServiceInterface::class => DefinitionHint::prototype(PlantService::class),
-            PlantService::class => DefinitionHint::singleton(PlantService::class)
+            PlantServiceInterface::class => DefinitionHint::singleton(PlantService::class)
                 ->parameter("plantType", "sunflower")
                 ->property("plantType", "sunflower"),
         ];

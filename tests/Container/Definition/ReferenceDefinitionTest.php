@@ -66,7 +66,8 @@ class ReferenceDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
+                "X\\B" => ClassDefinition::singleton("X\\B"),
             ]
         );
 
@@ -82,7 +83,7 @@ class ReferenceDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
                 "X\\B" => ClassDefinition::prototype("X\\B"),
             ]
         );

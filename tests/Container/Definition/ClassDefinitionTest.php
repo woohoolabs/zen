@@ -60,11 +60,15 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function singletonClassToPhpCode()
+    public function toPhpCodeWhenSingletonClass()
     {
         $definition = new ClassDefinition("X\\A");
 
-        $phpCode = $definition->toPhpCode([$definition->getId("") => $definition]);
+        $phpCode = $definition->toPhpCode(
+            [
+                "X\\A" => $definition,
+            ]
+        );
 
         $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionSingleton.php"), $phpCode);
     }
@@ -72,7 +76,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function prototypeWithRequiredConstructorDependenciesToPhpCode()
+    public function toPhpCodeWhenPrototypeWithRequiredConstructorDependencies()
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -92,7 +96,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function contextDependentConstructorInjectionToPhpCode()
+    public function toPhpCodeWhenContextDependentConstructorInjection()
     {
         $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -120,7 +124,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function prototypeWithOptionalConstructorDependenciesToPhpCode()
+    public function toPhpCodeWhenPrototypeWithOptionalConstructorDependencies()
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addConstructorArgumentFromValue("")
@@ -143,7 +147,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function prototypeWithPropertyDependenciesToPhpCode()
+    public function toPhpCodeWhenPrototypeWithPropertyDependencies()
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addPropertyFromClass("b", "X\\B")
@@ -163,7 +167,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function contextDependentPropertyInjectionToPhpCode()
+    public function toPhpCodeWhenContextDependentPropertyInjection()
     {
         $definition = ClassDefinition::singleton("X\\A")
             ->addPropertyFromClass("b", "X\\B")

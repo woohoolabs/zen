@@ -5,7 +5,10 @@ namespace WoohooLabs\Zen\Tests\Config\Hint;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
+use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\ContextDependent\ClassA;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\ContextDependent\ClassB;
 
 class DefinitionHintTest extends TestCase
 {
@@ -43,6 +46,139 @@ class DefinitionHintTest extends TestCase
         $hint->setSingletonScope();
 
         $this->assertEquals("singleton", $hint->getScope());
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenIdMismatch()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class);
+
+        $definitions = $hint->toDefinitions([], ClassB::class, false);
+
+        $this->assertEquals(
+            [
+                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class),
+                ClassA::class => new ClassDefinition(ClassA::class),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenParameterAndPropertySetAndIdMismatch()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class)
+            ->parameter("param", "value")
+            ->property("property", "value");
+
+        $definitions = $hint->toDefinitions([], ClassB::class, false);
+
+        $this->assertEquals(
+            [
+                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class),
+                ClassA::class => ClassDefinition::singleton(
+                    ClassA::class,
+                    false,
+                    [
+                        "param" => "value",
+                    ],
+                    [
+                        "property" => "value",
+                    ]
+                ),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenPrototype()
+    {
+        $hint = DefinitionHint::prototype(ClassA::class);
+
+        $definitions = $hint->toDefinitions([], ClassA::class, false);
+
+        $this->assertEquals(
+            [
+                ClassA::class => new ClassDefinition(ClassA::class, "prototype"),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenAutoloaded()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class);
+
+        $definitions = $hint->toDefinitions([], ClassA::class, true);
+
+        $this->assertEquals(
+            [
+                ClassA::class => new ClassDefinition(ClassA::class, "singleton", true),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenParameterSet()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class)
+            ->parameter("param", ["abc"]);
+
+        $definitions = $hint->toDefinitions([], ClassA::class, false);
+
+        $this->assertEquals(
+            [
+                ClassA::class => new ClassDefinition(
+                    ClassA::class,
+                    "singleton",
+                    false,
+                    [
+                        "param" => ["abc"],
+                    ],
+                    []
+                ),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWhenPropertySet()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class)
+            ->property("property", "value");
+
+        $definitions = $hint->toDefinitions([], ClassA::class, false);
+
+        $this->assertEquals(
+            [
+                ClassA::class => new ClassDefinition(
+                    ClassA::class,
+                    "singleton",
+                    false,
+                    [],
+                    [
+                        "property" => "value",
+                    ]
+                ),
+            ],
+            $definitions
+        );
     }
 
     /**
