@@ -52,10 +52,11 @@ one of the fastest PHP containers.
 
 - [PSR-11](https://www.php-fig.org/psr/psr-11/) (former Container-Interop) compliance
 - Supports compilation for [maximum performance](https://rawgit.com/kocsismate/php-di-container-benchmarks/master/var/benchmark.html)
-- Supports dynamic usage for development
 - Supports constructor and property injection
 - Supports the notion of scopes (Singleton and Prototype)
-- Supports autowiring and context-dependent injection
+- Supports autowiring
+- Supports scalar and context-dependent injection
+- Supports dynamic usage for development
 
 ## Install
 
@@ -336,9 +337,30 @@ it compiles a container in memory during runtime and then `eval`s it. It's ridic
 
 ### Scalar injection
 
-Although Zen doesn't support scalar injection natively, you are yet able to use this technique: you have to
-extend the class which needs scalar values as constructor arguments, provide these values in the new constructor via
-`parent::__construct()` and then add the appropriate [definition hint](#hints) to the container configuration.
+Scalar injection makes it possible to pass scalar values to an object in the form of constructor arguments or properties.
+As of v2.5, Zen supports scalar injection natively. You can use [Hints](#hints) for this purpose as you can see in the
+following example:
+
+```php
+protected function getDefinitionHints(): array
+{
+    return [
+        UserRepositoryInterface::class => DefinitionHint::singleton(MySqlUserRepository::class)
+            ->parameter("mysqlUser", "root")
+            ->parameter("mysqlPassword", "root"),
+            ->parameter("mysqlPort", 3306),
+            ->property("mysqlModes", ["ONLY_FULL_GROUP_BY", "STRICT_TRANS_TABLES", "NO_ZERO_IN_DATE"]),
+    ];
+}
+```
+
+Here, we instructed the DI Container to pass MySQL connection details as constructor arguments to the `MySqlUserRepository`
+class. Also, we initialized the `MySqlUserRepository::$mysqlModes` property with an array. That's all.
+
+Alternatively, you can use the following technique to simulate scalar injection: extend the class whose constructor parameters
+contain scalar types, and provide the arguments in question via `parent::__construct()` in the constructor of the child class.
+Finally, add the appropriate [Hint](#hints) to the container configuration so that the child class should be used instead of
+the parent class.
 
 ### Built-in autoloading of entry points
 
