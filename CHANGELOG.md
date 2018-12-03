@@ -10,6 +10,8 @@ REMOVED:
 
 FIXED:
 
+- String values containing special characters won't cause fatal error
+
 ## 2.4.0 - 2018-08-02
 
 ADDED:

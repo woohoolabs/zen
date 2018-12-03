@@ -243,7 +243,7 @@ class ClassDefinition extends AbstractDefinition
     private function serializeValue($value): string
     {
         if (\is_string($value)) {
-            return '"' . $value . '"';
+            return '"' . addslashes($value) . '"';
         }
 
         if ($value === null) {
