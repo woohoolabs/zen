@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
+use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedE;
 
 class AutoloadedDefinitionTest extends TestCase
@@ -82,7 +85,11 @@ class AutoloadedDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                MixedE::class => $definition,
+                MixedE::class => ClassDefinition::singleton(MixedE::class, true)
+                    ->addConstructorArgumentFromClass(MixedD::class)
+                    ->addConstructorArgumentFromClass(stdClass::class),
+                MixedD::class => new ClassDefinition(MixedD::class),
+                stdClass::class => new ClassDefinition(stdClass::class),
             ]
         );
 

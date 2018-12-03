@@ -7,7 +7,7 @@ use stdClass;
 
 class MixedE
 {
-    public function __construct(stdClass $class)
+    public function __construct(MixedD $mixedD, stdClass $class)
     {
     }
 }
