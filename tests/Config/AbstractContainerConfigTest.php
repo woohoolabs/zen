@@ -13,6 +13,12 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointC1;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AClass;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AInterface;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BClass;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BInterface;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\ClassC;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\ClassD;
 
 class AbstractContainerConfigTest extends TestCase
 {
@@ -115,7 +121,12 @@ class AbstractContainerConfigTest extends TestCase
             [
             ],
             [
-                new WildcardHint("", "", "", ""),
+                new WildcardHint(
+                    dirname(__DIR__) . "/Fixture/DependencyGraph/Wildcard/",
+                    'WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\*Interface',
+                    'WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\*Class',
+                    "singleton"
+                ),
             ]
         );
 
@@ -123,8 +134,45 @@ class AbstractContainerConfigTest extends TestCase
 
         $this->assertEquals(
             [
-                EntryPointA::class => new DefinitionHint(EntryPointA::class),
-                EntryPointC1::class => new DefinitionHint(EntryPointC1::class),
+                AInterface::class => new DefinitionHint(AClass::class),
+                BInterface::class => new DefinitionHint(BClass::class),
+            ],
+            $definitionHints
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function createDefinitionHintsWithHintsAndWildcardHints()
+    {
+        $config = new StubContainerConfig(
+            [
+            ],
+            [
+                ClassC::class => new DefinitionHint(ClassC::class),
+                AInterface::class => new DefinitionHint(AClass::class),
+                BInterface::class => new DefinitionHint(BClass::class),
+                ClassD::class => new DefinitionHint(ClassD::class),
+            ],
+            [
+                new WildcardHint(
+                    dirname(__DIR__) . "/Fixture/DependencyGraph/Wildcard/",
+                    'WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\*Interface',
+                    'WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\*Class',
+                    "prototype"
+                ),
+            ]
+        );
+
+        $definitionHints = $config->createDefinitionHints();
+
+        $this->assertEquals(
+            [
+                ClassC::class => new DefinitionHint(ClassC::class),
+                AInterface::class => new DefinitionHint(AClass::class, "prototype"),
+                BInterface::class => new DefinitionHint(BClass::class, "prototype"),
+                ClassD::class => new DefinitionHint(ClassD::class),
             ],
             $definitionHints
         );
