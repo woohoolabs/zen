@@ -42,6 +42,29 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
+    public function toDefinitionsWithOnlySetDefault()
+    {
+        $hint = ContextDependentDefinitionHint::create()
+            ->setDefaultClass(ClassA::class);
+
+        $definitions = $hint->toDefinitions([], InterfaceA::class, false);
+
+        $this->assertEquals(
+            [
+                InterfaceA::class => new ContextDependentDefinition(
+                    InterfaceA::class,
+                    new ClassDefinition(ClassA::class),
+                    []
+                ),
+                ClassA::class => new ClassDefinition(ClassA::class),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
     public function toDefinitionsWithOnlyPrototypeDefault()
     {
         $hint = ContextDependentDefinitionHint::create(
@@ -234,6 +257,40 @@ class ContextDependentDefinitionHintTest extends TestCase
                     ClassE::class,
                 ]
             );
+
+        $definitions = $hint->toDefinitions([], InterfaceA::class, false);
+
+        $this->assertEquals(
+            [
+                InterfaceA::class => new ContextDependentDefinition(
+                    InterfaceA::class,
+                    new ClassDefinition(ClassB::class, "prototype"),
+                    [
+                        ClassD::class => new ClassDefinition(ClassA::class),
+                        ClassE::class => new ClassDefinition(ClassA::class),
+                    ]
+                ),
+                ClassA::class => new ClassDefinition(ClassA::class),
+                ClassB::class => new ClassDefinition(ClassB::class, "prototype"),
+            ],
+            $definitions
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function toDefinitionsWithOverriddenDefault()
+    {
+        $hint = ContextDependentDefinitionHint::create(DefinitionHint::prototype(ClassA::class))
+            ->setClassContext(
+                ClassA::class,
+                [
+                    ClassD::class,
+                    ClassE::class,
+                ]
+            )
+            ->setDefaultClass(DefinitionHint::prototype(ClassB::class));
 
         $definitions = $hint->toDefinitions([], InterfaceA::class, false);
 

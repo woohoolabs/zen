@@ -12,6 +12,54 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function isAutoloaded()
+    {
+        $definition = new ReferenceDefinition("", "");
+
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
+    public function needsDependencyResolution()
+    {
+        $definition = new ReferenceDefinition("", "");
+
+        $needsDependencyResolution = $definition->needsDependencyResolution();
+
+        $this->assertFalse($needsDependencyResolution);
+    }
+
+    /**
+     * @test
+     */
+    public function resolveDependencies()
+    {
+        $definition = new ReferenceDefinition("", "");
+
+        $result = $definition->resolveDependencies();
+
+        $this->assertSame($definition, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getClassDependencies()
+    {
+        $definition = new ReferenceDefinition("X\\A", "X\\B");
+
+        $classDependencies = $definition->getClassDependencies();
+
+        $this->assertEquals(["X\\B"], $classDependencies);
+    }
+
+    /**
+     * @test
+     */
     public function singletonToPhpCode()
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B");

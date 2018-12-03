@@ -28,14 +28,14 @@ final class AutoloadedDefinition extends AbstractDefinition
         return "";
     }
 
-    public function needsDependencyResolution(): bool
-    {
-        return false;
-    }
-
     public function isAutoloaded(): bool
     {
         return true;
+    }
+
+    public function needsDependencyResolution(): bool
+    {
+        return false;
     }
 
     public function resolveDependencies(): DefinitionInterface

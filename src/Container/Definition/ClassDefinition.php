@@ -101,6 +101,11 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
+    }
+
     public function needsDependencyResolution(): bool
     {
         return $this->needsDependencyResolution;
@@ -111,11 +116,6 @@ class ClassDefinition extends AbstractDefinition
         $this->needsDependencyResolution = false;
 
         return $this;
-    }
-
-    public function isAutoloaded(): bool
-    {
-        return $this->autoloaded;
     }
 
     public function isConstructorParameterOverridden(string $name): bool

@@ -80,7 +80,7 @@ class ClassDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
                 "X\\B" => ClassDefinition::singleton("X\\B"),
                 "X\\C" => ClassDefinition::singleton("X\\C"),
             ]
@@ -100,7 +100,7 @@ class ClassDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
                 "X\\B" => new ContextDependentDefinition(
                     "X\\B",
                     null,
@@ -133,7 +133,7 @@ class ClassDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
             ]
         );
 
@@ -151,7 +151,7 @@ class ClassDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
                 "X\\B" => ClassDefinition::singleton("X\\B"),
                 "X\\C" => ClassDefinition::singleton("X\\C"),
             ]
@@ -171,7 +171,7 @@ class ClassDefinitionTest extends TestCase
 
         $phpCode = $definition->toPhpCode(
             [
-                $definition->getId("") => $definition,
+                "X\\A" => $definition,
                 "X\\B" => new ContextDependentDefinition(
                     "X\\B",
                     null,

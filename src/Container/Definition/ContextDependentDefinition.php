@@ -48,12 +48,12 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->getScope($parentId);
     }
 
-    public function needsDependencyResolution(): bool
+    public function isAutoloaded(): bool
     {
         return false;
     }
 
-    public function isAutoloaded(): bool
+    public function needsDependencyResolution(): bool
     {
         return false;
     }

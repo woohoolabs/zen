@@ -26,12 +26,12 @@ class ReferenceDefinition extends AbstractDefinition
         $this->referrerId = $referrerId;
     }
 
-    public function needsDependencyResolution(): bool
+    public function isAutoloaded(): bool
     {
         return false;
     }
 
-    public function isAutoloaded(): bool
+    public function needsDependencyResolution(): bool
     {
         return false;
     }

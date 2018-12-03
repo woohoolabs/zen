@@ -10,12 +10,12 @@ class SelfDefinition extends AbstractDefinition
         parent::__construct($className, "");
     }
 
-    public function needsDependencyResolution(): bool
+    public function isAutoloaded(): bool
     {
         return false;
     }
 
-    public function isAutoloaded(): bool
+    public function needsDependencyResolution(): bool
     {
         return false;
     }

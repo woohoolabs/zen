@@ -16,7 +16,9 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
-        $this->assertEquals("singleton", $hint->getScope());
+        $scoppe = $hint->getScope();
+
+        $this->assertEquals("singleton", $scoppe);
     }
 
     /**
@@ -25,6 +27,32 @@ class DefinitionHintTest extends TestCase
     public function prototype()
     {
         $hint = DefinitionHint::prototype(ClassA::class);
+
+        $scope = $hint->getScope();
+
+        $this->assertEquals("prototype", $scope);
+    }
+
+    /**
+     * @test
+     */
+    public function setSingletonScope()
+    {
+        $hint = DefinitionHint::prototype(ClassA::class);
+
+        $hint->setSingletonScope();
+
+        $this->assertEquals("singleton", $hint->getScope());
+    }
+
+    /**
+     * @test
+     */
+    public function setPrototypeScope()
+    {
+        $hint = DefinitionHint::singleton(ClassA::class);
+
+        $hint->setPrototypeScope();
 
         $this->assertEquals("prototype", $hint->getScope());
     }
@@ -36,6 +64,8 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
-        $this->assertEquals(ClassA::class, $hint->getClassName());
+        $className = $hint->getClassName();
+
+        $this->assertEquals(ClassA::class, $className);
     }
 }

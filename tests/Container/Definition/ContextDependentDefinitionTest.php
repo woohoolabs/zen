@@ -88,7 +88,17 @@ class ContextDependentDefinitionTest extends TestCase
         $this->assertEquals("prototype", $scope);
     }
 
+    /**
+     * @test
+     */
+    public function isAutoloaded()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
 
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
+    }
 
     /**
      * @test
@@ -105,14 +115,16 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloaded()
+    public function resolveDependencies()
     {
         $definition = new ContextDependentDefinition("", null, []);
 
-        $isAutoloaded = $definition->isAutoloaded();
+        $result = $definition->resolveDependencies();
 
-        $this->assertFalse($isAutoloaded);
+        $this->assertSame($definition, $result);
     }
+
+
 
     /**
      * @test

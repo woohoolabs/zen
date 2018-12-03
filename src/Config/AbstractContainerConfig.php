@@ -43,7 +43,9 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return new ClassEntryPoint($entryPoint);
                 }
 
-                throw new ContainerException("An entry point must be either a string or an EntryPoint object!");
+                throw new ContainerException(
+                    "An entry point must be either a string or instance of the EntryPointInterface (e.g.: ClassEntryPoint)!"
+                );
             },
             $this->getEntryPoints()
         );
@@ -65,7 +67,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return new DefinitionHint($definitionHint);
                 }
 
-                throw new ContainerException("A definition hint must be either a string or a DefinitionHint object");
+                throw new ContainerException("A definition hint must be either a string or a DefinitionHint object!");
             },
             $this->getDefinitionHints()
         );

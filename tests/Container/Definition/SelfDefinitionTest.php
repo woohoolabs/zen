@@ -11,6 +11,18 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function isAutoloaded()
+    {
+        $definition = new SelfDefinition("");
+
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertFalse($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
     public function needsDependencyResolution()
     {
         $definition = new SelfDefinition("");
@@ -18,6 +30,18 @@ class SelfDefinitionTest extends TestCase
         $needsDependencyResolution = $definition->needsDependencyResolution();
 
         $this->assertFalse($needsDependencyResolution);
+    }
+
+    /**
+     * @test
+     */
+    public function resolveDependencies()
+    {
+        $definition = new SelfDefinition("");
+
+        $result = $definition->resolveDependencies();
+
+        $this->assertSame($definition, $result);
     }
 
     /**

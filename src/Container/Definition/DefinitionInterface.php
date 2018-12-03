@@ -11,9 +11,9 @@ interface DefinitionInterface
 
     public function getScope(string $parentId): string;
 
-    public function needsDependencyResolution(): bool;
-
     public function isAutoloaded(): bool;
+
+    public function needsDependencyResolution(): bool;
 
     public function resolveDependencies(): DefinitionInterface;
 

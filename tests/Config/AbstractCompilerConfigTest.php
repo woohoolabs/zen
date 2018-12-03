@@ -8,7 +8,7 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 
-class CompilerConfigTest extends TestCase
+class AbstractCompilerConfigTest extends TestCase
 {
     /**
      * @test
