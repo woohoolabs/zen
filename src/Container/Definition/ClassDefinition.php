@@ -242,28 +242,6 @@ class ClassDefinition extends AbstractDefinition
 
     private function serializeValue($value): string
     {
-        if (\is_string($value)) {
-            return '"' . addslashes($value) . '"';
-        }
-
-        if ($value === null) {
-            return "null";
-        }
-
-        if (\is_bool($value)) {
-            return $value ? "true" : "false";
-        }
-
-        if (\is_array($value)) {
-            $array = "[";
-            foreach ($value as $k => $v) {
-                $array .= $this->serializeValue($k) . " => " . $this->serializeValue($v) . ",";
-            }
-            $array .= "]";
-
-            return $array;
-        }
-
-        return (string) $value;
+        return var_export($value, true);
     }
 }
