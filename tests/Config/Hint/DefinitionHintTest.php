@@ -72,8 +72,8 @@ class DefinitionHintTest extends TestCase
     public function toDefinitionsWhenParameterAndPropertySetAndIdMismatch()
     {
         $hint = DefinitionHint::singleton(ClassA::class)
-            ->parameter("param", "value")
-            ->property("property", "value");
+            ->setParameter("param", "value")
+            ->setProperty("property", "value");
 
         $definitions = $hint->toDefinitions([], ClassB::class, false);
 
@@ -135,7 +135,7 @@ class DefinitionHintTest extends TestCase
     public function toDefinitionsWhenParameterSet()
     {
         $hint = DefinitionHint::singleton(ClassA::class)
-            ->parameter("param", ["abc"]);
+            ->setParameter("param", ["abc"]);
 
         $definitions = $hint->toDefinitions([], ClassA::class, false);
 
@@ -161,7 +161,7 @@ class DefinitionHintTest extends TestCase
     public function toDefinitionsWhenPropertySet()
     {
         $hint = DefinitionHint::singleton(ClassA::class)
-            ->property("property", "value");
+            ->setProperty("property", "value");
 
         $definitions = $hint->toDefinitions([], ClassA::class, false);
 

@@ -46,7 +46,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     /**
      * @param string|int|float|bool|array|null $value
      */
-    public function parameter(string $name, $value): DefinitionHint
+    public function setParameter(string $name, $value): DefinitionHint
     {
         if (is_scalar($value) === false && is_array($value) === false) {
             throw new ContainerException("Constructor argument '$name' in '$this->className' must be a scalar or an array!");
@@ -60,7 +60,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     /**
      * @param string|int|float|bool|array|null $value
      */
-    public function property(string $name, $value): DefinitionHint
+    public function setProperty(string $name, $value): DefinitionHint
     {
         if (is_scalar($value) === false && is_array($value) === false) {
             throw new ContainerException("Property '$this->className::\$$name' must be a scalar or an array!");

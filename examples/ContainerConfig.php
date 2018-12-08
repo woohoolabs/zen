@@ -11,7 +11,6 @@ use WoohooLabs\Zen\Examples\Service\AnimalService;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Zen\Examples\Service\PlantService;
 use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
-
 class ContainerConfig extends AbstractContainerConfig
 {
     protected function getEntryPoints(): array
@@ -26,8 +25,8 @@ class ContainerConfig extends AbstractContainerConfig
         return [
             AnimalServiceInterface::class => AnimalService::class,
             PlantServiceInterface::class => DefinitionHint::singleton(PlantService::class)
-                ->parameter("plantType", "sunflower")
-                ->property("plantType", "sunflower"),
+                ->setParameter("plantType", "sunflower")
+                ->setProperty("plantType", "sunflower")
         ];
     }
 

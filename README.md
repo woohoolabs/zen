@@ -334,10 +334,10 @@ protected function getDefinitionHints(): array
 {
     return [
         UserRepositoryInterface::class => DefinitionHint::singleton(MySqlUserRepository::class)
-            ->parameter("mysqlUser", "root")
-            ->parameter("mysqlPassword", "root"),
-            ->parameter("mysqlPort", 3306),
-            ->property("mysqlModes", ["ONLY_FULL_GROUP_BY", "STRICT_TRANS_TABLES", "NO_ZERO_IN_DATE"]),
+            ->setParameter("mysqlUser", "root")
+            ->setParameter("mysqlPassword", "root"),
+            ->setParameter("mysqlPort", 3306),
+            ->setProperty("mysqlModes", ["ONLY_FULL_GROUP_BY", "STRICT_TRANS_TABLES", "NO_ZERO_IN_DATE"]),
     ];
 }
 ```
