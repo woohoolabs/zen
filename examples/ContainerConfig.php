@@ -11,6 +11,7 @@ use WoohooLabs\Zen\Examples\Service\AnimalService;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Zen\Examples\Service\PlantService;
 use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
+
 class ContainerConfig extends AbstractContainerConfig
 {
     protected function getEntryPoints(): array
