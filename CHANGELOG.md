@@ -1,4 +1,4 @@
-## 2.5.0 - unreleased
+## 2.6.0 - unreleased
 
 ADDED:
 
@@ -7,6 +7,16 @@ ADDED:
 CHANGED:
 
 REMOVED:
+
+FIXED:
+
+- String values containing special characters won't cause fatal error
+
+## 2.5.0 - unreleased
+
+ADDED:
+
+- Support for scalar injection
 
 FIXED:
 
