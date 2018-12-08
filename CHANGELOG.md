@@ -12,7 +12,7 @@ FIXED:
 
 - String values containing special characters won't cause fatal error
 
-## 2.5.0 - unreleased
+## 2.5.0 - 2018-12-08
 
 ADDED:
 
