@@ -3,11 +3,25 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Utils;
 
-use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use RegexIterator;
+use Throwable;
+use const T_ABSTRACT;
+use const T_CLASS;
+use const T_INTERFACE;
+use const T_NS_SEPARATOR;
+use const T_STRING;
+use const T_WHITESPACE;
+use function count;
+use function file_get_contents;
+use function in_array;
+use function is_string;
+use function strlen;
+use function strpos;
+use function substr;
+use function token_get_all;
 
 class FileSystemUtil
 {
@@ -17,7 +31,7 @@ class FileSystemUtil
         try {
             $reflectionClass = new ReflectionClass($className);
             $filename = $reflectionClass->getFileName();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return "";
         }
 
@@ -43,7 +57,7 @@ class FileSystemUtil
         foreach (self::getSourceFilesInPath($path) as $filePath) {
             foreach (self::getClassesInFile($filePath, $onlyConcreteClasses) as $namespace => $classes) {
                 foreach ($classes as $class) {
-                    $result[] = \is_string($namespace) ? $namespace . "\\" . $class : $class;
+                    $result[] = is_string($namespace) ? $namespace . "\\" . $class : $class;
                 }
             }
         }
@@ -76,7 +90,7 @@ class FileSystemUtil
         $classes = [];
         $namespace = 0;
         $tokens = token_get_all(file_get_contents($filePath));
-        $count = \count($tokens);
+        $count = count($tokens);
         $dlm = false;
 
         for ($i = 2; $i < $count; $i++) {
@@ -89,7 +103,7 @@ class FileSystemUtil
                     $namespace = $namespace ? $namespace . "\\" . $tokens[$i][1] : $tokens[$i][1];
                     $dlm = true;
                 }
-            } elseif ($dlm && ($tokens[$i][0] != T_NS_SEPARATOR) && ($tokens[$i][0] != T_STRING)) {
+            } elseif ($dlm && ($tokens[$i][0] !== T_NS_SEPARATOR) && ($tokens[$i][0] !== T_STRING)) {
                 $dlm = false;
             }
 
@@ -108,7 +122,7 @@ class FileSystemUtil
     private static function isNamespace(array $tokens, int $position, bool $dlm): bool
     {
         return (isset($tokens[$position - 2][1]) && $tokens[$position - 2][1] === "namespace") ||
-        ($dlm && $tokens[$position - 1][0] == T_NS_SEPARATOR && $tokens[$position][0] == T_STRING);
+        ($dlm && $tokens[$position - 1][0] === T_NS_SEPARATOR && $tokens[$position][0] === T_STRING);
     }
 
     private static function isRequiredClass(array $tokens, int $position, bool $onlyConcreteClasses): bool
@@ -131,7 +145,7 @@ class FileSystemUtil
         $whitespace = $tokens[$position - 1][0];
         $name = $tokens[$position][0];
 
-        $result = \in_array($class, $allowedClassTokens, true) && $whitespace === T_WHITESPACE && $name === T_STRING;
+        $result = in_array($class, $allowedClassTokens, true) && $whitespace === T_WHITESPACE && $name === T_STRING;
 
         return $result && ($onlyConcreteClasses === false || $type !== T_ABSTRACT);
     }

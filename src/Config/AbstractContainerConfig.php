@@ -9,6 +9,9 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function array_map;
+use function array_merge;
+use function is_string;
 
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {
@@ -39,7 +42,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return $entryPoint;
                 }
 
-                if (\is_string($entryPoint)) {
+                if (is_string($entryPoint)) {
                     return new ClassEntryPoint($entryPoint);
                 }
 
@@ -63,7 +66,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
                     return $definitionHint;
                 }
 
-                if (\is_string($definitionHint)) {
+                if (is_string($definitionHint)) {
                     return new DefinitionHint($definitionHint);
                 }
 

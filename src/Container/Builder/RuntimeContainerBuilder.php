@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
+use function substr;
 
 class RuntimeContainerBuilder extends AbstractContainerBuilder
 {

@@ -8,6 +8,8 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+use function array_values;
+use function str_replace;
 
 class Compiler
 {

@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+use function array_reverse;
 
 final class AutoloadedDefinition extends AbstractDefinition
 {

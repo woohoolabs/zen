@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use function array_key_exists;
+use function array_keys;
+use function implode;
+use function var_export;
+
 class ClassDefinition extends AbstractDefinition
 {
     /**
@@ -217,10 +222,10 @@ class ClassDefinition extends AbstractDefinition
                     $definition = $definitions[$property["class"]];
 
                     $code .= "                '$propertyName' => " . $this->getEntryToPhp(
-                            $definition->getId($this->id),
-                            $definition->getHash($this->id),
-                            $definition->getScope($this->id)
-                        ) . ",\n";
+                        $definition->getId($this->id),
+                        $definition->getHash($this->id),
+                        $definition->getScope($this->id)
+                    ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "                '$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
                 }

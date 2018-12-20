@@ -17,6 +17,10 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function array_diff;
+use function array_merge;
+use function implode;
+use function in_array;
 
 class DependencyResolver
 {
@@ -92,11 +96,11 @@ class DependencyResolver
             $isAutoloaded = true;
         }
 
-        if (\in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
+        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
             $isAutoloaded = false;
         }
 
-        if (\in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
+        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
             $isAutoloaded = false;
         }
 

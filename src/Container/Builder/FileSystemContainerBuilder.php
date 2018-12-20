@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
+use function file_put_contents;
 
 class FileSystemContainerBuilder extends AbstractContainerBuilder
 {

@@ -6,6 +6,8 @@ namespace WoohooLabs\Zen\Config\Hint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use function array_merge;
+use function is_string;
 
 class ContextDependentDefinitionHint implements DefinitionHintInterface
 {
@@ -109,6 +111,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
      */
     private function createDefinitionHint($definitionHint): ?DefinitionHint
     {
-        return \is_string($definitionHint) ? new DefinitionHint($definitionHint) : $definitionHint;
+        return is_string($definitionHint) ? new DefinitionHint($definitionHint) : $definitionHint;
     }
 }

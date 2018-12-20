@@ -7,6 +7,9 @@ use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function array_merge;
+use function is_array;
+use function is_scalar;
 
 class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 {
@@ -111,6 +114,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 
         return $result;
     }
+
     /**
      * @internal
      */

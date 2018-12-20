@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Config;
 
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use function str_replace;
 
 abstract class AbstractCompilerConfig
 {

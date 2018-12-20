@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use function str_replace;
+
 abstract class AbstractDefinition implements DefinitionInterface
 {
     /**
