@@ -27,4 +27,4 @@ cs:
 	docker-compose -f docker-compose.yml run --rm zen-php /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml
 
 cs-fix:
-	docker-compose -f docker-compose.yml run zen-php /var/www/vendor/bin/phpcbf --standard=/var/www/phpcs.xml
+	docker-compose -f docker-compose.yml run --rm zen-php /var/www/vendor/bin/phpcbf --standard=/var/www/phpcs.xml
