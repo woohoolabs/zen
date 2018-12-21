@@ -2,15 +2,17 @@
 
 ADDED:
 
-- Support for scalar injection
-
 CHANGED:
 
 REMOVED:
 
 FIXED:
 
-- String values containing special characters won't cause fatal error
+## 2.5.1 - 2018-12-21
+
+CHANGED:
+
+- Apply the Woohoo Labs. Coding Standard
 
 ## 2.5.0 - 2018-12-08
 
