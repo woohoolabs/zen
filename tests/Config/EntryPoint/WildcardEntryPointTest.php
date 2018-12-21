@@ -19,6 +19,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceG;
+use function dirname;
 
 class WildcardEntryPointTest extends TestCase
 {

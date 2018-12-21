@@ -5,6 +5,9 @@ namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
+use function dirname;
+use function file_get_contents;
+use function str_replace;
 
 class SelfDefinitionTest extends TestCase
 {

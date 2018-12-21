@@ -8,6 +8,8 @@ use WoohooLabs\Zen\Container\Compiler;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Double\StubDefinition;
+use function dirname;
+use function file_get_contents;
 
 class CompilerTest extends TestCase
 {

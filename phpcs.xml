@@ -1,18 +1,24 @@
 <?xml version="1.0"?>
-<ruleset name="Zen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
-    <description>PHP Coding Standards for Zen</description>
+<ruleset name="Project" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    <description>PHP Coding Standards for Project</description>
 
     <arg name="basepath" value="."/>
-    <arg name="extensions" value="php"/>
-    <arg name="colors" />
-    <arg name="parallel" value="80"/>
     <arg name="cache" value=".phpcs-cache"/>
+    <arg name="colors" />
+    <arg name="encoding" value="UTF-8"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="80"/>
+    <arg name="report" value="code"/>
+    <arg name="report-width" value="160"/>
 
     <!-- Show progress of the run -->
     <arg value="nps"/>
 
     <file>src/</file>
     <file>tests/</file>
+
+    <exclude-pattern>tests/Double/StubContainer.php</exclude-pattern>
+    <exclude-pattern>tests/Fixture/</exclude-pattern>
 
     <rule ref="WoohooLabs"/>
 </ruleset>

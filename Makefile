@@ -24,15 +24,7 @@ test:
 	docker-compose -f docker-compose.yml up
 
 cs:
-	docker-compose -f docker-compose.yml run zen-php /var/www/vendor/bin/phpcs \
-	    --standard=/var/www/phpcs.xml \
-	    --encoding=UTF-8 \
-	    --report-full \
-	    --extensions=php \
-	   /var/www/src/
+	docker-compose -f docker-compose.yml run --rm zen-php /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml
 
 cs-fix:
-	docker-compose -f docker-compose.yml run zen-php /var/www/vendor/bin/phpcbf \
-	    --standard=/var/www/phpcs.xml \
-	    --extensions=php \
-	   /var/www/src/
+	docker-compose -f docker-compose.yml run zen-php /var/www/vendor/bin/phpcbf --standard=/var/www/phpcs.xml

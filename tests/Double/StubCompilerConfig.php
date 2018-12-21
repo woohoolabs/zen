@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Tests\Double;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {
@@ -84,7 +85,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
 
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
-        return AutoloadConfig::create($this->useBuiltInAutoloading, \dirname(__DIR__, 2))
+        return AutoloadConfig::create($this->useBuiltInAutoloading, dirname(__DIR__, 2))
             ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
     }
 

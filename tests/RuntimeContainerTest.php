@@ -60,7 +60,8 @@ class RuntimeContainerTest extends TestCase
             [
                 ConstructorA::class => DefinitionHint::prototype(ConstructorA::class),
             ],
-            "Container4");
+            "Container4"
+        );
 
         $entry1 = $container->get(ConstructorA::class);
         $entry2 = $container->get(ConstructorA::class);
@@ -87,7 +88,7 @@ class RuntimeContainerTest extends TestCase
         return new RuntimeContainer(
             new StubCompilerConfig(
                 [
-                    new StubContainerConfig([$entryPoint], $definitionsHints)
+                    new StubContainerConfig([$entryPoint], $definitionsHints),
                 ],
                 "WoohooLabs\\Zen",
                 $className

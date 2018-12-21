@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function dirname;
+use function file_get_contents;
+use function str_replace;
 
 class ContextDependentDefinitionTest extends TestCase
 {
@@ -123,8 +126,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $this->assertSame($definition, $result);
     }
-
-
 
     /**
      * @test

@@ -10,6 +10,9 @@ use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedE;
+use function dirname;
+use function file_get_contents;
+use function str_replace;
 
 class AutoloadedDefinitionTest extends TestCase
 {

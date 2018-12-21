@@ -6,6 +6,9 @@ namespace WoohooLabs\Zen\Tests\Container\Definition;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
+use function dirname;
+use function file_get_contents;
+use function str_replace;
 
 class ClassDefinitionTest extends TestCase
 {

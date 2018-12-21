@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use function str_replace;
 
 class StubDefinition implements DefinitionInterface
 {
@@ -19,7 +20,7 @@ class StubDefinition implements DefinitionInterface
 
     public function getId(string $parentId): string
     {
-        return StubDefinition::class;
+        return self::class;
     }
 
     public function getHash(string $parentId): string
