@@ -62,7 +62,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function ToPhpCode()
+    public function toPhpCode()
     {
         $definition = new SelfDefinition("");
 
