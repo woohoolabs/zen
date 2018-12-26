@@ -53,7 +53,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         return "\$this->$hash()";
     }
 
-    private function hash(string $id): string
+    protected function hash(string $id): string
     {
         return str_replace("\\", "__", $id);
     }

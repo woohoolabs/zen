@@ -197,9 +197,10 @@ class ClassDefinition extends AbstractDefinition
                 $definition = $definitions[$constructorArgument["class"]];
 
                 $constructorArguments[] = "            " . $this->getEntryToPhp(
-                    $definition->getId($this->id),
-                    $definition->getHash($this->id),
-                    $definition->getScope($this->id)
+                    $constructorArgument["class"],
+                    $this->hash($constructorArgument["class"]),
+                    $definition->getScope($this->id),
+                    $definition->isFileBased()
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $constructorArguments[] = "            " . $this->serializeValue($constructorArgument["value"]);
@@ -222,9 +223,10 @@ class ClassDefinition extends AbstractDefinition
                     $definition = $definitions[$property["class"]];
 
                     $code .= "                '$propertyName' => " . $this->getEntryToPhp(
-                        $definition->getId($this->id),
-                        $definition->getHash($this->id),
-                        $definition->getScope($this->id)
+                        $property["class"],
+                        $this->hash($property["class"]),
+                        $definition->getScope($this->id),
+                        $definition->isFileBased()
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "                '$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
