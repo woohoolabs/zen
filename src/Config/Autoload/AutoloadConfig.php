@@ -50,7 +50,7 @@ final class AutoloadConfig implements AutoloadConfigInterface
 
     public function setRootDirectory(string $rootDirectory): AutoloadConfig
     {
-        $this->rootDirectory = $rootDirectory;
+        $this->rootDirectory = rtrim($rootDirectory, "\\/");
 
         return $this;
     }

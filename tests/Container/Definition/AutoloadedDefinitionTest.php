@@ -21,7 +21,7 @@ class AutoloadedDefinitionTest extends TestCase
      */
     public function getScope()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
+        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "", true);
 
         $scope = $definition->getScope("");
 

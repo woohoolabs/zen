@@ -11,7 +11,11 @@ interface DefinitionInterface
 
     public function getScope(string $parentId): string;
 
+    public function isEntryPoint(): bool;
+
     public function isAutoloaded(): bool;
+
+    public function isFileBased(): bool;
 
     public function needsDependencyResolution(): bool;
 

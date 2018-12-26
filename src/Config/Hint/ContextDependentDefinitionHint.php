@@ -67,14 +67,16 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
      * @return DefinitionInterface[]
      * @internal
      */
-    public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array
+    public function toDefinitions(array $definitionHints, string $id, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased): array
     {
         $defaultDefinition = null;
         if ($this->defaultDefinitionHint) {
             $defaultDefinition = new ClassDefinition(
                 $this->defaultDefinitionHint->getClassName(),
                 $this->defaultDefinitionHint->getScope(),
-                $isAutoloaded
+                $isEntryPoint,
+                $isAutoloaded,
+                $isFileBased
             );
         }
 
@@ -83,7 +85,9 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
             $definitions[$parentId] = new ClassDefinition(
                 $definitionHint->getClassName(),
                 $definitionHint->getScope(),
-                $isAutoloaded
+                $isEntryPoint,
+                $isAutoloaded,
+                $isFileBased
             );
         }
 
@@ -98,7 +102,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         foreach ($this->definitionHints as $definitionHint) {
             $result = array_merge(
                 $result,
-                $definitionHint->toDefinitions($definitionHints, $definitionHint->getClassName(), $isAutoloaded)
+                $definitionHint->toDefinitions($definitionHints, $definitionHint->getClassName(), $isAutoloaded, $isFileBased)
             );
         }
 

@@ -132,7 +132,7 @@ class CompilerTest extends TestCase
                 true
             ),
             [
-                StubDefinition::class => new StubDefinition(true),
+                StubDefinition::class => new StubDefinition(true, true),
             ]
         );
 

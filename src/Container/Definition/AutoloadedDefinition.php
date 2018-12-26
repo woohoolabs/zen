@@ -17,11 +17,11 @@ final class AutoloadedDefinition extends AbstractDefinition
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function __construct(AutoloadConfigInterface $autoloadConfig, string $id)
+    public function __construct(AutoloadConfigInterface $autoloadConfig, string $id, bool $isEntryPoint = false, bool $isFileBased = false)
     {
         $this->autoloadConfig = $autoloadConfig;
         $this->id = $id;
-        parent::__construct($id, "");
+        parent::__construct($id, "", $isEntryPoint, $isFileBased);
     }
 
     public function getScope(string $parentId): string
@@ -62,7 +62,12 @@ final class AutoloadedDefinition extends AbstractDefinition
 
         $code .= "\n";
         $code .= "        self::\$entryPoints[\\$id::class] = '$hash';\n\n";
-        $code .= "        return \$this->$hash();\n";
+
+        if ($this->isFileBased()) {
+            $code .= "        return require __DIR__ . '/$hash.php';\n";
+        } else {
+            $code .= "        return \$this->$hash();\n";
+        }
 
         return $code;
     }

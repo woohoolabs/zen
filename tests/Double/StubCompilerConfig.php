@@ -7,6 +7,7 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use function dirname;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {
@@ -45,6 +46,11 @@ class StubCompilerConfig extends AbstractCompilerConfig
      */
     private $alwaysAutoloadedClasses;
 
+    /**
+     * @var bool
+     */
+    private $useFileBasedDefinition;
+
     public function __construct(
         array $containerConfigs = [],
         string $namespace = "",
@@ -52,7 +58,8 @@ class StubCompilerConfig extends AbstractCompilerConfig
         bool $useConstructorInjection = true,
         bool $usePropertyInjection = true,
         bool $useBuiltInAutoloading = false,
-        array $alwaysAutoloadedClasses = []
+        array $alwaysAutoloadedClasses = [],
+        bool $useFileBasedDefinition = false
     ) {
         $this->namespace = $namespace;
         $this->className = $className;
@@ -61,6 +68,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
         $this->usePropertyInjection = $usePropertyInjection;
         $this->useBuiltInAutoloading = $useBuiltInAutoloading;
         $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
+        $this->useFileBasedDefinition = $useFileBasedDefinition;
     }
 
     public function getContainerNamespace(): string
@@ -87,6 +95,11 @@ class StubCompilerConfig extends AbstractCompilerConfig
     {
         return AutoloadConfig::create($this->useBuiltInAutoloading, dirname(__DIR__, 2))
             ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
+    }
+
+    public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfig
+    {
+        return FileBasedDefinitionConfig::create($this->useFileBasedDefinition, dirname(__DIR__));
     }
 
     public function getContainerConfigs(): array

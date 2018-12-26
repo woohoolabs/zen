@@ -2,6 +2,8 @@
 
 ADDED:
 
+- Support for file-based definitions
+
 CHANGED:
 
 REMOVED:

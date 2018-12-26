@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Examples;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 
 class CompilerConfig extends AbstractCompilerConfig
 {
@@ -32,6 +33,11 @@ class CompilerConfig extends AbstractCompilerConfig
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
         return AutoloadConfig::enabledGlobally(__DIR__);
+    }
+
+    public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfig
+    {
+        return FileBasedDefinitionConfig::disabledGlobally("definitions/");
     }
 
     public function getContainerConfigs(): array

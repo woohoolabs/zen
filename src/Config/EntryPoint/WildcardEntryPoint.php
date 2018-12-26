@@ -23,6 +23,11 @@ class WildcardEntryPoint implements EntryPointInterface
      */
     private $autoloaded;
 
+    /**
+     * @var bool
+     */
+    private $fileBased;
+
     public static function create(string $className, bool $onlyConcreteClasses = true): WildcardEntryPoint
     {
         return new WildcardEntryPoint($className, $onlyConcreteClasses);
@@ -33,11 +38,19 @@ class WildcardEntryPoint implements EntryPointInterface
         $this->directoryName = rtrim($directoryName, "\\/");
         $this->onlyConcreteClasses = $onlyConcreteClasses;
         $this->autoloaded = false;
+        $this->fileBased = false;
     }
 
     public function autoload(): WildcardEntryPoint
     {
         $this->autoloaded = true;
+
+        return $this;
+    }
+
+    public function fileBased(): WildcardEntryPoint
+    {
+        $this->fileBased = true;
 
         return $this;
     }
@@ -57,5 +70,13 @@ class WildcardEntryPoint implements EntryPointInterface
     public function isAutoloaded(): bool
     {
         return $this->autoloaded;
+    }
+
+    /**
+     * @internal
+     */
+    public function isFileBased(): bool
+    {
+        return $this->fileBased;
     }
 }

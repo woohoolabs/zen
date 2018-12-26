@@ -11,11 +11,23 @@ class StubDefinition implements DefinitionInterface
     /**
      * @var bool
      */
+    private $isEntryPoint;
+
+    /**
+     * @var bool
+     */
     private $isAutoloaded;
 
-    public function __construct(bool $isAutoloaded = false)
+    /**
+     * @var bool
+     */
+    private $isFileBased;
+
+    public function __construct(bool $isEntryPoint = false, bool $isAutoloaded = false, bool $isFileBased = false)
     {
+        $this->isEntryPoint = $isEntryPoint;
         $this->isAutoloaded = $isAutoloaded;
+        $this->isFileBased = $isFileBased;
     }
 
     public function getId(string $parentId): string
@@ -43,9 +55,19 @@ class StubDefinition implements DefinitionInterface
         return $this;
     }
 
+    public function isEntryPoint(): bool
+    {
+        return $this->isEntryPoint;
+    }
+
     public function isAutoloaded(): bool
     {
         return $this->isAutoloaded;
+    }
+
+    public function isFileBased(): bool
+    {
+        return $this->isFileBased;
     }
 
     public function getClassDependencies(): array

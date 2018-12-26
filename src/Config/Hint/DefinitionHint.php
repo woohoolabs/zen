@@ -79,14 +79,16 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
      * @return DefinitionInterface[]
      * @internal
      */
-    public function toDefinitions(array $definitionHints, string $id, bool $isAutoloaded): array
+    public function toDefinitions(array $definitionHints, string $id, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased): array
     {
         if ($this->className === $id) {
             return [
                 $id => new ClassDefinition(
                     $this->className,
                     $this->getScope(),
+                    $isEntryPoint,
                     $isAutoloaded,
+                    $isFileBased,
                     $this->parameters,
                     $this->properties
                 ),
@@ -94,19 +96,21 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->getScope()),
+            $id => new ReferenceDefinition($id, $this->className, $this->getScope(), $isEntryPoint, $isFileBased),
         ];
 
         if (isset($definitionHints[$this->className])) {
             $result = array_merge(
                 $result,
-                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className, $isAutoloaded)
+                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className, $isEntryPoint, $isAutoloaded, $isFileBased)
             );
         } else {
             $result[$this->className] = new ClassDefinition(
                 $this->className,
                 $this->getScope(),
+                $isEntryPoint,
                 $isAutoloaded,
+                $isFileBased,
                 $this->parameters,
                 $this->properties
             );

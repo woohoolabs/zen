@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
+use WoohooLabs\Zen\Exception\ContainerException;
 use function substr;
 
 class RuntimeContainerBuilder extends AbstractContainerBuilder
@@ -19,8 +20,13 @@ class RuntimeContainerBuilder extends AbstractContainerBuilder
         $definitions = $this->getDefinitions();
 
         $compiler = new Compiler();
-        $compiledContainer = $compiler->compile($this->compilerConfig, $definitions);
-        $compiledContainer = substr($compiledContainer, 5);
-        eval($compiledContainer);
+        $compiledContainerFiles = $compiler->compile($this->compilerConfig, $definitions);
+
+        if (empty($compiledContainerFiles["definitions"]) === false) {
+            throw new ContainerException("RuntimeContainerBuilder doesn't support file-based definitions!");
+        }
+
+        $container = substr($compiledContainerFiles["container"], 5);
+        eval($container);
     }
 }

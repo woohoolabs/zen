@@ -42,30 +42,52 @@ class ClassDefinition extends AbstractDefinition
 
     public static function singleton(
         string $className,
+        bool $isEntryPoint = false,
         bool $isAutoloaded = false,
+        bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = []
     ): ClassDefinition {
-        return new self($className, "singleton", $isAutoloaded, $overriddenConstructorParameters, $overriddenProperties);
+        return new self(
+            $className,
+            "singleton",
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $overriddenConstructorParameters,
+            $overriddenProperties
+        );
     }
 
     public static function prototype(
         string $className,
+        bool $isEntryPoint = false,
         bool $isAutoloaded = false,
+        bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = []
     ): ClassDefinition {
-        return new self($className, "prototype", $isAutoloaded, $overriddenConstructorParameters, $overriddenProperties);
+        return new self(
+            $className,
+            "prototype",
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $overriddenConstructorParameters,
+            $overriddenProperties
+        );
     }
 
     public function __construct(
         string $className,
         string $scope = "singleton",
+        bool $isEntryPoint = false,
         bool $autoloaded = false,
+        bool $fileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = []
     ) {
-        parent::__construct($className, $scope);
+        parent::__construct($className, $scope, $isEntryPoint, $fileBased);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;

@@ -10,19 +10,33 @@ class ReferenceDefinition extends AbstractDefinition
      */
     private $referrerId;
 
-    public static function singleton(string $referrerId, string $referencedClassName): ReferenceDefinition
-    {
-        return new self($referrerId, $referencedClassName);
+    public static function singleton(
+        string $referrerId,
+        string $referencedClassName,
+        bool $isEntryPoint = false,
+        bool $fileBased = false
+    ): ReferenceDefinition {
+        return new self($referrerId, $referencedClassName, "singleton", $isEntryPoint, $fileBased);
     }
 
-    public static function prototype(string $referrerId, string $referencedClassName): ReferenceDefinition
+    public static function prototype(
+        string $referrerId,
+        string $referencedClassName,
+        bool $isEntryPoint = false,
+        bool $fileBased = false
+    ): ReferenceDefinition
     {
-        return new self($referrerId, $referencedClassName, "prototype");
+        return new self($referrerId, $referencedClassName, "prototype", $isEntryPoint, $fileBased);
     }
 
-    public function __construct(string $referrerId, string $referencedClassName, string $scope = "singleton")
-    {
-        parent::__construct($referencedClassName, $scope);
+    public function __construct(
+        string $referrerId,
+        string $referencedClassName,
+        string $scope = "singleton",
+        bool $isEntryPoint = false,
+        bool $fileBased = false
+    ) {
+        parent::__construct($referencedClassName, $scope, $isEntryPoint, $fileBased);
         $this->referrerId = $referrerId;
     }
 
@@ -63,7 +77,8 @@ class ReferenceDefinition extends AbstractDefinition
         $code .= $this->getEntryToPhp(
             $definition->getId($this->referrerId),
             $definition->getHash($this->referrerId),
-            $definition->getScope($this->referrerId)
+            $definition->getScope($this->referrerId),
+            $definition->isFileBased()
         ) . ";\n";
 
         return $code;

@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Config;
 
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use function str_replace;
 
 abstract class AbstractCompilerConfig
@@ -20,6 +21,11 @@ abstract class AbstractCompilerConfig
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
         return AutoloadConfig::disabledGlobally();
+    }
+
+    public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfig
+    {
+        return FileBasedDefinitionConfig::disabledGlobally();
     }
 
     /**

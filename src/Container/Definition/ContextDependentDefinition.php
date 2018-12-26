@@ -48,7 +48,17 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->getScope($parentId);
     }
 
+    public function isEntryPoint(): bool
+    {
+        return false;
+    }
+
     public function isAutoloaded(): bool
+    {
+        return false;
+    }
+
+    public function isFileBased(): bool
     {
         return false;
     }

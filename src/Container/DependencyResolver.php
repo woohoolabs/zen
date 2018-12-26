@@ -63,9 +63,10 @@ class DependencyResolver
 
         $this->definitions = [
             $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
-            ContainerInterface::class => new ReferenceDefinition(
+            ContainerInterface::class => ReferenceDefinition::singleton(
                 ContainerInterface::class,
-                $this->compilerConfig->getContainerFqcn()
+                $this->compilerConfig->getContainerFqcn(),
+                true
             ),
         ];
     }
@@ -75,62 +76,53 @@ class DependencyResolver
         foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
-                    $this->resolve($id, $entryPoint);
+                    $this->resolve($id, $entryPoint, $entryPoint);
                 }
             }
         }
     }
 
-    private function resolve(string $id, ?EntryPointInterface $entryPoint = null): void
+    private function resolve(string $id, ?EntryPointInterface $currentEntryPoint, EntryPointInterface $parentEntryPoint): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
-                $this->resolveDependencies($id);
+                $this->resolveDependencies($id, $parentEntryPoint);
             }
 
             return;
         }
 
-        $isAutoloaded = false;
-        if ($entryPoint && ($this->compilerConfig->getAutoloadConfig()->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
-            $isAutoloaded = true;
-        }
-
-        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses(), true)) {
-            $isAutoloaded = false;
-        }
-
-        if (in_array($entryPoint, $this->compilerConfig->getAutoloadConfig()->getExcludedClasses(), true)) {
-            $isAutoloaded = false;
-        }
+        $isAutoloaded = $this->isAutoloaded($currentEntryPoint);
+        $isFileBased = $this->isFileBasedDefinition($parentEntryPoint);
+        $isEntryPoint = $currentEntryPoint !== null;
 
         if (isset($this->definitionHints[$id])) {
-            $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id, $isAutoloaded);
+            $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id, $isEntryPoint, $isAutoloaded, $isFileBased);
             foreach ($definitions as $definitionId => $definition) {
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {
                     $this->definitions[$definitionId] = $definition;
                 }
-                $this->resolve($definitionId);
+                $this->resolve($definitionId, null, $parentEntryPoint);
             }
 
             return;
         }
 
-        $this->definitions[$id] = new ClassDefinition($id, "singleton", $isAutoloaded);
-        $this->resolveDependencies($id);
+        $this->definitions[$id] = new ClassDefinition($id, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased);
+        $this->resolveDependencies($id, $parentEntryPoint);
     }
 
-    private function resolveDependencies(string $id): void
+    private function resolveDependencies(string $id, EntryPointInterface $parentEntryPoint): void
     {
         $this->definitions[$id]->resolveDependencies();
 
         if ($this->compilerConfig->useConstructorInjection()) {
-            $this->resolveConstructorArguments($this->definitions[$id]);
+            $this->resolveConstructorArguments($this->definitions[$id], $parentEntryPoint);
         }
 
         if ($this->compilerConfig->usePropertyInjection()) {
-            $this->resolveAnnotatedProperties($this->definitions[$id]);
+            $this->resolveAnnotatedProperties($this->definitions[$id], $parentEntryPoint);
         }
     }
 
@@ -142,7 +134,7 @@ class DependencyResolver
         return $this->definitions;
     }
 
-    private function resolveConstructorArguments(ClassDefinition $definition): void
+    private function resolveConstructorArguments(ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
     {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
@@ -177,7 +169,7 @@ class DependencyResolver
             }
 
             $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass);
+            $this->resolve($paramClass, null, $parentEntryPoint);
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
@@ -189,7 +181,7 @@ class DependencyResolver
         }
     }
 
-    private function resolveAnnotatedProperties(ClassDefinition $definition): void
+    private function resolveAnnotatedProperties(ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
     {
         $class = new ReflectionClass($definition->getClassName());
 
@@ -223,7 +215,7 @@ class DependencyResolver
             }
 
             $definition->addPropertyFromClass($property->getName(), $propertyClass);
-            $this->resolve($propertyClass);
+            $this->resolve($propertyClass, null, $parentEntryPoint);
         }
 
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
@@ -239,5 +231,43 @@ class DependencyResolver
     {
         $this->annotationReader = new SimpleAnnotationReader();
         $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
+    }
+
+    private function isAutoloaded(?EntryPointInterface $entryPoint): bool
+    {
+        $autoloadConfig = $this->compilerConfig->getAutoloadConfig();
+
+        if ($entryPoint && ($autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
+            return true;
+        }
+
+        if (in_array($entryPoint, $autoloadConfig->getExcludedClasses(), true)) {
+            return false;
+        }
+
+        if (in_array($entryPoint, $autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isFileBasedDefinition(?EntryPointInterface $entryPoint): bool
+    {
+        $fileBasedDefinitionConfig = $this->compilerConfig->getFileBasedDefinitionConfig();
+
+        if ($entryPoint && ($fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased())) {
+            return true;
+        }
+
+        if (in_array($entryPoint, $fileBasedDefinitionConfig->getExcludedClasses(), true)) {
+            return false;
+        }
+
+        if (in_array($entryPoint, $fileBasedDefinitionConfig->getAlwaysLoadedClasses(), true)) {
+            return true;
+        }
+
+        return false;
     }
 }

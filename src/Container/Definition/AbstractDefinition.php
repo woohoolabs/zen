@@ -22,11 +22,23 @@ abstract class AbstractDefinition implements DefinitionInterface
      */
     protected $scope;
 
-    public function __construct(string $id, string $scope)
+    /**
+     * @var bool
+     */
+    protected $entryPoint;
+
+    /**
+     * @var bool
+     */
+    protected $fileBased;
+
+    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $fileBased)
     {
         $this->id = $id;
         $this->hash = $this->hash($id);
         $this->scope = $scope;
+        $this->entryPoint = $isEntryPoint;
+        $this->fileBased = $fileBased;
     }
 
     public function getId(string $parentId): string
@@ -44,8 +56,26 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->scope;
     }
 
-    protected function getEntryToPhp(string $id, string $hash, string $scope): string
+    public function isEntryPoint(): bool
     {
+        return $this->entryPoint;
+    }
+
+    public function isFileBased(): bool
+    {
+        return $this->fileBased;
+    }
+
+    protected function getEntryToPhp(string $id, string $hash, string $scope, bool $isFileBased): string
+    {
+        if ($isFileBased) {
+            if ($scope === "singleton") {
+                return "\$this->singletonEntries['$id'] ?? require __DIR__ . '/$hash.php'";
+            }
+
+            return "require __DIR__ . '/$hash.php'";
+        }
+
         if ($scope === "singleton") {
             return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }

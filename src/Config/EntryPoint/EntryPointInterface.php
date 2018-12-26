@@ -15,4 +15,9 @@ interface EntryPointInterface
      * @internal
      */
     public function isAutoloaded(): bool;
+
+    /**
+     * @internal
+     */
+    public function isFileBased(): bool;
 }
