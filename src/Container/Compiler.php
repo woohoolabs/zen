@@ -81,7 +81,7 @@ class Compiler
                 $definitionFiles[$filename] = "<?php\n\n";
                 $definitionFiles[$filename] .= $autoloadedDefinition->toPhpCode($definitions);
 
-                $container .= "        require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+                $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
             } else {
                 $container .= $autoloadedDefinition->toPhpCode($definitions);
             }
@@ -97,7 +97,7 @@ class Compiler
 
                 if ($definition->isEntryPoint()) {
                     $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                    $container .= "        require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+                    $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
                     $container .= "    }\n";
                 }
             } else {
