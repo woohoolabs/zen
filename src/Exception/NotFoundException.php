@@ -10,6 +10,6 @@ class NotFoundException extends Exception implements PsrNotFoundExceptionInterfa
 {
     public function __construct(string $id)
     {
-        parent::__construct("Entry with ID '$id' was not found in the compiled container!");
+        parent::__construct("Entry with ID '$id' was not found in the container!");
     }
 }

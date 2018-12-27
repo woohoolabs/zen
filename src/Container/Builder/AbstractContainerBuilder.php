@@ -18,15 +18,4 @@ abstract class AbstractContainerBuilder implements ContainerBuilderInterface
     {
         $this->compilerConfig = $compilerConfig;
     }
-
-    /**
-     * @return DefinitionInterface[]
-     */
-    protected function getDefinitions(): array
-    {
-        $dependencyResolver = new DependencyResolver($this->compilerConfig);
-        $dependencyResolver->resolveEntryPoints();
-
-        return $dependencyResolver->getDefinitions();
-    }
 }

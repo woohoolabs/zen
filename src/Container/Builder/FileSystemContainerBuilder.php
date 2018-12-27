@@ -7,6 +7,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
+use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
 use function file_put_contents;
 
@@ -26,8 +27,9 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
     public function build(): void
     {
         $compiler = new Compiler();
+        $dependencyResolver = new DependencyResolver($this->compilerConfig);
 
-        $compiledContainerFiles = $compiler->compile($this->compilerConfig, $this->getDefinitions());
+        $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints());
 
         $definitionDirectory = $this->getDefinitionDirectory();
         $this->deleteDirectory($definitionDirectory);

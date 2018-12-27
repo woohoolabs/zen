@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
-use function array_values;
 use function str_replace;
 
 class Compiler
@@ -31,7 +29,7 @@ class Compiler
         $container .= "{\n";
 
         // Entry points
-        $entryPoints = $this->getEntryPoints($compilerConfig);
+        $entryPoints = array_keys($compilerConfig->getEntryPointMap());
 
         $container .= "    /**\n";
         $container .= "     * @var string[]\n";
@@ -115,24 +113,6 @@ class Compiler
             "container" => $container,
             "definitions" => $definitionFiles,
         ];
-    }
-
-    private function getEntryPoints(AbstractCompilerConfig $compilerConfig): array
-    {
-        $result = [
-            $compilerConfig->getContainerFqcn() => $compilerConfig->getContainerFqcn(),
-            ContainerInterface::class => ContainerInterface::class,
-        ];
-
-        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
-            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $id) {
-                    $result[$id] = $id;
-                }
-            }
-        }
-
-        return array_values($result);
     }
 
     private function getHash(string $id): string

@@ -17,17 +17,32 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_diff;
-use function array_merge;
 use function implode;
 use function in_array;
 
 class DependencyResolver
 {
     /**
+     * @var SimpleAnnotationReader
+     */
+    private $annotationReader;
+
+    /**
+     * @var PhpDocReader
+     */
+    private $typeHintReader;
+
+    /**
      * @var AbstractCompilerConfig
      */
     private $compilerConfig;
+
+    /**
+     * @var EntryPointInterface[]
+     */
+    private $entryPoints;
 
     /**
      * @var DefinitionHintInterface[]
@@ -39,47 +54,45 @@ class DependencyResolver
      */
     private $definitions;
 
-    /**
-     * @var SimpleAnnotationReader
-     */
-    private $annotationReader;
-
-    /**
-     * @var PhpDocReader
-     */
-    private $typeHintReader;
-
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
-        $definitionHints = [];
-        foreach ($compilerConfig->getContainerConfigs() as $containerConfig) {
-            $definitionHints = array_merge($definitionHints, $containerConfig->createDefinitionHints());
-        }
-
-        $this->compilerConfig = $compilerConfig;
-        $this->definitionHints = $definitionHints;
-        $this->setAnnotationReader();
+        $this->annotationReader = new SimpleAnnotationReader();
+        $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
         $this->typeHintReader = new PhpDocReader();
-
-        $this->definitions = [
-            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
-            ContainerInterface::class => ReferenceDefinition::singleton(
-                ContainerInterface::class,
-                $this->compilerConfig->getContainerFqcn(),
-                true
-            ),
-        ];
+        $this->compilerConfig = $compilerConfig;
+        $this->entryPoints = $compilerConfig->getEntryPointMap();
+        $this->definitionHints = $compilerConfig->getDefinitionHints();
     }
 
-    public function resolveEntryPoints(): void
+    /**
+     * @return DefinitionInterface[]
+     */
+    public function resolveEntryPoints(): array
     {
-        foreach ($this->compilerConfig->getContainerConfigs() as $containerConfig) {
-            foreach ($containerConfig->createEntryPoints() as $entryPoint) {
-                foreach ($entryPoint->getClassNames() as $id) {
-                    $this->resolve($id, $entryPoint, $entryPoint);
-                }
-            }
+        $this->resetDefinitions();
+
+        foreach ($this->entryPoints as $id => $entryPoint) {
+            $this->resolve($id, $entryPoint, $entryPoint);
         }
+
+        return $this->definitions;
+    }
+
+    /**
+     * @return DefinitionInterface[]
+     * @throws NotFoundException
+     */
+    public function resolveClass(string $id): array
+    {
+        $this->resetDefinitions();
+
+        if (isset($this->entryPoints[$id]) === false) {
+            throw new NotFoundException($id);
+        }
+
+        $this->resolve($id, $this->entryPoints[$id], $this->entryPoints[$id]);
+
+        return $this->definitions;
     }
 
     private function resolve(string $id, ?EntryPointInterface $currentEntryPoint, EntryPointInterface $parentEntryPoint): void
@@ -124,14 +137,6 @@ class DependencyResolver
         if ($this->compilerConfig->usePropertyInjection()) {
             $this->resolveAnnotatedProperties($this->definitions[$id], $parentEntryPoint);
         }
-    }
-
-    /**
-     * @return DefinitionInterface[]
-     */
-    public function getDefinitions(): array
-    {
-        return $this->definitions;
     }
 
     private function resolveConstructorArguments(ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
@@ -227,22 +232,16 @@ class DependencyResolver
         }
     }
 
-    private function setAnnotationReader(): void
-    {
-        $this->annotationReader = new SimpleAnnotationReader();
-        $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
-    }
-
     private function isAutoloaded(?EntryPointInterface $entryPoint): bool
     {
         $autoloadConfig = $this->compilerConfig->getAutoloadConfig();
 
-        if ($entryPoint && ($autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
-            return true;
-        }
-
         if (in_array($entryPoint, $autoloadConfig->getExcludedClasses(), true)) {
             return false;
+        }
+
+        if ($entryPoint && ($autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
+            return true;
         }
 
         if (in_array($entryPoint, $autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
@@ -252,16 +251,16 @@ class DependencyResolver
         return false;
     }
 
-    private function isFileBasedDefinition(?EntryPointInterface $entryPoint): bool
+    private function isFileBasedDefinition(EntryPointInterface $entryPoint): bool
     {
         $fileBasedDefinitionConfig = $this->compilerConfig->getFileBasedDefinitionConfig();
 
-        if ($entryPoint && ($fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased())) {
-            return true;
-        }
-
         if (in_array($entryPoint, $fileBasedDefinitionConfig->getExcludedClasses(), true)) {
             return false;
+        }
+
+        if ($entryPoint && ($fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased())) {
+            return true;
         }
 
         if (in_array($entryPoint, $fileBasedDefinitionConfig->getAlwaysLoadedClasses(), true)) {
@@ -269,5 +268,17 @@ class DependencyResolver
         }
 
         return false;
+    }
+
+    private function resetDefinitions(): void
+    {
+        $this->definitions = [
+            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
+            ContainerInterface::class => ReferenceDefinition::singleton(
+                ContainerInterface::class,
+                $this->compilerConfig->getContainerFqcn(),
+                true
+            ),
+        ];
     }
 }
