@@ -107,7 +107,7 @@ class DependencyResolver
 
         $isAutoloaded = $this->isAutoloaded($currentEntryPoint);
         $isFileBased = $this->isFileBasedDefinition($parentEntryPoint);
-        $isEntryPoint = $currentEntryPoint !== null;
+        $isEntryPoint = isset($this->entryPoints[$id]);
 
         if (isset($this->definitionHints[$id])) {
             $definitions = $this->definitionHints[$id]->toDefinitions($this->definitionHints, $id, $isEntryPoint, $isAutoloaded, $isFileBased);
