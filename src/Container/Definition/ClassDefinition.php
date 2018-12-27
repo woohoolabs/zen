@@ -200,6 +200,8 @@ class ClassDefinition extends AbstractDefinition
      */
     public function toPhpCode(array $definitions): string
     {
+        $entry = "\$entry" . ($this->isFileBased() === false || empty($this->properties) ? "" : random_int(1, 100000));
+
         $code = "";
         if (empty($this->properties)) {
             if ($this->scope === "singleton") {
@@ -208,7 +210,7 @@ class ClassDefinition extends AbstractDefinition
                 $code .= "        return ";
             }
         } else {
-            $code .= "        \$entry = ";
+            $code .= "        $entry = ";
         }
 
         $code .= "new \\" . $this->getClassName() . "(";
@@ -238,7 +240,7 @@ class ClassDefinition extends AbstractDefinition
 
         if (empty($this->properties) === false) {
             $code .= "        \$this->setProperties(\n";
-            $code .= "            \$entry,\n";
+            $code .= "            $entry,\n";
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $property) {
                 if (isset($property["class"])) {
@@ -260,9 +262,9 @@ class ClassDefinition extends AbstractDefinition
 
         if (empty($this->properties) === false) {
             if ($this->scope === "singleton") {
-                $code .= "        return \$this->singletonEntries['{$this->id}'] = \$entry;\n";
+                $code .= "        return \$this->singletonEntries['{$this->id}'] = $entry;\n";
             } else {
-                $code .= "\n        return \$entry;\n";
+                $code .= "\n        return $entry;\n";
             }
         }
 
