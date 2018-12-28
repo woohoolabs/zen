@@ -203,7 +203,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isSingleton("") && $this->isEntryPoint() && $this->isAutoloaded() && $this->getReferenceCount() === 0) {
+        if ($this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0) {
             $code .= $this->includeDependencies($compilation->getAutoloadConfig(), $compilation->getDefinitions(), $this->id) . "\n";
         }
 

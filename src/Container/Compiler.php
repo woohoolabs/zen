@@ -74,7 +74,7 @@ class Compiler
             }
 
             $definition = $definitions[$id];
-            if ($definition->isAutoloaded() === false || $definition->isSingleton("") || $definition->getReferenceCount() > 0) {
+            if ($definition->isAutoloaded() === false || ($definition->isSingleton("") && $definition->getReferenceCount() === 0)) {
                 continue;
             }
 
