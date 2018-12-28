@@ -38,7 +38,7 @@ class CompilerConfig extends AbstractCompilerConfig
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
     {
-        return FileBasedDefinitionConfig::disabledGlobally("definitions/");
+        return FileBasedDefinitionConfig::disabledGlobally("Definitions/");
     }
 
     public function getContainerConfigs(): array

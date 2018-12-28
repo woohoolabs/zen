@@ -3,4 +3,4 @@ vendor/
 composer.lock
 phpunit.xml
 examples/Container.php
-examples/definitions
+examples/Definitions/
