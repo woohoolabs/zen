@@ -2,11 +2,13 @@
 
 ADDED:
 
-- Support for file-based definitions
+- Support for file-based container definitions
 
 CHANGED:
 
 - Various optimizations of the compiled container based on reference count of container definitions
+- Build the foundations of a faster dynamic container by making it possible to resolve the dependencies of a single class
+
 REMOVED:
 
 FIXED:
@@ -18,6 +20,7 @@ FIXED:
 CHANGED:
 
 - Apply the Woohoo Labs. Coding Standard
+- Slightly optimized compilation time by importing functions from the global namespace 
 
 ## 2.5.0 - 2018-12-08
 
