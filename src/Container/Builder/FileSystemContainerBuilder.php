@@ -37,14 +37,17 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
 
         $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints());
 
-        $definitionDirectory = $this->getDefinitionDirectory();
-        $this->deleteDirectory($definitionDirectory);
-        $this->createDirectory($definitionDirectory);
+        if (empty($compiledContainerFiles["definitions"]) === false) {
+            $definitionDirectory = $this->getDefinitionDirectory();
+            $this->deleteDirectory($definitionDirectory);
+            $this->createDirectory($definitionDirectory);
+
+            foreach ($compiledContainerFiles["definitions"] as $filename => $content) {
+                file_put_contents("$definitionDirectory" . DIRECTORY_SEPARATOR . "$filename", $content);
+            }
+        }
 
         file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
-        foreach ($compiledContainerFiles["definitions"] as $filename => $content) {
-            file_put_contents("$definitionDirectory" . DIRECTORY_SEPARATOR . "$filename", $content);
-        }
     }
 
     private function deleteDirectory(string $directory): void
@@ -86,6 +89,10 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
     {
         $basePath = dirname($this->containerPath);
         $relativeDirectory = $this->compilerConfig->getFileBasedDefinitionConfig()->getRelativeDirectory();
+
+        if ($relativeDirectory === "") {
+            throw new ContainerException("Relative directory of file-based definitions can not be empty!");
+        }
 
         return $basePath . DIRECTORY_SEPARATOR . $relativeDirectory;
     }
