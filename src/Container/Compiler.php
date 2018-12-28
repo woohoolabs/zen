@@ -107,7 +107,7 @@ class Compiler
                 }
             } else {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definitionCode = $definition->compile($definitionCompilation);
+                $container .= $definition->compile($definitionCompilation);
                 $container .= "    }\n";
             }
         }

@@ -79,7 +79,8 @@ class ReferenceDefinition extends AbstractDefinition
             $definition->getId($this->referrerId),
             $definition->getHash($this->referrerId),
             $definition->isSingleton($this->referrerId),
-            $definition
+            $definition,
+            $compilation->getFileBasedDefinitionConfig()
         ) . ";\n";
 
         return $code;

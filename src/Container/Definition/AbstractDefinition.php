@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
 use function array_reverse;
 use function str_replace;
@@ -84,17 +85,29 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->referenceCount++;
     }
 
-    protected function getEntryToPhp(string $id, string $hash, bool $isSingleton, DefinitionInterface $definition): string
-    {
+    protected function getEntryToPhp(
+        string $id,
+        string $hash,
+        bool $isSingleton,
+        DefinitionInterface $definition,
+        FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig
+    ): string {
         $referenceCount = $definition->getReferenceCount();
         $isEntryPoint = $definition->isEntryPoint();
+        $isFileBased = $definition->isFileBased();
 
         if ($definition->isFileBased()) {
+            $path = "__DIR__ . '/";
+            if ($this->isFileBased() === false && $isFileBased) {
+                $path .= $fileBasedDefinitionConfig->getRelativeDirectory() . "/";
+            }
+            $path .= "$hash.php'";
+
             if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {
-                return "\$this->singletonEntries['$id'] ?? require __DIR__ . '/$hash.php'";
+                return "\$this->singletonEntries['$id'] ?? require $path";
             }
 
-            return "require __DIR__ . '/$hash.php'";
+            return "require $path";
         }
 
         if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {

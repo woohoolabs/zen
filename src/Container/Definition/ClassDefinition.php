@@ -228,7 +228,8 @@ class ClassDefinition extends AbstractDefinition
                     $constructorArgument["class"],
                     $this->hash($constructorArgument["class"]),
                     $definition->isSingleton($this->id),
-                    $definition
+                    $definition,
+                    $compilation->getFileBasedDefinitionConfig()
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $constructorArguments[] = "            " . $this->serializeValue($constructorArgument["value"]);
@@ -254,7 +255,8 @@ class ClassDefinition extends AbstractDefinition
                         $property["class"],
                         $this->hash($property["class"]),
                         $definition->isSingleton($this->id),
-                        $definition
+                        $definition,
+                        $compilation->getFileBasedDefinitionConfig()
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "                '$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
