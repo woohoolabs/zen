@@ -112,6 +112,8 @@ class DependencyResolver
     private function resolve(string $id, ?EntryPointInterface $currentEntryPoint, EntryPointInterface $parentEntryPoint): void
     {
         if (isset($this->definitions[$id])) {
+            $this->definitions[$id]->increaseReferenceCount();
+
             if ($this->definitions[$id]->needsDependencyResolution()) {
                 $this->resolveDependencies($id, $parentEntryPoint);
             }

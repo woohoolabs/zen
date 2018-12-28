@@ -17,6 +17,10 @@ interface DefinitionInterface
 
     public function isFileBased(): bool;
 
+    public function getReferenceCount(): int;
+
+    public function increaseReferenceCount(): void;
+
     public function needsDependencyResolution(): bool;
 
     public function resolveDependencies(): DefinitionInterface;

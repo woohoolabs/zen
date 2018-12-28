@@ -32,6 +32,11 @@ abstract class AbstractDefinition implements DefinitionInterface
      */
     protected $fileBased;
 
+    /**
+     * @var int
+     */
+    protected $referenceCount = 0;
+
     public function __construct(string $id, string $scope, bool $isEntryPoint, bool $fileBased)
     {
         $this->id = $id;
@@ -66,18 +71,26 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->fileBased;
     }
 
+    public function getReferenceCount(): int
+    {
+        return $this->referenceCount;
+    }
+
+    public function increaseReferenceCount(): void
+    {
+        $this->referenceCount++;
+    }
+
     protected function getEntryToPhp(string $id, string $hash, string $scope, bool $isFileBased): string
     {
         if ($isFileBased) {
             if ($scope === "singleton") {
-                return "\$this->singletonEntries['$id'] ?? require __DIR__ . '/$hash.php'";
             }
 
             return "require __DIR__ . '/$hash.php'";
         }
 
         if ($scope === "singleton") {
-            return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 
         return "\$this->$hash()";
