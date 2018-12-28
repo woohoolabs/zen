@@ -89,6 +89,13 @@ class DependencyResolver
             $this->resolve($id, $entryPoint, $entryPoint);
         }
 
+        foreach ($this->definitions as $definition) {
+            var_dump([
+                "class" => $definition->getId(""),
+                "reference" => $definition->getReferenceCount(),
+            ]);
+        }
+
         return $this->definitions;
     }
 
@@ -278,10 +285,6 @@ class DependencyResolver
         }
 
         if ($this->fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased()) {
-            return true;
-        }
-
-        if (in_array($entryPoint, $this->fileBasedDefinitionConfig->getAlwaysLoadedClasses(), true)) {
             return true;
         }
 

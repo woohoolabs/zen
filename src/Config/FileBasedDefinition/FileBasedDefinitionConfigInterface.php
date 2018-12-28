@@ -12,10 +12,5 @@ interface FileBasedDefinitionConfigInterface
     /**
      * @return string[]
      */
-    public function getAlwaysLoadedClasses(): array;
-
-    /**
-     * @return string[]
-     */
     public function getExcludedClasses(): array;
 }

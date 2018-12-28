@@ -20,11 +20,6 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     /**
      * @var array
      */
-    private $alwaysAutoloadedClasses;
-
-    /**
-     * @var array
-     */
     private $excludedClasses;
 
     public static function disabledGlobally(string $relativeDirectory = ""): FileBasedDefinitionConfig
@@ -45,7 +40,6 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     public function __construct(bool $isGlobalAutoloadEnabled, string $relativeDirectory = "")
     {
         $this->isGlobalFileBasedDefinitionsEnabled = $isGlobalAutoloadEnabled;
-        $this->alwaysAutoloadedClasses = [];
         $this->excludedClasses = [];
         $this->setRelativeDirectory($relativeDirectory);
     }
@@ -53,16 +47,6 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     public function setRelativeDirectory(string $relativeDirectory): FileBasedDefinitionConfig
     {
         $this->relativeDirectory = trim($relativeDirectory, "\\/");
-
-        return $this;
-    }
-
-    /**
-     * @param string[] $alwaysAutoloadedClasses
-     */
-    public function setAlwaysAutoloadedClasses(array $alwaysAutoloadedClasses): FileBasedDefinitionConfig
-    {
-        $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
 
         return $this;
     }
@@ -85,11 +69,6 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     public function getRelativeDirectory(): string
     {
         return $this->relativeDirectory;
-    }
-
-    public function getAlwaysLoadedClasses(): array
-    {
-        return $this->alwaysAutoloadedClasses;
     }
 
     public function getExcludedClasses(): array
