@@ -10,7 +10,9 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
@@ -54,6 +56,16 @@ class DependencyResolver
      */
     private $definitions;
 
+    /**
+     * @var AutoloadConfigInterface
+     */
+    private $autoloadConfig;
+
+    /**
+     * @var FileBasedDefinitionConfigInterface
+     */
+    private $fileBasedDefinitionConfig;
+
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
         $this->annotationReader = new SimpleAnnotationReader();
@@ -62,6 +74,8 @@ class DependencyResolver
         $this->compilerConfig = $compilerConfig;
         $this->entryPoints = $compilerConfig->getEntryPointMap();
         $this->definitionHints = $compilerConfig->getDefinitionHints();
+        $this->autoloadConfig = $compilerConfig->getAutoloadConfig();
+        $this->fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
     }
 
     /**
@@ -234,17 +248,15 @@ class DependencyResolver
 
     private function isAutoloaded(?EntryPointInterface $entryPoint): bool
     {
-        $autoloadConfig = $this->compilerConfig->getAutoloadConfig();
-
-        if (in_array($entryPoint, $autoloadConfig->getExcludedClasses(), true)) {
+        if (in_array($entryPoint, $this->autoloadConfig->getExcludedClasses(), true)) {
             return false;
         }
 
-        if ($entryPoint && ($autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
+        if ($entryPoint && ($this->autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
             return true;
         }
 
-        if (in_array($entryPoint, $autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
+        if (in_array($entryPoint, $this->autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
             return true;
         }
 
@@ -253,17 +265,15 @@ class DependencyResolver
 
     private function isFileBasedDefinition(EntryPointInterface $entryPoint): bool
     {
-        $fileBasedDefinitionConfig = $this->compilerConfig->getFileBasedDefinitionConfig();
-
-        if (in_array($entryPoint, $fileBasedDefinitionConfig->getExcludedClasses(), true)) {
+        if (in_array($entryPoint, $this->fileBasedDefinitionConfig->getExcludedClasses(), true)) {
             return false;
         }
 
-        if ($entryPoint && ($fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased())) {
+        if ($this->fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased()) {
             return true;
         }
 
-        if (in_array($entryPoint, $fileBasedDefinitionConfig->getAlwaysLoadedClasses(), true)) {
+        if (in_array($entryPoint, $this->fileBasedDefinitionConfig->getAlwaysLoadedClasses(), true)) {
             return true;
         }
 
