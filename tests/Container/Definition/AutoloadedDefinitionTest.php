@@ -86,7 +86,7 @@ class AutoloadedDefinitionTest extends TestCase
             MixedE::class
         );
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 MixedE::class => ClassDefinition::singleton(MixedE::class, true)
                     ->addConstructorArgumentFromClass(MixedD::class)

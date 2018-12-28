@@ -19,7 +19,10 @@ class Compiler
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions): array
     {
         $autoloadConfig = $compilerConfig->getAutoloadConfig();
-        $fileBasedDefinitionDirectory = $compilerConfig->getFileBasedDefinitionConfig()->getRelativeDirectory();
+        $fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
+        $fileBasedDefinitionDirectory = $fileBasedDefinitionConfig->getRelativeDirectory();
+        $definitionCompilation = new DefinitionCompilation($autoloadConfig, $fileBasedDefinitionConfig, $definitions);
+
         $definitionFiles = [];
 
         $container = "<?php\n";
@@ -40,7 +43,7 @@ class Compiler
         foreach ($entryPoints as $id) {
             $methodName = $this->getHash($id);
 
-            if (isset($definitions[$id]) && $definitions[$id]->isAutoloaded()) {
+            if (isset($definitions[$id]) && $definitions[$id]->isAutoloaded() && $definitions[$id]->isSingleton("") === false) {
                 $methodName = "_proxy__$methodName";
             }
 
@@ -71,21 +74,21 @@ class Compiler
             }
 
             $definition = $definitions[$id];
-            if ($definition->isAutoloaded() === false) {
+            if ($definition->isAutoloaded() === false || $definition->isSingleton("") || $definition->getReferenceCount() > 0) {
                 continue;
             }
 
-            $autoloadedDefinition = new AutoloadedDefinition($autoloadConfig, $id, true, $definition->isFileBased());
+            $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
 
             $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
             if ($autoloadedDefinition->isFileBased()) {
                 $filename = "_proxy__" . $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $autoloadedDefinition->toPhpCode($definitions);
+                $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation);
 
                 $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
             } else {
-                $container .= $autoloadedDefinition->toPhpCode($definitions);
+                $container .= $autoloadedDefinition->compile($definitionCompilation);
             }
             $container .= "    }\n";
         }
@@ -95,7 +98,7 @@ class Compiler
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $definition->toPhpCode($definitions);
+                $definitionFiles[$filename] .= $definition->compile($definitionCompilation);
 
                 if ($definition->isEntryPoint()) {
                     $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
@@ -104,7 +107,7 @@ class Compiler
                 }
             } else {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definitionCode = $definition->toPhpCode($definitions);
+                $container .= $definitionCode = $definition->compile($definitionCompilation);
                 $container .= "    }\n";
             }
         }

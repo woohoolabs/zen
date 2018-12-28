@@ -66,7 +66,7 @@ class SelfDefinitionTest extends TestCase
     {
         $definition = new SelfDefinition("");
 
-        $phpCode = $definition->toPhpCode([]);
+        $phpCode = $definition->compile([]);
 
         $this->assertEquals($this->getDefinitionSourceCode("SelfDefinition.php"), $phpCode);
     }

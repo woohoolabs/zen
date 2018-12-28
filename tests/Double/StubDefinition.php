@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use function str_replace;
 
 class StubDefinition implements DefinitionInterface
@@ -75,10 +76,7 @@ class StubDefinition implements DefinitionInterface
         return [];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         return "        // This is a dummy definition.\n";
     }

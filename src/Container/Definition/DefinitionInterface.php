@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Container\DefinitionCompilation;
+
 interface DefinitionInterface
 {
     public function getId(string $parentId): string;
 
     public function getHash(string $parentId): string;
 
-    public function getScope(string $parentId): string;
+    public function isSingleton(string $parentId): bool;
 
     public function isEntryPoint(): bool;
 
@@ -30,8 +32,5 @@ interface DefinitionInterface
      */
     public function getClassDependencies(): array;
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string;
+    public function compile(DefinitionCompilation $compilation): string;
 }

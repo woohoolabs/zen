@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Container\DefinitionCompilation;
+
 class ReferenceDefinition extends AbstractDefinition
 {
     /**
@@ -64,19 +66,19 @@ class ReferenceDefinition extends AbstractDefinition
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         $code = "        return ";
-        if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
+        if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
             $code .= "\$this->singletonEntries['{$this->referrerId}'] = ";
         }
 
-        $definition = $definitions[$this->id];
+        $definition = $compilation->getDefinition($this->id);
 
         $code .= $this->getEntryToPhp(
             $definition->getId($this->referrerId),
             $definition->getHash($this->referrerId),
-            $definition->getScope($this->referrerId),
+            $definition->isSingleton($this->referrerId),
             $definition
         ) . ";\n";
 

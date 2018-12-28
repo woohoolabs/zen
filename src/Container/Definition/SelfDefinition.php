@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Container\DefinitionCompilation;
+
 class SelfDefinition extends AbstractDefinition
 {
     public function __construct(string $className)
@@ -30,10 +32,7 @@ class SelfDefinition extends AbstractDefinition
         return [];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         return "        return \$this;\n";
     }

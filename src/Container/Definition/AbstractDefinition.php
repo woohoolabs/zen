@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Utils\FileSystemUtil;
+use function array_reverse;
 use function str_replace;
 
 abstract class AbstractDefinition implements DefinitionInterface
@@ -25,17 +28,17 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @var bool
      */
-    protected $entryPoint;
+    private $entryPoint;
 
     /**
      * @var bool
      */
-    protected $fileBased;
+    private $fileBased;
 
     /**
      * @var int
      */
-    protected $referenceCount = 0;
+    private $referenceCount = 0;
 
     public function __construct(string $id, string $scope, bool $isEntryPoint, bool $fileBased)
     {
@@ -56,9 +59,9 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->hash;
     }
 
-    public function getScope(string $parentId): string
+    public function isSingleton(string $parentId): bool
     {
-        return $this->scope;
+        return $this->scope === "singleton";
     }
 
     public function isEntryPoint(): bool
@@ -81,20 +84,20 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->referenceCount++;
     }
 
-    protected function getEntryToPhp(string $id, string $hash, string $scope, DefinitionInterface $definition): string
+    protected function getEntryToPhp(string $id, string $hash, bool $isSingleton, DefinitionInterface $definition): string
     {
         $referenceCount = $definition->getReferenceCount();
         $isEntryPoint = $definition->isEntryPoint();
 
         if ($definition->isFileBased()) {
-            if ($scope === "singleton" && ($referenceCount > 1 || $isEntryPoint)) {
+            if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {
                 return "\$this->singletonEntries['$id'] ?? require __DIR__ . '/$hash.php'";
             }
 
             return "require __DIR__ . '/$hash.php'";
         }
 
-        if ($scope === "singleton" && ($referenceCount > 1 || $isEntryPoint)) {
+        if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {
             return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 
@@ -104,5 +107,50 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected function hash(string $id): string
     {
         return str_replace("\\", "__", $id);
+    }
+
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    protected function includeDependencies(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id): string
+    {
+        $dependencies = [];
+        $this->collectDependencies($definitions, $id, $dependencies);
+        $dependencies = array_reverse($dependencies);
+
+        $code = "";
+        foreach ($dependencies as $dependency) {
+            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $dependency);
+            if ($filename === "") {
+                continue;
+            }
+
+            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
+        }
+
+        $definition = $definitions[$id];
+        $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $definition->getId(""));
+        if ($filename !== "") {
+            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
+        }
+
+        return $code;
+    }
+
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    private function collectDependencies(array $definitions, string $id, array &$dependencies): void
+    {
+        $definition = $definitions[$id];
+
+        foreach ($definition->getClassDependencies() as $dependency) {
+            if (isset($dependencies[$dependency])) {
+                continue;
+            }
+
+            $dependencies[$dependency] = $dependency;
+            $this->collectDependencies($definitions, $dependency, $dependencies);
+        }
     }
 }

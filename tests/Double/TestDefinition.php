@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Container\Definition\AbstractDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 class TestDefinition extends AbstractDefinition
 {
@@ -28,10 +29,7 @@ class TestDefinition extends AbstractDefinition
         return [];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         return "";
     }

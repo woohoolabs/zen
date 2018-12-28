@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use function array_key_exists;
 use function array_keys;
 use function implode;
@@ -196,16 +197,18 @@ class ClassDefinition extends AbstractDefinition
         return $dependencies;
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         $entry = "\$entry" . ($this->isFileBased() === false || empty($this->properties) ? "" : random_int(1, 100000));
 
         $code = "";
+
+        if ($this->isSingleton("") && $this->isEntryPoint() && $this->isAutoloaded() && $this->getReferenceCount() === 0) {
+            $code .= $this->includeDependencies($compilation->getAutoloadConfig(), $compilation->getDefinitions(), $this->id) . "\n";
+        }
+
         if (empty($this->properties)) {
-            if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
+            if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
                 $code .= "        return \$this->singletonEntries['{$this->id}'] = ";
             } else {
                 $code .= "        return ";
@@ -219,12 +222,12 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
         foreach ($this->constructorArguments as $constructorArgument) {
             if (isset($constructorArgument["class"])) {
-                $definition = $definitions[$constructorArgument["class"]];
+                $definition = $compilation->getDefinition($constructorArgument["class"]);
 
                 $constructorArguments[] = "            " . $this->getEntryToPhp(
                     $constructorArgument["class"],
                     $this->hash($constructorArgument["class"]),
-                    $definition->getScope($this->id),
+                    $definition->isSingleton($this->id),
                     $definition
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
@@ -245,12 +248,12 @@ class ClassDefinition extends AbstractDefinition
             $code .= "            [\n";
             foreach ($this->properties as $propertyName => $property) {
                 if (isset($property["class"])) {
-                    $definition = $definitions[$property["class"]];
+                    $definition = $compilation->getDefinition($property["class"]);
 
                     $code .= "                '$propertyName' => " . $this->getEntryToPhp(
                         $property["class"],
                         $this->hash($property["class"]),
-                        $definition->getScope($this->id),
+                        $definition->isSingleton($this->id),
                         $definition
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
@@ -262,7 +265,7 @@ class ClassDefinition extends AbstractDefinition
         }
 
         if (empty($this->properties) === false) {
-            if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
+            if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
                 $code .= "        return \$this->singletonEntries['{$this->id}'] = $entry;\n";
             } else {
                 $code .= "\n        return $entry;\n";

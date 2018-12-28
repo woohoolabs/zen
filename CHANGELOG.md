@@ -7,8 +7,9 @@ ADDED:
 CHANGED:
 
 - Various optimizations of the compiled container based on reference count of container definitions
+- Autoloaded definitions are inlined in the compiled container when possible
 - Build the foundations of a faster dynamic container by making it possible to resolve the dependencies of a single class
-- Optimized compilation time by minimizing class instantiations 
+- Optimize compilation time by minimizing class instantiations 
 
 REMOVED:
 

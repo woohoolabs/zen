@@ -74,7 +74,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getScope()
+    public function isSingleton()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -86,9 +86,9 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $scope = $definition->getScope("X\\D");
+        $scope = $definition->isSingleton("X\\D");
 
-        $this->assertEquals("prototype", $scope);
+        $this->assertFalse($scope);
     }
 
     /**
@@ -154,7 +154,7 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => new ClassDefinition("X\\E"),
@@ -180,7 +180,7 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\B" => new ClassDefinition("X\\C"),
                 "X\\D" => new ClassDefinition("X\\E"),

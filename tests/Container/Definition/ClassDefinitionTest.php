@@ -67,7 +67,7 @@ class ClassDefinitionTest extends TestCase
     {
         $definition = new ClassDefinition("X\\A");
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
             ]
@@ -85,7 +85,7 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
                 "X\\B" => ClassDefinition::singleton("X\\B"),
@@ -105,7 +105,7 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
                 "X\\B" => new ContextDependentDefinition(
@@ -138,7 +138,7 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromValue(null)
             ->addConstructorArgumentFromValue(["a" => false]);
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
             ]
@@ -156,7 +156,7 @@ class ClassDefinitionTest extends TestCase
             ->addPropertyFromClass("b", "X\\B")
             ->addPropertyFromClass("c", "X\\C");
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
                 "X\\B" => ClassDefinition::singleton("X\\B"),
@@ -176,7 +176,7 @@ class ClassDefinitionTest extends TestCase
             ->addPropertyFromClass("b", "X\\B")
             ->addPropertyFromClass("c", "X\\C");
 
-        $phpCode = $definition->toPhpCode(
+        $phpCode = $definition->compile(
             [
                 "X\\A" => $definition,
                 "X\\B" => new ContextDependentDefinition(

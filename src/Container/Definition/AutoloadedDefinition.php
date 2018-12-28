@@ -3,30 +3,19 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
-use WoohooLabs\Zen\Utils\FileSystemUtil;
-use function array_reverse;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 final class AutoloadedDefinition extends AbstractDefinition
 {
-    /**
-     * @var AutoloadConfigInterface
-     */
-    private $autoloadConfig;
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function __construct(AutoloadConfigInterface $autoloadConfig, string $id, bool $isEntryPoint = false, bool $isFileBased = false)
+    public function __construct(string $id, bool $isEntryPoint = false, bool $isFileBased = false)
     {
-        $this->autoloadConfig = $autoloadConfig;
         $this->id = $id;
         parent::__construct($id, "", $isEntryPoint, $isFileBased);
     }
 
-    public function getScope(string $parentId): string
+    public function isSingleton(string $parentId): bool
     {
-        return "";
+        return false;
     }
 
     public function isAutoloaded(): bool
@@ -49,16 +38,13 @@ final class AutoloadedDefinition extends AbstractDefinition
         return [];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $definitionCompilation): string
     {
-        $definition = $definitions[$this->id];
+        $definition = $definitionCompilation->getDefinition($this->id);
         $id = $definition->getId("");
         $hash = $definition->getHash("");
 
-        $code = $this->includeDependency($definitions, $this->id);
+        $code = $this->includeDependencies($definitionCompilation->getAutoloadConfig(), $definitionCompilation->getDefinitions(), $this->id);
 
         $code .= "\n";
         $code .= "        self::\$entryPoints[\\$id::class] = '$hash';\n\n";
@@ -70,50 +56,5 @@ final class AutoloadedDefinition extends AbstractDefinition
         }
 
         return $code;
-    }
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    private function includeDependency(array $definitions, string $id): string
-    {
-        $dependencies = [];
-        $this->collectDependencies($definitions, $id, $dependencies);
-        $dependencies = array_reverse($dependencies);
-
-        $code = "";
-        foreach ($dependencies as $dependency) {
-            $filename = FileSystemUtil::getRelativeFilename($this->autoloadConfig->getRootDirectory(), $dependency);
-            if ($filename === "") {
-                continue;
-            }
-
-            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
-        }
-
-        $definition = $definitions[$id];
-        $filename = FileSystemUtil::getRelativeFilename($this->autoloadConfig->getRootDirectory(), $definition->getId(""));
-        if ($filename !== "") {
-            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
-        }
-
-        return $code;
-    }
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    private function collectDependencies(array $definitions, string $id, array &$dependencies): void
-    {
-        $definition = $definitions[$id];
-
-        foreach ($definition->getClassDependencies() as $dependency) {
-            if (isset($dependencies[$dependency])) {
-                continue;
-            }
-
-            $dependencies[$dependency] = $dependency;
-            $this->collectDependencies($definitions, $dependency, $dependencies);
-        }
     }
 }

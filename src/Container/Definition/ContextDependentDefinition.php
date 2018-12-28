@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Exception\ContainerException;
 
 class ContextDependentDefinition implements DefinitionInterface
@@ -43,9 +44,9 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->getHash($parentId);
     }
 
-    public function getScope(string $parentId): string
+    public function isSingleton(string $parentId): bool
     {
-        return $this->getDefinition($parentId)->getScope($parentId);
+        return $this->getDefinition($parentId)->isSingleton($parentId);
     }
 
     public function isEntryPoint(): bool
@@ -88,10 +89,7 @@ class ContextDependentDefinition implements DefinitionInterface
         ];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function toPhpCode(array $definitions): string
+    public function compile(DefinitionCompilation $compilation): string
     {
         if ($this->defaultDefinition === null) {
             return <<<EOF
@@ -102,7 +100,7 @@ class ContextDependentDefinition implements DefinitionInterface
 EOF;
         }
 
-        return $this->defaultDefinition->toPhpCode($definitions);
+        return $this->defaultDefinition->compile($compilation);
     }
 
     private function getDefinition(string $parentId): DefinitionInterface
