@@ -80,9 +80,11 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->referenceCount;
     }
 
-    public function increaseReferenceCount(): void
+    public function increaseReferenceCount(): DefinitionInterface
     {
         $this->referenceCount++;
+
+        return $this;
     }
 
     protected function getEntryToPhp(

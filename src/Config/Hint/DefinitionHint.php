@@ -118,6 +118,8 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $this->parameters,
                 $this->properties
             );
+
+            $result[$this->className]->increaseReferenceCount();
         }
 
         return $result;

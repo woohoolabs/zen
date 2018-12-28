@@ -21,7 +21,7 @@ interface DefinitionInterface
 
     public function getReferenceCount(): int;
 
-    public function increaseReferenceCount(): void;
+    public function increaseReferenceCount(): DefinitionInterface;
 
     public function needsDependencyResolution(): bool;
 

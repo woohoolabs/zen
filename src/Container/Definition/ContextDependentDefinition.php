@@ -69,8 +69,9 @@ class ContextDependentDefinition implements DefinitionInterface
         return 0;
     }
 
-    public function increaseReferenceCount(): void
+    public function increaseReferenceCount(): DefinitionInterface
     {
+        return $this;
     }
 
     public function needsDependencyResolution(): bool
