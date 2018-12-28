@@ -24,8 +24,7 @@ class ReferenceDefinition extends AbstractDefinition
         string $referencedClassName,
         bool $isEntryPoint = false,
         bool $fileBased = false
-    ): ReferenceDefinition
-    {
+    ): ReferenceDefinition {
         return new self($referrerId, $referencedClassName, "prototype", $isEntryPoint, $fileBased);
     }
 

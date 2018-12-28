@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Container\Definition;
 use function array_key_exists;
 use function array_keys;
 use function implode;
+use function random_int;
 use function var_export;
 
 class ClassDefinition extends AbstractDefinition

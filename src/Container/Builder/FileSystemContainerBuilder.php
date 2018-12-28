@@ -3,13 +3,19 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Builder;
 
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
+use const DIRECTORY_SEPARATOR;
+use function dirname;
+use function file_exists;
 use function file_put_contents;
+use function mkdir;
+use function rmdir;
+use function unlink;
 
 class FileSystemContainerBuilder extends AbstractContainerBuilder
 {
@@ -47,11 +53,11 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
             return;
         }
 
-        $it = new RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+        $it = new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
 
-        foreach($files as $file) {
-            if ($file->isDir()){
+        foreach ($files as $file) {
+            if ($file->isDir()) {
                 rmdir($file->getRealPath());
             } else {
                 unlink($file->getRealPath());

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\FileBasedDefinition;
 
+use function trim;
+
 final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterface
 {
     /**

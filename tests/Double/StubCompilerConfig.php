@@ -6,8 +6,8 @@ namespace WoohooLabs\Zen\Tests\Double;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
-use function dirname;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
+use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {

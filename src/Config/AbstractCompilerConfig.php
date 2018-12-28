@@ -11,6 +11,7 @@ use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
+use function array_merge;
 use function str_replace;
 
 abstract class AbstractCompilerConfig
