@@ -17,6 +17,7 @@ class Compiler
      */
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions): array
     {
+        $autoloadConfig = $compilerConfig->getAutoloadConfig();
         $fileBasedDefinitionDirectory = $compilerConfig->getFileBasedDefinitionConfig()->getRelativeDirectory();
         $definitionFiles = [];
 
@@ -56,8 +57,8 @@ class Compiler
         $container .= "    public function __construct(string \$rootDirectory = '')\n";
         $container .= "    {\n";
         $container .= "        \$this->rootDirectory = \$rootDirectory;\n";
-        foreach ($compilerConfig->getAutoloadConfig()->getAlwaysAutoloadedClasses() as $autoloadedClass) {
-            $filename = FileSystemUtil::getRelativeFilename($compilerConfig->getAutoloadConfig()->getRootDirectory(), $autoloadedClass);
+        foreach ($autoloadConfig->getAlwaysAutoloadedClasses() as $autoloadedClass) {
+            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $autoloadedClass);
             $container .= "        include_once \$this->rootDirectory . '$filename';\n";
         }
         $container .= "    }\n";
@@ -73,7 +74,7 @@ class Compiler
                 continue;
             }
 
-            $autoloadedDefinition = new AutoloadedDefinition($compilerConfig->getAutoloadConfig(), $id, true, $definition->isFileBased());
+            $autoloadedDefinition = new AutoloadedDefinition($autoloadConfig, $id, true, $definition->isFileBased());
 
             $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
             if ($autoloadedDefinition->isFileBased()) {

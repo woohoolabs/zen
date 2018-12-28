@@ -8,6 +8,7 @@ CHANGED:
 
 - Various optimizations of the compiled container based on reference count of container definitions
 - Build the foundations of a faster dynamic container by making it possible to resolve the dependencies of a single class
+- Optimized compilation time by minimizing class instantiations 
 
 REMOVED:
 

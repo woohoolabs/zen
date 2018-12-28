@@ -15,6 +15,16 @@ use function str_replace;
 
 abstract class AbstractCompilerConfig
 {
+    /**
+     * @var ContainerConfigInterface[]
+     */
+    private $containerConfigs;
+
+    /**
+     * @var EntryPointInterface[]
+     */
+    private $entryPoints;
+
     abstract public function getContainerNamespace(): string;
 
     abstract public function getContainerClassName(): string;
@@ -63,12 +73,16 @@ abstract class AbstractCompilerConfig
      */
     public function getEntryPointMap(): array
     {
+        if ($this->entryPoints !== null) {
+            return $this->entryPoints;
+        }
+
         $entryPoints = [
             $this->getContainerFqcn() => new ClassEntryPoint($this->getContainerFqcn()),
             ContainerInterface::class => new ClassEntryPoint(ContainerInterface::class),
         ];
 
-        foreach ($this->getContainerConfigs() as $containerConfig) {
+        foreach ($this->createContainerConfigs() as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
                     // TODO This condition is only for ensuring backwards compatibility. It should be removed in Zen 3.0.
@@ -79,7 +93,7 @@ abstract class AbstractCompilerConfig
             }
         }
 
-        return $entryPoints;
+        return $this->entryPoints = $entryPoints;
     }
 
     /**
@@ -89,10 +103,22 @@ abstract class AbstractCompilerConfig
     {
         $definitionHints = [];
 
-        foreach ($this->getContainerConfigs() as $containerConfig) {
+        foreach ($this->createContainerConfigs() as $containerConfig) {
             $definitionHints = array_merge($definitionHints, $containerConfig->createDefinitionHints());
         }
 
         return $definitionHints;
+    }
+
+    /**
+     * @return ContainerConfigInterface[]
+     */
+    private function createContainerConfigs(): array
+    {
+        if ($this->containerConfigs !== null) {
+            return $this->containerConfigs;
+        }
+
+        return $this->containerConfigs = $this->getContainerConfigs();
     }
 }
