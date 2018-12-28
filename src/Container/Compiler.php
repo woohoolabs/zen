@@ -41,9 +41,10 @@ class Compiler
         $container .= "     */\n";
         $container .= "    protected static \$entryPoints = [\n";
         foreach ($entryPoints as $id) {
-            $methodName = $this->getHash($id);
+            $definition = $definitions[$id];
 
-            if (isset($definitions[$id]) && $definitions[$id]->isAutoloaded() && $definitions[$id]->isSingleton("") === false) {
+            $methodName = $this->getHash($id);
+            if ($definition->isAutoloaded() && ($definition->isSingleton("") === false || $definition->getReferenceCount() > 0)) {
                 $methodName = "_proxy__$methodName";
             }
 
