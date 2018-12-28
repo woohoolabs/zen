@@ -6,6 +6,7 @@ ADDED:
 
 CHANGED:
 
+- Various optimizations of the compiled container based on reference count of container definitions
 REMOVED:
 
 FIXED:

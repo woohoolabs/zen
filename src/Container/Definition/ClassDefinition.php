@@ -204,7 +204,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
         if (empty($this->properties)) {
-            if ($this->scope === "singleton") {
+            if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
                 $code .= "        return \$this->singletonEntries['{$this->id}'] = ";
             } else {
                 $code .= "        return ";
@@ -224,7 +224,7 @@ class ClassDefinition extends AbstractDefinition
                     $constructorArgument["class"],
                     $this->hash($constructorArgument["class"]),
                     $definition->getScope($this->id),
-                    $definition->isFileBased()
+                    $definition
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $constructorArguments[] = "            " . $this->serializeValue($constructorArgument["value"]);
@@ -250,7 +250,7 @@ class ClassDefinition extends AbstractDefinition
                         $property["class"],
                         $this->hash($property["class"]),
                         $definition->getScope($this->id),
-                        $definition->isFileBased()
+                        $definition
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "                '$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
@@ -261,7 +261,7 @@ class ClassDefinition extends AbstractDefinition
         }
 
         if (empty($this->properties) === false) {
-            if ($this->scope === "singleton") {
+            if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
                 $code .= "        return \$this->singletonEntries['{$this->id}'] = $entry;\n";
             } else {
                 $code .= "\n        return $entry;\n";

@@ -81,16 +81,21 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->referenceCount++;
     }
 
-    protected function getEntryToPhp(string $id, string $hash, string $scope, bool $isFileBased): string
+    protected function getEntryToPhp(string $id, string $hash, string $scope, DefinitionInterface $definition): string
     {
-        if ($isFileBased) {
-            if ($scope === "singleton") {
+        $referenceCount = $definition->getReferenceCount();
+        $isEntryPoint = $definition->isEntryPoint();
+
+        if ($definition->isFileBased()) {
+            if ($scope === "singleton" && ($referenceCount > 1 || $isEntryPoint)) {
+                return "\$this->singletonEntries['$id'] ?? require __DIR__ . '/$hash.php'";
             }
 
             return "require __DIR__ . '/$hash.php'";
         }
 
-        if ($scope === "singleton") {
+        if ($scope === "singleton" && ($referenceCount > 1 || $isEntryPoint)) {
+            return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 
         return "\$this->$hash()";

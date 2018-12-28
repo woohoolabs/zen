@@ -68,7 +68,7 @@ class ReferenceDefinition extends AbstractDefinition
     public function toPhpCode(array $definitions): string
     {
         $code = "        return ";
-        if ($this->scope === "singleton") {
+        if ($this->scope === "singleton" && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
             $code .= "\$this->singletonEntries['{$this->referrerId}'] = ";
         }
 
@@ -78,7 +78,7 @@ class ReferenceDefinition extends AbstractDefinition
             $definition->getId($this->referrerId),
             $definition->getHash($this->referrerId),
             $definition->getScope($this->referrerId),
-            $definition->isFileBased()
+            $definition
         ) . ";\n";
 
         return $code;
