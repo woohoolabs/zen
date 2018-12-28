@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
 
+use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
@@ -75,12 +76,15 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
+     * @param EntryPointInterface[] $entryPoints
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      * @internal
      */
-    public function toDefinitions(array $definitionHints, string $id, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased): array
+    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {
+        $isEntryPoint = isset($entryPoints[$id]);
+
         if ($this->className === $id) {
             return [
                 $id => new ClassDefinition(
@@ -102,14 +106,14 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         if (isset($definitionHints[$this->className])) {
             $result = array_merge(
                 $result,
-                $definitionHints[$this->className]->toDefinitions($definitionHints, $this->className, $isEntryPoint, $isAutoloaded, $isFileBased)
+                $definitionHints[$this->className]->toDefinitions($entryPoints, $definitionHints, $this->className, false, $isFileBased)
             );
         } else {
             $result[$this->className] = new ClassDefinition(
                 $this->className,
                 $this->getScope(),
-                $isEntryPoint,
-                $isAutoloaded,
+                isset($entryPoints[$this->className]),
+                false,
                 $isFileBased,
                 $this->parameters,
                 $this->properties

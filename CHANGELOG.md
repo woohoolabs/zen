@@ -15,7 +15,7 @@ REMOVED:
 
 FIXED:
 
-- Fix definition binding
+- Definition binding
 
 ## 2.5.1 - 2018-12-21
 
