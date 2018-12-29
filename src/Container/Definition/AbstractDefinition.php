@@ -147,10 +147,11 @@ abstract class AbstractDefinition implements DefinitionInterface
 
         $rootDirectory = $autoloadConfig->getRootDirectory();
         $alwaysAutoloadedClasses = array_flip($autoloadConfig->getAlwaysAutoloadedClasses());
+        $neverAutoloadedClasses = array_flip($autoloadConfig->getExcludedClasses());
 
         $code = "";
         foreach ($relatedClasses as $relatedClass) {
-            if (isset($alwaysAutoloadedClasses[$relatedClass])) {
+            if (isset($alwaysAutoloadedClasses[$relatedClass]) || isset($neverAutoloadedClasses[$relatedClass])) {
                 continue;
             }
 
