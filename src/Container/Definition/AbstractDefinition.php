@@ -117,14 +117,14 @@ abstract class AbstractDefinition implements DefinitionInterface
             }
             $path .= "$hash.php'";
 
-            if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {
+            if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
                 return "\$this->singletonEntries['$id'] ?? require $path";
             }
 
             return "require $path";
         }
 
-        if ($isSingleton && ($referenceCount > 1 || $isEntryPoint)) {
+        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
             return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 

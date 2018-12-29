@@ -32,6 +32,7 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getDefinitionHints(): array
     {
         return [
+            AnimalController::class => DefinitionHint::prototype(AnimalController::class),
             AnimalServiceInterface::class => AnimalService2::class,
             PlantServiceInterface::class => DefinitionHint::singleton(PlantService::class)
                 ->setParameter("plantType", "sunflower")
