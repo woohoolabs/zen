@@ -145,9 +145,16 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->collectRelatedClasses($definitions, $id, $relatedClasses);
         $relatedClasses = array_reverse($relatedClasses);
 
+        $rootDirectory = $autoloadConfig->getRootDirectory();
+        $alwaysAutoloadedClasses = array_flip($autoloadConfig->getAlwaysAutoloadedClasses());
+
         $code = "";
         foreach ($relatedClasses as $relatedClass) {
-            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $relatedClass);
+            if (isset($alwaysAutoloadedClasses[$relatedClass])) {
+                continue;
+            }
+
+            $filename = FileSystemUtil::getRelativeFilename($rootDirectory, $relatedClass);
             if ($filename === "") {
                 continue;
             }
