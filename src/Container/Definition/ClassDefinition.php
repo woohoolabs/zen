@@ -28,11 +28,6 @@ class ClassDefinition extends AbstractDefinition
     private $needsDependencyResolution;
 
     /**
-     * @var bool
-     */
-    private $autoloaded;
-
-    /**
      * @var array
      */
     private $overriddenConstructorParameters;
@@ -84,16 +79,15 @@ class ClassDefinition extends AbstractDefinition
         string $className,
         string $scope = "singleton",
         bool $isEntryPoint = false,
-        bool $autoloaded = false,
-        bool $fileBased = false,
+        bool $isAutoloaded = false,
+        bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = []
     ) {
-        parent::__construct($className, $scope, $isEntryPoint, $fileBased);
+        parent::__construct($className, $scope, $isEntryPoint, $isAutoloaded, $isFileBased);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
-        $this->autoloaded = $autoloaded;
         $this->overriddenConstructorParameters = $overriddenConstructorParameters;
         $this->overriddenProperties = $overriddenProperties;
     }
@@ -136,11 +130,6 @@ class ClassDefinition extends AbstractDefinition
         $this->properties[$name] = ["value" => $this->overriddenProperties[$name] ?? null];
 
         return $this;
-    }
-
-    public function isAutoloaded(): bool
-    {
-        return $this->autoloaded;
     }
 
     public function needsDependencyResolution(): bool
@@ -203,7 +192,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0) {
+        if ($this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0) {
             $code .= $this->includeDependencies($compilation->getAutoloadConfig(), $compilation->getDefinitions(), $this->id) . "\n";
         }
 

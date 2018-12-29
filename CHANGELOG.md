@@ -16,6 +16,7 @@ REMOVED:
 FIXED:
 
 - Definition binding
+- Autoloading of reference definitions
 
 ## 2.5.1 - 2018-12-21
 

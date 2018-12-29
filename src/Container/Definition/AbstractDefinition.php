@@ -34,6 +34,11 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @var bool
      */
+    private $autoloaded;
+
+    /**
+     * @var bool
+     */
     private $fileBased;
 
     /**
@@ -41,13 +46,14 @@ abstract class AbstractDefinition implements DefinitionInterface
      */
     private $referenceCount = 0;
 
-    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $fileBased)
+    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased)
     {
         $this->id = $id;
         $this->hash = $this->hash($id);
         $this->scope = $scope;
         $this->entryPoint = $isEntryPoint;
-        $this->fileBased = $fileBased;
+        $this->autoloaded = $isAutoloaded;
+        $this->fileBased = $isFileBased;
     }
 
     public function getId(string $parentId): string
@@ -68,6 +74,11 @@ abstract class AbstractDefinition implements DefinitionInterface
     public function isEntryPoint(): bool
     {
         return $this->entryPoint;
+    }
+
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
     }
 
     public function isFileBased(): bool

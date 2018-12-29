@@ -10,6 +10,7 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\WildcardHint;
 use WoohooLabs\Zen\Examples\Controller\AnimalController;
 use WoohooLabs\Zen\Examples\Service\AnimalService;
+use WoohooLabs\Zen\Examples\Service\AnimalService2;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Zen\Examples\Service\PlantService;
 use WoohooLabs\Zen\Examples\Service\PlantServiceInterface;
@@ -19,6 +20,9 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getEntryPoints(): array
     {
         return [
+            ClassEntryPoint::create(AnimalServiceInterface::class)
+                ->autoload()
+                ->fileBased(),
             ClassEntryPoint::create(AnimalController::class)
                 ->autoload()
                 ->fileBased(),
@@ -30,6 +34,7 @@ class ContainerConfig extends AbstractContainerConfig
     {
         return [
             AnimalServiceInterface::class => AnimalService::class,
+            AnimalService::class => AnimalService2::class,
             PlantServiceInterface::class => DefinitionHint::singleton(PlantService::class)
                 ->setParameter("plantType", "sunflower")
                 ->setProperty("plantType", "sunflower")

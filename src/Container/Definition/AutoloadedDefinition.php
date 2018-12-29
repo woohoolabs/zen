@@ -10,17 +10,12 @@ final class AutoloadedDefinition extends AbstractDefinition
     public function __construct(string $id, bool $isEntryPoint = false, bool $isFileBased = false)
     {
         $this->id = $id;
-        parent::__construct($id, "", $isEntryPoint, $isFileBased);
+        parent::__construct($id, "", $isEntryPoint, true, $isFileBased);
     }
 
     public function isSingleton(string $parentId): bool
     {
         return false;
-    }
-
-    public function isAutoloaded(): bool
-    {
-        return true;
     }
 
     public function needsDependencyResolution(): bool

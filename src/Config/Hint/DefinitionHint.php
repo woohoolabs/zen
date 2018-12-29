@@ -100,14 +100,16 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->getScope(), $isEntryPoint, $isFileBased),
+            $id => new ReferenceDefinition($id, $this->className, $this->getScope(), $isEntryPoint, $isAutoloaded, $isFileBased),
         ];
 
         if (isset($definitionHints[$this->className])) {
-            $result = array_merge(
-                $result,
-                $definitionHints[$this->className]->toDefinitions($entryPoints, $definitionHints, $this->className, false, $isFileBased)
-            );
+            $definitions = $definitionHints[$this->className]->toDefinitions($entryPoints, $definitionHints, $this->className, false, $isFileBased);
+            foreach ($definitions as $definition) {
+                $definition->increaseReferenceCount();
+            }
+
+            $result = array_merge($result, $definitions);
         } else {
             $result[$this->className] = new ClassDefinition(
                 $this->className,
