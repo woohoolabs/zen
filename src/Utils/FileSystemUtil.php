@@ -27,15 +27,24 @@ class FileSystemUtil
 {
     public static function getRelativeFilename(string $rootDirectory, string $className): string
     {
+        static $pathCache = [];
+        $key = $rootDirectory . "/" . $className;
+
+        if (isset($pathCache[$key])) {
+            return $pathCache[$key];
+        }
+
         // Get absolute filename
         try {
             $reflectionClass = new ReflectionClass($className);
             $filename = $reflectionClass->getFileName();
         } catch (Throwable $e) {
+            $pathCache[$key] = "";
             return "";
         }
 
         if ($filename === false) {
+            $pathCache[$key] = "";
             return "";
         }
 
@@ -43,6 +52,8 @@ class FileSystemUtil
         if (strpos($filename, $rootDirectory) === 0) {
             $filename = substr($filename, strlen($rootDirectory));
         }
+
+        $pathCache[$key] = $filename;
 
         return $filename;
     }
