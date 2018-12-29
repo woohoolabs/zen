@@ -3,6 +3,7 @@
 ADDED:
 
 - Support for file-based container definitions
+- Support for marking an Entry Point as not autoloaded via `ClassEntryPoint::notAutoloaded`
 
 CHANGED:
 

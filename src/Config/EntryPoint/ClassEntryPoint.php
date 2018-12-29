@@ -39,9 +39,23 @@ class ClassEntryPoint implements EntryPointInterface
         return $this;
     }
 
+    public function notAutoloaded(): ClassEntryPoint
+    {
+        $this->autoloaded = false;
+
+        return $this;
+    }
+
     public function fileBased(): ClassEntryPoint
     {
         $this->fileBased = true;
+
+        return $this;
+    }
+
+    public function notFileBased(): ClassEntryPoint
+    {
+        $this->fileBased = false;
 
         return $this;
     }
