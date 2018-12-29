@@ -39,7 +39,7 @@ final class AutoloadedDefinition extends AbstractDefinition
         $id = $definition->getId("");
         $hash = $definition->getHash("");
 
-        $code = $this->includeDependencies($definitionCompilation->getAutoloadConfig(), $definitionCompilation->getDefinitions(), $this->id);
+        $code = $this->includeRelatedClasses($definitionCompilation->getAutoloadConfig(), $definitionCompilation->getDefinitions(), $this->id);
 
         $code .= "\n";
         $code .= "        self::\$entryPoints[\\$id::class] = '$hash';\n\n";

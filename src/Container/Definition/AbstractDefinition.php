@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use ReflectionClass;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
@@ -138,25 +139,19 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @param DefinitionInterface[] $definitions
      */
-    protected function includeDependencies(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id): string
+    protected function includeRelatedClasses(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id): string
     {
-        $dependencies = [];
-        $this->collectDependencies($definitions, $id, $dependencies);
-        $dependencies = array_reverse($dependencies);
+        $relatedClasses = [];
+        $this->collectRelatedClasses($definitions, $id, $relatedClasses);
+        $relatedClasses = array_reverse($relatedClasses);
 
         $code = "";
-        foreach ($dependencies as $dependency) {
-            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $dependency);
+        foreach ($relatedClasses as $relatedClass) {
+            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $relatedClass);
             if ($filename === "") {
                 continue;
             }
 
-            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
-        }
-
-        $definition = $definitions[$id];
-        $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $definition->getId(""));
-        if ($filename !== "") {
             $code .= "        include_once \$this->rootDirectory . '$filename';\n";
         }
 
@@ -166,17 +161,43 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @param DefinitionInterface[] $definitions
      */
-    private function collectDependencies(array $definitions, string $id, array &$dependencies): void
+    private function collectRelatedClasses(array $definitions, string $id, array &$relatedClasses): void
     {
         $definition = $definitions[$id];
 
-        foreach ($definition->getClassDependencies() as $dependency) {
-            if (isset($dependencies[$dependency])) {
-                continue;
+        $relatedClasses[$id] = $id;
+        $this->collectParentClasses($id, $relatedClasses);
+
+        foreach ($definition->getClassDependencies() as $relatedClass) {
+            $relatedClasses[$relatedClass] = $relatedClass;
+            $this->collectRelatedClasses($definitions, $relatedClass, $relatedClasses);
+            $this->collectParentClasses($relatedClass, $relatedClasses);
+        }
+    }
+
+    private function collectParentClasses(string $id, array &$relatedClasses): void
+    {
+        $class = new ReflectionClass($id);
+
+        while ($parent = $class->getParentClass()) {
+            $name = $parent->getName();
+
+            $relatedClasses[$name] = $name;
+            foreach ($class->getInterfaceNames() as $interface) {
+                if (isset($relatedClasses[$interface])) {
+                    unset($relatedClasses[$interface]);
+                }
+                $relatedClasses[$interface] = $interface;
             }
 
-            $dependencies[$dependency] = $dependency;
-            $this->collectDependencies($definitions, $dependency, $dependencies);
+            $class = $parent;
+        }
+
+        foreach ($class->getInterfaceNames() as $interface) {
+            if (isset($relatedClasses[$interface])) {
+                unset($relatedClasses[$interface]);
+            }
+            $relatedClasses[$interface] = $interface;
         }
     }
 }

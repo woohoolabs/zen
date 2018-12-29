@@ -9,7 +9,6 @@ use WoohooLabs\Zen\Config\EntryPoint\WildcardEntryPoint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\WildcardHint;
 use WoohooLabs\Zen\Examples\Controller\AnimalController;
-use WoohooLabs\Zen\Examples\Service\AnimalService;
 use WoohooLabs\Zen\Examples\Service\AnimalService2;
 use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 use WoohooLabs\Zen\Examples\Service\PlantService;
@@ -33,8 +32,7 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getDefinitionHints(): array
     {
         return [
-            AnimalServiceInterface::class => AnimalService::class,
-            AnimalService::class => AnimalService2::class,
+            AnimalServiceInterface::class => AnimalService2::class,
             PlantServiceInterface::class => DefinitionHint::singleton(PlantService::class)
                 ->setParameter("plantType", "sunflower")
                 ->setProperty("plantType", "sunflower")
