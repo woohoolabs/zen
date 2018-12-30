@@ -68,34 +68,26 @@ class Compiler
         }
         $container .= "    }\n";
 
-        // Custom autoloading of container definitions
+        // Entry Points
         foreach ($entryPoints as $id) {
-            if (isset($definitions[$id]) === false) {
-                continue;
-            }
-
             $definition = $definitions[$id];
-            if ($definition->isAutoloaded() === false || ($definition->isSingleton("") && $definition->getReferenceCount() === 0)) {
-                continue;
+
+            if ($definition->isAutoloaded() && ($definition->isSingleton("") === false || $definition->getReferenceCount() >= 0)) {
+                $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
+
+                $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
+                if ($autoloadedDefinition->isFileBased()) {
+                    $filename = "_proxy__" . $this->getHash($id) . ".php";
+                    $definitionFiles[$filename] = "<?php\n\n";
+                    $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, 0);
+
+                    $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+                } else {
+                    $container .= $autoloadedDefinition->compile($definitionCompilation, 2);
+                }
+                $container .= "    }\n";
             }
 
-            $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
-
-            $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
-            if ($autoloadedDefinition->isFileBased()) {
-                $filename = "_proxy__" . $this->getHash($id) . ".php";
-                $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, 0);
-
-                $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
-            } else {
-                $container .= $autoloadedDefinition->compile($definitionCompilation, 2);
-            }
-            $container .= "    }\n";
-        }
-
-        // Container definitions
-        foreach ($definitions as $id => $definition) {
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";

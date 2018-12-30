@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
 use function array_flip;
 use function array_reverse;
@@ -107,9 +108,43 @@ abstract class AbstractDefinition implements DefinitionInterface
         string $hash,
         bool $isSingleton,
         DefinitionInterface $definition,
-        FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig,
-        bool $inline,
+        DefinitionCompilation $compilation,
         int $indentationLevelWhenInlined
+    ): string {
+        if ($definition->isEntryPoint() === false) {
+            return $this->getInlinedEntryToPhp($id, $isSingleton, $definition, $compilation, $indentationLevelWhenInlined);
+        }
+
+        return $this->getReferencedEntryToPhp($id, $hash, $isSingleton, $definition, $compilation->getFileBasedDefinitionConfig());
+    }
+
+    protected function getInlinedEntryToPhp(
+        string $id,
+        bool $isSingleton,
+        DefinitionInterface $definition,
+        DefinitionCompilation $compilation,
+        int $indentationLevelWhenInlined
+    ): string {
+        $referenceCount = $definition->getReferenceCount();
+        $isEntryPoint = $definition->isEntryPoint();
+
+        $code = "";
+
+        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+            $code .= "\$this->singletonEntries['$id'] ?? ";
+        }
+
+        $code .= $definition->compile($compilation, $indentationLevelWhenInlined, true);
+
+        return $code;
+    }
+
+    private function getReferencedEntryToPhp(
+        string $id,
+        string $hash,
+        bool $isSingleton,
+        DefinitionInterface $definition,
+        FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig
     ): string {
         $referenceCount = $definition->getReferenceCount();
         $isEntryPoint = $definition->isEntryPoint();
@@ -149,8 +184,12 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @param DefinitionInterface[] $definitions
      */
-    protected function includeRelatedClasses(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id, int $indentationLevel): string
-    {
+    protected function includeRelatedClasses(
+        AutoloadConfigInterface $autoloadConfig,
+        array $definitions,
+        string $id,
+        int $indentationLevel
+    ): string {
         $indent = $this->indent($indentationLevel);
 
         $relatedClasses = [];
