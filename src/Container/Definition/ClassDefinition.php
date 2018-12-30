@@ -222,8 +222,8 @@ class ClassDefinition extends AbstractDefinition
             $code .= ")";
         }
 
-        $constructorIndentationLevel = $indentationLevel + ($hasProperties ? 1 : 2);
-        $constructorIndent = $this->indent($indentationLevel);
+        $constructorIndentationLevel = $indentationLevel + ($hasProperties ? 1 : 0);
+        $constructorIndent = $this->indent($constructorIndentationLevel);
         $constructorArguments = [];
 
         foreach ($this->constructorArguments as $constructorArgument) {
@@ -235,9 +235,8 @@ class ClassDefinition extends AbstractDefinition
                     $this->hash($constructorArgument["class"]),
                     $definition->isSingleton($this->id),
                     $definition,
-                    $compilation->getFileBasedDefinitionConfig(),
-                    $inline,
-                    $constructorIndentationLevel + 2
+                    $compilation,
+                    $constructorIndentationLevel + 1
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $constructorArguments[] = "${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]);
@@ -261,9 +260,8 @@ class ClassDefinition extends AbstractDefinition
                         $this->hash($property["class"]),
                         $definition->isSingleton($this->id),
                         $definition,
-                        $compilation->getFileBasedDefinitionConfig(),
-                        $inline,
-                        $indentationLevel + 3
+                        $compilation,
+                        $indentationLevel + 2
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";

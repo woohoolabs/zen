@@ -95,9 +95,8 @@ class ReferenceDefinition extends AbstractDefinition
             $definition->getHash($this->id),
             $definition->isSingleton($this->id),
             $definition,
-            $compilation->getFileBasedDefinitionConfig(),
-            $inline,
-            $indentationLevel + 1
+            $compilation,
+            $indentationLevel
         );
 
         if ($inline === false) {
