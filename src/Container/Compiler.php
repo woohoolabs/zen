@@ -72,7 +72,7 @@ class Compiler
         foreach ($entryPoints as $id) {
             $definition = $definitions[$id];
 
-            if ($definition->isAutoloaded() && ($definition->isSingleton("") === false || $definition->getReferenceCount() >= 0)) {
+            if ($definition->isAutoloaded() && ($definition->isSingleton("") === false || $definition->getReferenceCount() > 0)) {
                 $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
 
                 $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
