@@ -33,7 +33,7 @@ class CompilerConfig extends AbstractCompilerConfig
 
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
-        return AutoloadConfig::enabledGlobally(__DIR__);
+        return AutoloadConfig::enabledGlobally(realpath(__DIR__  . "/.."));
     }
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
