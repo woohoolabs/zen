@@ -79,8 +79,8 @@ abstract class AbstractCompilerConfig
         }
 
         $entryPoints = [
-            $this->getContainerFqcn() => new ClassEntryPoint($this->getContainerFqcn()),
             ContainerInterface::class => new ClassEntryPoint(ContainerInterface::class),
+            $this->getContainerFqcn() => new ClassEntryPoint($this->getContainerFqcn()),
         ];
 
         foreach ($this->createContainerConfigs() as $containerConfig) {

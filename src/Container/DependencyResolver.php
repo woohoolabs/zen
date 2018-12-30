@@ -287,12 +287,12 @@ class DependencyResolver
     private function resetDefinitions(): void
     {
         $this->definitions = [
-            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
             ContainerInterface::class => ReferenceDefinition::singleton(
                 ContainerInterface::class,
                 $this->compilerConfig->getContainerFqcn(),
                 true
             ),
+            $this->compilerConfig->getContainerFqcn() => new SelfDefinition($this->compilerConfig->getContainerFqcn()),
         ];
     }
 }
