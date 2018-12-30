@@ -85,11 +85,11 @@ class Compiler
             if ($autoloadedDefinition->isFileBased()) {
                 $filename = "_proxy__" . $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation);
+                $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, 0);
 
                 $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
             } else {
-                $container .= $autoloadedDefinition->compile($definitionCompilation);
+                $container .= $autoloadedDefinition->compile($definitionCompilation, 2);
             }
             $container .= "    }\n";
         }
@@ -99,7 +99,7 @@ class Compiler
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $definition->compile($definitionCompilation);
+                $definitionFiles[$filename] .= $definition->compile($definitionCompilation, 0);
 
                 if ($definition->isEntryPoint()) {
                     $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
@@ -108,7 +108,7 @@ class Compiler
                 }
             } else {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definition->compile($definitionCompilation);
+                $container .= $definition->compile($definitionCompilation, 2);
                 $container .= "    }\n";
             }
         }

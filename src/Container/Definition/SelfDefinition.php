@@ -27,8 +27,14 @@ class SelfDefinition extends AbstractDefinition
         return [];
     }
 
-    public function compile(DefinitionCompilation $compilation): string
+    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
     {
-        return "        return \$this;\n";
+        $indent = $this->indent($indentationLevel);
+
+        if ($inline) {
+            return "\$this";
+        }
+
+        return "${indent}return \$this;\n";
     }
 }

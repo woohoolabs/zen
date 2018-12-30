@@ -8,7 +8,9 @@ use ReflectionException;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+use function array_flip;
 use function array_reverse;
+use function str_repeat;
 use function str_replace;
 
 abstract class AbstractDefinition implements DefinitionInterface
@@ -105,7 +107,9 @@ abstract class AbstractDefinition implements DefinitionInterface
         string $hash,
         bool $isSingleton,
         DefinitionInterface $definition,
-        FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig
+        FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig,
+        bool $inline,
+        int $indentationLevelWhenInlined
     ): string {
         $referenceCount = $definition->getReferenceCount();
         $isEntryPoint = $definition->isEntryPoint();
@@ -137,11 +141,18 @@ abstract class AbstractDefinition implements DefinitionInterface
         return str_replace("\\", "__", $id);
     }
 
+    protected function indent(int $indentationLevel): string
+    {
+        return str_repeat(" ", $indentationLevel * 4);
+    }
+
     /**
      * @param DefinitionInterface[] $definitions
      */
-    protected function includeRelatedClasses(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id): string
+    protected function includeRelatedClasses(AutoloadConfigInterface $autoloadConfig, array $definitions, string $id, int $indentationLevel): string
     {
+        $indent = $this->indent($indentationLevel);
+
         $relatedClasses = [];
         $this->collectRelatedClasses($definitions, $id, $relatedClasses);
         $relatedClasses = array_reverse($relatedClasses);
@@ -161,7 +172,7 @@ abstract class AbstractDefinition implements DefinitionInterface
                 continue;
             }
 
-            $code .= "        include_once \$this->rootDirectory . '$filename';\n";
+            $code .= "${indent}include_once \$this->rootDirectory . '$filename';\n";
         }
 
         return $code;

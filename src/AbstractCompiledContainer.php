@@ -19,11 +19,19 @@ abstract class AbstractCompiledContainer implements ContainerInterface
      */
     protected static $entryPoints = [];
 
+    /**
+     * @param string $id
+     */
     public function has($id): bool
     {
         return isset(static::$entryPoints[$id]);
     }
 
+    /**
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundException
+     */
     public function get($id)
     {
         return $this->singletonEntries[$id] ?? $this->{static::$entryPoints[$id] ?? "throwNotFoundException"}($id);
@@ -34,7 +42,11 @@ abstract class AbstractCompiledContainer implements ContainerInterface
         throw new NotFoundException($id);
     }
 
-    protected function setProperties($object, array $properties): void
+    /**
+     * @param object $object
+     * @return object
+     */
+    protected function setClassProperties($object, array $properties)
     {
         Closure::bind(
             function () use ($object, $properties) {
@@ -45,5 +57,7 @@ abstract class AbstractCompiledContainer implements ContainerInterface
             null,
             $object
         )->__invoke();
+
+        return $object;
     }
 }

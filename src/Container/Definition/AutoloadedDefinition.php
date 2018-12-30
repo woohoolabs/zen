@@ -33,21 +33,28 @@ final class AutoloadedDefinition extends AbstractDefinition
         return [];
     }
 
-    public function compile(DefinitionCompilation $definitionCompilation): string
+    public function compile(DefinitionCompilation $definitionCompilation, int $indentationLevel, bool $inline = false): string
     {
+        $indent = $this->indent($indentationLevel);
+
         $definition = $definitionCompilation->getDefinition($this->id);
         $id = $definition->getId("");
         $hash = $definition->getHash("");
 
-        $code = $this->includeRelatedClasses($definitionCompilation->getAutoloadConfig(), $definitionCompilation->getDefinitions(), $this->id);
+        $code = $this->includeRelatedClasses(
+            $definitionCompilation->getAutoloadConfig(),
+            $definitionCompilation->getDefinitions(),
+            $this->id,
+            $indentationLevel
+        );
 
         $code .= "\n";
-        $code .= "        self::\$entryPoints[\\$id::class] = '$hash';\n\n";
+        $code .= "${indent}self::\$entryPoints[\\$id::class] = '$hash';\n\n";
 
         if ($this->isFileBased()) {
-            $code .= "        return require __DIR__ . '/$hash.php';\n";
+            $code .= "${indent}return require __DIR__ . '/$hash.php';\n";
         } else {
-            $code .= "        return \$this->$hash();\n";
+            $code .= "${indent}return \$this->$hash();\n";
         }
 
         return $code;

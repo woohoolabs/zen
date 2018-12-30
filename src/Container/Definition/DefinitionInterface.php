@@ -32,5 +32,5 @@ interface DefinitionInterface
      */
     public function getClassDependencies(): array;
 
-    public function compile(DefinitionCompilation $compilation): string;
+    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string;
 }

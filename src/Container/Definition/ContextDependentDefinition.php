@@ -90,7 +90,7 @@ class ContextDependentDefinition implements DefinitionInterface
         ];
     }
 
-    public function compile(DefinitionCompilation $compilation): string
+    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
     {
         if ($this->defaultDefinition === null) {
             return <<<EOF
@@ -101,7 +101,7 @@ class ContextDependentDefinition implements DefinitionInterface
 EOF;
         }
 
-        return $this->defaultDefinition->compile($compilation);
+        return $this->defaultDefinition->compile($compilation, $indentationLevel, $inline);
     }
 
     private function getDefinition(string $parentId): DefinitionInterface

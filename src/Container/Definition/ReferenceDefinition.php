@@ -64,15 +64,26 @@ class ReferenceDefinition extends AbstractDefinition
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function compile(DefinitionCompilation $compilation): string
+    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
     {
+        $indent = $this->indent($indentationLevel);
+
         $code = "";
 
-        if ($this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0) {
-            $code .= $this->includeRelatedClasses($compilation->getAutoloadConfig(), $compilation->getDefinitions(), $this->id) . "\n";
+        if ($this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0 && $inline === false) {
+            $code .= $this->includeRelatedClasses(
+                $compilation->getAutoloadConfig(),
+                $compilation->getDefinitions(),
+                $this->id,
+                $indentationLevel
+            );
+            $code .= "\n";
         }
 
-        $code .= "        return ";
+        if ($inline === false) {
+            $code .= "${indent}return ";
+        }
+
         if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
@@ -84,8 +95,14 @@ class ReferenceDefinition extends AbstractDefinition
             $definition->getHash($this->id),
             $definition->isSingleton($this->id),
             $definition,
-            $compilation->getFileBasedDefinitionConfig()
-        ) . ";\n";
+            $compilation->getFileBasedDefinitionConfig(),
+            $inline,
+            $indentationLevel + 1
+        );
+
+        if ($inline === false) {
+            $code .= ";\n";
+        }
 
         return $code;
     }
