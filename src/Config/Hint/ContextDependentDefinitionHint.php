@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
 
+use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
@@ -63,12 +64,15 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     }
 
     /**
+     * @param EntryPointInterface[] $entryPoints
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      * @internal
      */
-    public function toDefinitions(array $definitionHints, string $id, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased): array
+    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {
+        $isEntryPoint = isset($entryPoints[$id]);
+
         $defaultDefinition = null;
         if ($this->defaultDefinitionHint) {
             $defaultDefinition = new ClassDefinition(
@@ -102,7 +106,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         foreach ($this->definitionHints as $definitionHint) {
             $result = array_merge(
                 $result,
-                $definitionHint->toDefinitions($definitionHints, $definitionHint->getClassName(), $isAutoloaded, $isFileBased)
+                $definitionHint->toDefinitions($entryPoints, $definitionHints, $definitionHint->getClassName(), $isAutoloaded, $isFileBased)
             );
         }
 

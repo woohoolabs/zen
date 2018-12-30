@@ -104,7 +104,14 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         ];
 
         if (isset($definitionHints[$this->className])) {
-            $definitions = $definitionHints[$this->className]->toDefinitions($entryPoints, $definitionHints, $this->className, false, $isFileBased);
+            $definitions = $definitionHints[$this->className]->toDefinitions(
+                $entryPoints,
+                $definitionHints,
+                $this->className,
+                false,
+                $isFileBased
+            );
+
             foreach ($definitions as $definition) {
                 $definition->increaseReferenceCount();
             }

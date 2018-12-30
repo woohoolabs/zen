@@ -14,7 +14,6 @@ class Compiler
 {
     /**
      * @param DefinitionInterface[] $definitions
-     * @return string[]
      */
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions): array
     {
