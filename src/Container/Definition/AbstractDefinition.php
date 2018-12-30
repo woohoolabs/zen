@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use ReflectionClass;
+use ReflectionException;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
@@ -185,7 +186,11 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     private function collectParentClasses(string $id, array &$relatedClasses): void
     {
-        $class = new ReflectionClass($id);
+        try {
+            $class = new ReflectionClass($id);
+        } catch (ReflectionException $exception) {
+            return;
+        }
 
         while ($parent = $class->getParentClass()) {
             $name = $parent->getName();
