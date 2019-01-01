@@ -48,11 +48,27 @@ class WildcardEntryPoint implements EntryPointInterface
         return $this;
     }
 
+    /**
+     * @internal
+     */
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
+    }
+
     public function fileBased(): WildcardEntryPoint
     {
         $this->fileBased = true;
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    public function isFileBased(): bool
+    {
+        return $this->fileBased;
     }
 
     /**
@@ -62,21 +78,5 @@ class WildcardEntryPoint implements EntryPointInterface
     public function getClassNames(): array
     {
         return FileSystemUtil::getClassesInPath($this->directoryName, $this->onlyConcreteClasses);
-    }
-
-    /**
-     * @internal
-     */
-    public function isAutoloaded(): bool
-    {
-        return $this->autoloaded;
-    }
-
-    /**
-     * @internal
-     */
-    public function isFileBased(): bool
-    {
-        return $this->fileBased;
     }
 }

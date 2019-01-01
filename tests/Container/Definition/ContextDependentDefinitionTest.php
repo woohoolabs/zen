@@ -109,6 +109,18 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function isFileBased()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $isFileBased = $definition->isFileBased();
+
+        $this->assertFalse($isFileBased);
+    }
+
+    /**
+     * @test
+     */
     public function needsDependencyResolution()
     {
         $definition = new ContextDependentDefinition("", null, []);

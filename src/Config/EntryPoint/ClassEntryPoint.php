@@ -46,6 +46,14 @@ class ClassEntryPoint implements EntryPointInterface
         return $this;
     }
 
+    /**
+     * @internal
+     */
+    public function isAutoloaded(): bool
+    {
+        return $this->autoloaded;
+    }
+
     public function fileBased(): ClassEntryPoint
     {
         $this->fileBased = true;
@@ -53,11 +61,12 @@ class ClassEntryPoint implements EntryPointInterface
         return $this;
     }
 
-    public function notFileBased(): ClassEntryPoint
+    /**
+     * @internal
+     */
+    public function isFileBased(): bool
     {
-        $this->fileBased = false;
-
-        return $this;
+        return $this->fileBased;
     }
 
     /**
@@ -69,21 +78,5 @@ class ClassEntryPoint implements EntryPointInterface
         return [
             $this->className,
         ];
-    }
-
-    /**
-     * @internal
-     */
-    public function isAutoloaded(): bool
-    {
-        return $this->autoloaded;
-    }
-
-    /**
-     * @internal
-     */
-    public function isFileBased(): bool
-    {
-        return $this->fileBased;
     }
 }
