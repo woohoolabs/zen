@@ -7,9 +7,10 @@ ADDED:
 
 CHANGED:
 
-- Various optimizations of the compiled container based on reference count of container definitions
+- Container definitions are inlined (referenced directly) in the compiled container when possible
 - Autoloaded definitions are inlined in the compiled container when possible
-- Interfaces and parent classes are also autoloaded when an entry point is autoloaded
+- Various other optimizations of the compiled container based on reference count of container definitions
+- Interfaces and parent classes are also autoloaded when an Entry Point is autoloaded
 - Optimize compilation time by minimizing class instantiations and caching
 - Build the foundations of a faster dynamic container by making it possible to resolve the dependencies of a single class
 
