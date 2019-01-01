@@ -9,6 +9,17 @@ use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 class TestDefinition extends AbstractDefinition
 {
+    public function __construct(
+        string $id,
+        string $scope,
+        bool $isEntryPoint = false,
+        bool $isAutoloaded = false,
+        bool $isFileBased = false,
+        int $referenceCount = 0
+    ) {
+        parent::__construct($id, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+    }
+
     public function needsDependencyResolution(): bool
     {
         return false;
@@ -19,17 +30,12 @@ class TestDefinition extends AbstractDefinition
         return $this;
     }
 
-    public function isAutoloaded(): bool
-    {
-        return false;
-    }
-
     public function getClassDependencies(): array
     {
         return [];
     }
 
-    public function compile(DefinitionCompilation $compilation): string
+    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
     {
         return "";
     }

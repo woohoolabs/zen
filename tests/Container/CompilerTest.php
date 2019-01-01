@@ -7,7 +7,8 @@ use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Compiler;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
-use WoohooLabs\Zen\Tests\Double\StubDefinition;
+use WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition;
+use WoohooLabs\Zen\Tests\Double\StubSingletonDefinition;
 use function dirname;
 use function file_get_contents;
 
@@ -20,9 +21,12 @@ class CompilerTest extends TestCase
     {
         $compiler = new Compiler();
 
-        $container = $compiler->compile(new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"), []);
+        $container = $compiler->compile(
+            new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"),
+            []
+        );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithoutNamespace.php"), $container);
+        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithoutNamespace.php"), $container["container"]);
     }
 
     /**
@@ -37,24 +41,24 @@ class CompilerTest extends TestCase
             []
         );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithNamespace.php"), $container);
+        $this->assertEquals($this->getCompiledContainerSourceCode("EmptyContainerWithNamespace.php"), $container["container"]);
     }
 
     /**
      * @test
      */
-    public function compileContainerWithEntry()
+    public function compileContainerWithoutEntryPointWithEntry()
     {
         $compiler = new Compiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "ContainerWithEntry"),
             [
-                StubDefinition::class => new StubDefinition(),
+                StubSingletonDefinition::class => new StubSingletonDefinition(),
             ]
         );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntry.php"), $container);
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntry.php"), $container["container"]);
     }
 
     /**
@@ -69,7 +73,7 @@ class CompilerTest extends TestCase
                 [
                     new StubContainerConfig(
                         [
-                            StubDefinition::class,
+                            StubSingletonDefinition::class,
                         ]
                     ),
                 ],
@@ -77,11 +81,11 @@ class CompilerTest extends TestCase
                 "ContainerWithEntryPoint"
             ),
             [
-                StubDefinition::class => new StubDefinition(),
+                StubSingletonDefinition::class => new StubSingletonDefinition(true),
             ]
         );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntryPoint.php"), $container);
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntryPoint.php"), $container["container"]);
     }
 
     /**
@@ -101,18 +105,20 @@ class CompilerTest extends TestCase
                 true,
                 true,
                 true,
-                [StubDefinition::class]
+                [
+                    StubSingletonDefinition::class,
+                ]
             ),
             []
         );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithAlwaysAutoloadedClasses.php"), $container);
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithAlwaysAutoloadedClasses.php"), $container["container"]);
     }
 
     /**
      * @test
      */
-    public function compileContainerWithAutoloadedEntryPoint()
+    public function compileContainerWithUnoptimizedAutoloadedPrototypeEntryPoint()
     {
         $compiler = new Compiler();
 
@@ -121,22 +127,169 @@ class CompilerTest extends TestCase
                 [
                     new StubContainerConfig(
                         [
-                            StubDefinition::class,
+                            StubPrototypeDefinition::class,
                         ]
                     ),
                 ],
                 "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
-                "ContainerWithAutoloadedEntryPoint",
+                "ContainerWithUnoptimizedAutoloadedPrototypeEntryPoint",
                 true,
                 true,
                 true
             ),
             [
-                StubDefinition::class => new StubDefinition(true, true),
+                StubPrototypeDefinition::class => new StubPrototypeDefinition(true, true),
             ]
         );
 
-        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithAutoloadedEntryPoint.php"), $container);
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithUnoptimizedAutoloadedPrototypeEntryPoint.php"),
+            $container["container"]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithUnoptimizedAutoloadedSingletonEntryPoint()
+    {
+        $compiler = new Compiler();
+
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(
+                        [
+                            StubSingletonDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithUnoptimizedAutoloadedSingletonEntryPoint",
+                true,
+                true,
+                true
+            ),
+            [
+                StubSingletonDefinition::class => new StubSingletonDefinition(true, true, false, 1),
+            ]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithUnoptimizedAutoloadedSingletonEntryPoint.php"),
+            $container["container"]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithOptimizedAutoloadedEntryPoint()
+    {
+        $compiler = new Compiler();
+
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(
+                        [
+                            StubSingletonDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithOptimizedAutoloadedEntryPoint",
+                true,
+                true,
+                true
+            ),
+            [
+                StubSingletonDefinition::class => new StubSingletonDefinition(true, true),
+            ]
+        );
+
+        $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithOptimizedAutoloadedEntryPoint.php"), $container["container"]);
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithFileBasedEntryPoint()
+    {
+        $compiler = new Compiler();
+
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(
+                        [
+                            StubSingletonDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithFileBasedEntryPoint",
+                true,
+                true,
+                true
+            ),
+            [
+                StubSingletonDefinition::class => new StubSingletonDefinition(true, false, true),
+            ]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPoint.php"),
+            $container["container"]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPoint-Definition.php"),
+            $container["definitions"]["WoohooLabs__Zen__Tests__Double__StubSingletonDefinition.php"]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithFileBasedAutoloadedEntryPoint()
+    {
+        $compiler = new Compiler();
+
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(
+                        [
+                            StubPrototypeDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithFileBasedAutoloadedEntryPoint",
+                true,
+                true,
+                true
+            ),
+            [
+                StubPrototypeDefinition::class => new StubPrototypeDefinition(true, true, true),
+            ]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedAutoloadedEntryPoint.php"),
+            $container["container"]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedAutoloadedEntryPoint-ProxyDefinition.php"),
+            $container["definitions"]["_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition.php"]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedAutoloadedEntryPoint-Definition.php"),
+            $container["definitions"]["WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition.php"]
+        );
     }
 
     private function getCompiledContainerSourceCode(string $fileName): string

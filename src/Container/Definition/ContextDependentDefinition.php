@@ -93,12 +93,9 @@ class ContextDependentDefinition implements DefinitionInterface
     public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
     {
         if ($this->defaultDefinition === null) {
-            return <<<EOF
-        throw new \WoohooLabs\Zen\Exception\ContainerException(
-            'Context-Dependent Definition with "{$this->referrerId}" ID doesn\'t have a default value, therefore it cannot be retrieved directly!'
-        );
-
-EOF;
+            throw new \WoohooLabs\Zen\Exception\ContainerException(
+                'Context-Dependent Definition with "{$this->referrerId}" ID doesn\'t have a default value, therefore it cannot be retrieved directly!'
+            );
         }
 
         return $this->defaultDefinition->compile($compilation, $indentationLevel, $inline);

@@ -19,7 +19,7 @@ class Compiler
     {
         $autoloadConfig = $compilerConfig->getAutoloadConfig();
         $fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
-        $fileBasedDefinitionDirectory = $fileBasedDefinitionConfig->getRelativeDirectory();
+        $fileBasedDefinitionDirectory = $fileBasedDefinitionConfig->getRelativeDefinitionDirectory();
         $definitionCompilation = new DefinitionCompilation($autoloadConfig, $fileBasedDefinitionConfig, $definitions);
 
         $definitionFiles = [];
@@ -33,13 +33,17 @@ class Compiler
         $container .= "{\n";
 
         // Entry points
-        $entryPoints = array_keys($compilerConfig->getEntryPointMap());
+        $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
 
         $container .= "    /**\n";
         $container .= "     * @var string[]\n";
         $container .= "     */\n";
         $container .= "    protected static \$entryPoints = [\n";
-        foreach ($entryPoints as $id) {
+        foreach ($entryPointIds as $id) {
+            if (isset($definitions[$id]) === false) {
+                continue;
+            }
+
             $definition = $definitions[$id];
 
             $methodName = $this->getHash($id);
@@ -68,7 +72,11 @@ class Compiler
         $container .= "    }\n";
 
         // Entry Points
-        foreach ($entryPoints as $id) {
+        foreach ($entryPointIds as $id) {
+            if (isset($definitions[$id]) === false) {
+                continue;
+            }
+
             $definition = $definitions[$id];
 
             if ($definition->isAutoloaded() && ($definition->isSingleton("") === false || $definition->getReferenceCount() > 0)) {

@@ -17,9 +17,10 @@ class ReferenceDefinition extends AbstractDefinition
         string $referencedId,
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
-        bool $isFileBased = false
+        bool $isFileBased = false,
+        int $referenceCount = 0
     ): ReferenceDefinition {
-        return new self($referrerId, $referencedId, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased);
+        return new self($referrerId, $referencedId, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
     }
 
     public static function prototype(
@@ -27,9 +28,10 @@ class ReferenceDefinition extends AbstractDefinition
         string $referencedId,
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
-        bool $isFileBased = false
+        bool $isFileBased = false,
+        int $referenceCount = 0
     ): ReferenceDefinition {
-        return new self($referrerId, $referencedId, "prototype", $isEntryPoint, $isAutoloaded, $isFileBased);
+        return new self($referrerId, $referencedId, "prototype", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
     }
 
     public function __construct(
@@ -38,9 +40,10 @@ class ReferenceDefinition extends AbstractDefinition
         string $scope = "singleton",
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
-        bool $isFileBased = false
+        bool $isFileBased = false,
+        int $referenceCount = 0
     ) {
-        parent::__construct($referrerId, $scope, $isEntryPoint, $isAutoloaded, $isFileBased);
+        parent::__construct($referrerId, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
         $this->referencedId = $referencedId;
     }
 
@@ -70,7 +73,7 @@ class ReferenceDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0 && $inline === false) {
+        if ($this->isAutoloadable($inline)) {
             $code .= $this->includeRelatedClasses(
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
@@ -84,13 +87,13 @@ class ReferenceDefinition extends AbstractDefinition
             $code .= "${indent}return ";
         }
 
-        if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
+        if ($this->isOptimizable() === false) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
 
         $definition = $compilation->getDefinition($this->referencedId);
 
-        $code .= $this->getEntryToPhp(
+        $code .= $this->compileEntryReference(
             $definition->getId($this->id),
             $definition->getHash($this->id),
             $definition->isSingleton($this->id),

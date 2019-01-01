@@ -15,40 +15,50 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     /**
      * @var string
      */
-    private $relativeDirectory;
+    private $relativeDefinitionDirectory;
 
     /**
      * @var array
      */
     private $excludedClasses;
 
-    public static function disabledGlobally(string $relativeDirectory = ""): FileBasedDefinitionConfig
+    public static function disabledGlobally(string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
     {
-        return new FileBasedDefinitionConfig(false, $relativeDirectory);
+        return new FileBasedDefinitionConfig(false, $relativeDefinitionDirectory);
     }
 
-    public static function enabledGlobally(string $relativeDirectory): FileBasedDefinitionConfig
+    public static function enabledGlobally(string $relativeDefinitionDirectory): FileBasedDefinitionConfig
     {
-        return new FileBasedDefinitionConfig(true, $relativeDirectory);
+        return new FileBasedDefinitionConfig(true, $relativeDefinitionDirectory);
     }
 
-    public static function create(bool $isGlobalAutoloadEnabled, string $relativeDirectory = ""): FileBasedDefinitionConfig
+    public static function create(bool $isGlobalAutoloadEnabled, string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
     {
-        return new FileBasedDefinitionConfig($isGlobalAutoloadEnabled, $relativeDirectory);
+        return new FileBasedDefinitionConfig($isGlobalAutoloadEnabled, $relativeDefinitionDirectory);
     }
 
-    public function __construct(bool $isGlobalAutoloadEnabled, string $relativeDirectory = "")
+    public function __construct(bool $isGlobalAutoloadEnabled, string $relativeDefinitionDirectory = "")
     {
         $this->isGlobalFileBasedDefinitionsEnabled = $isGlobalAutoloadEnabled;
         $this->excludedClasses = [];
-        $this->setRelativeDirectory($relativeDirectory);
+        $this->setRelativeDefinitionDirectory($relativeDefinitionDirectory);
     }
 
-    public function setRelativeDirectory(string $relativeDirectory): FileBasedDefinitionConfig
+    public function isGlobalFileBasedDefinitionEnabled(): bool
     {
-        $this->relativeDirectory = trim($relativeDirectory, "\\/");
+        return $this->isGlobalFileBasedDefinitionsEnabled;
+    }
+
+    public function setRelativeDefinitionDirectory(string $relativeDefinitionDirectory): FileBasedDefinitionConfig
+    {
+        $this->relativeDefinitionDirectory = trim($relativeDefinitionDirectory, "\\/");
 
         return $this;
+    }
+
+    public function getRelativeDefinitionDirectory(): string
+    {
+        return $this->relativeDefinitionDirectory;
     }
 
     /**
@@ -59,16 +69,6 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
         $this->excludedClasses = $excludedClasses;
 
         return $this;
-    }
-
-    public function isGlobalFileBasedDefinitionEnabled(): bool
-    {
-        return $this->isGlobalFileBasedDefinitionsEnabled;
-    }
-
-    public function getRelativeDirectory(): string
-    {
-        return $this->relativeDirectory;
     }
 
     public function getExcludedClasses(): array

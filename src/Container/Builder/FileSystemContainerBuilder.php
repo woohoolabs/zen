@@ -88,7 +88,7 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
     private function getDefinitionDirectory(): string
     {
         $basePath = dirname($this->containerPath);
-        $relativeDirectory = $this->compilerConfig->getFileBasedDefinitionConfig()->getRelativeDirectory();
+        $relativeDirectory = $this->compilerConfig->getFileBasedDefinitionConfig()->getRelativeDefinitionDirectory();
 
         if ($relativeDirectory === "") {
             throw new ContainerException("Relative directory of file-based definitions can not be empty!");

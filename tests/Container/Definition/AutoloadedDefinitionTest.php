@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedE;
 use function dirname;
@@ -19,13 +20,13 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getScope()
+    public function isSingleton()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "", true);
+        $definition = new AutoloadedDefinition("", true);
 
-        $scope = $definition->getScope("");
+        $singleton = $definition->isSingleton("");
 
-        $this->assertEquals("", $scope);
+        $this->assertFalse($singleton);
     }
 
     /**
@@ -33,7 +34,7 @@ class AutoloadedDefinitionTest extends TestCase
      */
     public function isAutoloaded()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
+        $definition = new AutoloadedDefinition("");
 
         $isAutoloaded = $definition->isAutoloaded();
 
@@ -45,7 +46,7 @@ class AutoloadedDefinitionTest extends TestCase
      */
     public function needsDependencyResolution()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
+        $definition = new AutoloadedDefinition("");
 
         $needsDependencyResolution = $definition->needsDependencyResolution();
 
@@ -57,7 +58,7 @@ class AutoloadedDefinitionTest extends TestCase
      */
     public function resolveDependencies()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
+        $definition = new AutoloadedDefinition("");
 
         $result = $definition->resolveDependencies();
 
@@ -69,7 +70,7 @@ class AutoloadedDefinitionTest extends TestCase
      */
     public function getClassDependencies()
     {
-        $definition = new AutoloadedDefinition(new AutoloadConfig(true), "");
+        $definition = new AutoloadedDefinition("");
 
         $classDependencies = $definition->getClassDependencies();
 
@@ -79,27 +80,76 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function toPhpCode()
+    public function compile()
     {
-        $definition = new AutoloadedDefinition(
-            new AutoloadConfig(true, dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Mixed/"),
-            MixedE::class
+        $definition = new AutoloadedDefinition(MixedE::class);
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                new AutoloadConfig(true, dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Mixed/"),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    MixedE::class => ClassDefinition::singleton(MixedE::class, true)
+                        ->addConstructorArgumentFromClass(MixedD::class),
+                    MixedD::class => new ClassDefinition(MixedD::class),
+                ]
+            ),
+            0,
+            false
         );
 
-        $phpCode = $definition->compile(
-            [
-                MixedE::class => ClassDefinition::singleton(MixedE::class, true)
-                    ->addConstructorArgumentFromClass(MixedD::class)
-                    ->addConstructorArgumentFromClass(stdClass::class),
-                MixedD::class => new ClassDefinition(MixedD::class),
-                stdClass::class => new ClassDefinition(stdClass::class),
-            ]
-        );
-
-        $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinition.php"), $phpCode);
+        $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinition.php"), $compiledDefinition);
     }
 
-    private function getDefinitionSourceCode(string $fileName)
+    /**
+     * @test
+     */
+    public function compileWhenIndented()
+    {
+        $definition = new AutoloadedDefinition(MixedE::class);
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                new AutoloadConfig(true, dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Mixed/"),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    MixedE::class => ClassDefinition::singleton(MixedE::class, true)
+                        ->addConstructorArgumentFromClass(MixedD::class),
+                    MixedD::class => new ClassDefinition(MixedD::class),
+                ]
+            ),
+            2,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinitionWhenIndented.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenFileBased()
+    {
+        $definition = new AutoloadedDefinition(MixedE::class, true, true);
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                new AutoloadConfig(true, dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Mixed/"),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions/"),
+                [
+                    MixedE::class => ClassDefinition::singleton(MixedE::class, true, true, true)
+                        ->addConstructorArgumentFromClass(MixedD::class),
+                    MixedD::class => ClassDefinition::singleton(MixedD::class),
+                ]
+            ),
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinitionWhenFileBased.php"), $compiledDefinition);
+    }
+
+    private function getDefinitionSourceCode(string $fileName): string
     {
         return str_replace("<?php\n", "", file_get_contents(dirname(__DIR__, 2) . "/Fixture/Definition/" . $fileName));
     }

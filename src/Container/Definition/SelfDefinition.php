@@ -9,7 +9,7 @@ class SelfDefinition extends AbstractDefinition
 {
     public function __construct(string $className)
     {
-        parent::__construct($className, "", true, false, false);
+        parent::__construct($className, "", true, false, false, 0);
     }
 
     public function needsDependencyResolution(): bool

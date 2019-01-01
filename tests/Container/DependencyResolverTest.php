@@ -43,27 +43,30 @@ class DependencyResolverTest extends TestCase
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
 
-        $dependencyResolver->resolveEntryPoints();
+        $definitions = $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
-                ConstructorA::class => ClassDefinition::singleton(ConstructorA::class)
+                ConstructorA::class => ClassDefinition::singleton(ConstructorA::class, true)
                     ->addConstructorArgumentFromClass(ConstructorB::class)
                     ->addConstructorArgumentFromClass(ConstructorC::class)
                     ->addConstructorArgumentFromValue(true)
                     ->addConstructorArgumentFromValue(null)
                     ->resolveDependencies(),
                 ConstructorB::class => ClassDefinition::singleton(ConstructorB::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addConstructorArgumentFromClass(ConstructorD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
                 ConstructorD::class => ClassDefinition::singleton(ConstructorD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
             ],
-            $dependencyResolver->getDefinitions()
+            $definitions
         );
     }
 
@@ -74,30 +77,36 @@ class DependencyResolverTest extends TestCase
     {
         $dependencyResolver = $this->createDependencyResolver(AnnotationA::class);
 
-        $dependencyResolver->resolveEntryPoints();
+        $definitions = $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
-                AnnotationA::class => ClassDefinition::singleton(AnnotationA::class)
+                AnnotationA::class => ClassDefinition::singleton(AnnotationA::class, true)
                     ->addPropertyFromClass("b", AnnotationB::class)
                     ->addPropertyFromClass("c", AnnotationC::class)
                     ->resolveDependencies(),
                 AnnotationB::class => ClassDefinition::singleton(AnnotationB::class)
                     ->addPropertyFromClass("e2", AnnotationE::class)
                     ->addPropertyFromClass("d", AnnotationD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
                 AnnotationC::class => ClassDefinition::singleton(AnnotationC::class)
                     ->addPropertyFromClass("e1", AnnotationE::class)
                     ->addPropertyFromClass("e2", AnnotationE::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
                 AnnotationE::class => ClassDefinition::singleton(AnnotationE::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount()
+                    ->increaseReferenceCount()
+                    ->increaseReferenceCount(),
                 AnnotationD::class => ClassDefinition::singleton(AnnotationD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
             ],
-            $dependencyResolver->getDefinitions()
+            $definitions
         );
     }
 
@@ -108,27 +117,32 @@ class DependencyResolverTest extends TestCase
     {
         $dependencyResolver = $this->createDependencyResolver(MixedA::class);
 
-        $dependencyResolver->resolveEntryPoints();
+        $definitions = $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
-                MixedA::class => ClassDefinition::singleton(MixedA::class)
+                MixedA::class => ClassDefinition::singleton(MixedA::class, true)
                     ->addConstructorArgumentFromClass(MixedB::class)
                     ->addConstructorArgumentFromClass(MixedC::class)
                     ->addPropertyFromClass("d", MixedD::class)
                     ->resolveDependencies(),
                 MixedB::class => ClassDefinition::singleton(MixedB::class)
                     ->addConstructorArgumentFromClass(MixedD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount()
+                    ->increaseReferenceCount(),
                 MixedD::class => ClassDefinition::singleton(MixedD::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount()
+                    ->increaseReferenceCount(),
                 MixedC::class => ClassDefinition::singleton(MixedC::class)
                     ->addPropertyFromClass("b", MixedB::class)
-                    ->resolveDependencies(),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
             ],
-            $dependencyResolver->getDefinitions()
+            $definitions
         );
     }
 
@@ -144,16 +158,16 @@ class DependencyResolverTest extends TestCase
             ]
         );
 
-        $dependencyResolver->resolveEntryPoints();
+        $definitions = $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
-                ConstructorD::class => ClassDefinition::prototype(ConstructorD::class)
+                ConstructorD::class => ClassDefinition::prototype(ConstructorD::class, true)
                     ->resolveDependencies(),
             ],
-            $dependencyResolver->getDefinitions()
+            $definitions
         );
     }
 
@@ -169,27 +183,29 @@ class DependencyResolverTest extends TestCase
             ]
         );
 
-        $dependencyResolver->resolveEntryPoints();
+        $definitions = $dependencyResolver->resolveEntryPoints();
 
         $this->assertEquals(
             [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                ContainerInterface::class => new ReferenceDefinition(ContainerInterface::class, ""),
-                ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
+                ConstructorC::class => ClassDefinition::singleton(ConstructorC::class, true)
                     ->addConstructorArgumentFromClass(ConstructorD::class)
                     ->resolveDependencies(),
                 ConstructorE::class => ClassDefinition::singleton(ConstructorE::class)
-                    ->resolveDependencies(),
-                ConstructorD::class => ReferenceDefinition::singleton(ConstructorD::class, ConstructorE::class),
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
+                ConstructorD::class => ReferenceDefinition::singleton(ConstructorD::class, ConstructorE::class)
+                    ->increaseReferenceCount(),
             ],
-            $dependencyResolver->getDefinitions()
+            $definitions
         );
     }
 
     /**
      * @test
      */
-    public function throwExceptionOnInexistentClass()
+    public function resolveEntryPointsWhenInexistentClass()
     {
         $dependencyResolver = $this->createDependencyResolver("InexistentClass");
 
@@ -201,7 +217,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForPropertyWithoutTypeHint()
+    public function resolveEntryPointsWhenPropertyWithoutTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionA::class);
 
@@ -213,7 +229,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForPropertyWithScalarTypeHint()
+    public function resolveEntryPointsWhenPropertyWithoutDefaultValueWithScalarTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionB::class);
 
@@ -225,7 +241,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForParameterWithScalarTypeHint()
+    public function resolveEntryPointsWhenConstructorParameterWithoutDefaultValueWithScalarTypeHint()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionC::class);
 
@@ -237,7 +253,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForParameterWithScalarDocBlock()
+    public function resolveEntryPointsWhenWhenConstructorParameterWithoutDefaultValueWithScalarDocBlock()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionD::class);
 
@@ -249,7 +265,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForPropertyWithoutTypeInfo()
+    public function resolveEntryPointsWhenWhenPropertyWithoutTypeInfo()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionE::class);
 
@@ -261,7 +277,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function throwExceptionForStaticProperty()
+    public function resolveEntryPointsWhenWhenStaticProperty()
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionF::class);
 

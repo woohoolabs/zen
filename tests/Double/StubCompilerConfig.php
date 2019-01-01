@@ -7,6 +7,7 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig
@@ -97,9 +98,9 @@ class StubCompilerConfig extends AbstractCompilerConfig
             ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
     }
 
-    public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfig
+    public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
     {
-        return FileBasedDefinitionConfig::create($this->useFileBasedDefinition, dirname(__DIR__));
+        return FileBasedDefinitionConfig::create($this->useFileBasedDefinition, "Definitions/");
     }
 
     public function getContainerConfigs(): array

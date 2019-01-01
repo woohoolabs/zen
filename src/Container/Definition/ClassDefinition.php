@@ -42,7 +42,8 @@ class ClassDefinition extends AbstractDefinition
         bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
-        array $overriddenProperties = []
+        array $overriddenProperties = [],
+        int $referenceCount = 0
     ): ClassDefinition {
         return new self(
             $className,
@@ -51,7 +52,8 @@ class ClassDefinition extends AbstractDefinition
             $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
-            $overriddenProperties
+            $overriddenProperties,
+            $referenceCount
         );
     }
 
@@ -61,7 +63,8 @@ class ClassDefinition extends AbstractDefinition
         bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
-        array $overriddenProperties = []
+        array $overriddenProperties = [],
+        int $referenceCount = 0
     ): ClassDefinition {
         return new self(
             $className,
@@ -70,7 +73,8 @@ class ClassDefinition extends AbstractDefinition
             $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
-            $overriddenProperties
+            $overriddenProperties,
+            $referenceCount
         );
     }
 
@@ -81,9 +85,10 @@ class ClassDefinition extends AbstractDefinition
         bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
-        array $overriddenProperties = []
+        array $overriddenProperties = [],
+        int $referenceCount = 0
     ) {
-        parent::__construct($className, $scope, $isEntryPoint, $isAutoloaded, $isFileBased);
+        parent::__construct($className, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
@@ -145,7 +150,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function isConstructorParameterOverridden(string $name): bool
     {
-        return isset($this->overriddenConstructorParameters[$name]);
+        return array_key_exists($name, $this->overriddenConstructorParameters);
     }
 
     public function getOverriddenConstructorParameters(): array
@@ -194,7 +199,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0 && $inline === false) {
+        if ($this->isAutoloadable($inline)) {
             $code .= $this->includeRelatedClasses(
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
@@ -208,7 +213,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= "${indent}return ";
         }
 
-        if ($this->isSingleton("") && ($this->getReferenceCount() > 1 || $this->isEntryPoint())) {
+        if ($this->isOptimizable() === false) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
 
@@ -230,7 +235,7 @@ class ClassDefinition extends AbstractDefinition
             if (isset($constructorArgument["class"])) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $constructorArguments[] = "${constructorIndent}${tab}" . $this->getEntryToPhp(
+                $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
                     $constructorArgument["class"],
                     $this->hash($constructorArgument["class"]),
                     $definition->isSingleton($this->id),
@@ -255,7 +260,7 @@ class ClassDefinition extends AbstractDefinition
                 if (isset($property["class"])) {
                     $definition = $compilation->getDefinition($property["class"]);
 
-                    $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->getEntryToPhp(
+                    $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->compileEntryReference(
                         $property["class"],
                         $this->hash($property["class"]),
                         $definition->isSingleton($this->id),

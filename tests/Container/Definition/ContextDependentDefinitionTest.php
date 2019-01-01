@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
+use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Exception\ContainerException;
 use function dirname;
 use function file_get_contents;
@@ -142,56 +145,100 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function toPhpCodeWithoutDefault()
+    public function compileWithoutDefault()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
             null,
             [
-                "X\\B" => new ClassDefinition("X\\C"),
-                "X\\D" => new ClassDefinition("X\\E"),
-                "X\\F" => new ClassDefinition("X\\G"),
+                "X\\B" => ClassDefinition::singleton("X\\C"),
+                "X\\D" => ClassDefinition::singleton("X\\E"),
+                "X\\F" => ClassDefinition::singleton("X\\G"),
             ]
         );
 
-        $phpCode = $definition->compile(
-            [
-                "X\\B" => new ClassDefinition("X\\C"),
-                "X\\D" => new ClassDefinition("X\\E"),
-                "X\\F" => new ClassDefinition("X\\G"),
-            ]
-        );
+        $this->expectException(ContainerException::class);
 
-        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWithoutDefault.php"), $phpCode);
+        $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    "X\\B" => ClassDefinition::singleton("X\\C"),
+                    "X\\D" => ClassDefinition::singleton("X\\E"),
+                    "X\\F" => ClassDefinition::singleton("X\\G"),
+                ]
+            ),
+            0,
+            false
+        );
     }
 
     /**
      * @test
      */
-    public function toPhpCodeWithDefault()
+    public function compileWithDefault()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
-            new ClassDefinition("X\\H"),
+            ClassDefinition::singleton("X\\H", true),
             [
-                "X\\B" => new ClassDefinition("X\\C"),
-                "X\\D" => new ClassDefinition("X\\E"),
-                "X\\F" => new ClassDefinition("X\\G"),
+                "X\\B" => ClassDefinition::singleton("X\\C"),
+                "X\\D" => ClassDefinition::singleton("X\\E"),
+                "X\\F" => ClassDefinition::singleton("X\\G"),
             ]
         );
 
-        $phpCode = $definition->compile(
-            [
-                "X\\B" => new ClassDefinition("X\\C"),
-                "X\\D" => new ClassDefinition("X\\E"),
-                "X\\F" => new ClassDefinition("X\\G"),
-            ]
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    "X\\B" => ClassDefinition::singleton("X\\C"),
+                    "X\\D" => ClassDefinition::singleton("X\\E"),
+                    "X\\F" => ClassDefinition::singleton("X\\G"),
+                ]
+            ),
+            0,
+            false
         );
 
-        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWithDefault.php"), $phpCode);
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWithDefault.php"), $compiledDefinition);
     }
 
-    private function getDefinitionSourceCode(string $fileName)
+    /**
+     * @test
+     */
+    public function compileWhenIndented()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            ClassDefinition::singleton("X\\H", true),
+            [
+                "X\\B" => ClassDefinition::singleton("X\\C"),
+                "X\\D" => ClassDefinition::singleton("X\\E"),
+                "X\\F" => ClassDefinition::singleton("X\\G"),
+            ]
+        );
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    "X\\B" => new ClassDefinition("X\\C"),
+                    "X\\D" => new ClassDefinition("X\\E"),
+                    "X\\F" => new ClassDefinition("X\\G"),
+                ]
+            ),
+            2,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenIndented.php"), $compiledDefinition);
+    }
+
+    private function getDefinitionSourceCode(string $fileName): string
     {
         return str_replace("<?php\n", "", file_get_contents(dirname(__DIR__, 2) . "/Fixture/Definition/" . $fileName));
     }

@@ -50,11 +50,21 @@ final class AutoloadConfig implements AutoloadConfigInterface
         $this->excludedClasses = [];
     }
 
+    public function isGlobalAutoloadEnabled(): bool
+    {
+        return $this->isGlobalAutoloadEnabled;
+    }
+
     public function setRootDirectory(string $rootDirectory): AutoloadConfig
     {
         $this->rootDirectory = rtrim($rootDirectory, "\\/");
 
         return $this;
+    }
+
+    public function getRootDirectory(): string
+    {
+        return $this->rootDirectory;
     }
 
     /**
@@ -67,6 +77,11 @@ final class AutoloadConfig implements AutoloadConfigInterface
         return $this;
     }
 
+    public function getAlwaysAutoloadedClasses(): array
+    {
+        return $this->alwaysAutoloadedClasses;
+    }
+
     /**
      * @param string[] $excludedClasses
      */
@@ -75,21 +90,6 @@ final class AutoloadConfig implements AutoloadConfigInterface
         $this->excludedClasses = $excludedClasses;
 
         return $this;
-    }
-
-    public function isGlobalAutoloadEnabled(): bool
-    {
-        return $this->isGlobalAutoloadEnabled;
-    }
-
-    public function getRootDirectory(): string
-    {
-        return $this->rootDirectory;
-    }
-
-    public function getAlwaysAutoloadedClasses(): array
-    {
-        return $this->alwaysAutoloadedClasses;
     }
 
     public function getExcludedClasses(): array

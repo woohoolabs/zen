@@ -7,7 +7,7 @@ interface FileBasedDefinitionConfigInterface
 {
     public function isGlobalFileBasedDefinitionEnabled(): bool;
 
-    public function getRelativeDirectory(): string;
+    public function getRelativeDefinitionDirectory(): string;
 
     /**
      * @return string[]

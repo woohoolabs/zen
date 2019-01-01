@@ -9,8 +9,6 @@ class ContainerWithAlwaysAutoloadedClasses extends AbstractCompiledContainer
      * @var string[]
      */
     protected static $entryPoints = [
-        \WoohooLabs\Zen\Tests\Fixture\Container\ContainerWithAlwaysAutoloadedClasses::class => 'WoohooLabs__Zen__Tests__Fixture__Container__ContainerWithAlwaysAutoloadedClasses',
-        \Psr\Container\ContainerInterface::class => 'Psr__Container__ContainerInterface',
     ];
 
     /**
@@ -21,6 +19,6 @@ class ContainerWithAlwaysAutoloadedClasses extends AbstractCompiledContainer
     public function __construct(string $rootDirectory = '')
     {
         $this->rootDirectory = $rootDirectory;
-        include_once $this->rootDirectory . '/tests/Double/StubDefinition.php';
+        include_once $this->rootDirectory . '/tests/Double/StubSingletonDefinition.php';
     }
 }

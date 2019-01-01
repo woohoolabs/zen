@@ -49,9 +49,9 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @var int
      */
-    private $referenceCount = 0;
+    private $referenceCount;
 
-    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased)
+    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased, int $referenceCount)
     {
         $this->id = $id;
         $this->hash = $this->hash($id);
@@ -59,6 +59,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->entryPoint = $isEntryPoint;
         $this->autoloaded = $isAutoloaded;
         $this->fileBased = $isFileBased;
+        $this->referenceCount = $referenceCount;
     }
 
     public function getId(string $parentId): string
@@ -103,7 +104,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this;
     }
 
-    protected function getEntryToPhp(
+    protected function compileEntryReference(
         string $id,
         string $hash,
         bool $isSingleton,
@@ -112,13 +113,13 @@ abstract class AbstractDefinition implements DefinitionInterface
         int $indentationLevelWhenInlined
     ): string {
         if ($definition->isEntryPoint() === false) {
-            return $this->getInlinedEntryToPhp($id, $isSingleton, $definition, $compilation, $indentationLevelWhenInlined);
+            return $this->compileInlinedEntry($id, $isSingleton, $definition, $compilation, $indentationLevelWhenInlined);
         }
 
-        return $this->getReferencedEntryToPhp($id, $hash, $isSingleton, $definition, $compilation->getFileBasedDefinitionConfig());
+        return $this->compileReferencedEntry($id, $hash, $isSingleton, $definition, $compilation->getFileBasedDefinitionConfig());
     }
 
-    protected function getInlinedEntryToPhp(
+    private function compileInlinedEntry(
         string $id,
         bool $isSingleton,
         DefinitionInterface $definition,
@@ -139,7 +140,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $code;
     }
 
-    private function getReferencedEntryToPhp(
+    private function compileReferencedEntry(
         string $id,
         string $hash,
         bool $isSingleton,
@@ -153,7 +154,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         if ($definition->isFileBased()) {
             $path = "__DIR__ . '/";
             if ($this->isFileBased() === false && $isFileBased) {
-                $path .= $fileBasedDefinitionConfig->getRelativeDirectory() . "/";
+                $path .= $fileBasedDefinitionConfig->getRelativeDefinitionDirectory() . "/";
             }
             $path .= "$hash.php'";
 
@@ -179,6 +180,16 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected function indent(int $indentationLevel): string
     {
         return str_repeat(" ", $indentationLevel * 4);
+    }
+
+    protected function isOptimizable(): bool
+    {
+        return $this->isSingleton("") === false || ($this->getReferenceCount() <= 1 && $this->isEntryPoint() === false);
+    }
+
+    protected function isAutoloadable(bool $inline): bool
+    {
+        return $this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0 && $inline === false;
     }
 
     /**

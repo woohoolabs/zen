@@ -24,7 +24,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     {
         $hint = ContextDependentDefinitionHint::create(ClassA::class);
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -47,7 +47,7 @@ class ContextDependentDefinitionHintTest extends TestCase
         $hint = ContextDependentDefinitionHint::create()
             ->setDefaultClass(ClassA::class);
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -71,7 +71,7 @@ class ContextDependentDefinitionHintTest extends TestCase
             DefinitionHint::prototype(ClassA::class)
         );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -93,16 +93,16 @@ class ContextDependentDefinitionHintTest extends TestCase
     {
         $hint = ContextDependentDefinitionHint::create(ClassA::class);
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, true, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, true, false);
 
         $this->assertEquals(
             [
                 InterfaceA::class => new ContextDependentDefinition(
                     InterfaceA::class,
-                    new ClassDefinition(ClassA::class, "singleton", true),
+                    new ClassDefinition(ClassA::class, "singleton", false, true),
                     []
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", true),
+                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, true),
             ],
             $definitions
         );
@@ -122,7 +122,7 @@ class ContextDependentDefinitionHintTest extends TestCase
                 ]
             );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -154,7 +154,7 @@ class ContextDependentDefinitionHintTest extends TestCase
                 ]
             );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -186,7 +186,7 @@ class ContextDependentDefinitionHintTest extends TestCase
                 ]
             );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, true, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, true, false);
 
         $this->assertEquals(
             [
@@ -194,11 +194,11 @@ class ContextDependentDefinitionHintTest extends TestCase
                     InterfaceA::class,
                     null,
                     [
-                        ClassD::class => new ClassDefinition(ClassA::class, "singleton", true),
-                        ClassE::class => new ClassDefinition(ClassA::class, "singleton", true),
+                        ClassD::class => new ClassDefinition(ClassA::class, "singleton", false, true),
+                        ClassE::class => new ClassDefinition(ClassA::class, "singleton", false, true),
                     ]
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", true),
+                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, true),
             ],
             $definitions
         );
@@ -224,7 +224,7 @@ class ContextDependentDefinitionHintTest extends TestCase
                 ]
             );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -258,7 +258,7 @@ class ContextDependentDefinitionHintTest extends TestCase
                 ]
             );
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
@@ -292,7 +292,7 @@ class ContextDependentDefinitionHintTest extends TestCase
             )
             ->setDefaultClass(DefinitionHint::prototype(ClassB::class));
 
-        $definitions = $hint->toDefinitions([], InterfaceA::class, false, false, false);
+        $definitions = $hint->toDefinitions([], [], InterfaceA::class, false, false);
 
         $this->assertEquals(
             [
