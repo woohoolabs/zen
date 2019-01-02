@@ -9,7 +9,12 @@ class SelfDefinition extends AbstractDefinition
 {
     public function __construct(string $className)
     {
-        parent::__construct($className, "", true, false, false, 0);
+        parent::__construct($className, "", false, false, false, 0);
+    }
+
+    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface
+    {
+        return $this;
     }
 
     public function needsDependencyResolution(): bool
