@@ -109,7 +109,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         DefinitionCompilation $compilation,
         int $indentationLevelWhenInlined
     ): string {
-        if ($definition->isEntryPoint($this->getId()) === false) {
+        if ($definition->isEntryPoint($this->id) === false) {
             return $this->compileInlinedEntry($definition, $compilation, $indentationLevelWhenInlined);
         }
 
