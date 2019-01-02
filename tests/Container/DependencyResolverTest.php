@@ -11,6 +11,7 @@ use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationA;
@@ -36,6 +37,52 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 
 class DependencyResolverTest extends TestCase
 {
+    /**
+     * @test
+     */
+    public function resolveClassWhenNonEntryPoint()
+    {
+        $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
+
+        $this->expectException(NotFoundException::class);
+
+        $dependencyResolver->resolveClass(ConstructorB::class);
+    }
+
+    /**
+     * @test
+     */
+    public function resolveClassWhenConstructorDependencies()
+    {
+        $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
+
+        $definitions = $dependencyResolver->resolveClass(ConstructorA::class);
+
+        $this->assertEquals(
+            [
+                ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
+                "" => new SelfDefinition(""),
+                ConstructorA::class => ClassDefinition::singleton(ConstructorA::class, true)
+                    ->addConstructorArgumentFromClass(ConstructorB::class)
+                    ->addConstructorArgumentFromClass(ConstructorC::class)
+                    ->addConstructorArgumentFromValue(true)
+                    ->addConstructorArgumentFromValue(null)
+                    ->resolveDependencies(),
+                ConstructorB::class => ClassDefinition::singleton(ConstructorB::class)
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
+                ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
+                    ->addConstructorArgumentFromClass(ConstructorD::class)
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
+                ConstructorD::class => ClassDefinition::singleton(ConstructorD::class)
+                    ->resolveDependencies()
+                    ->increaseReferenceCount(),
+            ],
+            $definitions
+        );
+    }
+
     /**
      * @test
      */

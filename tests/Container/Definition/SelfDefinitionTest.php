@@ -18,6 +18,18 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function isEntryPoint()
+    {
+        $definition = new SelfDefinition("");
+
+        $isEntryPoint = $definition->isEntryPoint();
+
+        $this->assertFalse($isEntryPoint);
+    }
+
+    /**
+     * @test
+     */
     public function isAutoloaded()
     {
         $definition = new SelfDefinition("");
@@ -25,6 +37,44 @@ class SelfDefinitionTest extends TestCase
         $isAutoloaded = $definition->isAutoloaded();
 
         $this->assertFalse($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
+    public function isFileBased()
+    {
+        $definition = new SelfDefinition("");
+
+        $isFileBased = $definition->isFileBased();
+
+        $this->assertFalse($isFileBased);
+    }
+
+    /**
+     * @test
+     */
+    public function getReferenceCount()
+    {
+        $definition = new SelfDefinition("");
+
+        $referenceCount = $definition->getReferenceCount();
+
+        $this->assertEquals(0, $referenceCount);
+    }
+
+    /**
+     * @test
+     */
+    public function increaseReferenceCount()
+    {
+        $definition = new SelfDefinition("");
+
+        $definition
+            ->increaseReferenceCount()
+            ->increaseReferenceCount();
+
+        $this->assertEquals(0, $definition->getReferenceCount());
     }
 
     /**

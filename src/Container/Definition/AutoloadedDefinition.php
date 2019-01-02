@@ -28,17 +28,17 @@ final class AutoloadedDefinition extends AbstractDefinition
         return [];
     }
 
-    public function compile(DefinitionCompilation $definitionCompilation, string $parentId, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
 
-        $definition = $definitionCompilation->getDefinition($this->id);
+        $definition = $compilation->getDefinition($this->id);
         $id = $definition->getId();
         $hash = $definition->getHash();
 
         $code = $this->includeRelatedClasses(
-            $definitionCompilation->getAutoloadConfig(),
-            $definitionCompilation->getDefinitions(),
+            $compilation->getAutoloadConfig(),
+            $compilation->getDefinitions(),
             $this->id,
             $indentationLevel
         );

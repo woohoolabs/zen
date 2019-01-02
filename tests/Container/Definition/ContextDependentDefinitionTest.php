@@ -368,6 +368,74 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function increaseReferenceCountWithoutDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->increaseReferenceCount();
+    }
+
+    /**
+     * @test
+     */
+    public function increaseReferenceCountWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            ClassDefinition::singleton("X\\A"),
+            []
+        );
+
+        $definition
+            ->increaseReferenceCount()
+            ->increaseReferenceCount();
+
+        $this->assertEquals(2, $definition->getReferenceCount(""));
+    }
+
+    /**
+     * @test
+     */
+    public function increaseReferenceCountWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            ClassDefinition::singleton("X\\A"),
+            []
+        );
+
+        $definition
+            ->increaseReferenceCount("X\\B")
+            ->increaseReferenceCount("X\\B");
+
+        $this->assertEquals(2, $definition->getReferenceCount("X\\B"));
+    }
+
+    /**
+     * @test
+     */
+    public function increaseReferenceCountWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B"),
+            ]
+        );
+
+        $definition
+            ->increaseReferenceCount("X\\A")
+            ->increaseReferenceCount("X\\A");
+
+        $this->assertEquals(2, $definition->getReferenceCount("X\\A"));
+    }
+
+    /**
+     * @test
+     */
     public function needsDependencyResolution()
     {
         $definition = new ContextDependentDefinition("", null, []);

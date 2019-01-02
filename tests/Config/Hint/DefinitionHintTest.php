@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Config\Hint;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
+use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\ContextDependent\ClassA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\ContextDependent\ClassB;
 
@@ -64,6 +66,28 @@ class DefinitionHintTest extends TestCase
             ],
             $definitions
         );
+    }
+
+    /**
+     * @test
+     */
+    public function setParameterWhenNotScalarOrArray()
+    {
+        $this->expectException(ContainerException::class);
+
+        DefinitionHint::singleton(ClassA::class)
+            ->setParameter("param", new stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function setPropertyWhenNotScalarOrArray()
+    {
+        $this->expectException(ContainerException::class);
+
+        DefinitionHint::singleton(ClassA::class)
+            ->setProperty("param", new stdClass());
     }
 
     /**

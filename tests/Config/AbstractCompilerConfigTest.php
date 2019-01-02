@@ -5,6 +5,7 @@ namespace WoohooLabs\Zen\Tests\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 
@@ -56,5 +57,17 @@ class AbstractCompilerConfigTest extends TestCase
         $autoloadConfig = $config->getAutoloadConfig();
 
         $this->assertEquals(AutoloadConfig::disabledGlobally(), $autoloadConfig);
+    }
+
+    /**
+     * @test
+     */
+    public function getFileBasedDefinitionConfig()
+    {
+        $config = new DummyCompilerConfig();
+
+        $fileBasedDefinitionConfig = $config->getFileBasedDefinitionConfig();
+
+        $this->assertEquals(FileBasedDefinitionConfig::disabledGlobally(), $fileBasedDefinitionConfig);
     }
 }

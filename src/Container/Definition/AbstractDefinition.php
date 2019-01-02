@@ -122,8 +122,8 @@ abstract class AbstractDefinition implements DefinitionInterface
         int $indentationLevelWhenInlined
     ): string {
         $id = $definition->getId($this->id);
-        $referenceCount = $definition->getReferenceCount($this->getId());
-        $isEntryPoint = $definition->isEntryPoint($this->getId());
+        $referenceCount = $definition->getReferenceCount($this->id);
+        $isEntryPoint = $definition->isEntryPoint($this->id);
 
         $code = "";
 
@@ -131,7 +131,7 @@ abstract class AbstractDefinition implements DefinitionInterface
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
-        $code .= $definition->compile($compilation, $this->getId(), $indentationLevelWhenInlined, true);
+        $code .= $definition->compile($compilation, $this->id, $indentationLevelWhenInlined, true);
 
         return $code;
     }
@@ -143,13 +143,13 @@ abstract class AbstractDefinition implements DefinitionInterface
         $id = $definition->getId($this->id);
         $hash = $definition->getHash($this->id);
         $isSingleton = $definition->isSingleton($this->id);
-        $isEntryPoint = $definition->isEntryPoint($this->getId());
-        $isFileBased = $definition->isFileBased($this->getId());
-        $referenceCount = $definition->getReferenceCount($this->getId());
+        $isEntryPoint = $definition->isEntryPoint($this->id);
+        $isFileBased = $definition->isFileBased($this->id);
+        $referenceCount = $definition->getReferenceCount($this->id);
 
         if ($isFileBased) {
             $path = "__DIR__ . '/";
-            if ($this->isFileBased($this->getId()) === false && $isFileBased) {
+            if ($this->isFileBased($this->id) === false && $isFileBased) {
                 $path .= $fileBasedDefinitionConfig->getRelativeDefinitionDirectory() . "/";
             }
             $path .= "$hash.php'";

@@ -9,7 +9,6 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorC;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
 use function dirname;
 use function file_get_contents;
