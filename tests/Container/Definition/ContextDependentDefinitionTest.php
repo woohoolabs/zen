@@ -13,6 +13,7 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use function dirname;
 use function file_get_contents;
 use function str_replace;
+use function substr;
 
 class ContextDependentDefinitionTest extends TestCase
 {
@@ -97,25 +98,271 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloaded()
+    public function isSingletonWithoutDefaultWhenNoParent()
     {
         $definition = new ContextDependentDefinition("", null, []);
 
-        $isAutoloaded = $definition->isAutoloaded();
+        $this->expectException(ContainerException::class);
 
-        $this->assertFalse($isAutoloaded);
+        $definition->isSingleton();
     }
 
     /**
      * @test
      */
-    public function isFileBased()
+    public function isSingletonWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A"), []);
+
+        $isSingleton = $definition->isSingleton();
+
+        $this->assertTrue($isSingleton);
+    }
+
+    /**
+     * @test
+     */
+    public function isSingletonWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A"), []);
+
+        $isSingleton = $definition->isSingleton("X\\B");
+
+        $this->assertTrue($isSingleton);
+    }
+
+    /**
+     * @test
+     */
+    public function isSingletonWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B", true),
+            ]
+        );
+
+        $isSingleton = $definition->isSingleton("X\\A");
+
+        $this->assertTrue($isSingleton);
+    }
+
+    /**
+     * @test
+     */
+    public function isEntryPointWithoutDefaultWhenNoParent()
     {
         $definition = new ContextDependentDefinition("", null, []);
 
+        $this->expectException(ContainerException::class);
+
+        $definition->isEntryPoint();
+    }
+
+    /**
+     * @test
+     */
+    public function isEntryPointWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", true), []);
+
+        $isEntryPoint = $definition->isEntryPoint();
+
+        $this->assertTrue($isEntryPoint);
+    }
+
+    /**
+     * @test
+     */
+    public function isEntryPointWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", true), []);
+
+        $isEntryPoint = $definition->isEntryPoint("X\\B");
+
+        $this->assertTrue($isEntryPoint);
+    }
+
+    /**
+     * @test
+     */
+    public function isEntryPointWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B", true),
+            ]
+        );
+
+        $isEntryPoint = $definition->isEntryPoint("X\\A");
+
+        $this->assertTrue($isEntryPoint);
+    }
+
+    /**
+     * @test
+     */
+    public function isAutoloadedWithoutDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->isAutoloaded();
+    }
+
+    /**
+     * @test
+     */
+    public function isAutoloadedWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
+
+        $isAutoloaded = $definition->isAutoloaded();
+
+        $this->assertTrue($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
+    public function isAutoloadedWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
+
+        $isAutoloaded = $definition->isAutoloaded("X\\B");
+
+        $this->assertTrue($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
+    public function isAutoloadedWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B", false, true),
+            ]
+        );
+
+        $isAutoloaded = $definition->isAutoloaded("X\\A");
+
+        $this->assertTrue($isAutoloaded);
+    }
+
+    /**
+     * @test
+     */
+    public function isFileBasedWithoutDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->isFileBased();
+    }
+
+    /**
+     * @test
+     */
+    public function isFileBasedWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
+
         $isFileBased = $definition->isFileBased();
 
-        $this->assertFalse($isFileBased);
+        $this->assertTrue($isFileBased);
+    }
+
+    /**
+     * @test
+     */
+    public function isFileBasedWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
+
+        $isFileBased = $definition->isFileBased("X\\B");
+
+        $this->assertTrue($isFileBased);
+    }
+
+    /**
+     * @test
+     */
+    public function isFileBasedWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B", false, false, true),
+            ]
+        );
+
+        $isFileBased = $definition->isFileBased("X\\A");
+
+        $this->assertTrue($isFileBased);
+    }
+
+    /**
+     * @test
+     */
+    public function getReferenceCountWithoutDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->getReferenceCount();
+    }
+
+    /**
+     * @test
+     */
+    public function getReferenceCountWithDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
+
+        $referenceCount = $definition->getReferenceCount();
+
+        $this->assertEquals(2, $referenceCount);
+    }
+
+    /**
+     * @test
+     */
+    public function getReferenceCountWithDefaultWhenParentNotExists()
+    {
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
+
+        $referenceCount = $definition->getReferenceCount("X\\B");
+
+        $this->assertEquals(2, $referenceCount);
+    }
+
+    /**
+     * @test
+     */
+    public function getReferenceCountWhenParentExists()
+    {
+        $definition = new ContextDependentDefinition(
+            "",
+            null,
+            [
+                "X\\A" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 2),
+            ]
+        );
+
+        $referenceCount = $definition->getReferenceCount("X\\A");
+
+        $this->assertEquals(2, $referenceCount);
     }
 
     /**
@@ -157,16 +404,12 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithoutDefault()
+    public function compileWithoutDefaultWhenNoParent()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
             null,
-            [
-                "X\\B" => ClassDefinition::singleton("X\\C"),
-                "X\\D" => ClassDefinition::singleton("X\\E"),
-                "X\\F" => ClassDefinition::singleton("X\\G"),
-            ]
+            []
         );
 
         $this->expectException(ContainerException::class);
@@ -175,12 +418,9 @@ class ContextDependentDefinitionTest extends TestCase
             new DefinitionCompilation(
                 AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
-                [
-                    "X\\B" => ClassDefinition::singleton("X\\C"),
-                    "X\\D" => ClassDefinition::singleton("X\\E"),
-                    "X\\F" => ClassDefinition::singleton("X\\G"),
-                ]
+                []
             ),
+            "",
             0,
             false
         );
@@ -189,15 +429,13 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithDefault()
+    public function compileWithDefaultWhenParentNotExists()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
             ClassDefinition::singleton("X\\H", true),
             [
                 "X\\B" => ClassDefinition::singleton("X\\C"),
-                "X\\D" => ClassDefinition::singleton("X\\E"),
-                "X\\F" => ClassDefinition::singleton("X\\G"),
             ]
         );
 
@@ -207,10 +445,9 @@ class ContextDependentDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\B" => ClassDefinition::singleton("X\\C"),
-                    "X\\D" => ClassDefinition::singleton("X\\E"),
-                    "X\\F" => ClassDefinition::singleton("X\\G"),
                 ]
             ),
+            "X\\Y",
             0,
             false
         );
@@ -221,13 +458,13 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenParentExists()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
-            ClassDefinition::singleton("X\\H", true),
+            null,
             [
-                "X\\B" => ClassDefinition::singleton("X\\C"),
+                "X\\B" => ClassDefinition::singleton("X\\C", true),
                 "X\\D" => ClassDefinition::singleton("X\\E"),
                 "X\\F" => ClassDefinition::singleton("X\\G"),
             ]
@@ -238,11 +475,41 @@ class ContextDependentDefinitionTest extends TestCase
                 AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
-                    "X\\B" => new ClassDefinition("X\\C"),
-                    "X\\D" => new ClassDefinition("X\\E"),
-                    "X\\F" => new ClassDefinition("X\\G"),
+                    "X\\B" => ClassDefinition::singleton("X\\C", true),
+                    "X\\D" => ClassDefinition::singleton("X\\E"),
+                    "X\\F" => ClassDefinition::singleton("X\\G"),
                 ]
             ),
+            "X\\B",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenParentExists.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenIndented()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            null,
+            [
+                "X\\B" => ClassDefinition::singleton("X\\C", true),
+            ]
+        );
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    "X\\B" => ClassDefinition::singleton("X\\C", true),
+                ]
+            ),
+            "X\\B",
             2,
             false
         );
@@ -250,8 +517,71 @@ class ContextDependentDefinitionTest extends TestCase
         $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenIndented.php"), $compiledDefinition);
     }
 
+    /**
+     * @test
+     */
+    public function compileWhenInlined()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            null,
+            [
+                "X\\B" => ClassDefinition::singleton("X\\C", true),
+            ]
+        );
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally(),
+                [
+                    "X\\B" => ClassDefinition::singleton("X\\C", true),
+                ]
+            ),
+            "X\\B",
+            0,
+            true
+        );
+
+        $this->assertEquals($this->getInlinedDefinitionSourceCode("ContextDependentDefinitionWhenInlined.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenFileBased()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            null,
+            [
+                "X\\Z" => ClassDefinition::singleton("X\\C", true, false, true),
+            ]
+        );
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions"),
+                [
+                    "X\\Z" => ClassDefinition::singleton("X\\C", true, false, true),
+                ]
+            ),
+            "X\\Z",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenFileBased.php"), $compiledDefinition);
+    }
+
     private function getDefinitionSourceCode(string $fileName): string
     {
         return str_replace("<?php\n", "", file_get_contents(dirname(__DIR__, 2) . "/Fixture/Definition/" . $fileName));
+    }
+
+    private function getInlinedDefinitionSourceCode(string $fileName): string
+    {
+        return substr($this->getDefinitionSourceCode($fileName), 0, -2);
     }
 }

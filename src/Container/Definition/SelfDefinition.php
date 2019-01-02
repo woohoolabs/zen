@@ -32,7 +32,7 @@ class SelfDefinition extends AbstractDefinition
         return [];
     }
 
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
 

@@ -13,11 +13,6 @@ final class AutoloadedDefinition extends AbstractDefinition
         parent::__construct($id, "", $isEntryPoint, true, $isFileBased, 0);
     }
 
-    public function isSingleton(string $parentId): bool
-    {
-        return false;
-    }
-
     public function needsDependencyResolution(): bool
     {
         return false;
@@ -33,13 +28,13 @@ final class AutoloadedDefinition extends AbstractDefinition
         return [];
     }
 
-    public function compile(DefinitionCompilation $definitionCompilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $definitionCompilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
 
         $definition = $definitionCompilation->getDefinition($this->id);
-        $id = $definition->getId("");
-        $hash = $definition->getHash("");
+        $id = $definition->getId();
+        $hash = $definition->getHash();
 
         $code = $this->includeRelatedClasses(
             $definitionCompilation->getAutoloadConfig(),

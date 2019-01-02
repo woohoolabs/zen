@@ -7,21 +7,21 @@ use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 interface DefinitionInterface
 {
-    public function getId(string $parentId): string;
+    public function getId(string $parentId = ""): string;
 
-    public function getHash(string $parentId): string;
+    public function getHash(string $parentId = ""): string;
 
-    public function isSingleton(string $parentId): bool;
+    public function isSingleton(string $parentId = ""): bool;
 
-    public function isEntryPoint(): bool;
+    public function isEntryPoint(string $parentId = ""): bool;
 
-    public function isAutoloaded(): bool;
+    public function isAutoloaded(string $parentId = ""): bool;
 
-    public function isFileBased(): bool;
+    public function isFileBased(string $parentId = ""): bool;
 
-    public function getReferenceCount(): int;
+    public function getReferenceCount(string $parentId = ""): int;
 
-    public function increaseReferenceCount(): DefinitionInterface;
+    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface;
 
     public function needsDependencyResolution(): bool;
 
@@ -32,5 +32,5 @@ interface DefinitionInterface
      */
     public function getClassDependencies(): array;
 
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string;
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string;
 }

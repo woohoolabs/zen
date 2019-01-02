@@ -115,7 +115,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
 
     /**
      * @param DefinitionHint|string|null $definitionHint
-     * @internal
      */
     private function createDefinitionHint($definitionHint): ?DefinitionHint
     {

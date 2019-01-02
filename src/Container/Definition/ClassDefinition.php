@@ -190,7 +190,7 @@ class ClassDefinition extends AbstractDefinition
         return $dependencies;
     }
 
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
         $tab = $this->indent(1);
@@ -236,9 +236,6 @@ class ClassDefinition extends AbstractDefinition
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
                 $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
-                    $constructorArgument["class"],
-                    $this->hash($constructorArgument["class"]),
-                    $definition->isSingleton($this->id),
                     $definition,
                     $compilation,
                     $constructorIndentationLevel + 1
@@ -261,9 +258,6 @@ class ClassDefinition extends AbstractDefinition
                     $definition = $compilation->getDefinition($property["class"]);
 
                     $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->compileEntryReference(
-                        $property["class"],
-                        $this->hash($property["class"]),
-                        $definition->isSingleton($this->id),
                         $definition,
                         $compilation,
                         $indentationLevel + 2

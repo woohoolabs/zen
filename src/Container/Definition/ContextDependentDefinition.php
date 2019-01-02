@@ -24,7 +24,6 @@ class ContextDependentDefinition implements DefinitionInterface
     private $definitions;
 
     /**
-     * @param DefinitionInterface|null $defaultDefinition
      * @param DefinitionInterface[] $contextDependentDefinitions
      */
     public function __construct(string $referrerId, ?DefinitionInterface $defaultDefinition, array $contextDependentDefinitions)
@@ -34,44 +33,44 @@ class ContextDependentDefinition implements DefinitionInterface
         $this->definitions = $contextDependentDefinitions;
     }
 
-    public function getId(string $parentId): string
+    public function getId(string $parentId = ""): string
     {
         return $this->getDefinition($parentId)->getId($parentId);
     }
 
-    public function getHash(string $parentId): string
+    public function getHash(string $parentId = ""): string
     {
         return $this->getDefinition($parentId)->getHash($parentId);
     }
 
-    public function isSingleton(string $parentId): bool
+    public function isSingleton(string $parentId = ""): bool
     {
         return $this->getDefinition($parentId)->isSingleton($parentId);
     }
 
-    public function isEntryPoint(): bool
+    public function isEntryPoint(string $parentId = ""): bool
     {
-        return false;
+        return $this->getDefinition($parentId)->isEntryPoint($parentId);
     }
 
-    public function isAutoloaded(): bool
+    public function isAutoloaded(string $parentId = ""): bool
     {
-        return false;
+        return $this->getDefinition($parentId)->isAutoloaded($parentId);
     }
 
-    public function isFileBased(): bool
+    public function isFileBased(string $parentId = ""): bool
     {
-        return false;
+        return $this->getDefinition($parentId)->isFileBased($parentId);
     }
 
-    public function getReferenceCount(): int
+    public function getReferenceCount(string $parentId = ""): int
     {
-        return 0;
+        return $this->getDefinition($parentId)->getReferenceCount($parentId);
     }
 
-    public function increaseReferenceCount(): DefinitionInterface
+    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface
     {
-        return $this;
+        return $this->getDefinition($parentId)->increaseReferenceCount($parentId);
     }
 
     public function needsDependencyResolution(): bool
@@ -90,15 +89,9 @@ class ContextDependentDefinition implements DefinitionInterface
         ];
     }
 
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
-        if ($this->defaultDefinition === null) {
-            throw new ContainerException(
-                'Context-Dependent Definition with "{$this->referrerId}" ID doesn\'t have a default value, therefore it cannot be retrieved directly!'
-            );
-        }
-
-        return $this->defaultDefinition->compile($compilation, $indentationLevel, $inline);
+        return $this->getDefinition($parentId)->compile($compilation, $parentId, $indentationLevel, $inline);
     }
 
     private function getDefinition(string $parentId): DefinitionInterface

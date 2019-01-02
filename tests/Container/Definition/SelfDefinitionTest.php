@@ -76,6 +76,7 @@ class SelfDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
+            "",
             0,
             false
         );
@@ -96,6 +97,7 @@ class SelfDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
+            "",
             2,
             false
         );
@@ -116,6 +118,7 @@ class SelfDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
+            "",
             0,
             true
         );

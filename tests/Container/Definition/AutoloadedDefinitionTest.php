@@ -94,6 +94,7 @@ class AutoloadedDefinitionTest extends TestCase
                     MixedD::class => new ClassDefinition(MixedD::class),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -118,6 +119,7 @@ class AutoloadedDefinitionTest extends TestCase
                     MixedD::class => new ClassDefinition(MixedD::class),
                 ]
             ),
+            "",
             2,
             false
         );
@@ -142,6 +144,7 @@ class AutoloadedDefinitionTest extends TestCase
                     MixedD::class => ClassDefinition::singleton(MixedD::class),
                 ]
             ),
+            "",
             0,
             false
         );

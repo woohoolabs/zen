@@ -62,42 +62,42 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->referenceCount = $referenceCount;
     }
 
-    public function getId(string $parentId): string
+    public function getId(string $parentId = ""): string
     {
         return $this->id;
     }
 
-    public function getHash(string $parentId): string
+    public function getHash(string $parentId = ""): string
     {
         return $this->hash;
     }
 
-    public function isSingleton(string $parentId): bool
+    public function isSingleton(string $parentId = ""): bool
     {
         return $this->scope === "singleton";
     }
 
-    public function isEntryPoint(): bool
+    public function isEntryPoint(string $parentId = ""): bool
     {
         return $this->entryPoint;
     }
 
-    public function isAutoloaded(): bool
+    public function isAutoloaded(string $parentId = ""): bool
     {
         return $this->autoloaded;
     }
 
-    public function isFileBased(): bool
+    public function isFileBased(string $parentId = ""): bool
     {
         return $this->fileBased;
     }
 
-    public function getReferenceCount(): int
+    public function getReferenceCount(string $parentId = ""): int
     {
         return $this->referenceCount;
     }
 
-    public function increaseReferenceCount(): DefinitionInterface
+    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface
     {
         $this->referenceCount++;
 
@@ -105,55 +105,51 @@ abstract class AbstractDefinition implements DefinitionInterface
     }
 
     protected function compileEntryReference(
-        string $id,
-        string $hash,
-        bool $isSingleton,
         DefinitionInterface $definition,
         DefinitionCompilation $compilation,
         int $indentationLevelWhenInlined
     ): string {
-        if ($definition->isEntryPoint() === false) {
-            return $this->compileInlinedEntry($id, $isSingleton, $definition, $compilation, $indentationLevelWhenInlined);
+        if ($definition->isEntryPoint($this->getId()) === false) {
+            return $this->compileInlinedEntry($definition, $compilation, $indentationLevelWhenInlined);
         }
 
-        return $this->compileReferencedEntry($id, $hash, $isSingleton, $definition, $compilation->getFileBasedDefinitionConfig());
+        return $this->compileReferencedEntry($definition, $compilation->getFileBasedDefinitionConfig());
     }
 
     private function compileInlinedEntry(
-        string $id,
-        bool $isSingleton,
         DefinitionInterface $definition,
         DefinitionCompilation $compilation,
         int $indentationLevelWhenInlined
     ): string {
-        $referenceCount = $definition->getReferenceCount();
-        $isEntryPoint = $definition->isEntryPoint();
+        $id = $definition->getId($this->id);
+        $referenceCount = $definition->getReferenceCount($this->getId());
+        $isEntryPoint = $definition->isEntryPoint($this->getId());
 
         $code = "";
 
-        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+        if ($id && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
-        $code .= $definition->compile($compilation, $indentationLevelWhenInlined, true);
+        $code .= $definition->compile($compilation, $this->getId(), $indentationLevelWhenInlined, true);
 
         return $code;
     }
 
     private function compileReferencedEntry(
-        string $id,
-        string $hash,
-        bool $isSingleton,
         DefinitionInterface $definition,
         FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig
     ): string {
-        $referenceCount = $definition->getReferenceCount();
-        $isEntryPoint = $definition->isEntryPoint();
-        $isFileBased = $definition->isFileBased();
+        $id = $definition->getId($this->id);
+        $hash = $definition->getHash($this->id);
+        $isSingleton = $definition->isSingleton($this->id);
+        $isEntryPoint = $definition->isEntryPoint($this->getId());
+        $isFileBased = $definition->isFileBased($this->getId());
+        $referenceCount = $definition->getReferenceCount($this->getId());
 
-        if ($definition->isFileBased()) {
+        if ($isFileBased) {
             $path = "__DIR__ . '/";
-            if ($this->isFileBased() === false && $isFileBased) {
+            if ($this->isFileBased($this->getId()) === false && $isFileBased) {
                 $path .= $fileBasedDefinitionConfig->getRelativeDefinitionDirectory() . "/";
             }
             $path .= "$hash.php'";
@@ -184,12 +180,12 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     protected function isOptimizable(): bool
     {
-        return $this->isSingleton("") === false || ($this->getReferenceCount() <= 1 && $this->isEntryPoint() === false);
+        return $this->isSingleton("") === false || ($this->referenceCount <= 1 && $this->entryPoint === false);
     }
 
     protected function isAutoloadable(bool $inline): bool
     {
-        return $this->isEntryPoint() && $this->isAutoloaded() && $this->isSingleton("") && $this->getReferenceCount() === 0 && $inline === false;
+        return $this->entryPoint && $this->autoloaded && $this->isSingleton("") && $this->referenceCount === 0 && $inline === false;
     }
 
     /**

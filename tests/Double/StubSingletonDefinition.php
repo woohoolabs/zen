@@ -13,7 +13,7 @@ class StubSingletonDefinition extends TestDefinition implements DefinitionInterf
         parent::__construct(self::class, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
     }
 
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
 

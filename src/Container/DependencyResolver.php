@@ -151,15 +151,15 @@ class DependencyResolver
         $this->definitions[$id]->resolveDependencies();
 
         if ($this->compilerConfig->useConstructorInjection()) {
-            $this->resolveConstructorArguments($this->definitions[$id], $parentEntryPoint);
+            $this->resolveConstructorArguments($id, $this->definitions[$id], $parentEntryPoint);
         }
 
         if ($this->compilerConfig->usePropertyInjection()) {
-            $this->resolveAnnotatedProperties($this->definitions[$id], $parentEntryPoint);
+            $this->resolveAnnotatedProperties($id, $this->definitions[$id], $parentEntryPoint);
         }
     }
 
-    private function resolveConstructorArguments(ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
+    private function resolveConstructorArguments(string $id, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
     {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
@@ -195,7 +195,7 @@ class DependencyResolver
 
             $definition->addConstructorArgumentFromClass($paramClass);
             $this->resolve($paramClass, null, $parentEntryPoint);
-            $this->definitions[$paramClass]->increaseReferenceCount();
+            $this->definitions[$paramClass]->increaseReferenceCount($id);
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
@@ -207,7 +207,7 @@ class DependencyResolver
         }
     }
 
-    private function resolveAnnotatedProperties(ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
+    private function resolveAnnotatedProperties(string $id, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
     {
         $class = new ReflectionClass($definition->getClassName());
 
@@ -242,7 +242,7 @@ class DependencyResolver
 
             $definition->addPropertyFromClass($property->getName(), $propertyClass);
             $this->resolve($propertyClass, null, $parentEntryPoint);
-            $this->definitions[$propertyClass]->increaseReferenceCount();
+            $this->definitions[$propertyClass]->increaseReferenceCount($id);
         }
 
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);

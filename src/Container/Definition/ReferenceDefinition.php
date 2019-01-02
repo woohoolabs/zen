@@ -64,10 +64,7 @@ class ReferenceDefinition extends AbstractDefinition
         ];
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    public function compile(DefinitionCompilation $compilation, int $indentationLevel, bool $inline = false): string
+    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
 
@@ -93,14 +90,7 @@ class ReferenceDefinition extends AbstractDefinition
 
         $definition = $compilation->getDefinition($this->referencedId);
 
-        $code .= $this->compileEntryReference(
-            $definition->getId($this->id),
-            $definition->getHash($this->id),
-            $definition->isSingleton($this->id),
-            $definition,
-            $compilation,
-            $indentationLevel
-        );
+        $code .= $this->compileEntryReference($definition, $compilation, $indentationLevel);
 
         if ($inline === false) {
             $code .= ";\n";

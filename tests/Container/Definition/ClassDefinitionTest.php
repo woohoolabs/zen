@@ -9,7 +9,7 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
-use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorC;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
 use function dirname;
 use function file_get_contents;
@@ -158,6 +158,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -180,6 +181,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -202,6 +204,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -224,6 +227,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -253,6 +257,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\C" => ClassDefinition::singleton("X\\C", true),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -282,6 +287,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\C" => ClassDefinition::singleton("X\\C", false),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -301,8 +307,6 @@ class ClassDefinitionTest extends TestCase
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
-        $this->expectException(ContainerException::class);
-
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
                 AutoloadConfig::disabledGlobally(),
@@ -321,16 +325,15 @@ class ClassDefinitionTest extends TestCase
                     "X\\D" => ClassDefinition::singleton("X\\D", true),
                 ]
             ),
+            $definition->getId(""),
             0,
             false
         );
 
-        /*
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentEntryPointConstructorDependencies.php"),
             $compiledDefinition
         );
-        */
     }
 
     /**
@@ -355,6 +358,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -395,6 +399,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -424,6 +429,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\C" => ClassDefinition::singleton("X\\C"),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -463,6 +469,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\A" => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -478,11 +485,9 @@ class ClassDefinitionTest extends TestCase
      */
     public function compileWhenContextDependentPropertyInjection()
     {
-        $definition = ClassDefinition::singleton("X\\A")
+        $definition = ClassDefinition::singleton("X\\A", true)
             ->addPropertyFromClass("b", "X\\B")
             ->addPropertyFromClass("c", "X\\C");
-
-        $this->expectException(ContainerException::class);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
@@ -494,24 +499,23 @@ class ClassDefinitionTest extends TestCase
                         "X\\B",
                         null,
                         [
-                            "X\\A" => new ClassDefinition("X\\C", "singleton"),
-                            "X\\F" => new ClassDefinition("X\\D", "singleton"),
+                            "X\\A" => new ClassDefinition("X\\C", "singleton", true),
+                            "X\\F" => new ClassDefinition("X\\D", "singleton", true),
                         ]
                     ),
-                    "X\\C" => new ClassDefinition("X\\C", "singleton"),
-                    "X\\D" => new ClassDefinition("X\\D", "singleton"),
+                    "X\\C" => new ClassDefinition("X\\C", "singleton", true),
+                    "X\\D" => new ClassDefinition("X\\D", "singleton", true),
                 ]
             ),
+            "",
             0,
             false
         );
 
-        /*
         $this->assertEquals(
             $this->getDefinitionSourceCode("ClassDefinitionWithContextDependentPropertyDependencies.php"),
             $compiledDefinition
         );
-        */
     }
 
     /**
@@ -532,6 +536,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -566,6 +571,7 @@ class ClassDefinitionTest extends TestCase
                     "X\\E" => ClassDefinition::singleton("X\\E"),
                 ]
             ),
+            "",
             2,
             false
         );
@@ -591,6 +597,7 @@ class ClassDefinitionTest extends TestCase
                     ConstructorD::class => $definition,
                 ]
             ),
+            "",
             0,
             false
         );
@@ -599,6 +606,56 @@ class ClassDefinitionTest extends TestCase
             $this->getDefinitionSourceCode("ClassDefinitionWhenAutoloaded.php"),
             $compiledDefinition
         );
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenBothFileBased()
+    {
+        $definition = ClassDefinition::singleton("X\\A", true, false, true)
+            ->addConstructorArgumentFromClass("X\\B");
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions"),
+                [
+                    "X\\A" => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                ]
+            ),
+            "",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWhenBothFileBased.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenOnlyChildFileBased()
+    {
+        $definition = ClassDefinition::singleton("X\\A", true, false, false)
+            ->addConstructorArgumentFromClass("X\\B");
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions"),
+                [
+                    "X\\A" => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                ]
+            ),
+            "",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
     }
 
     private function getDefinitionSourceCode(string $fileName): string

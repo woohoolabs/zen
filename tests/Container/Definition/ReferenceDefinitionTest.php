@@ -70,6 +70,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -93,6 +94,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -116,6 +118,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B"),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -139,6 +142,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B", true),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -162,6 +166,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::prototype("X\\B", true),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -185,6 +190,7 @@ class ReferenceDefinitionTest extends TestCase
                     ConstructorD::class => ClassDefinition::singleton(ConstructorD::class, true),
                 ]
             ),
+            "",
             0,
             false
         );
@@ -208,6 +214,7 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B", true),
                 ]
             ),
+            "",
             2,
             false
         );
@@ -220,7 +227,7 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenInlined()
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
@@ -231,11 +238,60 @@ class ReferenceDefinitionTest extends TestCase
                     "X\\B" => ClassDefinition::singleton("X\\B", true),
                 ]
             ),
+            "",
             0,
             true
         );
 
         $this->assertEquals($this->getInlinedDefinitionSourceCode("ReferenceDefinitionWhenInlined.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenBothFileBased()
+    {
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, true);
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions"),
+                [
+                    "X\\A" => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                ]
+            ),
+            "",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ReferenceDefinitionWhenBothFileBased.php"), $compiledDefinition);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWhenOnlyChildFileBased()
+    {
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
+
+        $compiledDefinition = $definition->compile(
+            new DefinitionCompilation(
+                AutoloadConfig::disabledGlobally(),
+                FileBasedDefinitionConfig::disabledGlobally("Definitions"),
+                [
+                    "X\\A" => $definition,
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                ]
+            ),
+            "",
+            0,
+            false
+        );
+
+        $this->assertEquals($this->getDefinitionSourceCode("ReferenceDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
     }
 
     private function getDefinitionSourceCode(string $fileName): string
