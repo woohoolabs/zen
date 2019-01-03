@@ -86,7 +86,7 @@ class DependencyResolver
         $this->resetDefinitions();
 
         foreach ($this->entryPoints as $id => $entryPoint) {
-            $this->resolve($id, $entryPoint, $entryPoint);
+            $this->resolve($id, $entryPoint);
         }
 
         return $this->definitions;
@@ -104,12 +104,12 @@ class DependencyResolver
             throw new NotFoundException($id);
         }
 
-        $this->resolve($id, $this->entryPoints[$id], $this->entryPoints[$id]);
+        $this->resolve($id, $this->entryPoints[$id]);
 
         return $this->definitions;
     }
 
-    private function resolve(string $id, ?EntryPointInterface $currentEntryPoint, EntryPointInterface $parentEntryPoint): void
+    private function resolve(string $id, EntryPointInterface $parentEntryPoint): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
@@ -119,8 +119,8 @@ class DependencyResolver
             return;
         }
 
-        $isAutoloaded = $this->isAutoloaded($currentEntryPoint);
-        $isFileBased = $this->isFileBasedDefinition($parentEntryPoint);
+        $isAutoloaded = $this->isAutoloaded($id, $parentEntryPoint);
+        $isFileBased = $this->isFileBased($id, $parentEntryPoint);
 
         if (isset($this->definitionHints[$id])) {
             $definitions = $this->definitionHints[$id]->toDefinitions(
@@ -135,7 +135,7 @@ class DependencyResolver
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {
                     $this->definitions[$definitionId] = $definition;
-                    $this->resolve($definitionId, null, $parentEntryPoint);
+                    $this->resolve($definitionId, $parentEntryPoint);
                 }
             }
 
@@ -194,7 +194,7 @@ class DependencyResolver
             }
 
             $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass, null, $parentEntryPoint);
+            $this->resolve($paramClass, $parentEntryPoint);
             $this->definitions[$paramClass]->increaseReferenceCount($id);
         }
 
@@ -241,7 +241,7 @@ class DependencyResolver
             }
 
             $definition->addPropertyFromClass($property->getName(), $propertyClass);
-            $this->resolve($propertyClass, null, $parentEntryPoint);
+            $this->resolve($propertyClass, $parentEntryPoint);
             $this->definitions[$propertyClass]->increaseReferenceCount($id);
         }
 
@@ -254,34 +254,26 @@ class DependencyResolver
         }
     }
 
-    private function isAutoloaded(?EntryPointInterface $entryPoint): bool
+    private function isAutoloaded(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (in_array($entryPoint, $this->autoloadConfig->getExcludedClasses(), true)) {
+        if (in_array($id, $this->autoloadConfig->getExcludedClasses(), true)) {
             return false;
         }
 
-        if ($entryPoint && ($this->autoloadConfig->isGlobalAutoloadEnabled() || $entryPoint->isAutoloaded())) {
+        if (in_array($id, $this->autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
             return true;
         }
 
-        if (in_array($entryPoint, $this->autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
-            return true;
-        }
-
-        return false;
+        return $parentEntryPoint->isAutoloaded($this->autoloadConfig);
     }
 
-    private function isFileBasedDefinition(EntryPointInterface $entryPoint): bool
+    private function isFileBased(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (in_array($entryPoint, $this->fileBasedDefinitionConfig->getExcludedClasses(), true)) {
+        if (in_array($id, $this->fileBasedDefinitionConfig->getExcludedDefinitions(), true)) {
             return false;
         }
 
-        if ($this->fileBasedDefinitionConfig->isGlobalFileBasedDefinitionEnabled() || $entryPoint->isFileBased()) {
-            return true;
-        }
-
-        return false;
+        return $parentEntryPoint->isFileBased($this->fileBasedDefinitionConfig);
     }
 
     private function resetDefinitions(): void

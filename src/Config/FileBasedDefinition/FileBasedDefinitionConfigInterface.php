@@ -12,5 +12,5 @@ interface FileBasedDefinitionConfigInterface
     /**
      * @return string[]
      */
-    public function getExcludedClasses(): array;
+    public function getExcludedDefinitions(): array;
 }

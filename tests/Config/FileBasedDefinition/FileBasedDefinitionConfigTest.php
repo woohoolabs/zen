@@ -66,7 +66,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     {
         $fileBasedDefinitionConfig = new FileBasedDefinitionConfig(true);
 
-        $excludedClasses = $fileBasedDefinitionConfig->getExcludedClasses();
+        $excludedClasses = $fileBasedDefinitionConfig->getExcludedDefinitions();
 
         $this->assertEmpty($excludedClasses);
     }
@@ -78,8 +78,8 @@ class FileBasedDefinitionConfigTest extends TestCase
     {
         $fileBasedDefinitionConfig = new FileBasedDefinitionConfig(true);
 
-        $fileBasedDefinitionConfig->setExcludedClasses([EntryPointA::class]);
+        $fileBasedDefinitionConfig->setExcludedDefinitions([EntryPointA::class]);
 
-        $this->assertEquals([EntryPointA::class], $fileBasedDefinitionConfig->getExcludedClasses());
+        $this->assertEquals([EntryPointA::class], $fileBasedDefinitionConfig->getExcludedDefinitions());
     }
 }

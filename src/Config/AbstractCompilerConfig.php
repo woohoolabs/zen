@@ -78,7 +78,7 @@ abstract class AbstractCompilerConfig
             return $this->entryPoints;
         }
 
-        $entryPoints = [
+        $this->entryPoints = [
             ContainerInterface::class => new ClassEntryPoint(ContainerInterface::class),
             $this->getContainerFqcn() => new ClassEntryPoint($this->getContainerFqcn()),
         ];
@@ -87,14 +87,14 @@ abstract class AbstractCompilerConfig
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
                     // TODO This condition is only for ensuring backwards compatibility. It should be removed in Zen 3.0.
-                    if (isset($entryPoints[$id]) === false) {
-                        $entryPoints[$id] = $entryPoint;
+                    if (isset($this->entryPoints[$id]) === false) {
+                        $this->entryPoints[$id] = $entryPoint;
                     }
                 }
             }
         }
 
-        return $this->entryPoints = $entryPoints;
+        return $this->entryPoints;
     }
 
     /**

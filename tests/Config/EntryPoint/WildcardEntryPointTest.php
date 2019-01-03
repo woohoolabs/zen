@@ -53,54 +53,6 @@ class WildcardEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function autoload()
-    {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
-
-        $entryPoint->autoload();
-
-        $this->assertTrue($entryPoint->isAutoloaded());
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloadedWhenFalse()
-    {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
-
-        $isAutoloaded = $entryPoint->isAutoloaded();
-
-        $this->assertFalse($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
-    public function fileBased()
-    {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
-
-        $entryPoint->fileBased();
-
-        $this->assertTrue($entryPoint->isFileBased());
-    }
-
-    /**
-     * @test
-     */
-    public function isFileBasedWhenFalse()
-    {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
-
-        $isFileBased = $entryPoint->isFileBased();
-
-        $this->assertFalse($isFileBased);
-    }
-
-    /**
-     * @test
-     */
     public function getClassNames()
     {
         $entryPoint = new WildcardEntryPoint($this->getSourcePath(), false);

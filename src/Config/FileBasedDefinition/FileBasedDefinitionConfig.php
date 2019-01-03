@@ -20,7 +20,7 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     /**
      * @var array
      */
-    private $excludedClasses;
+    private $excludedDefinitions;
 
     public static function disabledGlobally(string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
     {
@@ -32,15 +32,17 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
         return new FileBasedDefinitionConfig(true, $relativeDefinitionDirectory);
     }
 
-    public static function create(bool $isGlobalAutoloadEnabled, string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
-    {
-        return new FileBasedDefinitionConfig($isGlobalAutoloadEnabled, $relativeDefinitionDirectory);
+    public static function create(
+        bool $isGlobalFileBasedDefinitionsEnabled,
+        string $relativeDefinitionDirectory = ""
+    ): FileBasedDefinitionConfig {
+        return new FileBasedDefinitionConfig($isGlobalFileBasedDefinitionsEnabled, $relativeDefinitionDirectory);
     }
 
-    public function __construct(bool $isGlobalAutoloadEnabled, string $relativeDefinitionDirectory = "")
+    public function __construct(bool $isGlobalFileBasedDefinitionsEnabled, string $relativeDefinitionDirectory = "")
     {
-        $this->isGlobalFileBasedDefinitionsEnabled = $isGlobalAutoloadEnabled;
-        $this->excludedClasses = [];
+        $this->isGlobalFileBasedDefinitionsEnabled = $isGlobalFileBasedDefinitionsEnabled;
+        $this->excludedDefinitions = [];
         $this->setRelativeDefinitionDirectory($relativeDefinitionDirectory);
     }
 
@@ -62,17 +64,17 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     }
 
     /**
-     * @param string[] $excludedClasses
+     * @param string[] $excludedDefinitions
      */
-    public function setExcludedClasses(array $excludedClasses): FileBasedDefinitionConfig
+    public function setExcludedDefinitions(array $excludedDefinitions): FileBasedDefinitionConfig
     {
-        $this->excludedClasses = $excludedClasses;
+        $this->excludedDefinitions = $excludedDefinitions;
 
         return $this;
     }
 
-    public function getExcludedClasses(): array
+    public function getExcludedDefinitions(): array
     {
-        return $this->excludedClasses;
+        return $this->excludedDefinitions;
     }
 }

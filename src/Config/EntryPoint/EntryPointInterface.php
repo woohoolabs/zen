@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\EntryPoint;
 
+use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
+
 interface EntryPointInterface
 {
     /**
@@ -14,10 +17,10 @@ interface EntryPointInterface
     /**
      * @internal
      */
-    public function isAutoloaded(): bool;
+    public function isAutoloaded(AutoloadConfigInterface $autoloadConfig): bool;
 
     /**
      * @internal
      */
-    public function isFileBased(): bool;
+    public function isFileBased(FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig): bool;
 }

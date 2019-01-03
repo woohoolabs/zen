@@ -8,6 +8,8 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
+use WoohooLabs\Zen\Examples\Controller\AbstractController;
+use WoohooLabs\Zen\Examples\Controller\ControllerInterface;
 
 class CompilerConfig extends AbstractCompilerConfig
 {
@@ -33,7 +35,17 @@ class CompilerConfig extends AbstractCompilerConfig
 
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
-        return AutoloadConfig::enabledGlobally(realpath(__DIR__  . "/.."));
+        return AutoloadConfig::enabledGlobally(realpath(__DIR__  . "/.."))
+            ->setAlwaysAutoloadedClasses(
+                [
+                    ControllerInterface::class,
+                ]
+            )
+            ->setExcludedClasses(
+                [
+                    AbstractController::class
+                ]
+            );
     }
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
