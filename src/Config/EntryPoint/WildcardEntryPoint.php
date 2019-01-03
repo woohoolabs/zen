@@ -18,9 +18,9 @@ class WildcardEntryPoint extends AbstractEntryPoint
      */
     private $onlyConcreteClasses;
 
-    public static function create(string $className, bool $onlyConcreteClasses = true): WildcardEntryPoint
+    public static function create(string $directoryName, bool $onlyConcreteClasses = true): WildcardEntryPoint
     {
-        return new WildcardEntryPoint($className, $onlyConcreteClasses);
+        return new WildcardEntryPoint($directoryName, $onlyConcreteClasses);
     }
 
     public function __construct(string $directoryName, bool $onlyConcreteClasses = true)
