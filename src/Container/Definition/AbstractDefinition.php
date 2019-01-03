@@ -123,11 +123,12 @@ abstract class AbstractDefinition implements DefinitionInterface
     ): string {
         $id = $definition->getId($this->id);
         $referenceCount = $definition->getReferenceCount($this->id);
+        $isSingleton = $definition->isSingleton($this->id);
         $isEntryPoint = $definition->isEntryPoint($this->id);
 
         $code = "";
 
-        if ($id && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
