@@ -435,7 +435,8 @@ public function getAutoloadConfig(): AutoloadConfigInterface
 }
 ```
 
-This way, all your Entry Points will be autoladed by Zen. Note that the first parameter is the root directory of your project.
+This way, all your Entry Points will be autoladed by Zen. Note that the first parameter in the example above is the root
+directory of your project.
 
 - Selectively: You can choose which Entry Points are to be autoloaded.
 ```php
@@ -443,7 +444,7 @@ protected function getEntryPoints(): array
 {
     return [
         WildcardEntryPoint::create(__DIR__ . "/Controller")->autoload(),
-        ClassEntryPoint::create(Class10::class)->autoload(),
+        ClassEntryPoint::create(Class10::class)->disableAutoload(),
         // ...      
     ];
 }
@@ -474,7 +475,7 @@ This effects that the `VeryImportantClass1` is included just after the compiled 
 ### File-based definitions
 
 This is another optimization which was [inspired by Symfony](https://github.com/symfony/symfony/pull/23678): if you have
-hundreds or even thousands of entries in the compiled container, then you may be better off separating the contents
+hundreds or even thousands of entries in the compiled container, then you may be better off separating the content
 of the container into different files.
 
 There are two ways of enabling this feature:
@@ -487,9 +488,9 @@ public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterfa
 }
 ```
 
-This way, all definitions will be in separate files. Note that the first parameter is the directory where the definitions
-are generated, relative to the container itself. This directory is automatically deleted and created during compilation,
-so be cautious with it.
+This way, all definitions will be in separate files. Note that the first parameter in the example above is the directory
+where the definitions are generated, relative to the container itself. This directory is automatically deleted and created
+during compilation, so be cautious with it.
 
 - Selectively: You can choose which Entry Points are to be separated into different files.
 ```php
@@ -497,7 +498,7 @@ protected function getEntryPoints(): array
 {
     return [
         WildcardEntryPoint::create(__DIR__ . "/Controller")->fileBased(),
-        ClassEntryPoint::create(Class10::class)->fileBased(),
+        ClassEntryPoint::create(Class10::class)->disableFileBased(),
         // ...      
     ];
 }
