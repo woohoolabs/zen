@@ -350,39 +350,6 @@ contain scalar types, and provide the arguments in question via `parent::__const
 Finally, add the appropriate [Hint](#hints) to the container configuration so that the child class should be used instead of
 the parent class.
 
-### Built-in autoloading of entry points
-
-If you have big object graphs then autoloading can take relatively
-[much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
-[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers a similar functionality
-that tries to improve the situation: starting from Zen 2.3, you can configure the container to autoload your
-[Entry Points](#entry-points) and all their dependencies by including them (using `include_once`) just before their
-first retrieval.
-
-There are two ways of enabling this feature:
-
-- Globally: Configure your [Compiler Configuration](#configuring-the-compiler) by adding this method:
-```php
-public function getAutoloadConfig(): AutoloadConfigInterface
-{
-    return AutoloadConfig::enableGlobally("/var/www");
-}
-```
-This way, all your Entry Points will be autoladed by Zen. Note that the first parameter is the root directory of
-your project.
-
-- Selectively: You can choose which Entry Points are to be autoloaded.
-```php
-protected function getEntryPoints(): array
-{
-    return [
-        WildcardEntryPoint::create(__DIR__ . "/Controller")->autoload(),
-        ClassEntryPoint::create(Class10::class)->autoload(),
-        // ...      
-    ];
-}
-```
-
 ### Context-dependent dependency injection
 
 Sometimes - usually for bigger projects - it can be useful to be able to inject different implementations of the same
@@ -448,6 +415,93 @@ on it, then the class/[definition hint](#hints) in the first parameter of the `s
 > Note that if you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
 then a `ContainerException` will be thrown if the interface is injected as a dependency of any class other than the listed
 ones in the second parameter of the `setClassContext()` method calls.
+
+### Built-in autoloading of entry points
+
+If you have big object graphs then autoloading can take relatively
+[much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
+[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers a similar functionality
+that tries to improve the situation: starting from Zen 2.3, you can configure the container to autoload your
+[Entry Points](#entry-points) and all their dependencies by including them (using `include_once`) just before their
+first retrieval.
+
+There are two ways of enabling this feature:
+
+- Globally: Configure your [Compiler Configuration](#configuring-the-compiler) by adding this method:
+```php
+public function getAutoloadConfig(): AutoloadConfigInterface
+{
+    return AutoloadConfig::enableGlobally("/var/www");
+}
+```
+
+This way, all your Entry Points will be autoladed by Zen. Note that the first parameter is the root directory of your project.
+
+- Selectively: You can choose which Entry Points are to be autoloaded.
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        WildcardEntryPoint::create(__DIR__ . "/Controller")->autoload(),
+        ClassEntryPoint::create(Class10::class)->autoload(),
+        // ...      
+    ];
+}
+```
+
+You can also define such classes that should be always autoloaded or which should be never autoloaded by Zen:
+
+```php
+public function getAutoloadConfig(): AutoloadConfigInterface
+{
+    return AutoloadConfig::enableGlobally("/var/www")
+        ->setAlwaysAutoloadedClasses(
+            [
+                "VeryImportantClass1",
+            ]
+        )
+        ->setNeverAutoloadedClasses(
+            [
+                "NotImportantClass1",
+            ]
+        );
+}
+```
+
+This effects that the `VeryImportantClass1` is included just after the compiled container has been instantiated, while the
+`NotImportantClass1` won't ever be included by Zen.
+
+### File-based definitions
+
+This is another optimization which was [inspired by Symfony](https://github.com/symfony/symfony/pull/23678): if you have
+hundreds or even thousands of entries in the compiled container, then you may be better off separating the contents
+of the container into different files.
+
+There are two ways of enabling this feature:
+
+- Globally: Configure your [Compiler Configuration](#configuring-the-compiler) by adding this method:
+```php
+public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
+{
+    return FileBasedDefinitionConfig::enableGlobally("Definitions");
+}
+```
+
+This way, all definitions will be in separate files. Note that the first parameter is the directory where the definitions
+are generated, relative to the container itself. This directory is automatically deleted and created during compilation,
+so be cautious with it.
+
+- Selectively: You can choose which Entry Points are to be separated into different files.
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        WildcardEntryPoint::create(__DIR__ . "/Controller")->fileBased(),
+        ClassEntryPoint::create(Class10::class)->fileBased(),
+        // ...      
+    ];
+}
+```
 
 ### Dynamic container
 
