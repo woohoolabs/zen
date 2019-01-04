@@ -43,7 +43,8 @@ class ClassDefinition extends AbstractDefinition
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ): ClassDefinition {
         return new self(
             $className,
@@ -53,7 +54,8 @@ class ClassDefinition extends AbstractDefinition
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
-            $referenceCount
+            $singletonReferenceCount,
+            $prototypeReferenceCount
         );
     }
 
@@ -64,7 +66,8 @@ class ClassDefinition extends AbstractDefinition
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ): ClassDefinition {
         return new self(
             $className,
@@ -74,7 +77,8 @@ class ClassDefinition extends AbstractDefinition
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
-            $referenceCount
+            $singletonReferenceCount,
+            $prototypeReferenceCount
         );
     }
 
@@ -86,9 +90,18 @@ class ClassDefinition extends AbstractDefinition
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ) {
-        parent::__construct($className, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        parent::__construct(
+            $className,
+            $scope,
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $singletonReferenceCount,
+            $prototypeReferenceCount
+        );
         $this->constructorArguments = [];
         $this->properties = [];
         $this->needsDependencyResolution = true;
@@ -199,7 +212,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isAutoloadable($inline)) {
+        if ($this->isAutoloadingInlinable($inline)) {
             $code .= $this->includeRelatedClasses(
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
@@ -213,7 +226,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= "${indent}return ";
         }
 
-        if ($this->isOptimizable() === false) {
+        if ($this->isAssignmentEliminable() === false) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
 

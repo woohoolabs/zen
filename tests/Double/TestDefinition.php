@@ -15,9 +15,10 @@ class TestDefinition extends AbstractDefinition
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ) {
-        parent::__construct($id, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        parent::__construct($id, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $singletonReferenceCount, $prototypeReferenceCount);
     }
 
     public function needsDependencyResolution(): bool

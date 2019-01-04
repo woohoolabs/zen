@@ -49,17 +49,30 @@ abstract class AbstractDefinition implements DefinitionInterface
     /**
      * @var int
      */
-    private $referenceCount;
+    private $singletonReferenceCount;
 
-    public function __construct(string $id, string $scope, bool $isEntryPoint, bool $isAutoloaded, bool $isFileBased, int $referenceCount)
-    {
+    /**
+     * @var int
+     */
+    private $prototypeReferenceCount;
+
+    public function __construct(
+        string $id,
+        string $scope,
+        bool $isEntryPoint,
+        bool $isAutoloaded,
+        bool $isFileBased,
+        int $singletonReferenceCount,
+        int $prototypeReferenceCount
+    ) {
         $this->id = $id;
         $this->hash = $this->hash($id);
         $this->scope = $scope;
         $this->entryPoint = $isEntryPoint;
         $this->autoloaded = $isAutoloaded;
         $this->fileBased = $isFileBased;
-        $this->referenceCount = $referenceCount;
+        $this->singletonReferenceCount = $singletonReferenceCount;
+        $this->prototypeReferenceCount = $prototypeReferenceCount;
     }
 
     public function getId(string $parentId = ""): string
@@ -92,14 +105,26 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->fileBased;
     }
 
-    public function getReferenceCount(string $parentId = ""): int
+    public function getSingletonReferenceCount(string $parentId = ""): int
     {
-        return $this->referenceCount;
+        return $this->singletonReferenceCount;
     }
 
-    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface
+    public function getPrototypeReferenceCount(string $parentId = ""): int
     {
-        $this->referenceCount++;
+        return $this->prototypeReferenceCount;
+    }
+
+    /**
+     * @return $this
+     */
+    public function increaseReferenceCount(string $parentId, bool $isParentSingleton): DefinitionInterface
+    {
+        if ($isParentSingleton) {
+            $this->singletonReferenceCount++;
+        } else {
+            $this->prototypeReferenceCount++;
+        }
 
         return $this;
     }
@@ -122,13 +147,10 @@ abstract class AbstractDefinition implements DefinitionInterface
         int $indentationLevelWhenInlined
     ): string {
         $id = $definition->getId($this->id);
-        $referenceCount = $definition->getReferenceCount($this->id);
-        $isSingleton = $definition->isSingleton($this->id);
-        $isEntryPoint = $definition->isEntryPoint($this->id);
 
         $code = "";
 
-        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+        if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
@@ -143,10 +165,7 @@ abstract class AbstractDefinition implements DefinitionInterface
     ): string {
         $id = $definition->getId($this->id);
         $hash = $definition->getHash($this->id);
-        $isSingleton = $definition->isSingleton($this->id);
-        $isEntryPoint = $definition->isEntryPoint($this->id);
         $isFileBased = $definition->isFileBased($this->id);
-        $referenceCount = $definition->getReferenceCount($this->id);
 
         if ($isFileBased) {
             $path = "__DIR__ . '/";
@@ -155,14 +174,14 @@ abstract class AbstractDefinition implements DefinitionInterface
             }
             $path .= "$hash.php'";
 
-            if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+            if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
                 return "\$this->singletonEntries['$id'] ?? require $path";
             }
 
             return "require $path";
         }
 
-        if ($isSingleton && ($this->scope === "prototype" || $referenceCount > 1 || $isEntryPoint)) {
+        if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
             return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 
@@ -179,14 +198,44 @@ abstract class AbstractDefinition implements DefinitionInterface
         return str_repeat(" ", $indentationLevel * 4);
     }
 
-    protected function isOptimizable(): bool
+    protected function isAutoloadingInlinable(bool $inline): bool
     {
-        return $this->isSingleton("") === false || ($this->referenceCount <= 1 && $this->entryPoint === false);
+        if ($this->autoloaded === false || $this->entryPoint === false || $this->isSingleton("") === false) {
+            return false;
+        }
+
+        if ($this->singletonReferenceCount > 0 || $this->prototypeReferenceCount > 0) {
+            return false;
+        }
+
+        if ($inline) {
+            return false;
+        }
+
+        return true;
     }
 
-    protected function isAutoloadable(bool $inline): bool
+    protected function isAssignmentEliminable(): bool
     {
-        return $this->entryPoint && $this->autoloaded && $this->isSingleton("") && $this->referenceCount === 0 && $inline === false;
+        if ($this->isSingleton("") === false) {
+            return true;
+        }
+
+        return $this->entryPoint === false && $this->singletonReferenceCount <= 1 && $this->prototypeReferenceCount === 0;
+    }
+
+    protected function isCheckForSingletonReferenceEliminable(DefinitionInterface $definition): bool
+    {
+        $isSingleton = $definition->isSingleton($this->id);
+        $isEntryPoint = $definition->isEntryPoint($this->id);
+        $singletonReferenceCount = $definition->getSingletonReferenceCount($this->id);
+        $prototypeReferenceCount = $definition->getPrototypeReferenceCount($this->id);
+
+        if ($isSingleton === false) {
+            return true;
+        }
+
+        return $isEntryPoint === false && $singletonReferenceCount <= 1 && $prototypeReferenceCount === 0;
     }
 
     /**

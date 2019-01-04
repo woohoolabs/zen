@@ -63,14 +63,19 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->isFileBased($parentId);
     }
 
-    public function getReferenceCount(string $parentId = ""): int
+    public function getSingletonReferenceCount(string $parentId = ""): int
     {
-        return $this->getDefinition($parentId)->getReferenceCount($parentId);
+        return $this->getDefinition($parentId)->getSingletonReferenceCount($parentId);
     }
 
-    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface
+    public function getPrototypeReferenceCount(string $parentId = ""): int
     {
-        return $this->getDefinition($parentId)->increaseReferenceCount($parentId);
+        return $this->getDefinition($parentId)->getPrototypeReferenceCount($parentId);
+    }
+
+    public function increaseReferenceCount(string $parentId, bool $isSingletonParent): DefinitionInterface
+    {
+        return $this->getDefinition($parentId)->increaseReferenceCount($parentId, $isSingletonParent);
     }
 
     public function needsDependencyResolution(): bool

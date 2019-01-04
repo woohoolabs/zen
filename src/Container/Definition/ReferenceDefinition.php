@@ -18,9 +18,19 @@ class ReferenceDefinition extends AbstractDefinition
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ): ReferenceDefinition {
-        return new self($referrerId, $referencedId, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        return new self(
+            $referrerId,
+            $referencedId,
+            "singleton",
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $singletonReferenceCount,
+            $prototypeReferenceCount
+        );
     }
 
     public static function prototype(
@@ -29,9 +39,19 @@ class ReferenceDefinition extends AbstractDefinition
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ): ReferenceDefinition {
-        return new self($referrerId, $referencedId, "prototype", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        return new self(
+            $referrerId,
+            $referencedId,
+            "prototype",
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $singletonReferenceCount,
+            $prototypeReferenceCount
+        );
     }
 
     public function __construct(
@@ -41,9 +61,18 @@ class ReferenceDefinition extends AbstractDefinition
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
-        int $referenceCount = 0
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0
     ) {
-        parent::__construct($referrerId, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        parent::__construct(
+            $referrerId,
+            $scope,
+            $isEntryPoint,
+            $isAutoloaded,
+            $isFileBased,
+            $singletonReferenceCount,
+            $prototypeReferenceCount
+        );
         $this->referencedId = $referencedId;
     }
 
@@ -70,7 +99,7 @@ class ReferenceDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isAutoloadable($inline)) {
+        if ($this->isAutoloadingInlinable($inline)) {
             $code .= $this->includeRelatedClasses(
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
@@ -84,7 +113,7 @@ class ReferenceDefinition extends AbstractDefinition
             $code .= "${indent}return ";
         }
 
-        if ($this->isOptimizable() === false) {
+        if ($this->isAssignmentEliminable() === false) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
 

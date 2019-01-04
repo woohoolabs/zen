@@ -46,7 +46,7 @@ class DependencyResolverTest extends TestCase
 
         $this->expectException(NotFoundException::class);
 
-        $dependencyResolver->resolveClass(ConstructorB::class);
+        $dependencyResolver->resolveEntryPoint(ConstructorB::class);
     }
 
     /**
@@ -56,7 +56,7 @@ class DependencyResolverTest extends TestCase
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
 
-        $definitions = $dependencyResolver->resolveClass(ConstructorA::class);
+        $definitions = $dependencyResolver->resolveEntryPoint(ConstructorA::class);
 
         $this->assertEquals(
             [
@@ -70,14 +70,14 @@ class DependencyResolverTest extends TestCase
                     ->resolveDependencies(),
                 ConstructorB::class => ClassDefinition::singleton(ConstructorB::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addConstructorArgumentFromClass(ConstructorD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 ConstructorD::class => ClassDefinition::singleton(ConstructorD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
             ],
             $definitions
         );
@@ -104,14 +104,14 @@ class DependencyResolverTest extends TestCase
                     ->resolveDependencies(),
                 ConstructorB::class => ClassDefinition::singleton(ConstructorB::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 ConstructorC::class => ClassDefinition::singleton(ConstructorC::class)
                     ->addConstructorArgumentFromClass(ConstructorD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 ConstructorD::class => ClassDefinition::singleton(ConstructorD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
             ],
             $definitions
         );
@@ -138,20 +138,20 @@ class DependencyResolverTest extends TestCase
                     ->addPropertyFromClass("e2", AnnotationE::class)
                     ->addPropertyFromClass("d", AnnotationD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 AnnotationC::class => ClassDefinition::singleton(AnnotationC::class)
                     ->addPropertyFromClass("e1", AnnotationE::class)
                     ->addPropertyFromClass("e2", AnnotationE::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 AnnotationE::class => ClassDefinition::singleton(AnnotationE::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount()
-                    ->increaseReferenceCount()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true)
+                    ->increaseReferenceCount("", true)
+                    ->increaseReferenceCount("", true),
                 AnnotationD::class => ClassDefinition::singleton(AnnotationD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
             ],
             $definitions
         );
@@ -178,16 +178,16 @@ class DependencyResolverTest extends TestCase
                 MixedB::class => ClassDefinition::singleton(MixedB::class)
                     ->addConstructorArgumentFromClass(MixedD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true)
+                    ->increaseReferenceCount("", true),
                 MixedD::class => ClassDefinition::singleton(MixedD::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true)
+                    ->increaseReferenceCount("", true),
                 MixedC::class => ClassDefinition::singleton(MixedC::class)
                     ->addPropertyFromClass("b", MixedB::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
             ],
             $definitions
         );
@@ -241,9 +241,9 @@ class DependencyResolverTest extends TestCase
                     ->resolveDependencies(),
                 ConstructorE::class => ClassDefinition::singleton(ConstructorE::class)
                     ->resolveDependencies()
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
                 ConstructorD::class => ReferenceDefinition::singleton(ConstructorD::class, ConstructorE::class)
-                    ->increaseReferenceCount(),
+                    ->increaseReferenceCount("", true),
             ],
             $definitions
         );

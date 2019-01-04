@@ -113,7 +113,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             );
 
             foreach ($definitions as $definition) {
-                $definition->increaseReferenceCount($id);
+                $definition->increaseReferenceCount($id, $this->getScope() === "singleton");
             }
 
             $result = array_merge($result, $definitions);
@@ -128,7 +128,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $this->properties
             );
 
-            $result[$this->className]->increaseReferenceCount($id);
+            $result[$this->className]->increaseReferenceCount($id, $this->getScope() === "singleton");
         }
 
         return $result;

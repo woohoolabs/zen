@@ -314,23 +314,23 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCountWithoutDefaultWhenNoParent()
+    public function getSingletonReferenceCountWithoutDefaultWhenNoParent()
     {
         $definition = new ContextDependentDefinition("", null, []);
 
         $this->expectException(ContainerException::class);
 
-        $definition->getReferenceCount();
+        $definition->getSingletonReferenceCount();
     }
 
     /**
      * @test
      */
-    public function getReferenceCountWithDefaultWhenNoParent()
+    public function getSingletonReferenceCountWithDefaultWhenNoParent()
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
 
-        $referenceCount = $definition->getReferenceCount();
+        $referenceCount = $definition->getSingletonReferenceCount();
 
         $this->assertEquals(2, $referenceCount);
     }
@@ -338,11 +338,11 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCountWithDefaultWhenParentNotExists()
+    public function getSingletonReferenceCountWithDefaultWhenParentNotExists()
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
 
-        $referenceCount = $definition->getReferenceCount("X\\B");
+        $referenceCount = $definition->getSingletonReferenceCount("X\\B");
 
         $this->assertEquals(2, $referenceCount);
     }
@@ -350,7 +350,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCountWhenParentExists()
+    public function getSingletonReferenceCountWhenParentExists()
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -360,7 +360,7 @@ class ContextDependentDefinitionTest extends TestCase
             ]
         );
 
-        $referenceCount = $definition->getReferenceCount("X\\A");
+        $referenceCount = $definition->getSingletonReferenceCount("X\\A");
 
         $this->assertEquals(2, $referenceCount);
     }
@@ -374,7 +374,7 @@ class ContextDependentDefinitionTest extends TestCase
 
         $this->expectException(ContainerException::class);
 
-        $definition->increaseReferenceCount();
+        $definition->increaseReferenceCount("", true);
     }
 
     /**
@@ -389,10 +389,11 @@ class ContextDependentDefinitionTest extends TestCase
         );
 
         $definition
-            ->increaseReferenceCount()
-            ->increaseReferenceCount();
+            ->increaseReferenceCount("", true)
+            ->increaseReferenceCount("", false);
 
-        $this->assertEquals(2, $definition->getReferenceCount(""));
+        $this->assertEquals(1, $definition->getSingletonReferenceCount(""));
+        $this->assertEquals(1, $definition->getPrototypeReferenceCount(""));
     }
 
     /**
@@ -407,10 +408,11 @@ class ContextDependentDefinitionTest extends TestCase
         );
 
         $definition
-            ->increaseReferenceCount("X\\B")
-            ->increaseReferenceCount("X\\B");
+            ->increaseReferenceCount("X\\B", true)
+            ->increaseReferenceCount("X\\B", false);
 
-        $this->assertEquals(2, $definition->getReferenceCount("X\\B"));
+        $this->assertEquals(1, $definition->getSingletonReferenceCount("X\\B"));
+        $this->assertEquals(1, $definition->getPrototypeReferenceCount("X\\B"));
     }
 
     /**
@@ -427,10 +429,11 @@ class ContextDependentDefinitionTest extends TestCase
         );
 
         $definition
-            ->increaseReferenceCount("X\\A")
-            ->increaseReferenceCount("X\\A");
+            ->increaseReferenceCount("X\\A", true)
+            ->increaseReferenceCount("X\\A", false);
 
-        $this->assertEquals(2, $definition->getReferenceCount("X\\A"));
+        $this->assertEquals(1, $definition->getSingletonReferenceCount("X\\A"));
+        $this->assertEquals(1, $definition->getPrototypeReferenceCount("X\\A"));
     }
 
     /**

@@ -83,7 +83,7 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenUnoptimizedSingletonEntryPoint()
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false, 0);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false, 0, 0);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
@@ -107,7 +107,7 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenOptimizedSingleton()
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 0);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 0, 0);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
@@ -115,7 +115,7 @@ class ReferenceDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 1, 0),
                 ]
             ),
             "",

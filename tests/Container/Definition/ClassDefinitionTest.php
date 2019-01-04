@@ -272,7 +272,7 @@ class ClassDefinitionTest extends TestCase
      */
     public function compileWhenPrototypeWithRequiredInlinedConstructorDependencies()
     {
-        $definition = ClassDefinition::prototype("X\\A")
+        $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
             ->addConstructorArgumentFromClass("X\\C");
 
@@ -282,8 +282,8 @@ class ClassDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B", false),
-                    "X\\C" => ClassDefinition::singleton("X\\C", false),
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 0, 1),
+                    "X\\C" => ClassDefinition::singleton("X\\C", false, false, false, [], [], 0, 1),
                 ]
             ),
             "",
@@ -424,8 +424,8 @@ class ClassDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
-                    "X\\C" => ClassDefinition::singleton("X\\C"),
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 0, 1),
+                    "X\\C" => ClassDefinition::singleton("X\\C", false, false, false, [], [], 0, 1),
                 ]
             ),
             "",
@@ -522,7 +522,7 @@ class ClassDefinitionTest extends TestCase
      */
     public function compileWhenMultipleReferenceForOptimizableClass()
     {
-        $definition = ClassDefinition::prototype("X\\A")
+        $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
             ->addPropertyFromClass("b", "X\\B");
 
@@ -532,7 +532,7 @@ class ClassDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 2),
                 ]
             ),
             "",
@@ -562,12 +562,12 @@ class ClassDefinitionTest extends TestCase
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B"),
-                    "X\\C" => ClassDefinition::singleton("X\\C")
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 0, 2),
+                    "X\\C" => ClassDefinition::singleton("X\\C", false, false, false, [], [], 0, 1)
                         ->addConstructorArgumentFromClass("X\\D")
                         ->addPropertyFromClass("e", "X\\E"),
-                    "X\\D" => ClassDefinition::singleton("X\\D"),
-                    "X\\E" => ClassDefinition::singleton("X\\E"),
+                    "X\\D" => ClassDefinition::singleton("X\\D", false, false, false, [], [], 1, 0),
+                    "X\\E" => ClassDefinition::singleton("X\\E", false, false, false, [], [], 1, 0),
                 ]
             ),
             "",

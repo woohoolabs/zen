@@ -86,7 +86,7 @@ class DependencyResolver
         $this->resetDefinitions();
 
         foreach ($this->entryPoints as $id => $entryPoint) {
-            $this->resolve($id, $entryPoint);
+            $this->resolve($id, "", $entryPoint);
         }
 
         return $this->definitions;
@@ -96,7 +96,7 @@ class DependencyResolver
      * @return DefinitionInterface[]
      * @throws NotFoundException
      */
-    public function resolveClass(string $id): array
+    public function resolveEntryPoint(string $id): array
     {
         $this->resetDefinitions();
 
@@ -104,16 +104,16 @@ class DependencyResolver
             throw new NotFoundException($id);
         }
 
-        $this->resolve($id, $this->entryPoints[$id]);
+        $this->resolve($id, "", $this->entryPoints[$id]);
 
         return $this->definitions;
     }
 
-    private function resolve(string $id, EntryPointInterface $parentEntryPoint): void
+    private function resolve(string $id, string $parentId, EntryPointInterface $parentEntryPoint): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
-                $this->resolveDependencies($id, $parentEntryPoint);
+                $this->resolveDependencies($id, $parentId, $parentEntryPoint);
             }
 
             return;
@@ -135,32 +135,36 @@ class DependencyResolver
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {
                     $this->definitions[$definitionId] = $definition;
-                    $this->resolve($definitionId, $parentEntryPoint);
+                    $this->resolve($definitionId, $parentId, $parentEntryPoint);
                 }
             }
 
             return;
         } else {
             $this->definitions[$id] = new ClassDefinition($id, "singleton", isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
-            $this->resolveDependencies($id, $parentEntryPoint);
+            $this->resolveDependencies($id, $parentId, $parentEntryPoint);
         }
     }
 
-    private function resolveDependencies(string $id, EntryPointInterface $parentEntryPoint): void
+    private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint): void
     {
         $this->definitions[$id]->resolveDependencies();
 
         if ($this->compilerConfig->useConstructorInjection()) {
-            $this->resolveConstructorArguments($id, $this->definitions[$id], $parentEntryPoint);
+            $this->resolveConstructorArguments($id, $parentId, $this->definitions[$id], $parentEntryPoint);
         }
 
         if ($this->compilerConfig->usePropertyInjection()) {
-            $this->resolveAnnotatedProperties($id, $this->definitions[$id], $parentEntryPoint);
+            $this->resolveAnnotatedProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint);
         }
     }
 
-    private function resolveConstructorArguments(string $id, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
-    {
+    private function resolveConstructorArguments(
+        string $id,
+        string $parentId,
+        ClassDefinition $definition,
+        EntryPointInterface $parentEntryPoint
+    ): void {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
         } catch (ReflectionException $e) {
@@ -194,8 +198,8 @@ class DependencyResolver
             }
 
             $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass, $parentEntryPoint);
-            $this->definitions[$paramClass]->increaseReferenceCount($id);
+            $this->resolve($paramClass, $id, $parentEntryPoint);
+            $this->definitions[$paramClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
@@ -207,7 +211,7 @@ class DependencyResolver
         }
     }
 
-    private function resolveAnnotatedProperties(string $id, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
+    private function resolveAnnotatedProperties(string $id, string $parentId, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
     {
         $class = new ReflectionClass($definition->getClassName());
 
@@ -241,8 +245,8 @@ class DependencyResolver
             }
 
             $definition->addPropertyFromClass($property->getName(), $propertyClass);
-            $this->resolve($propertyClass, $parentEntryPoint);
-            $this->definitions[$propertyClass]->increaseReferenceCount($id);
+            $this->resolve($propertyClass, $id, $parentEntryPoint);
+            $this->definitions[$propertyClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);

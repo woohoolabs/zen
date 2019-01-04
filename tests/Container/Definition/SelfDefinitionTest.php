@@ -54,11 +54,11 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCount()
+    public function getSingletonReferenceCount()
     {
         $definition = new SelfDefinition("");
 
-        $referenceCount = $definition->getReferenceCount();
+        $referenceCount = $definition->getSingletonReferenceCount();
 
         $this->assertEquals(0, $referenceCount);
     }
@@ -71,10 +71,11 @@ class SelfDefinitionTest extends TestCase
         $definition = new SelfDefinition("");
 
         $definition
-            ->increaseReferenceCount()
-            ->increaseReferenceCount();
+            ->increaseReferenceCount("", true)
+            ->increaseReferenceCount("", false);
 
-        $this->assertEquals(0, $definition->getReferenceCount());
+        $this->assertEquals(0, $definition->getSingletonReferenceCount());
+        $this->assertEquals(0, $definition->getPrototypeReferenceCount());
     }
 
     /**

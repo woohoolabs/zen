@@ -143,11 +143,11 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCountWhen0()
+    public function getSingletonReferenceCountWhen0()
     {
         $definition = new TestDefinition("", "", false, false, false, 0);
 
-        $referenceCount = $definition->getReferenceCount();
+        $referenceCount = $definition->getSingletonReferenceCount();
 
         $this->assertEquals(0, $referenceCount);
     }
@@ -155,11 +155,11 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getReferenceCountWhenMore()
+    public function getSingletonReferenceCountWhenMore()
     {
         $definition = new TestDefinition("", "", false, false, false, 2);
 
-        $referenceCount = $definition->getReferenceCount();
+        $referenceCount = $definition->getSingletonReferenceCount();
 
         $this->assertEquals(2, $referenceCount);
     }
@@ -172,9 +172,10 @@ class AbstractDefinitionTest extends TestCase
         $definition = new TestDefinition("", "", false, false, false, 0);
 
         $definition
-            ->increaseReferenceCount()
-            ->increaseReferenceCount();
+            ->increaseReferenceCount("", true)
+            ->increaseReferenceCount("", false);
 
-        $this->assertEquals(2, $definition->getReferenceCount());
+        $this->assertEquals(1, $definition->getSingletonReferenceCount());
+        $this->assertEquals(1, $definition->getPrototypeReferenceCount());
     }
 }

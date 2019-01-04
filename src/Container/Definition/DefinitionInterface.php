@@ -19,9 +19,11 @@ interface DefinitionInterface
 
     public function isFileBased(string $parentId = ""): bool;
 
-    public function getReferenceCount(string $parentId = ""): int;
+    public function getSingletonReferenceCount(string $parentId = ""): int;
 
-    public function increaseReferenceCount(string $parentId = ""): DefinitionInterface;
+    public function getPrototypeReferenceCount(string $parentId = ""): int;
+
+    public function increaseReferenceCount(string $parentId, bool $isParentSingleton): DefinitionInterface;
 
     public function needsDependencyResolution(): bool;
 
