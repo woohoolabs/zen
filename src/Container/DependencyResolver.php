@@ -155,7 +155,7 @@ class DependencyResolver
         }
 
         if ($this->compilerConfig->usePropertyInjection()) {
-            $this->resolveAnnotatedProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint);
+            $this->resolveProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint);
         }
     }
 
@@ -211,8 +211,12 @@ class DependencyResolver
         }
     }
 
-    private function resolveAnnotatedProperties(string $id, string $parentId, ClassDefinition $definition, EntryPointInterface $parentEntryPoint): void
-    {
+    private function resolveProperties(
+        string $id,
+        string $parentId,
+        ClassDefinition $definition,
+        EntryPointInterface $parentEntryPoint
+    ): void {
         $class = new ReflectionClass($definition->getClassName());
 
         $propertyNames = [];

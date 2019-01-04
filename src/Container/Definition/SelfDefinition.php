@@ -17,11 +17,6 @@ class SelfDefinition extends AbstractDefinition
         return $this;
     }
 
-    public function increasePrototypeReferenceCount(string $parentId = ""): DefinitionInterface
-    {
-        return $this;
-    }
-
     public function needsDependencyResolution(): bool
     {
         return false;
