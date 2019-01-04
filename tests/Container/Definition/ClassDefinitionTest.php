@@ -9,6 +9,13 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
+use WoohooLabs\Zen\RuntimeContainer;
+use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationB;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationD;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorA;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
 use function dirname;
 use function file_get_contents;
@@ -140,6 +147,78 @@ class ClassDefinitionTest extends TestCase
             ["param1", "param2"],
             $overriddenConstructorParameters
         );
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenSingleton()
+    {
+        $definition = ClassDefinition::singleton(ConstructorD::class, true);
+        $instantiation = $this->createDefinitionInstantiation([ConstructorD::class => $definition]);
+
+        $object1 = $definition->instantiate($instantiation, "");
+        $object2 = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorD::class, $object1);
+        $this->assertSame($object1, $object2);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenPrototype()
+    {
+        $definition = ClassDefinition::prototype(ConstructorD::class, true);
+        $instantiation = $this->createDefinitionInstantiation([ConstructorD::class => $definition]);
+
+        $object1 = $definition->instantiate($instantiation, "");
+        $object2 = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorD::class, $object1);
+        $this->assertNotSame($object1, $object2);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWithConstructorArguments()
+    {
+        $definition = ClassDefinition::singleton(ConstructorA::class, true)
+            ->addConstructorArgumentFromClass(ConstructorB::class)
+            ->addConstructorArgumentFromValue(0)
+            ->addConstructorArgumentFromValue(false)
+            ->addConstructorArgumentFromValue("abc");
+        $instantiation = $this->createDefinitionInstantiation(
+            [
+                ConstructorA::class => $definition,
+                ConstructorB::class => ClassDefinition::singleton(ConstructorB::class),
+            ]
+        );
+
+        $object = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorA::class, $object);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWithProperties()
+    {
+        $definition = ClassDefinition::singleton(AnnotationB::class, true, false, false, [], ["value" => "abc"])
+            ->addPropertyFromClass("d", AnnotationD::class)
+            ->addPropertyFromOverride("value");
+        $instantiation = $this->createDefinitionInstantiation(
+            [
+                AnnotationB::class => $definition,
+                AnnotationD::class => ClassDefinition::singleton(ConstructorD::class),
+            ]
+        );
+
+        $object = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(AnnotationB::class, $object);
     }
 
     /**
@@ -655,6 +734,17 @@ class ClassDefinitionTest extends TestCase
         );
 
         $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
+    }
+
+    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    {
+        $singletonEntries = [];
+
+        return new DefinitionInstantiation(
+            new RuntimeContainer(new DummyCompilerConfig()),
+            $definitions,
+            $singletonEntries
+        );
     }
 
     private function getDefinitionSourceCode(string $fileName): string

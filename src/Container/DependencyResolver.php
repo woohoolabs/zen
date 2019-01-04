@@ -177,10 +177,11 @@ class DependencyResolver
 
         $paramNames = [];
         foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
-            $paramNames[] = $param->getName();
+            $paramName = $param->getName();
+            $paramNames[] = $paramName;
 
-            if ($definition->isConstructorParameterOverridden($param->getName())) {
-                $definition->addConstructorArgumentFromOverride($param->getName());
+            if ($definition->isConstructorParameterOverridden($paramName)) {
+                $definition->addConstructorArgumentFromOverride($paramName);
                 continue;
             }
 
@@ -192,7 +193,7 @@ class DependencyResolver
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
                 throw new ContainerException(
-                    "Type declaration or '@param' PHPDoc comment for constructor parameter '{$param->getName()}' in '" .
+                    "Type declaration or '@param' PHPDoc comment for constructor parameter '$paramName' in '" .
                     "class '{$definition->getClassName()}' is missing or it is not a class!"
                 );
             }
@@ -221,10 +222,12 @@ class DependencyResolver
 
         $propertyNames = [];
         foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $property->getName();
+            $propertyName = $property->getName();
 
-            if ($definition->isPropertyOverridden($property->getName())) {
-                $definition->addPropertyFromOverride($property->getName());
+            $propertyNames[] = $propertyName;
+
+            if ($definition->isPropertyOverridden($propertyName)) {
+                $definition->addPropertyFromOverride($propertyName);
                 continue;
             }
 
@@ -236,19 +239,19 @@ class DependencyResolver
 
             if ($property->isStatic()) {
                 throw new ContainerException(
-                    "Property '{$class->getName()}::\${$property->getName()}' is static and can't be injected upon!"
+                    "Property '{$class->getName()}::\$$propertyName' is static and can't be injected upon!"
                 );
             }
 
             $propertyClass = $this->typeHintReader->getPropertyClass($property);
             if ($propertyClass === null) {
                 throw new ContainerException(
-                    "'@var' PHPDoc comment for property '" . $definition->getClassName() . "::$" . $property->getName() .
+                    "'@var' PHPDoc comment for property '" . $definition->getClassName() . "::$" . $propertyName .
                     "' is missing or it is not a class!"
                 );
             }
 
-            $definition->addPropertyFromClass($property->getName(), $propertyClass);
+            $definition->addPropertyFromClass($propertyName, $propertyClass);
             $this->resolve($propertyClass, $id, $parentEntryPoint);
             $this->definitions[$propertyClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }

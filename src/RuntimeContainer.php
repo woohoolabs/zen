@@ -8,26 +8,15 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Container\DependencyResolver;
-use WoohooLabs\Zen\Examples\CompilerConfig;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_merge;
 
 class RuntimeContainer implements ContainerInterface
 {
     /**
-     * @var CompilerConfig
-     */
-    private $compilerConfig;
-
-    /**
      * @var DependencyResolver
      */
     private $dependencyResolver;
-
-    /**
-     * @var string
-     */
-    private $rootDirectory;
 
     /**
      * @var DefinitionInterface[]
@@ -44,14 +33,11 @@ class RuntimeContainer implements ContainerInterface
      */
     private $instantiation;
 
-    public function __construct(AbstractCompilerConfig $compilerConfig, string $rootDirectory = "")
+    public function __construct(AbstractCompilerConfig $compilerConfig)
     {
-        $this->compilerConfig = $compilerConfig;
         $this->dependencyResolver = new DependencyResolver($compilerConfig);
-        $this->rootDirectory = $rootDirectory;
         $this->instantiation = new DefinitionInstantiation(
             $this,
-            $compilerConfig->getAutoloadConfig(),
             $this->definitions,
             $this->singletonEntries
         );
@@ -66,9 +52,13 @@ class RuntimeContainer implements ContainerInterface
             return $this->definitions[$id]->isEntryPoint();
         }
 
-        $this->resolve($id);
+        try {
+            $this->resolve($id);
+        } catch (NotFoundException $exception) {
+            return false;
+        }
 
-        return isset($this->definitions[$id]) && $this->definitions[$id]->isEntryPoint();
+        return true;
     }
 
     /**
@@ -97,6 +87,9 @@ class RuntimeContainer implements ContainerInterface
         return $definition->instantiate($this->instantiation, "");
     }
 
+    /**
+     * @throws NotFoundException
+     */
     private function resolve(string $id): void
     {
         $this->definitions = array_merge($this->definitions, $this->dependencyResolver->resolveEntryPoint($id));

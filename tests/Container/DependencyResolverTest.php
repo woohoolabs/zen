@@ -122,7 +122,13 @@ class DependencyResolverTest extends TestCase
      */
     public function resolvePropertyDependencies()
     {
-        $dependencyResolver = $this->createDependencyResolver(AnnotationA::class);
+        $dependencyResolver = $this->createDependencyResolver(
+            AnnotationA::class,
+            [
+                AnnotationB::class => DefinitionHint::singleton(AnnotationB::class)
+                    ->setProperty("value", "abc"),
+            ]
+        );
 
         $definitions = $dependencyResolver->resolveEntryPoints();
 
@@ -134,9 +140,10 @@ class DependencyResolverTest extends TestCase
                     ->addPropertyFromClass("b", AnnotationB::class)
                     ->addPropertyFromClass("c", AnnotationC::class)
                     ->resolveDependencies(),
-                AnnotationB::class => ClassDefinition::singleton(AnnotationB::class)
+                AnnotationB::class => ClassDefinition::singleton(AnnotationB::class, false, false, false, [], ["value" => "abc"])
                     ->addPropertyFromClass("e2", AnnotationE::class)
                     ->addPropertyFromClass("d", AnnotationD::class)
+                    ->addPropertyFromOverride("value")
                     ->resolveDependencies()
                     ->increaseReferenceCount("", true),
                 AnnotationC::class => ClassDefinition::singleton(AnnotationC::class)

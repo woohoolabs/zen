@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Tests\Double;
 use WoohooLabs\Zen\Container\Definition\AbstractDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class TestDefinition extends AbstractDefinition
 {
@@ -34,6 +35,11 @@ class TestDefinition extends AbstractDefinition
     public function getClassDependencies(): array
     {
         return [];
+    }
+
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        return null;
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

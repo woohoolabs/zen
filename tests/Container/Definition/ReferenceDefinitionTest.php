@@ -53,7 +53,7 @@ class ReferenceDefinitionTest extends TestCase
 
         $this->assertEquals(["X\\B"], $classDependencies);
     }
-
+    
     /**
      * @test
      */

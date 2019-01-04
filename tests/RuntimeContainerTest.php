@@ -5,11 +5,9 @@ namespace WoohooLabs\Zen\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
-use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\RuntimeContainer;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
@@ -21,25 +19,9 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function createThrowsExceptionWhenFileBasedDefinition()
-    {
-        $this->expectException(ContainerException::class);
-
-        $this->createRuntimeContainer(
-            [
-                ClassEntryPoint::create(ConstructorA::class)->fileBased(),
-            ],
-            [],
-            "Container5"
-        );
-    }
-
-    /**
-     * @test
-     */
     public function hasReturnsFalse()
     {
-        $container = $this->createRuntimeContainer([ConstructorA::class], [], "Container1");
+        $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
         $hasEntry = $container->has("TestContainerEntry");
 
@@ -51,7 +33,7 @@ class RuntimeContainerTest extends TestCase
      */
     public function hasReturnsTrue()
     {
-        $container = $this->createRuntimeContainer([ConstructorA::class], [], "Container2");
+        $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
         $hasEntry = $container->has(ConstructorA::class);
 
@@ -63,7 +45,7 @@ class RuntimeContainerTest extends TestCase
      */
     public function getThrowsNotFoundException()
     {
-        $container = $this->createRuntimeContainer([ConstructorA::class], [], "Container3");
+        $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
         $this->expectException(NotFoundException::class);
 
@@ -79,8 +61,7 @@ class RuntimeContainerTest extends TestCase
             [ConstructorA::class],
             [
                 ConstructorA::class => DefinitionHint::prototype(ConstructorA::class),
-            ],
-            "Container4"
+            ]
         );
 
         $entry1 = $container->get(ConstructorA::class);
@@ -96,7 +77,7 @@ class RuntimeContainerTest extends TestCase
      */
     public function getReturnsSingletonEntry()
     {
-        $container = $this->createRuntimeContainer([ConstructorA::class], [], "Container5");
+        $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
         $entry = $container->get(ConstructorA::class);
 
@@ -107,15 +88,13 @@ class RuntimeContainerTest extends TestCase
      * @param EntryPointInterface[]|string[] $entryPoints
      * @param DefinitionHintInterface[] $definitionsHints
      */
-    private function createRuntimeContainer(array $entryPoints, array $definitionsHints, string $className): ContainerInterface
+    private function createRuntimeContainer(array $entryPoints, array $definitionsHints): ContainerInterface
     {
         return new RuntimeContainer(
             new StubCompilerConfig(
                 [
                     new StubContainerConfig($entryPoints, $definitionsHints),
-                ],
-                "WoohooLabs\\Zen",
-                $className
+                ]
             )
         );
     }

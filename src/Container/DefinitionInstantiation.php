@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\RuntimeContainer;
 
@@ -13,11 +12,6 @@ class DefinitionInstantiation
      * @var RuntimeContainer
      */
     private $container;
-
-    /**
-     * @var AutoloadConfigInterface
-     */
-    private $autoloadConfig;
 
     /**
      * @var DefinitionInterface[]
@@ -34,12 +28,10 @@ class DefinitionInstantiation
      */
     public function __construct(
         RuntimeContainer $container,
-        AutoloadConfigInterface $autoloadConfig,
         array &$definitions,
         array &$singletonEntries
     ) {
         $this->container = $container;
-        $this->autoloadConfig = $autoloadConfig;
         $this->definitions = &$definitions;
         $this->singletonEntries = &$singletonEntries;
     }
@@ -47,11 +39,6 @@ class DefinitionInstantiation
     public function getContainer(): RuntimeContainer
     {
         return $this->container;
-    }
-
-    public function getAutoloadConfig(): AutoloadConfigInterface
-    {
-        return $this->autoloadConfig;
     }
 
     /**
