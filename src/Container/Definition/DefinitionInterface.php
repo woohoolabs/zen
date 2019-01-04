@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 interface DefinitionInterface
 {
@@ -33,6 +34,11 @@ interface DefinitionInterface
      * @return string[]
      */
     public function getClassDependencies(): array;
+
+    /**
+     * @return mixed
+     */
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId);
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string;
 }

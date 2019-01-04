@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class ReferenceDefinition extends AbstractDefinition
 {
@@ -91,6 +92,26 @@ class ReferenceDefinition extends AbstractDefinition
         return [
             $this->referencedId,
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        if ($this->isAssignmentEliminable()) {
+            return $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id);
+        }
+
+        $object = $instantiation->getSingletonEntry($this->id);
+        if ($object) {
+            return $object;
+        }
+
+        return $instantiation->setSingletonEntry(
+            $this->id,
+            $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id)
+        );
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

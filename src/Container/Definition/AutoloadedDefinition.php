@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
+use WoohooLabs\Zen\Exception\ContainerException;
 
 final class AutoloadedDefinition extends AbstractDefinition
 {
@@ -26,6 +28,14 @@ final class AutoloadedDefinition extends AbstractDefinition
     public function getClassDependencies(): array
     {
         return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        throw new ContainerException("An autoloaded definition can not be instantiated!");
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

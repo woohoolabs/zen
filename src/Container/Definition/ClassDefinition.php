@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
 
+use Closure;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use function array_key_exists;
 use function array_keys;
 use function implode;
@@ -203,6 +205,15 @@ class ClassDefinition extends AbstractDefinition
         return $dependencies;
     }
 
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        if ($this->isAssignmentEliminable()) {
+            return $this->instantiateClass($instantiation);
+        }
+
+        return $instantiation->getSingletonEntry($this->id) ?? $instantiation->setSingletonEntry($this->id, $this->instantiateClass($instantiation));
+    }
+
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
     {
         $indent = $this->indent($indentationLevel);
@@ -288,6 +299,54 @@ class ClassDefinition extends AbstractDefinition
         }
 
         return $code;
+    }
+
+    private function instantiateClass(DefinitionInstantiation $instantiation)
+    {
+        $arguments = [];
+        foreach ($this->constructorArguments as $argument) {
+            if (isset($argument["class"])) {
+                $arguments[] = $instantiation->getDefinition($argument["class"])->instantiate($instantiation, $this->id);
+            } elseif (array_key_exists("value", $argument)) {
+                $arguments[] = $argument["value"];
+            }
+        }
+
+        $className = $this->id;
+
+        $self = new $className(...$arguments);
+
+        $properties = [];
+        foreach ($this->properties as $name => $property) {
+            if (isset($property["class"])) {
+                $properties[$name] = $instantiation->getDefinition($property["class"])->instantiate($instantiation, $this->id);
+            } elseif (array_key_exists("value", $property)) {
+                $properties[$name] = $property["value"];
+            }
+        }
+
+        $this->setClassProperties($self, $properties);
+
+        return $self;
+    }
+
+    /**
+     * @param object $object
+     * @return object
+     */
+    private function setClassProperties($object, array $properties)
+    {
+        Closure::bind(
+            function () use ($object, $properties) {
+                foreach ($properties as $name => $value) {
+                    $object->$name = $value;
+                }
+            },
+            null,
+            $object
+        )->__invoke();
+
+        return $object;
     }
 
     private function serializeValue($value): string

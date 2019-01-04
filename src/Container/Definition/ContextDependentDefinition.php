@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\ContainerException;
 
 class ContextDependentDefinition implements DefinitionInterface
@@ -92,6 +93,14 @@ class ContextDependentDefinition implements DefinitionInterface
     {
         return [
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        return $this->getDefinition($parentId)->instantiate($instantiation, $this->referrerId);
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

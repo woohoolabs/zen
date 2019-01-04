@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container\Definition;
 
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class SelfDefinition extends AbstractDefinition
 {
@@ -30,6 +31,14 @@ class SelfDefinition extends AbstractDefinition
     public function getClassDependencies(): array
     {
         return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    {
+        return $instantiation->getContainer();
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
