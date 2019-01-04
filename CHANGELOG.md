@@ -1,9 +1,20 @@
-## 2.6.0 - unreleased
+## 2.7.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
+## 2.6.0 - 2019-01-04
 
 ADDED:
 
 - Support for file-based container definitions
 - Support for marking an Entry Point as not autoloaded via `ClassEntryPoint::disableAutoload()` and `WildcardEntryPoint::disableAutoload()`
+- Support for autoloading reference definitions
 
 CHANGED:
 
@@ -11,11 +22,8 @@ CHANGED:
 - Autoloaded definitions are inlined in the compiled container when possible
 - Various other optimizations of the compiled container based on reference count of container definitions
 - Interfaces and parent classes are also autoloaded when an Entry Point is autoloaded
-- Reference definitions can also be autoloaded
 - Optimize compilation time by minimizing class instantiations and caching
 - Build the foundations of a faster dynamic container by making it possible to resolve the dependencies of a single class
-
-REMOVED:
 
 FIXED:
 
