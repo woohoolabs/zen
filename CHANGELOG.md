@@ -13,12 +13,12 @@ FIXED:
 ADDED:
 
 - Support for file-based container definitions
-- Support for marking an Entry Point as not autoloaded via `ClassEntryPoint::disableAutoload()` and `WildcardEntryPoint::disableAutoload()`
+- Support for disabling autoload of an Entry Point via `ClassEntryPoint::disableAutoload()` and `WildcardEntryPoint::disableAutoload()`
 - Support for autoloading reference definitions
 
 CHANGED:
 
-- Container definitions are inlined (referenced directly) in the compiled container when possible
+- Container definitions are inlined in the compiled container when possible
 - Autoloaded definitions are inlined in the compiled container when possible
 - Various other optimizations of the compiled container based on reference count of container definitions
 - Interfaces and parent classes are also autoloaded when an Entry Point is autoloaded
