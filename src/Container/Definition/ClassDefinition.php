@@ -322,21 +322,26 @@ class ClassDefinition extends AbstractDefinition
         }
 
         $className = $this->id;
+        $object = new $className(...$arguments);
 
-        $self = new $className(...$arguments);
-
-        $properties = [];
-        foreach ($this->properties as $name => $property) {
-            if (isset($property["class"])) {
-                $properties[$name] = $instantiation->getDefinition($property["class"])->instantiate($instantiation, $this->id);
-            } elseif (array_key_exists("value", $property)) {
-                $properties[$name] = $property["value"];
-            }
+        if (empty($this->properties) === false) {
+            $properties = $this->properties;
+            Closure::bind(
+                function () use ($instantiation, $className, $object, $properties) {
+                    foreach ($properties as $name => $property) {
+                        if (isset($property["class"])) {
+                            $object->$name = $instantiation->definitions[$property["class"]]->instantiate($instantiation, $className);
+                        } elseif (array_key_exists("value", $property)) {
+                            $object->$name = $property["value"];
+                        }
+                    }
+                },
+                null,
+                $object
+            )->__invoke();
         }
 
-        $this->setClassProperties($self, $properties);
-
-        return $self;
+        return $object;
     }
 
     /**
