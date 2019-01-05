@@ -19,16 +19,6 @@ class RuntimeContainer implements ContainerInterface
     private $dependencyResolver;
 
     /**
-     * @var DefinitionInterface[]
-     */
-    private $definitions = [];
-
-    /**
-     * @var array
-     */
-    private $singletonEntries = [];
-
-    /**
      * @var DefinitionInstantiation
      */
     private $instantiation;
@@ -36,11 +26,7 @@ class RuntimeContainer implements ContainerInterface
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
         $this->dependencyResolver = new DependencyResolver($compilerConfig);
-        $this->instantiation = new DefinitionInstantiation(
-            $this,
-            $this->definitions,
-            $this->singletonEntries
-        );
+        $this->instantiation = new DefinitionInstantiation($this);
     }
 
     /**
@@ -48,8 +34,8 @@ class RuntimeContainer implements ContainerInterface
      */
     public function has($id): bool
     {
-        if (isset($this->definitions[$id])) {
-            return $this->definitions[$id]->isEntryPoint();
+        if (isset($this->instantiation->definitions[$id])) {
+            return $this->instantiation->definitions[$id]->isEntryPoint();
         }
 
         try {
@@ -68,7 +54,7 @@ class RuntimeContainer implements ContainerInterface
      */
     public function get($id)
     {
-        return $this->singletonEntries[$id] ?? ($this->definitions[$id] ?? $this->resolve($id))->instantiate($this->instantiation, "");
+        return $this->instantiation->singletonEntries[$id] ?? ($this->instantiation->definitions[$id] ?? $this->resolve($id))->instantiate($this->instantiation, "");
     }
 
     /**
@@ -78,8 +64,11 @@ class RuntimeContainer implements ContainerInterface
      */
     private function resolve($id)
     {
-        $this->definitions = array_merge($this->definitions, $this->dependencyResolver->resolveEntryPoint($id));
+        $this->instantiation->definitions = array_merge(
+            $this->instantiation->definitions,
+            $this->dependencyResolver->resolveEntryPoint($id)
+        );
 
-        return $this->definitions[$id];
+        return $this->instantiation->definitions[$id];
     }
 }

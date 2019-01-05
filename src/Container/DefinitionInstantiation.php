@@ -16,23 +16,18 @@ final class DefinitionInstantiation
     /**
      * @var DefinitionInterface[]
      */
-    public $definitions;
+    public $definitions = [];
 
     /**
      * @var array
      */
-    public $singletonEntries;
+    public $singletonEntries = [];
 
     /**
      * @param DefinitionInterface[] $definitions
      */
-    public function __construct(
-        RuntimeContainer $container,
-        array &$definitions,
-        array &$singletonEntries
-    ) {
+    public function __construct(RuntimeContainer $container)
+    {
         $this->container = $container;
-        $this->definitions = &$definitions;
-        $this->singletonEntries = &$singletonEntries;
     }
 }

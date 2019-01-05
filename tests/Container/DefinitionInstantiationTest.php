@@ -15,21 +15,15 @@ class DefinitionInstantiationTest extends TestCase
      */
     public function construct()
     {
-        $instantiation = $this->createDefinitionInstantiation([]);
+        $instantiation = $this->createDefinitionInstantiation();
 
         $this->assertInstanceOf(RuntimeContainer::class, $instantiation->container);
         $this->assertEmpty($instantiation->definitions);
         $this->assertEmpty($instantiation->singletonEntries);
     }
 
-    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    private function createDefinitionInstantiation(): DefinitionInstantiation
     {
-        $singletonEntries = [];
-
-        return new DefinitionInstantiation(
-            new RuntimeContainer(new DummyCompilerConfig()),
-            $definitions,
-            $singletonEntries
-        );
+        return new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));
     }
 }
