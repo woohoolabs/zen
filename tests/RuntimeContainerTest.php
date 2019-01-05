@@ -69,7 +69,6 @@ class RuntimeContainerTest extends TestCase
         $entry2 = $container->get(ConstructorA::class);
 
         $this->assertInstanceOf(ConstructorA::class, $entry1);
-        $this->assertInstanceOf(ConstructorA::class, $entry2);
         $this->assertNotSame($entry1, $entry2);
     }
 
@@ -80,9 +79,11 @@ class RuntimeContainerTest extends TestCase
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
-        $entry = $container->get(ConstructorA::class);
+        $entry1 = $container->get(ConstructorA::class);
+        $entry2 = $container->get(ConstructorA::class);
 
-        $this->assertSame($container->get(ConstructorA::class), $entry);
+        $this->assertInstanceOf(ConstructorA::class, $entry1);
+        $this->assertSame($entry1, $entry2);
     }
 
     /**

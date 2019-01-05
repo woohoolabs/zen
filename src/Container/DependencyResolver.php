@@ -22,7 +22,6 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_diff;
 use function implode;
-use function in_array;
 
 final class DependencyResolver
 {
@@ -40,6 +39,16 @@ final class DependencyResolver
      * @var AbstractCompilerConfig
      */
     private $compilerConfig;
+
+    /**
+     * @var bool
+     */
+    private $useConstructorInjection;
+
+    /**
+     * @var bool
+     */
+    private $usePropertyInjection;
 
     /**
      * @var EntryPointInterface[]
@@ -62,20 +71,43 @@ final class DependencyResolver
     private $autoloadConfig;
 
     /**
+     * @var array
+     */
+    private $excludedAutoloadedFiles;
+
+    /**
+     * @var array
+     */
+    private $alwaysAutoloadedFiles;
+
+    /**
      * @var FileBasedDefinitionConfigInterface
      */
     private $fileBasedDefinitionConfig;
+
+    /**
+     * @var array
+     */
+    private $excludedFileBasedDefinitions;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
         $this->annotationReader = new SimpleAnnotationReader();
         $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
         $this->typeHintReader = new PhpDocReader();
+
         $this->compilerConfig = $compilerConfig;
+        $this->useConstructorInjection = $compilerConfig->useConstructorInjection();
+        $this->usePropertyInjection = $compilerConfig->usePropertyInjection();
         $this->entryPoints = $compilerConfig->getEntryPointMap();
         $this->definitionHints = $compilerConfig->getDefinitionHints();
+
         $this->autoloadConfig = $compilerConfig->getAutoloadConfig();
+        $this->excludedAutoloadedFiles = array_flip($this->autoloadConfig->getExcludedClasses());
+        $this->alwaysAutoloadedFiles = array_flip($this->autoloadConfig->getAlwaysAutoloadedClasses());
+
         $this->fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
+        $this->excludedFileBasedDefinitions = array_flip($this->fileBasedDefinitionConfig->getExcludedDefinitions());
     }
 
     /**
@@ -86,7 +118,7 @@ final class DependencyResolver
         $this->resetDefinitions();
 
         foreach ($this->entryPoints as $id => $entryPoint) {
-            $this->resolve($id, "", $entryPoint);
+            $this->resolve($id, "", $entryPoint, false);
         }
 
         return $this->definitions;
@@ -104,23 +136,28 @@ final class DependencyResolver
             throw new NotFoundException($id);
         }
 
-        $this->resolve($id, "", $this->entryPoints[$id]);
+        $this->resolve($id, "", $this->entryPoints[$id], true);
 
         return $this->definitions;
     }
 
-    private function resolve(string $id, string $parentId, EntryPointInterface $parentEntryPoint): void
+    private function resolve(string $id, string $parentId, EntryPointInterface $parentEntryPoint, bool $runtime): void
     {
         if (isset($this->definitions[$id])) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
-                $this->resolveDependencies($id, $parentId, $parentEntryPoint);
+                $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
             }
 
             return;
         }
 
-        $isAutoloaded = $this->isAutoloaded($id, $parentEntryPoint);
-        $isFileBased = $this->isFileBased($id, $parentEntryPoint);
+        if ($runtime) {
+            $isAutoloaded = false;
+            $isFileBased = false;
+        } else {
+            $isAutoloaded = $this->isAutoloaded($id, $parentEntryPoint);
+            $isFileBased = $this->isFileBased($id, $parentEntryPoint);
+        }
 
         if (isset($this->definitionHints[$id])) {
             $definitions = $this->definitionHints[$id]->toDefinitions(
@@ -135,7 +172,7 @@ final class DependencyResolver
                 /** @var DefinitionInterface $definition */
                 if (isset($this->definitions[$definitionId]) === false) {
                     $this->definitions[$definitionId] = $definition;
-                    $this->resolve($definitionId, $parentId, $parentEntryPoint);
+                    $this->resolve($definitionId, $parentId, $parentEntryPoint, $runtime);
                 }
             }
 
@@ -143,19 +180,19 @@ final class DependencyResolver
         }
 
         $this->definitions[$id] = new ClassDefinition($id, true, isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
-        $this->resolveDependencies($id, $parentId, $parentEntryPoint);
+        $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
     }
 
-    private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint): void
+    private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint, bool $runtime): void
     {
         $this->definitions[$id]->resolveDependencies();
 
-        if ($this->compilerConfig->useConstructorInjection()) {
-            $this->resolveConstructorArguments($id, $parentId, $this->definitions[$id], $parentEntryPoint);
+        if ($this->useConstructorInjection) {
+            $this->resolveConstructorArguments($id, $parentId, $this->definitions[$id], $parentEntryPoint, $runtime);
         }
 
-        if ($this->compilerConfig->usePropertyInjection()) {
-            $this->resolveProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint);
+        if ($this->usePropertyInjection) {
+            $this->resolveProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint, $runtime);
         }
     }
 
@@ -163,7 +200,8 @@ final class DependencyResolver
         string $id,
         string $parentId,
         ClassDefinition $definition,
-        EntryPointInterface $parentEntryPoint
+        EntryPointInterface $parentEntryPoint,
+        $runtime
     ): void {
         try {
             $reflectionClass = new ReflectionClass($definition->getClassName());
@@ -171,12 +209,13 @@ final class DependencyResolver
             throw new ContainerException("Cannot inject class: " . $definition->getClassName());
         }
 
-        if ($reflectionClass->getConstructor() === null) {
+        $constructor = $reflectionClass->getConstructor();
+        if ($constructor === null) {
             return;
         }
 
         $paramNames = [];
-        foreach ($reflectionClass->getConstructor()->getParameters() as $param) {
+        foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();
             $paramNames[] = $paramName;
 
@@ -199,7 +238,7 @@ final class DependencyResolver
             }
 
             $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass, $id, $parentEntryPoint);
+            $this->resolve($paramClass, $id, $parentEntryPoint, $runtime);
             $this->definitions[$paramClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
@@ -216,7 +255,8 @@ final class DependencyResolver
         string $id,
         string $parentId,
         ClassDefinition $definition,
-        EntryPointInterface $parentEntryPoint
+        EntryPointInterface $parentEntryPoint,
+        bool $runtime
     ): void {
         $class = new ReflectionClass($definition->getClassName());
 
@@ -252,7 +292,7 @@ final class DependencyResolver
             }
 
             $definition->addPropertyFromClass($propertyName, $propertyClass);
-            $this->resolve($propertyClass, $id, $parentEntryPoint);
+            $this->resolve($propertyClass, $id, $parentEntryPoint, $runtime);
             $this->definitions[$propertyClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
@@ -267,11 +307,11 @@ final class DependencyResolver
 
     private function isAutoloaded(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (in_array($id, $this->autoloadConfig->getExcludedClasses(), true)) {
+        if (isset($this->excludedAutoloadedFiles[$id])) {
             return false;
         }
 
-        if (in_array($id, $this->autoloadConfig->getAlwaysAutoloadedClasses(), true)) {
+        if (isset($this->alwaysAutoloadedFiles[$id])) {
             return true;
         }
 
@@ -280,7 +320,7 @@ final class DependencyResolver
 
     private function isFileBased(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (in_array($id, $this->fileBasedDefinitionConfig->getExcludedDefinitions(), true)) {
+        if (isset($this->excludedFileBasedDefinitions[$id])) {
             return false;
         }
 
