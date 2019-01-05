@@ -68,7 +68,7 @@ class RuntimeContainer implements ContainerInterface
      */
     public function get($id)
     {
-        return $this->singletonEntries[$id] ?? $this->instantiate($id);
+        return $this->singletonEntries[$id] ?? ($this->definitions[$id] ?? $this->resolve($id))->instantiate($this->instantiation, "");
     }
 
     /**
@@ -76,20 +76,10 @@ class RuntimeContainer implements ContainerInterface
      * @return DefinitionInterface
      * @throws NotFoundException
      */
-    private function instantiate(string $id)
-    {
-        if (isset($this->definitions[$id]) === false) {
-            $this->resolve($id);
-        }
-
-        return $this->definitions[$id]->instantiate($this->instantiation, "");
-    }
-
-    /**
-     * @throws NotFoundException
-     */
     private function resolve($id)
     {
         $this->definitions = array_merge($this->definitions, $this->dependencyResolver->resolveEntryPoint($id));
+
+        return $this->definitions[$id];
     }
 }
