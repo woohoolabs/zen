@@ -7,6 +7,7 @@ use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use function array_merge;
 use function is_string;
 
 class ContextDependentDefinitionHint implements DefinitionHintInterface

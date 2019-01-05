@@ -344,25 +344,6 @@ class ClassDefinition extends AbstractDefinition
         return $object;
     }
 
-    /**
-     * @param object $object
-     * @return object
-     */
-    private function setClassProperties($object, array $properties)
-    {
-        Closure::bind(
-            function () use ($object, $properties) {
-                foreach ($properties as $name => $value) {
-                    $object->$name = $value;
-                }
-            },
-            null,
-            $object
-        )->__invoke();
-
-        return $object;
-    }
-
     private function serializeValue($value): string
     {
         return var_export($value, true);

@@ -24,7 +24,7 @@ use function array_diff;
 use function implode;
 use function in_array;
 
-class DependencyResolver
+final class DependencyResolver
 {
     /**
      * @var SimpleAnnotationReader
