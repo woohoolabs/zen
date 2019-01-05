@@ -21,6 +21,7 @@ use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_diff;
+use function array_flip;
 use function implode;
 
 final class DependencyResolver
@@ -71,12 +72,12 @@ final class DependencyResolver
     private $autoloadConfig;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $excludedAutoloadedFiles;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $alwaysAutoloadedFiles;
 
@@ -86,7 +87,7 @@ final class DependencyResolver
     private $fileBasedDefinitionConfig;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $excludedFileBasedDefinitions;
 
