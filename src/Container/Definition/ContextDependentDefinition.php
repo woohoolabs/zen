@@ -64,19 +64,19 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->isFileBased($parentId);
     }
 
-    public function getSingletonReferenceCount(string $parentId = ""): int
-    {
-        return $this->getDefinition($parentId)->getSingletonReferenceCount($parentId);
-    }
-
-    public function getPrototypeReferenceCount(string $parentId = ""): int
-    {
-        return $this->getDefinition($parentId)->getPrototypeReferenceCount($parentId);
-    }
-
     public function increaseReferenceCount(string $parentId, bool $isSingletonParent): DefinitionInterface
     {
         return $this->getDefinition($parentId)->increaseReferenceCount($parentId, $isSingletonParent);
+    }
+
+    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
+    {
+        return $this->getDefinition($parentId)->isAutoloadingInlinable($parentId, $inline);
+    }
+
+    public function isSingletonCheckEliminable(string $parentId = ""): bool
+    {
+        return $this->getDefinition($parentId)->isSingletonCheckEliminable($parentId);
     }
 
     public function needsDependencyResolution(): bool

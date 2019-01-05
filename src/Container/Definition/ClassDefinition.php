@@ -207,7 +207,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
     {
-        if ($this->isAssignmentEliminable()) {
+        if ($this->isSingletonCheckEliminable($parentId)) {
             return $this->instantiateClass($instantiation);
         }
 
@@ -223,7 +223,7 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isAutoloadingInlinable($inline)) {
+        if ($this->isAutoloadingInlinable($parentId, $inline)) {
             $code .= $this->includeRelatedClasses(
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
@@ -237,7 +237,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= "${indent}return ";
         }
 
-        if ($this->isAssignmentEliminable() === false) {
+        if ($this->isSingletonCheckEliminable($parentId) === false) {
             $code .= "\$this->singletonEntries['{$this->id}'] = ";
         }
 

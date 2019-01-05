@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Compiler;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
+use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
+use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
+use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 
 class AbstractCompilerConfigTest extends TestCase
 {
@@ -69,5 +73,101 @@ class AbstractCompilerConfigTest extends TestCase
         $fileBasedDefinitionConfig = $config->getFileBasedDefinitionConfig();
 
         $this->assertEquals(FileBasedDefinitionConfig::disabledGlobally(), $fileBasedDefinitionConfig);
+    }
+
+    /**
+     * @test
+     */
+    public function getContainerFqcn()
+    {
+        $config = new StubCompilerConfig(
+            [],
+            "A\\B\\C",
+            "Container"
+        );
+
+        $containerFqcn = $config->getContainerFqcn();
+
+        $this->assertEquals("A\\B\\C\\Container", $containerFqcn);
+    }
+
+    /**
+     * @test
+     */
+    public function getEntryPointMap()
+    {
+        $config = new StubCompilerConfig(
+            [
+                new StubContainerConfig(
+                    [
+                        ClassEntryPoint::create("X\\A"),
+                    ]
+                ),
+                new StubContainerConfig(
+                    [
+                        ClassEntryPoint::create("X\\B"),
+                    ]
+                ),
+                new StubContainerConfig(
+                    [
+                        ClassEntryPoint::create("X\\A")
+                            ->fileBased(),
+                    ]
+                ),
+            ]
+        );
+
+        $entryPointMap1 = $config->getEntryPointMap();
+        $entryPointMap2 = $config->getEntryPointMap();
+
+        $this->assertEquals(
+            [
+                ContainerInterface::class => new ClassEntryPoint(ContainerInterface::class),
+                "" => new ClassEntryPoint(""),
+                "X\\A" => ClassEntryPoint::create("X\\A"),
+                "X\\B" => ClassEntryPoint::create("X\\B"),
+            ],
+            $entryPointMap1
+        );
+        $this->assertSame($entryPointMap1, $entryPointMap2);
+    }
+
+    /**
+     * @test
+     */
+    public function getDefinitionHints()
+    {
+        $config = new StubCompilerConfig(
+            [
+                new StubContainerConfig(
+                    [],
+                    [
+                        "X\\A" => DefinitionHint::singleton("X\\A"),
+                    ]
+                ),
+                new StubContainerConfig(
+                    [],
+                    [
+                        "X\\B" => DefinitionHint::singleton("X\\B"),
+                    ]
+                ),
+                new StubContainerConfig(
+                    [],
+                    [
+                        "X\\A" => DefinitionHint::prototype("X\\A"),
+                    ]
+                ),
+            ]
+        );
+
+        $definitionHints = $config->getDefinitionHints();
+
+        $this->assertEquals(
+            [
+                "X\\A" => DefinitionHint::prototype("X\\A"),
+                "X\\B" => DefinitionHint::singleton("X\\B"),
+            ],
+            $definitionHints
+        );
     }
 }

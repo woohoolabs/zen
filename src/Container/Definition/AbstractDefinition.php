@@ -105,16 +105,6 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->fileBased;
     }
 
-    public function getSingletonReferenceCount(string $parentId = ""): int
-    {
-        return $this->singletonReferenceCount;
-    }
-
-    public function getPrototypeReferenceCount(string $parentId = ""): int
-    {
-        return $this->prototypeReferenceCount;
-    }
-
     /**
      * @return $this
      */
@@ -127,6 +117,42 @@ abstract class AbstractDefinition implements DefinitionInterface
         }
 
         return $this;
+    }
+
+    public function getSingletonReferenceCount(): int
+    {
+        return $this->singletonReferenceCount;
+    }
+
+    public function getPrototypeReferenceCount(): int
+    {
+        return $this->prototypeReferenceCount;
+    }
+
+    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
+    {
+        if ($this->autoloaded === false || $this->entryPoint === false || $this->scope === "prototype") {
+            return false;
+        }
+
+        if ($this->singletonReferenceCount > 0 || $this->prototypeReferenceCount > 0) {
+            return false;
+        }
+
+        if ($inline) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isSingletonCheckEliminable(string $parentId = ""): bool
+    {
+        if ($this->scope === "prototype") {
+            return true;
+        }
+
+        return $this->entryPoint === false && $this->singletonReferenceCount <= 1 && $this->prototypeReferenceCount === 0;
     }
 
     protected function compileEntryReference(
@@ -150,7 +176,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
         $code = "";
 
-        if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
+        if ($definition->isSingletonCheckEliminable($this->id) === false) {
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
@@ -174,14 +200,14 @@ abstract class AbstractDefinition implements DefinitionInterface
             }
             $path .= "$hash.php'";
 
-            if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
+            if ($definition->isSingletonCheckEliminable($this->id) === false) {
                 return "\$this->singletonEntries['$id'] ?? require $path";
             }
 
             return "require $path";
         }
 
-        if ($this->isCheckForSingletonReferenceEliminable($definition) === false) {
+        if ($definition->isSingletonCheckEliminable($this->id) === false) {
             return "\$this->singletonEntries['$id'] ?? \$this->$hash()";
         }
 
@@ -196,46 +222,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected function indent(int $indentationLevel): string
     {
         return str_repeat(" ", $indentationLevel * 4);
-    }
-
-    protected function isAutoloadingInlinable(bool $inline): bool
-    {
-        if ($this->autoloaded === false || $this->entryPoint === false || $this->isSingleton("") === false) {
-            return false;
-        }
-
-        if ($this->singletonReferenceCount > 0 || $this->prototypeReferenceCount > 0) {
-            return false;
-        }
-
-        if ($inline) {
-            return false;
-        }
-
-        return true;
-    }
-
-    protected function isAssignmentEliminable(): bool
-    {
-        if ($this->isSingleton("") === false) {
-            return true;
-        }
-
-        return $this->entryPoint === false && $this->singletonReferenceCount <= 1 && $this->prototypeReferenceCount === 0;
-    }
-
-    protected function isCheckForSingletonReferenceEliminable(DefinitionInterface $definition): bool
-    {
-        $isSingleton = $definition->isSingleton($this->id);
-        $isEntryPoint = $definition->isEntryPoint($this->id);
-        $singletonReferenceCount = $definition->getSingletonReferenceCount($this->id);
-        $prototypeReferenceCount = $definition->getPrototypeReferenceCount($this->id);
-
-        if ($isSingleton === false) {
-            return true;
-        }
-
-        return $isEntryPoint === false && $singletonReferenceCount <= 1 && $prototypeReferenceCount === 0;
     }
 
     /**

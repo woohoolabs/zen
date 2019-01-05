@@ -47,13 +47,7 @@ class Compiler
             $definition = $definitions[$id];
 
             $methodName = $this->getHash($id);
-            if ($definition->isAutoloaded() &&
-                (
-                    $definition->isSingleton() === false ||
-                    $definition->getSingletonReferenceCount() > 0 ||
-                    $definition->getPrototypeReferenceCount() > 0
-                )
-            ) {
+            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false) {
                 $methodName = "_proxy__$methodName";
             }
 
@@ -85,9 +79,8 @@ class Compiler
 
             $definition = $definitions[$id];
 
-            if ($definition->isAutoloaded() && ($definition->isSingleton() === false || $definition->getSingletonReferenceCount() > 0)) {
+            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false) {
                 $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
-
 
                 $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
                 if ($autoloadedDefinition->isFileBased()) {

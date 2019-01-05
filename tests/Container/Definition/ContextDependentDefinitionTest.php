@@ -318,60 +318,6 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getSingletonReferenceCountWithoutDefaultWhenNoParent()
-    {
-        $definition = new ContextDependentDefinition("", null, []);
-
-        $this->expectException(ContainerException::class);
-
-        $definition->getSingletonReferenceCount();
-    }
-
-    /**
-     * @test
-     */
-    public function getSingletonReferenceCountWithDefaultWhenNoParent()
-    {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
-
-        $referenceCount = $definition->getSingletonReferenceCount();
-
-        $this->assertEquals(2, $referenceCount);
-    }
-
-    /**
-     * @test
-     */
-    public function getSingletonReferenceCountWithDefaultWhenParentNotExists()
-    {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, false, [], [], 2), []);
-
-        $referenceCount = $definition->getSingletonReferenceCount("X\\B");
-
-        $this->assertEquals(2, $referenceCount);
-    }
-
-    /**
-     * @test
-     */
-    public function getSingletonReferenceCountWhenParentExists()
-    {
-        $definition = new ContextDependentDefinition(
-            "",
-            null,
-            [
-                "X\\A" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 2),
-            ]
-        );
-
-        $referenceCount = $definition->getSingletonReferenceCount("X\\A");
-
-        $this->assertEquals(2, $referenceCount);
-    }
-
-    /**
-     * @test
-     */
     public function increaseReferenceCountWithoutDefaultWhenParentNotExists()
     {
         $definition = new ContextDependentDefinition("", null, []);
@@ -396,8 +342,7 @@ class ContextDependentDefinitionTest extends TestCase
             ->increaseReferenceCount("", true)
             ->increaseReferenceCount("", false);
 
-        $this->assertEquals(1, $definition->getSingletonReferenceCount(""));
-        $this->assertEquals(1, $definition->getPrototypeReferenceCount(""));
+        $this->assertFalse($definition->isSingletonCheckEliminable(""));
     }
 
     /**
@@ -415,8 +360,7 @@ class ContextDependentDefinitionTest extends TestCase
             ->increaseReferenceCount("X\\B", true)
             ->increaseReferenceCount("X\\B", false);
 
-        $this->assertEquals(1, $definition->getSingletonReferenceCount("X\\B"));
-        $this->assertEquals(1, $definition->getPrototypeReferenceCount("X\\B"));
+        $this->assertFalse($definition->isSingletonCheckEliminable(""));
     }
 
     /**
@@ -436,8 +380,7 @@ class ContextDependentDefinitionTest extends TestCase
             ->increaseReferenceCount("X\\A", true)
             ->increaseReferenceCount("X\\A", false);
 
-        $this->assertEquals(1, $definition->getSingletonReferenceCount("X\\A"));
-        $this->assertEquals(1, $definition->getPrototypeReferenceCount("X\\A"));
+        $this->assertFalse($definition->isSingletonCheckEliminable("X\\A"));
     }
 
     /**
