@@ -152,6 +152,38 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function getClassDependenciesWhenEmpty()
+    {
+        $definition = ClassDefinition::singleton("X\\A");
+
+        $dependencies = $definition->getClassDependencies();
+
+        $this->assertEmpty($dependencies);
+    }
+
+    /**
+     * @test
+     */
+    public function getClassDependencies()
+    {
+        $definition = ClassDefinition::singleton("X\\A")
+            ->addConstructorArgumentFromClass("X\\B")
+            ->addPropertyFromClass("c", "X\\C");
+
+        $dependencies = $definition->getClassDependencies();
+
+        $this->assertEquals(
+            [
+                "X\\B",
+                "X\\C",
+            ],
+            $dependencies
+        );
+    }
+
+    /**
+     * @test
+     */
     public function instantiateWhenSingleton()
     {
         $definition = ClassDefinition::singleton(ConstructorD::class, true);
