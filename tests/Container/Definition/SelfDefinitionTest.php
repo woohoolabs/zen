@@ -206,13 +206,10 @@ class SelfDefinitionTest extends TestCase
 
     private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
     {
-        $singletonEntries = [];
+        $instantiation = new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));
+        $instantiation->definitions = $definitions;
 
-        return new DefinitionInstantiation(
-            new RuntimeContainer(new DummyCompilerConfig()),
-            $definitions,
-            $singletonEntries
-        );
+        return $instantiation;
     }
 
     private function getDefinitionSourceCode(string $fileName): string

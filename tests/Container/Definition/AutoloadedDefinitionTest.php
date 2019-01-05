@@ -115,7 +115,7 @@ class AutoloadedDefinitionTest extends TestCase
 
         $this->expectException(ContainerException::class);
 
-        $definition->instantiate($this->createDefinitionInstantiation([]), "");
+        $definition->instantiate($this->createDefinitionInstantiation(), "");
     }
 
     /**
@@ -168,15 +168,9 @@ class AutoloadedDefinitionTest extends TestCase
         $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinitionWhenFileBased.php"), $compiledDefinition);
     }
 
-    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    private function createDefinitionInstantiation(): DefinitionInstantiation
     {
-        $singletonEntries = [];
-
-        return new DefinitionInstantiation(
-            new RuntimeContainer(new DummyCompilerConfig()),
-            $definitions,
-            $singletonEntries
-        );
+        return new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));
     }
 
     private function getDefinitionSourceCode(string $fileName): string
