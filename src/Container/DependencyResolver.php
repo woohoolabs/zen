@@ -141,7 +141,7 @@ class DependencyResolver
 
             return;
         } else {
-            $this->definitions[$id] = new ClassDefinition($id, "singleton", isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
+            $this->definitions[$id] = new ClassDefinition($id, true, isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
             $this->resolveDependencies($id, $parentId, $parentEntryPoint);
         }
     }

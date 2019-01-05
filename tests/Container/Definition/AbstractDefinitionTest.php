@@ -13,7 +13,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getId()
     {
-        $definition = new TestDefinition("A", "");
+        $definition = new TestDefinition("A");
 
         $id = $definition->getId("");
 
@@ -25,7 +25,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getHash()
     {
-        $definition = new TestDefinition("A", "");
+        $definition = new TestDefinition("A");
 
         $hash = $definition->getHash("");
 
@@ -37,7 +37,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getFCQNHash()
     {
-        $definition = new TestDefinition("A\\B", "");
+        $definition = new TestDefinition("A\\B");
 
         $hash = $definition->getHash("");
 
@@ -49,7 +49,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isEntryPointWhenTrue()
     {
-        $definition = new TestDefinition("", "", true);
+        $definition = new TestDefinition("", true, true);
 
         $entryPoint = $definition->isEntryPoint();
 
@@ -61,7 +61,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isSingletonWhenTrue()
     {
-        $definition = new TestDefinition("", "singleton");
+        $definition = new TestDefinition("", true);
 
         $singleton = $definition->isSingleton("");
 
@@ -73,7 +73,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isSingletonWhenFalse()
     {
-        $definition = new TestDefinition("", "prototype");
+        $definition = new TestDefinition("", false);
 
         $singleton = $definition->isSingleton("");
 
@@ -85,7 +85,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isEntryPointWhenFalse()
     {
-        $definition = new TestDefinition("", "", false);
+        $definition = new TestDefinition("", true, false);
 
         $entryPoint = $definition->isEntryPoint();
 
@@ -97,7 +97,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isAutoloadedWhenTrue()
     {
-        $definition = new TestDefinition("", "", false, true);
+        $definition = new TestDefinition("", true, false, true);
 
         $autoloaded = $definition->isAutoloaded();
 
@@ -109,7 +109,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isAutoloadedWhenFalse()
     {
-        $definition = new TestDefinition("", "", false, false);
+        $definition = new TestDefinition("", true, false, false);
 
         $autoloaded = $definition->isAutoloaded();
 
@@ -121,7 +121,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isFileBasedWhenTrue()
     {
-        $definition = new TestDefinition("", "", false, false, true);
+        $definition = new TestDefinition("", true, false, false, true);
 
         $fileBased = $definition->isFileBased();
 
@@ -133,7 +133,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function isFileBasedWhenFalse()
     {
-        $definition = new TestDefinition("", "", false, false, false);
+        $definition = new TestDefinition("", true, false, false, false);
 
         $fileBased = $definition->isFileBased();
 
@@ -145,7 +145,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getSingletonReferenceCountWhen0()
     {
-        $definition = new TestDefinition("", "", false, false, false, 0);
+        $definition = new TestDefinition("", true, false, false, false, 0);
 
         $referenceCount = $definition->getSingletonReferenceCount();
 
@@ -157,7 +157,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function getSingletonReferenceCountWhenMore()
     {
-        $definition = new TestDefinition("", "", false, false, false, 2);
+        $definition = new TestDefinition("", true, false, false, false, 2);
 
         $referenceCount = $definition->getSingletonReferenceCount();
 
@@ -169,7 +169,7 @@ class AbstractDefinitionTest extends TestCase
      */
     public function increaseReferenceCount()
     {
-        $definition = new TestDefinition("", "", false, false, false, 0);
+        $definition = new TestDefinition("", true, false, false, false, 0);
 
         $definition
             ->increaseReferenceCount("", true)

@@ -77,10 +77,10 @@ class ContextDependentDefinitionHintTest extends TestCase
             [
                 InterfaceA::class => new ContextDependentDefinition(
                     InterfaceA::class,
-                    new ClassDefinition(ClassA::class, "prototype"),
+                    new ClassDefinition(ClassA::class, false),
                     []
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "prototype"),
+                ClassA::class => new ClassDefinition(ClassA::class, false),
             ],
             $definitions
         );
@@ -99,10 +99,10 @@ class ContextDependentDefinitionHintTest extends TestCase
             [
                 InterfaceA::class => new ContextDependentDefinition(
                     InterfaceA::class,
-                    new ClassDefinition(ClassA::class, "singleton", false, true),
+                    new ClassDefinition(ClassA::class, true, false, true),
                     []
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, true),
+                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
             ],
             $definitions
         );
@@ -162,11 +162,11 @@ class ContextDependentDefinitionHintTest extends TestCase
                     InterfaceA::class,
                     null,
                     [
-                        ClassD::class => new ClassDefinition(ClassA::class, "prototype"),
-                        ClassE::class => new ClassDefinition(ClassA::class, "prototype"),
+                        ClassD::class => new ClassDefinition(ClassA::class, false),
+                        ClassE::class => new ClassDefinition(ClassA::class, false),
                     ]
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "prototype"),
+                ClassA::class => new ClassDefinition(ClassA::class, false),
             ],
             $definitions
         );
@@ -194,11 +194,11 @@ class ContextDependentDefinitionHintTest extends TestCase
                     InterfaceA::class,
                     null,
                     [
-                        ClassD::class => new ClassDefinition(ClassA::class, "singleton", false, true),
-                        ClassE::class => new ClassDefinition(ClassA::class, "singleton", false, true),
+                        ClassD::class => new ClassDefinition(ClassA::class, true, false, true),
+                        ClassE::class => new ClassDefinition(ClassA::class, true, false, true),
                     ]
                 ),
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, true),
+                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
             ],
             $definitions
         );
@@ -234,11 +234,11 @@ class ContextDependentDefinitionHintTest extends TestCase
                     [
                         ClassD::class => new ClassDefinition(ClassA::class),
                         ClassE::class => new ClassDefinition(ClassA::class),
-                        ClassF::class => new ClassDefinition(ClassB::class, "prototype"),
+                        ClassF::class => new ClassDefinition(ClassB::class, false),
                     ]
                 ),
                 ClassA::class => new ClassDefinition(ClassA::class),
-                ClassB::class => new ClassDefinition(ClassB::class, "prototype"),
+                ClassB::class => new ClassDefinition(ClassB::class, false),
             ],
             $definitions
         );
@@ -264,14 +264,14 @@ class ContextDependentDefinitionHintTest extends TestCase
             [
                 InterfaceA::class => new ContextDependentDefinition(
                     InterfaceA::class,
-                    new ClassDefinition(ClassB::class, "prototype"),
+                    new ClassDefinition(ClassB::class, false),
                     [
                         ClassD::class => new ClassDefinition(ClassA::class),
                         ClassE::class => new ClassDefinition(ClassA::class),
                     ]
                 ),
                 ClassA::class => new ClassDefinition(ClassA::class),
-                ClassB::class => new ClassDefinition(ClassB::class, "prototype"),
+                ClassB::class => new ClassDefinition(ClassB::class, false),
             ],
             $definitions
         );
@@ -298,14 +298,14 @@ class ContextDependentDefinitionHintTest extends TestCase
             [
                 InterfaceA::class => new ContextDependentDefinition(
                     InterfaceA::class,
-                    new ClassDefinition(ClassB::class, "prototype"),
+                    new ClassDefinition(ClassB::class, false),
                     [
                         ClassD::class => new ClassDefinition(ClassA::class),
                         ClassE::class => new ClassDefinition(ClassA::class),
                     ]
                 ),
                 ClassA::class => new ClassDefinition(ClassA::class),
-                ClassB::class => new ClassDefinition(ClassB::class, "prototype"),
+                ClassB::class => new ClassDefinition(ClassB::class, false),
             ],
             $definitions
         );

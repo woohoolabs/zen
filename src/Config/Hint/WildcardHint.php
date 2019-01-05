@@ -67,7 +67,7 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
             }
 
             $definitionHint = new DefinitionHint($targetClass);
-            if ($this->getScope() === "prototype") {
+            if ($this->singleton === false) {
                 $definitionHint->setPrototypeScope();
             }
 

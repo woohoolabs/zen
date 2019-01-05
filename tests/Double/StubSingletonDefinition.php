@@ -10,7 +10,7 @@ class StubSingletonDefinition extends TestDefinition implements DefinitionInterf
 {
     public function __construct(bool $isEntryPoint = false, bool $isAutoloaded = false, bool $isFileBased = false, int $referenceCount = 0)
     {
-        parent::__construct(self::class, "singleton", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        parent::__construct(self::class, true, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

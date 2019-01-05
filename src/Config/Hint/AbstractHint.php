@@ -6,18 +6,18 @@ namespace WoohooLabs\Zen\Config\Hint;
 abstract class AbstractHint
 {
     /**
-     * @var string
+     * @var bool
      */
-    private $scope;
+    protected $singleton;
 
     public function __construct(string $scope)
     {
-        $this->scope = $scope === "prototype" ? "prototype" : "singleton";
+        $this->singleton = $scope === "singleton";
     }
 
-    public function getScope(): string
+    public function isSingleton(): bool
     {
-        return $this->scope;
+        return $this->singleton;
     }
 
     /**
@@ -25,7 +25,7 @@ abstract class AbstractHint
      */
     public function setSingletonScope()
     {
-        $this->scope = "singleton";
+        $this->singleton = true;
 
         return $this;
     }
@@ -35,7 +35,7 @@ abstract class AbstractHint
      */
     public function setPrototypeScope()
     {
-        $this->scope = "prototype";
+        $this->singleton = false;
 
         return $this;
     }

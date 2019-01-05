@@ -21,6 +21,18 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function isSingleton()
+    {
+        $definition = new SelfDefinition("");
+
+        $singleton = $definition->isSingleton("");
+
+        $this->assertTrue($singleton);
+    }
+
+    /**
+     * @test
+     */
     public function isEntryPoint()
     {
         $definition = new SelfDefinition("");

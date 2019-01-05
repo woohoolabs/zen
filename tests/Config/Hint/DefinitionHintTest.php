@@ -21,9 +21,9 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
-        $scoppe = $hint->getScope();
+        $isSingleton = $hint->isSingleton();
 
-        $this->assertEquals("singleton", $scoppe);
+        $this->assertTrue($isSingleton);
     }
 
     /**
@@ -33,9 +33,9 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
-        $scope = $hint->getScope();
+        $isSingleton = $hint->isSingleton();
 
-        $this->assertEquals("prototype", $scope);
+        $this->assertFalse($isSingleton);
     }
 
     /**
@@ -47,7 +47,7 @@ class DefinitionHintTest extends TestCase
 
         $hint->setSingletonScope();
 
-        $this->assertEquals("singleton", $hint->getScope());
+        $this->assertTrue($hint->isSingleton());
     }
 
     /**
@@ -61,8 +61,8 @@ class DefinitionHintTest extends TestCase
 
         $this->assertEquals(
             [
-                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class, "singleton", false, false, false, 0),
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, false, false, [], [], 1),
+                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class, true, false, false, false, 0),
+                ClassA::class => new ClassDefinition(ClassA::class, true, false, false, false, [], [], 1),
             ],
             $definitions
         );
@@ -133,7 +133,7 @@ class DefinitionHintTest extends TestCase
 
         $this->assertEquals(
             [
-                ClassA::class => new ClassDefinition(ClassA::class, "prototype"),
+                ClassA::class => new ClassDefinition(ClassA::class, false),
             ],
             $definitions
         );
@@ -150,7 +150,7 @@ class DefinitionHintTest extends TestCase
 
         $this->assertEquals(
             [
-                ClassA::class => new ClassDefinition(ClassA::class, "singleton", false, true),
+                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
             ],
             $definitions
         );
@@ -170,7 +170,7 @@ class DefinitionHintTest extends TestCase
             [
                 ClassA::class => new ClassDefinition(
                     ClassA::class,
-                    "singleton",
+                    true,
                     false,
                     false,
                     false,
@@ -198,7 +198,7 @@ class DefinitionHintTest extends TestCase
             [
                 ClassA::class => new ClassDefinition(
                     ClassA::class,
-                    "singleton",
+                    true,
                     false,
                     false,
                     false,
@@ -221,7 +221,7 @@ class DefinitionHintTest extends TestCase
 
         $hint->setPrototypeScope();
 
-        $this->assertEquals("prototype", $hint->getScope());
+        $this->assertFalse($hint->isSingleton());
     }
 
     /**

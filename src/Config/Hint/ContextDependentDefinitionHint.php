@@ -77,7 +77,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         if ($this->defaultDefinitionHint) {
             $defaultDefinition = new ClassDefinition(
                 $this->defaultDefinitionHint->getClassName(),
-                $this->defaultDefinitionHint->getScope(),
+                $this->defaultDefinitionHint->isSingleton(),
                 $isEntryPoint,
                 $isAutoloaded,
                 $isFileBased
@@ -88,7 +88,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         foreach ($this->definitionHints as $parentId => $definitionHint) {
             $definitions[$parentId] = new ClassDefinition(
                 $definitionHint->getClassName(),
-                $definitionHint->getScope(),
+                $definitionHint->isSingleton(),
                 $isEntryPoint,
                 $isAutoloaded,
                 $isFileBased

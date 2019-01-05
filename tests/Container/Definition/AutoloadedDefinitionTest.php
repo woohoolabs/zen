@@ -30,7 +30,7 @@ class AutoloadedDefinitionTest extends TestCase
 
         $singleton = $definition->isSingleton("");
 
-        $this->assertFalse($singleton);
+        $this->assertTrue($singleton);
     }
 
     /**

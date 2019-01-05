@@ -12,14 +12,14 @@ class TestDefinition extends AbstractDefinition
 {
     public function __construct(
         string $id,
-        string $scope,
+        bool $isSingleton = true,
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
     ) {
-        parent::__construct($id, $scope, $isEntryPoint, $isAutoloaded, $isFileBased, $singletonReferenceCount, $prototypeReferenceCount);
+        parent::__construct($id, $isSingleton, $isEntryPoint, $isAutoloaded, $isFileBased, $singletonReferenceCount, $prototypeReferenceCount);
     }
 
     public function needsDependencyResolution(): bool

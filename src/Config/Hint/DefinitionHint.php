@@ -89,7 +89,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             return [
                 $id => new ClassDefinition(
                     $this->className,
-                    $this->getScope(),
+                    $this->isSingleton(),
                     $isEntryPoint,
                     $isAutoloaded,
                     $isFileBased,
@@ -100,7 +100,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->getScope(), $isEntryPoint, $isAutoloaded, $isFileBased),
+            $id => new ReferenceDefinition($id, $this->className, $this->isSingleton(), $isEntryPoint, $isAutoloaded, $isFileBased),
         ];
 
         if (isset($definitionHints[$this->className])) {
@@ -113,14 +113,14 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             );
 
             foreach ($definitions as $definition) {
-                $definition->increaseReferenceCount($id, $this->getScope() === "singleton");
+                $definition->increaseReferenceCount($id, $this->singleton);
             }
 
             $result = array_merge($result, $definitions);
         } else {
             $result[$this->className] = new ClassDefinition(
                 $this->className,
-                $this->getScope(),
+                $this->isSingleton(),
                 isset($entryPoints[$this->className]),
                 false,
                 $isFileBased,
@@ -128,7 +128,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $this->properties
             );
 
-            $result[$this->className]->increaseReferenceCount($id, $this->getScope() === "singleton");
+            $result[$this->className]->increaseReferenceCount($id, $this->singleton);
         }
 
         return $result;

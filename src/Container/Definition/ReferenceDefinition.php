@@ -25,7 +25,7 @@ class ReferenceDefinition extends AbstractDefinition
         return new self(
             $referrerId,
             $referencedId,
-            "singleton",
+            true,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,
@@ -46,7 +46,7 @@ class ReferenceDefinition extends AbstractDefinition
         return new self(
             $referrerId,
             $referencedId,
-            "prototype",
+            false,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,
@@ -58,7 +58,7 @@ class ReferenceDefinition extends AbstractDefinition
     public function __construct(
         string $referrerId,
         string $referencedId,
-        string $scope = "singleton",
+        bool $isSingleton = true,
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
@@ -67,7 +67,7 @@ class ReferenceDefinition extends AbstractDefinition
     ) {
         parent::__construct(
             $referrerId,
-            $scope,
+            $isSingleton,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,

@@ -27,9 +27,9 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected $hash;
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $scope;
+    protected $singleton;
 
     /**
      * @var bool
@@ -58,7 +58,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     public function __construct(
         string $id,
-        string $scope,
+        bool $isSingleton,
         bool $isEntryPoint,
         bool $isAutoloaded,
         bool $isFileBased,
@@ -67,7 +67,7 @@ abstract class AbstractDefinition implements DefinitionInterface
     ) {
         $this->id = $id;
         $this->hash = $this->hash($id);
-        $this->scope = $scope;
+        $this->singleton = $isSingleton;
         $this->entryPoint = $isEntryPoint;
         $this->autoloaded = $isAutoloaded;
         $this->fileBased = $isFileBased;
@@ -87,7 +87,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     public function isSingleton(string $parentId = ""): bool
     {
-        return $this->scope === "singleton";
+        return $this->singleton;
     }
 
     public function isEntryPoint(string $parentId = ""): bool
@@ -131,7 +131,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
     {
-        if ($this->autoloaded === false || $this->entryPoint === false || $this->scope === "prototype") {
+        if ($this->autoloaded === false || $this->entryPoint === false || $this->singleton === false) {
             return false;
         }
 
@@ -148,7 +148,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     public function isSingletonCheckEliminable(string $parentId = ""): bool
     {
-        if ($this->scope === "prototype") {
+        if ($this->singleton === false) {
             return true;
         }
 

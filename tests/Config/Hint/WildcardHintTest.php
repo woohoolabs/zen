@@ -49,8 +49,6 @@ class WildcardHintTest extends TestCase
      */
     public function getPrototypeDefinitionHintsWithPrefixPattern()
     {
-        $sourcePath = dirname(__DIR__, 2) . "/Fixture/WildcardHint";
-
         $wildcardHint = WildcardHint::prototype(
             $this->getSourcePath(),
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Interface",

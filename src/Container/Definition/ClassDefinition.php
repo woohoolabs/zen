@@ -50,7 +50,7 @@ class ClassDefinition extends AbstractDefinition
     ): ClassDefinition {
         return new self(
             $className,
-            "singleton",
+            true,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,
@@ -73,7 +73,7 @@ class ClassDefinition extends AbstractDefinition
     ): ClassDefinition {
         return new self(
             $className,
-            "prototype",
+            false,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,
@@ -86,7 +86,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function __construct(
         string $className,
-        string $scope = "singleton",
+        bool $isSingleton = true,
         bool $isEntryPoint = false,
         bool $isAutoloaded = false,
         bool $isFileBased = false,
@@ -97,7 +97,7 @@ class ClassDefinition extends AbstractDefinition
     ) {
         parent::__construct(
             $className,
-            $scope,
+            $isSingleton,
             $isEntryPoint,
             $isAutoloaded,
             $isFileBased,

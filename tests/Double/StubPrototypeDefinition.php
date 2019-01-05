@@ -10,7 +10,7 @@ class StubPrototypeDefinition extends TestDefinition implements DefinitionInterf
 {
     public function __construct(bool $isEntryPoint = false, bool $isAutoloaded = false, bool $isFileBased = false, int $referenceCount = 0)
     {
-        parent::__construct(self::class, "prototype", $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+        parent::__construct(self::class, false, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

@@ -609,12 +609,12 @@ class ClassDefinitionTest extends TestCase
                         "X\\B",
                         null,
                         [
-                            "X\\A" => new ClassDefinition("X\\C", "singleton", true),
-                            "X\\F" => new ClassDefinition("X\\D", "singleton", true),
+                            "X\\A" => new ClassDefinition("X\\C", true, true),
+                            "X\\F" => new ClassDefinition("X\\D", true, true),
                         ]
                     ),
-                    "X\\C" => new ClassDefinition("X\\C", "singleton", true),
-                    "X\\D" => new ClassDefinition("X\\D", "singleton", true),
+                    "X\\C" => new ClassDefinition("X\\C", true, true),
+                    "X\\D" => new ClassDefinition("X\\D", true, true),
                 ]
             ),
             "",
