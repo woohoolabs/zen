@@ -205,7 +205,12 @@ class ClassDefinition extends AbstractDefinition
         return $dependencies;
     }
 
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
+     * @return mixed
+     */
+    public function instantiate($instantiation, $parentId)
     {
         if ($this->isSingletonCheckEliminable($parentId)) {
             return $this->instantiateClass($instantiation);
@@ -301,7 +306,11 @@ class ClassDefinition extends AbstractDefinition
         return $code;
     }
 
-    private function instantiateClass(DefinitionInstantiation $instantiation)
+    /**
+     * @param DefinitionInstantiation $instantiation
+     * @return mixed
+     */
+    private function instantiateClass($instantiation)
     {
         $arguments = [];
         foreach ($this->constructorArguments as $argument) {

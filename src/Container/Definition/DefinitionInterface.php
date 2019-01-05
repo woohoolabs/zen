@@ -36,9 +36,11 @@ interface DefinitionInterface
     public function getClassDependencies(): array;
 
     /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
      * @return mixed
      */
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId);
+    public function instantiate($instantiation, $parentId);
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string;
 }

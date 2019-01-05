@@ -37,7 +37,12 @@ class TestDefinition extends AbstractDefinition
         return [];
     }
 
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
+     * @return mixed
+     */
+    public function instantiate($instantiation, $parentId)
     {
         return null;
     }

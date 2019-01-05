@@ -96,9 +96,11 @@ class ContextDependentDefinition implements DefinitionInterface
     }
 
     /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
      * @return mixed
      */
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    public function instantiate($instantiation, $parentId)
     {
         return $this->getDefinition($parentId)->instantiate($instantiation, $this->referrerId);
     }

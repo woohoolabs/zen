@@ -95,9 +95,11 @@ class ReferenceDefinition extends AbstractDefinition
     }
 
     /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
      * @return mixed
      */
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    public function instantiate($instantiation, $parentId)
     {
         if ($this->isSingletonCheckEliminable($parentId)) {
             return $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id);

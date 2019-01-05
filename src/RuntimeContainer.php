@@ -73,7 +73,7 @@ class RuntimeContainer implements ContainerInterface
 
     /**
      * @param string $id
-     * @return mixed
+     * @return DefinitionInterface
      * @throws NotFoundException
      */
     private function instantiate(string $id)
@@ -88,7 +88,7 @@ class RuntimeContainer implements ContainerInterface
     /**
      * @throws NotFoundException
      */
-    private function resolve(string $id): void
+    private function resolve($id)
     {
         $this->definitions = array_merge($this->definitions, $this->dependencyResolver->resolveEntryPoint($id));
     }

@@ -34,9 +34,11 @@ class SelfDefinition extends AbstractDefinition
     }
 
     /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
      * @return mixed
      */
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    public function instantiate($instantiation, $parentId)
     {
         return $instantiation->getContainer();
     }

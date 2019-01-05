@@ -31,9 +31,11 @@ final class AutoloadedDefinition extends AbstractDefinition
     }
 
     /**
+     * @param DefinitionInstantiation $instantiation
+     * @param string $parentId
      * @return mixed
      */
-    public function instantiate(DefinitionInstantiation $instantiation, string $parentId)
+    public function instantiate($instantiation, $parentId)
     {
         throw new ContainerException("An autoloaded definition can not be instantiated!");
     }
