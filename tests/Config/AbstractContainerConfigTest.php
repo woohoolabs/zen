@@ -27,17 +27,15 @@ class AbstractContainerConfigTest extends TestCase
      */
     public function createEntryPointsWhenInvalidType()
     {
-        $config = new StubContainerConfig(
+        $this->expectException(ContainerException::class);
+
+        new StubContainerConfig(
             [
                 new stdClass(),
             ],
             [],
             []
         );
-
-        $this->expectException(ContainerException::class);
-
-        $config->createEntryPoints();
     }
 
     /**
@@ -70,7 +68,9 @@ class AbstractContainerConfigTest extends TestCase
      */
     public function createDefinitionHintsWhenInvalidType()
     {
-        $config = new StubContainerConfig(
+        $this->expectException(ContainerException::class);
+
+        new StubContainerConfig(
             [
             ],
             [
@@ -78,10 +78,6 @@ class AbstractContainerConfigTest extends TestCase
             ],
             []
         );
-
-        $this->expectException(ContainerException::class);
-
-        $config->createDefinitionHints();
     }
 
     /**
