@@ -140,10 +140,10 @@ class DependencyResolver
             }
 
             return;
-        } else {
-            $this->definitions[$id] = new ClassDefinition($id, true, isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
-            $this->resolveDependencies($id, $parentId, $parentEntryPoint);
         }
+
+        $this->definitions[$id] = new ClassDefinition($id, true, isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
+        $this->resolveDependencies($id, $parentId, $parentEntryPoint);
     }
 
     private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint): void

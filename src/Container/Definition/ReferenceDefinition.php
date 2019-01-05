@@ -101,14 +101,12 @@ class ReferenceDefinition extends AbstractDefinition
      */
     public function instantiate($instantiation, $parentId)
     {
-        if ($this->isSingletonCheckEliminable($parentId)) {
-            return $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id);
+        if ($this->singleton === false) {
+            return $instantiation->definitions[$this->referencedId]->instantiate($instantiation, $this->id);
         }
 
-        return $instantiation->getSingletonEntry($this->id) ?? $instantiation->setSingletonEntry(
-            $this->id,
-            $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id)
-        );
+        return $instantiation->singletonEntries[$this->id] ?? $instantiation->singletonEntries[$this->id] =
+            $instantiation->definitions[$this->referencedId]->instantiate($instantiation, $this->id);
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

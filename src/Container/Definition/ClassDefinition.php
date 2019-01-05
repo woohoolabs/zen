@@ -212,11 +212,11 @@ class ClassDefinition extends AbstractDefinition
      */
     public function instantiate($instantiation, $parentId)
     {
-        if ($this->isSingletonCheckEliminable($parentId)) {
+        if ($this->singleton === false) {
             return $this->instantiateClass($instantiation);
         }
 
-        return $instantiation->getSingletonEntry($this->id) ?? $instantiation->setSingletonEntry($this->id, $this->instantiateClass($instantiation));
+        return $instantiation->singletonEntries[$this->id] ?? $instantiation->singletonEntries[$this->id] = $this->instantiateClass($instantiation);
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
@@ -315,7 +315,7 @@ class ClassDefinition extends AbstractDefinition
         $arguments = [];
         foreach ($this->constructorArguments as $argument) {
             if (isset($argument["class"])) {
-                $arguments[] = $instantiation->getDefinition($argument["class"])->instantiate($instantiation, $this->id);
+                $arguments[] = $instantiation->definitions[$argument["class"]]->instantiate($instantiation, $this->id);
             } elseif (array_key_exists("value", $argument)) {
                 $arguments[] = $argument["value"];
             }

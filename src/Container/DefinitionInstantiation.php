@@ -11,17 +11,17 @@ class DefinitionInstantiation
     /**
      * @var RuntimeContainer
      */
-    private $container;
+    public $container;
 
     /**
      * @var DefinitionInterface[]
      */
-    private $definitions;
+    public $definitions;
 
     /**
      * @var array
      */
-    private $singletonEntries;
+    public $singletonEntries;
 
     /**
      * @param DefinitionInterface[] $definitions

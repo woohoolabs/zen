@@ -40,7 +40,7 @@ class SelfDefinition extends AbstractDefinition
      */
     public function instantiate($instantiation, $parentId)
     {
-        return $instantiation->getContainer();
+        return $instantiation->container;
     }
 
     public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string

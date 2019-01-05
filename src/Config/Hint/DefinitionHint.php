@@ -89,7 +89,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             return [
                 $id => new ClassDefinition(
                     $this->className,
-                    $this->isSingleton(),
+                    $this->singleton,
                     $isEntryPoint,
                     $isAutoloaded,
                     $isFileBased,
@@ -100,7 +100,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->isSingleton(), $isEntryPoint, $isAutoloaded, $isFileBased),
+            $id => new ReferenceDefinition($id, $this->className, $this->singleton, $isEntryPoint, $isAutoloaded, $isFileBased),
         ];
 
         if (isset($definitionHints[$this->className])) {
