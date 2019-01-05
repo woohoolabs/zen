@@ -4,21 +4,10 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
-use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 
 class StubContainerConfig extends AbstractContainerConfig
 {
-    /**
-     * @var array
-     */
-    private $entryPoints;
-
-    /**
-     * @var DefinitionHintInterface[]
-     */
-    private $definitionHints;
-
     /**
      * @var WildcardHintInterface[]
      */
@@ -29,6 +18,7 @@ class StubContainerConfig extends AbstractContainerConfig
         $this->entryPoints = $entryPoints;
         $this->definitionHints = $definitionHints;
         $this->wildcardHints = $wildcardHints;
+        parent::__construct();
     }
 
     protected function getEntryPoints(): array

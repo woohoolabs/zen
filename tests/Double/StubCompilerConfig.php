@@ -23,11 +23,6 @@ class StubCompilerConfig extends AbstractCompilerConfig
     private $className;
 
     /**
-     * @var array
-     */
-    private $containerConfigs;
-
-    /**
      * @var bool
      */
     private $useConstructorInjection;
@@ -70,6 +65,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
         $this->useBuiltInAutoloading = $useBuiltInAutoloading;
         $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
         $this->useFileBasedDefinition = $useFileBasedDefinition;
+        parent::__construct();
     }
 
     public function getContainerNamespace(): string

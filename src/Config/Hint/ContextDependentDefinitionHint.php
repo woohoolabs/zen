@@ -7,7 +7,6 @@ use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
-use function array_merge;
 use function is_string;
 
 class ContextDependentDefinitionHint implements DefinitionHintInterface
@@ -103,14 +102,18 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
             $result[$defaultDefinition->getClassName()] = $defaultDefinition;
         }
 
+        $definitionHintDefinitions = [];
         foreach ($this->definitionHints as $definitionHint) {
-            $result = array_merge(
-                $result,
-                $definitionHint->toDefinitions($entryPoints, $definitionHints, $definitionHint->getClassName(), $isAutoloaded, $isFileBased)
+            $definitionHintDefinitions[] = $definitionHint->toDefinitions(
+                $entryPoints,
+                $definitionHints,
+                $definitionHint->getClassName(),
+                $isAutoloaded,
+                $isFileBased
             );
         }
 
-        return $result;
+        return array_merge($result, ...$definitionHintDefinitions);
     }
 
     /**

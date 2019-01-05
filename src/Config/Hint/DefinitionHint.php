@@ -116,20 +116,19 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $definition->increaseReferenceCount($id, $this->singleton);
             }
 
-            $result = array_merge($result, $definitions);
-        } else {
-            $result[$this->className] = new ClassDefinition(
-                $this->className,
-                $this->isSingleton(),
-                isset($entryPoints[$this->className]),
-                false,
-                $isFileBased,
-                $this->parameters,
-                $this->properties
-            );
-
-            $result[$this->className]->increaseReferenceCount($id, $this->singleton);
+            return array_merge($result, $definitions);
         }
+
+        $classDefinition = new ClassDefinition(
+            $this->className,
+            $this->singleton,
+            isset($entryPoints[$this->className]),
+            false,
+            $isFileBased,
+            $this->parameters,
+            $this->properties
+        );
+        $result[$this->className] = $classDefinition->increaseReferenceCount($id, $this->singleton);
 
         return $result;
     }

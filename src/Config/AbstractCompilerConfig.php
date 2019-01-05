@@ -19,12 +19,24 @@ abstract class AbstractCompilerConfig
     /**
      * @var ContainerConfigInterface[]
      */
-    private $containerConfigs;
+    protected $containerConfigs = [];
 
     /**
      * @var EntryPointInterface[]
      */
-    private $entryPoints;
+    protected $entryPoints;
+
+    /**
+     * @var DefinitionHintInterface[]
+     */
+    protected $definitionHints;
+
+    public function __construct()
+    {
+        $this->containerConfigs = $this->getContainerConfigs();
+        $this->setEntryPointMap();
+        $this->setDefinitionHints();
+    }
 
     abstract public function getContainerNamespace(): string;
 
@@ -74,16 +86,29 @@ abstract class AbstractCompilerConfig
      */
     public function getEntryPointMap(): array
     {
-        if ($this->entryPoints !== null) {
-            return $this->entryPoints;
-        }
+        return $this->entryPoints;
+    }
 
+    /**
+     * @return DefinitionHintInterface[]
+     * @internal
+     */
+    public function getDefinitionHints(): array
+    {
+        return $this->definitionHints;
+    }
+
+    /**
+     * @internal
+     */
+    protected function setEntryPointMap(): void
+    {
         $this->entryPoints = [
             ContainerInterface::class => new ClassEntryPoint(ContainerInterface::class),
             $this->getContainerFqcn() => new ClassEntryPoint($this->getContainerFqcn()),
         ];
 
-        foreach ($this->createContainerConfigs() as $containerConfig) {
+        foreach ($this->containerConfigs as $containerConfig) {
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
                     // TODO This condition is only for ensuring backwards compatibility. It should be removed in Zen 3.0.
@@ -93,33 +118,15 @@ abstract class AbstractCompilerConfig
                 }
             }
         }
-
-        return $this->entryPoints;
     }
 
-    /**
-     * @return DefinitionHintInterface[]
-     */
-    public function getDefinitionHints(): array
+    protected function setDefinitionHints(): void
     {
         $definitionHints = [];
-
-        foreach ($this->createContainerConfigs() as $containerConfig) {
-            $definitionHints = array_merge($definitionHints, $containerConfig->createDefinitionHints());
+        foreach ($this->containerConfigs as $containerConfig) {
+            $definitionHints[] = $containerConfig->createDefinitionHints();
         }
 
-        return $definitionHints;
-    }
-
-    /**
-     * @return ContainerConfigInterface[]
-     */
-    private function createContainerConfigs(): array
-    {
-        if ($this->containerConfigs !== null) {
-            return $this->containerConfigs;
-        }
-
-        return $this->containerConfigs = $this->getContainerConfigs();
+        $this->definitionHints = array_merge([], ...$definitionHints);
     }
 }

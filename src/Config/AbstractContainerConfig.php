@@ -16,7 +16,23 @@ use function is_string;
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {
     /**
-     * @return EntryPointInterface[]
+     * @var EntryPointInterface[]
+     */
+    protected $entryPoints;
+
+    /**
+     * @var DefinitionHintInterface[]
+     */
+    protected $definitionHints;
+
+    public function __construct()
+    {
+        $this->setEntryPoints();
+        $this->setDefinitionHints();
+    }
+
+    /**
+     * @return EntryPointInterface[]|string[]
      */
     abstract protected function getEntryPoints(): array;
 
@@ -36,7 +52,24 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
      */
     public function createEntryPoints(): array
     {
-        return array_map(
+        return $this->entryPoints;
+    }
+
+    /**
+     * @return DefinitionHintInterface[]
+     * @internal
+     */
+    public function createDefinitionHints(): array
+    {
+        return $this->definitionHints;
+    }
+
+    /**
+     * @internal
+     */
+    protected function setEntryPoints(): void
+    {
+        $this->entryPoints = array_map(
             function ($entryPoint): EntryPointInterface {
                 if ($entryPoint instanceof EntryPointInterface) {
                     return $entryPoint;
@@ -55,12 +88,11 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     }
 
     /**
-     * @return DefinitionHintInterface[]
      * @internal
      */
-    public function createDefinitionHints(): array
+    protected function setDefinitionHints(): void
     {
-        $definitionHints = array_map(
+        $this->definitionHints = array_map(
             function ($definitionHint): DefinitionHintInterface {
                 if ($definitionHint instanceof DefinitionHintInterface) {
                     return $definitionHint;
@@ -75,10 +107,11 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
             $this->getDefinitionHints()
         );
 
+        $wildcardDefinitionHints = [];
         foreach ($this->getWildcardHints() as $wildcardHint) {
-            $definitionHints = array_merge($definitionHints, $wildcardHint->getDefinitionHints());
+            $wildcardDefinitionHints[] = $wildcardHint->getDefinitionHints();
         }
 
-        return $definitionHints;
+        $this->definitionHints = array_merge($this->definitionHints, ...$wildcardDefinitionHints);
     }
 }
