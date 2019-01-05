@@ -82,9 +82,7 @@ class RuntimeContainer implements ContainerInterface
             $this->resolve($id);
         }
 
-        $definition = $this->definitions[$id] ?? $this->throwNotFoundException($id);
-
-        return $definition->instantiate($this->instantiation, "");
+        return $this->definitions[$id]->instantiate($this->instantiation, "");
     }
 
     /**
@@ -93,10 +91,5 @@ class RuntimeContainer implements ContainerInterface
     private function resolve(string $id): void
     {
         $this->definitions = array_merge($this->definitions, $this->dependencyResolver->resolveEntryPoint($id));
-    }
-
-    private function throwNotFoundException(string $id): void
-    {
-        throw new NotFoundException($id);
     }
 }

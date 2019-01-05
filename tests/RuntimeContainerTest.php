@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
@@ -35,9 +34,11 @@ class RuntimeContainerTest extends TestCase
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
-        $hasEntry = $container->has(ConstructorA::class);
+        $hasEntry1 = $container->has(ConstructorA::class);
+        $hasEntry2 = $container->has(ConstructorA::class);
 
-        $this->assertTrue($hasEntry);
+        $this->assertTrue($hasEntry1);
+        $this->assertTrue($hasEntry2);
     }
 
     /**
@@ -88,7 +89,7 @@ class RuntimeContainerTest extends TestCase
      * @param EntryPointInterface[]|string[] $entryPoints
      * @param DefinitionHintInterface[] $definitionsHints
      */
-    private function createRuntimeContainer(array $entryPoints, array $definitionsHints): ContainerInterface
+    private function createRuntimeContainer(array $entryPoints, array $definitionsHints): RuntimeContainer
     {
         return new RuntimeContainer(
             new StubCompilerConfig(

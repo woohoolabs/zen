@@ -103,12 +103,7 @@ class ReferenceDefinition extends AbstractDefinition
             return $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id);
         }
 
-        $object = $instantiation->getSingletonEntry($this->id);
-        if ($object) {
-            return $object;
-        }
-
-        return $instantiation->setSingletonEntry(
+        return $instantiation->getSingletonEntry($this->id) ?? $instantiation->setSingletonEntry(
             $this->id,
             $instantiation->getDefinition($this->referencedId)->instantiate($instantiation, $this->id)
         );

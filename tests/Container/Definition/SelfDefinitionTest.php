@@ -8,6 +8,9 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
+use WoohooLabs\Zen\RuntimeContainer;
+use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use function dirname;
 use function file_get_contents;
 use function str_replace;
@@ -117,6 +120,18 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function instantiate()
+    {
+        $definition = new SelfDefinition("");
+
+        $object = $definition->instantiate($this->createDefinitionInstantiation([]), "");
+
+        $this->assertInstanceOf(RuntimeContainer::class, $object);
+    }
+
+    /**
+     * @test
+     */
     public function compile()
     {
         $definition = new SelfDefinition("");
@@ -175,6 +190,17 @@ class SelfDefinitionTest extends TestCase
         );
 
         $this->assertEquals($this->getInlinedDefinitionSourceCode("SelfDefinitionWhenInlined.php"), $compiledDefinition);
+    }
+
+    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    {
+        $singletonEntries = [];
+
+        return new DefinitionInstantiation(
+            new RuntimeContainer(new DummyCompilerConfig()),
+            $definitions,
+            $singletonEntries
+        );
     }
 
     private function getDefinitionSourceCode(string $fileName): string

@@ -17,8 +17,13 @@ use function mkdir;
 use function rmdir;
 use function unlink;
 
-class FileSystemContainerBuilder extends AbstractContainerBuilder
+class FileSystemContainerBuilder implements ContainerBuilderInterface
 {
+    /**
+     * @var AbstractCompilerConfig
+     */
+    protected $compilerConfig;
+
     /**
      * @var string
      */
@@ -26,8 +31,8 @@ class FileSystemContainerBuilder extends AbstractContainerBuilder
 
     public function __construct(AbstractCompilerConfig $compilerConfig, string $containerPath)
     {
-        parent::__construct($compilerConfig);
         $this->containerPath = $containerPath;
+        $this->compilerConfig = $compilerConfig;
     }
 
     public function build(): void

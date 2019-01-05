@@ -9,6 +9,9 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
+use WoohooLabs\Zen\RuntimeContainer;
+use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorE;
 use function dirname;
@@ -53,7 +56,67 @@ class ReferenceDefinitionTest extends TestCase
 
         $this->assertEquals(["X\\B"], $classDependencies);
     }
-    
+
+    /**
+     * @test
+     */
+    public function instantiateWhenSingleton()
+    {
+        $definition = ReferenceDefinition::singleton("X\\D", ConstructorD::class, true);
+        $instantiation = $this->createDefinitionInstantiation(
+            [
+                "X\\A" => $definition,
+                ConstructorD::class => ClassDefinition::singleton(ConstructorD::class, true),
+            ]
+        );
+
+        $object1 = $definition->instantiate($instantiation, "");
+        $object2 = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorD::class, $object1);
+        $this->assertSame($object1, $object2);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenPrototypeWithSingletonReference()
+    {
+        $definition = ReferenceDefinition::prototype("X\\D", ConstructorD::class, true);
+        $instantiation = $this->createDefinitionInstantiation(
+            [
+                "X\\D" => $definition,
+                ConstructorD::class => ClassDefinition::singleton(ConstructorD::class, true),
+            ]
+        );
+
+        $object1 = $definition->instantiate($instantiation, "");
+        $object2 = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorD::class, $object1);
+        $this->assertSame($object1, $object2);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenPrototypeWithPrototypeReference()
+    {
+        $definition = ReferenceDefinition::prototype("X\\D", ConstructorD::class, true);
+        $instantiation = $this->createDefinitionInstantiation(
+            [
+                "X\\D" => $definition,
+                ConstructorD::class => ClassDefinition::prototype(ConstructorD::class, true),
+            ]
+        );
+
+        $object1 = $definition->instantiate($instantiation, "");
+        $object2 = $definition->instantiate($instantiation, "");
+
+        $this->assertInstanceOf(ConstructorD::class, $object1);
+        $this->assertNotSame($object1, $object2);
+    }
+
     /**
      * @test
      */
@@ -292,6 +355,17 @@ class ReferenceDefinitionTest extends TestCase
         );
 
         $this->assertEquals($this->getDefinitionSourceCode("ReferenceDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
+    }
+
+    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    {
+        $singletonEntries = [];
+
+        return new DefinitionInstantiation(
+            new RuntimeContainer(new DummyCompilerConfig()),
+            $definitions,
+            $singletonEntries
+        );
     }
 
     private function getDefinitionSourceCode(string $fileName): string

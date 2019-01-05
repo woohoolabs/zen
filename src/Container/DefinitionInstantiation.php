@@ -41,14 +41,6 @@ class DefinitionInstantiation
         return $this->container;
     }
 
-    /**
-     * @return DefinitionInterface[]
-     */
-    public function getDefinitions(): array
-    {
-        return $this->definitions;
-    }
-
     public function getDefinition(string $id): DefinitionInterface
     {
         return $this->definitions[$id];

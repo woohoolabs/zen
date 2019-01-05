@@ -9,6 +9,10 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
+use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\RuntimeContainer;
+use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedE;
 use function dirname;
@@ -105,6 +109,18 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
+    public function instantiate()
+    {
+        $definition = new AutoloadedDefinition(MixedE::class);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->instantiate($this->createDefinitionInstantiation([]), "");
+    }
+
+    /**
+     * @test
+     */
     public function compileWhenIndented()
     {
         $definition = new AutoloadedDefinition(MixedE::class);
@@ -150,6 +166,17 @@ class AutoloadedDefinitionTest extends TestCase
         );
 
         $this->assertEquals($this->getDefinitionSourceCode("AutoloadedDefinitionWhenFileBased.php"), $compiledDefinition);
+    }
+
+    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    {
+        $singletonEntries = [];
+
+        return new DefinitionInstantiation(
+            new RuntimeContainer(new DummyCompilerConfig()),
+            $definitions,
+            $singletonEntries
+        );
     }
 
     private function getDefinitionSourceCode(string $fileName): string

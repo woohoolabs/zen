@@ -9,7 +9,11 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
+use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\ContainerException;
+use WoohooLabs\Zen\RuntimeContainer;
+use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
 use function dirname;
 use function file_get_contents;
 use function str_replace;
@@ -475,13 +479,69 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithoutDefaultWhenNoParent()
+    public function instantiateWithoutDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
+
+        $this->expectException(ContainerException::class);
+
+        $definition->instantiate($this->createDefinitionInstantiation([]), "");
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenDefault()
+    {
+        $definition = new ContextDependentDefinition(
+            "X\\A",
+            ClassDefinition::singleton(ConstructorD::class, true),
+            []
+        );
+
+        $object = $definition->instantiate(
+            $this->createDefinitionInstantiation(
+                [
+                    "X\\A" => $definition,
+                ]
+            ),
+            ""
+        );
+
+        $this->assertInstanceOf(ConstructorD::class, $object);
+    }
+
+    /**
+     * @test
+     */
+    public function instantiateWhenNotDefault()
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
             null,
-            []
+            [
+                "" => ClassDefinition::singleton(ConstructorD::class, true),
+            ]
         );
+
+        $object = $definition->instantiate(
+            $this->createDefinitionInstantiation(
+                [
+                    "X\\A" => $definition,
+                ]
+            ),
+            ""
+        );
+
+        $this->assertInstanceOf(ConstructorD::class, $object);
+    }
+
+    /**
+     * @test
+     */
+    public function compileWithoutDefaultWhenNoParent()
+    {
+        $definition = new ContextDependentDefinition("", null, []);
 
         $this->expectException(ContainerException::class);
 
@@ -644,6 +704,17 @@ class ContextDependentDefinitionTest extends TestCase
         );
 
         $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenFileBased.php"), $compiledDefinition);
+    }
+
+    private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
+    {
+        $singletonEntries = [];
+
+        return new DefinitionInstantiation(
+            new RuntimeContainer(new DummyCompilerConfig()),
+            $definitions,
+            $singletonEntries
+        );
     }
 
     private function getDefinitionSourceCode(string $fileName): string

@@ -14,7 +14,7 @@ class ClassEntryPointTest extends TestCase
      */
     public function getClassNames()
     {
-        $entryPoint = new ClassEntryPoint(EntryPointA::class);
+        $entryPoint = ClassEntryPoint::create(EntryPointA::class);
 
         $classNames = $entryPoint->getClassNames();
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Tests\Compiler;
+namespace WoohooLabs\Zen\Tests\Container;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\Compiler;
