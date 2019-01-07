@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Utils;
 
+use DirectoryIterator;
+use IteratorIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
-use RegexIterator;
 use Throwable;
 use const T_ABSTRACT;
 use const T_CLASS;
@@ -21,6 +22,7 @@ use function is_string;
 use function strlen;
 use function strpos;
 use function substr;
+use function substr_compare;
 use function token_get_all;
 
 class FileSystemUtil
@@ -48,7 +50,7 @@ class FileSystemUtil
             return "";
         }
 
-        // Make the filename relative to the project dir
+        // Make the filename relative to the root directory
         if (strpos($filename, $rootDirectory) === 0) {
             $filename = substr($filename, strlen($rootDirectory));
         }
@@ -65,7 +67,7 @@ class FileSystemUtil
     {
         $result = [];
 
-        foreach (self::getSourceFilesInPath($path) as $filePath) {
+        foreach (self::getPhpFilesInPath($path) as $filePath) {
             foreach (self::getClassesInFile($filePath, $onlyConcreteClasses) as $namespace => $classes) {
                 foreach ($classes as $class) {
                     $result[] = is_string($namespace) ? $namespace . "\\" . $class : $class;
@@ -79,15 +81,23 @@ class FileSystemUtil
     /**
      * @return string[]
      */
-    private static function getSourceFilesInPath(string $path): array
+    public static function getPhpFilesInPath(string $path, bool $recursive = true, bool $caseInsensitive = true): array
     {
-        $di = new RecursiveDirectoryIterator($path);
-        $it = new RecursiveIteratorIterator($di);
-        $files = new RegexIterator($it, '#.*\.(php|hhvm)$#');
+        if ($recursive) {
+            $directoryIterator = new RecursiveDirectoryIterator($path);
+            $iterator = new RecursiveIteratorIterator($directoryIterator);
+        } else {
+            $directoryIterator = new DirectoryIterator($path);
+            $iterator = new IteratorIterator($directoryIterator);
+        }
 
         $result = [];
-        foreach ($files as $file) {
-            $result[] = $file->getPathname();
+        foreach ($iterator as $file) {
+            $path = $file->getPathname();
+
+            if (isset($path[4]) && substr_compare($path, ".php", -4, null, $caseInsensitive) === 0) {
+                $result[] = $path;
+            }
         }
 
         return $result;
@@ -133,7 +143,7 @@ class FileSystemUtil
     private static function isNamespace(array $tokens, int $position, bool $dlm): bool
     {
         return (isset($tokens[$position - 2][1]) && $tokens[$position - 2][1] === "namespace") ||
-        ($dlm && $tokens[$position - 1][0] === T_NS_SEPARATOR && $tokens[$position][0] === T_STRING);
+            ($dlm && $tokens[$position - 1][0] === T_NS_SEPARATOR && $tokens[$position][0] === T_STRING);
     }
 
     private static function isRequiredClass(array $tokens, int $position, bool $onlyConcreteClasses): bool
