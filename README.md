@@ -8,7 +8,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Gitter][ico-gitter]][link-gitter]
 
-**Woohoo Labs. Zen is a very fast and simple, PSR-11 (former Container-Interop) compliant DI Container.**
+**Woohoo Labs. Zen is a very fast and easy-to-use, PSR-11 (former Container-Interop) compliant DI Container.**
 
 ## Table of Contents
 
@@ -46,7 +46,7 @@ the most important capabilities of the most popular DI Containers currently avai
 
 Fortunately, since the birth of Zen a lot of progress have been made in the DI Container ecosystem: many containers almost
 doubled their performance, autowiring and compilation became more popular, but one thing didn't change: Zen is still
-one of the fastest PHP containers.
+one of the fastest PHP containers out there.
 
 ### Features
 
@@ -77,15 +77,14 @@ Zen requires PHP 7.1 at least.
 ### Using the container
 
 As Zen is a PSR-11 compliant container, it supports the `$container->has()` and
-`$container->get()` methods as defined by
-[`ContainerInterface`](https://www.php-fig.org/psr/psr-11/).
+`$container->get()` methods as defined by [`ContainerInterface`](https://www.php-fig.org/psr/psr-11/).
 
 ### Types of injection
 
 Only constructor and property injection of objects are supported by Zen.
 
-In order to use constructor injection, you have to type hint the parameters or add a `@param` PHPDoc tag for them. If a
-parameter has a default value then this value will be injected. Here is an example of a valid constructor:
+In order to use constructor injection, you have to declare the type of the parameters or add a `@param` PHPDoc tag for them. If a
+parameter has a default value then this value will be injected. Here is an example of a constructor with valid parameters:
 
 ```php
 /**
@@ -97,7 +96,7 @@ public function __construct(A $a, $b, $c = true)
 }
 ```
 
-In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity) and
+In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity!), and
 provide their type with a `@var` PHPDoc tag in the following way:
 
 ```php
@@ -124,29 +123,28 @@ Compilation is possible by running the following command from your project's roo
 $ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 ```
 
-> Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` parameter when using namespaces like below:
+> Please make sure you escape the `COMPILER_CONFIG_CLASS_NAME` argument when using namespaces, like below:
 
 ```bash
 ./vendor/bin/zen build /var/www/app/Container/Container.php "App\\Container\\CompilerConfig"
 ```
 
 This results in a new file `CONTAINER_PATH` (e.g.: "/var/www/app/Container/Container.php") which can be directly
-instantiated (assuming proper autoloading) in your project. No other configuration is needed during runtime.
+instantiated (assuming autoloading is property set up) in your project. No other configuration is needed during runtime
+by default.
 
 ```php
 $container = new Container();
 ```
 
-It's up to you where you generate the container but please be aware that file system speed (referring to the
-Virtualbox FS) can affect the time consumption of the compilation as well as the performance of your application.
-On the other hand, it's much more convenient to put the container in a place where it is easily reachable as you will
-occasionally need to debug it.
+It's up to you where you generate the container but please be aware that file system speed can affect the time consumption
+of the compilation as well as the performance of your application. On the other hand, it's much more convenient to put
+the container in a place where it is easily reachable as you might occasionally need to debug it.
 
 ### Configuring the compiler
 
 What about the `COMPILER_CONFIG_CLASS_NAME` argument? This must be the fully qualified name of a class which extends
-`AbstractCompilerConfig`. Let's see an
-[example](https://github.com/woohoolabs/zen/blob/master/examples/CompilerConfig.php)!
+`AbstractCompilerConfig`. Let's see an [example](https://github.com/woohoolabs/zen/blob/master/examples/CompilerConfig.php)!
 
 ```php
 class CompilerConfig extends AbstractCompilerConfig
@@ -184,12 +182,19 @@ By providing the prior configuration to the `zen build` command, an `App\Contain
 generated and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
 dependencies marked by annotations.
 
+Besides from the CLI, you can build the Container from PHP itself:
+
+```php
+$builder = new FileSystemContainerBuilder(new CompilerConfig(), "/var/www/src/Container/CompiledContainer.php");
+$builder->build();
+```
+
 ### Configuring the container
 
-We only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
+we only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
 be done by returning an array of `AbstractContainerConfig` child instances in the `getContainerConfigs()`
-method. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/examples/ContainerConfig.php))
-for the container configuration too!
+method of the compiler config. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/examples/ContainerConfig.php))
+for the container configuration too:
 
 ```php
 class ContainerConfig extends AbstractContainerConfig
@@ -197,20 +202,41 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getEntryPoints(): array
     {
         return [
-            new WildcardEntryPoint(__DIR__ . "/Controller"),
+            // Define all classes in a PSR-4 namespace as Entry Point
+            Psr4NamespaceEntryPoint::singleton('WoohooLabs\Zen\Examples\Controller'),
+
+            // Define all classes in a directory as Entry Point
+            WildcardEntryPoint::singleton(__DIR__ . "/Controller"),
+
+            // Define a class as Entry Point
+            ClassEntryPoint::singleton(UserController::class),
         ];
     }
 
     protected function getDefinitionHints(): array
     {
         return [
+            // Bind the Container class to the ContainerInterface (Singleton scope by default)
             ContainerInterface::class => Container::class,
+
+            // Bind the Request class to the RequestInterface (Prototype scope)
+            RequestInterface::class => DefinionHint::singleton(Request::class),
+
+            // Bind the Response class to the ResponseInterface (Singleton scope)
+            ResponseInterface::class => DefinionHint::singleton(Response::class),
         ];
     }
 
     protected function getWildcardHints(): array
     {
         return [
+            // Bind all classes in the specified PSR-4 namespaces to each other based on patterns
+            new Psr4WildcardHint(
+                'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
+                'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
+            ),
+
+            // Bind all classes in the specified directories to each other based on patterns
             new WildcardHint(
                 __DIR__ . "/Domain",
                 'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
@@ -222,20 +248,20 @@ class ContainerConfig extends AbstractContainerConfig
 ```
 
 Configuring the container consist of the following two things: defining your Entry Points (in the `getEntryPoints()`
-method) and passing Hints for the compiler (in the `getDefinitionHints()` and `getWildcardHints()` methods).
+method) and passing Hints for the compiler (via the `getDefinitionHints()` and `getWildcardHints()` methods).
 
 ### Entry Points
 
 Entry Points are such classes that are to be directly retrieved from the DI Container (for instance Controllers and
-Middleware usually fall in this category). This means that you _can only_ fetch Entry Points from the Container with
-the `$container->get()` method.
+Middleware usually fall in this category). This means that you can __only__ fetch Entry Points from the Container with
+the `$container->get()` method and nothing else.
 
-Entry Points are important because their dependencies are automatically discovered during the compilation phase
-resulting in your full object graph (this feature is usually called "autowiring").
+Entry Points are not only special because of this, but also because their dependencies are automatically discovered during
+the compilation phase resulting in the full object graph (this feature is usually called as "autowiring").
 
 The following example shows a configuration which instructs the compiler to recursively search for all classes in the
-`Controller` directory (please note that only concrete classes are included by default) and discover all of their
-dependencies.
+`Controller` directory and discover all of their dependencies. Please note that only concrete classes are included by default,
+and detection is done recursively.
  
 ```php
 protected function getEntryPoints(): array
@@ -246,7 +272,21 @@ protected function getEntryPoints(): array
 }
 ```
 
-But you are able to define Entry Points individually too:
+If you use PSR-4, there is a more convenient and performant way to define multiple Entry Points at once:
+
+```php
+protected function getEntryPoints(): array
+{
+    return [
+        new Psr4NamespaceEntryPoint('Src\Controller'),
+    ];
+}
+```
+
+This way, you can define all classes in a specific PSR-4 namespace as entry point. Please note that only concrete
+classes are included by default and detection is done recursively.
+
+Last but not least, you are able to define Entry Points individually too:
 
 ```php
 protected function getEntryPoints(): array
@@ -256,8 +296,6 @@ protected function getEntryPoints(): array
     ];
 }
 ```
-
-The first method is the preferred one, because it needs much less configuration.
 
 ### Hints
 
@@ -297,8 +335,25 @@ will bind
 
 `UserRepositoryInterface` to `MysqlUserRepository`.
 
-Currently, only `*` supported as a wildcard character because your patterns are much simpler to read this way than with
-real regular expressions.
+If you use PSR-4, there is another - more convenient and performant - way to define the above settings:
+
+```php
+protected function getWildcardHints(): array
+{
+    return [
+        new Psr4WildcardHint(
+            'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
+            'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
+        ),
+    ];
+}
+```
+
+This does exactly the same thing as what `WildcardHint` did.
+
+> Note that currently, namespace detection is not recursive; you are only able to use the wildcard character in the class name part,
+but not in the namespace (so `WoohooLabs\Zen\Examples\*\UserRepositoryInterface` is invalid); and only `*` supported as
+a wildcard character.
 
 ### Scopes
 
@@ -408,7 +463,7 @@ protected function getDefinitionHints(): array
 ```
 
 The code above can be read the following way: when the classes listed in the second parameter of the `setClassContext()` methods
-depend on the class/interface in the key of the current array item (`ServiceA` depends on `LoggerInterface` in the example),
+depend on the class/interface in the key of the specified array item (`ServiceA` depends on `LoggerInterface` in the example),
 then the class/[definition hint](#hints) in the first parameter will be resolved by the container. If any other class depends
 on it, then the class/[definition hint](#hints) in the first parameter of the `setDefaultClass()` method will be resolved.
 
@@ -443,9 +498,14 @@ directory of your project.
 protected function getEntryPoints(): array
 {
     return [
-        WildcardEntryPoint::create(__DIR__ . "/Controller")->autoload(),
-        ClassEntryPoint::create(Class10::class)->disableAutoload(),
-        // ...      
+        Psr4WildcardEntryPoint::create('Src\Controller')
+            ->autoload(),
+
+        WildcardEntryPoint::create(__DIR__ . "/Controller")
+            ->autoload(),
+
+        ClassEntryPoint::create(Class10::class)
+            ->disableAutoload(),      
     ];
 }
 ```
@@ -472,6 +532,13 @@ public function getAutoloadConfig(): AutoloadConfigInterface
 This effects that the `VeryImportantClass1` is included just after the compiled container has been instantiated, while the
 `NotImportantClass1` won't ever be included by Zen.
 
+**Important:** If you autoload the classes by Zen, you have to pass the root directory of the project in the first parameter of the
+compiled container's constructor like below:
+
+```php
+$container = new Container("/var/www");
+```
+
 ### File-based definitions
 
 This is another optimization which was [inspired by Symfony](https://github.com/symfony/symfony/pull/23678): if you have
@@ -497,9 +564,14 @@ during compilation, so be cautious with it.
 protected function getEntryPoints(): array
 {
     return [
-        WildcardEntryPoint::create(__DIR__ . "/Controller")->fileBased(),
-        ClassEntryPoint::create(Class10::class)->disableFileBased(),
-        // ...      
+        Psr4WildcardEntryPoint::create('Src\Controller')
+            ->fileBased(),
+
+        WildcardEntryPoint::create(__DIR__ . "/Controller")
+            ->fileBased(),
+
+        ClassEntryPoint::create(Class10::class)
+            ->disableFileBased(),
     ];
 }
 ```
@@ -513,8 +585,8 @@ helps you:
 $container = new RuntimeContainer(new CompilerConfig());
 ```
 
-Please note that it is only suitable for development purposes, because its implementation is extremely slow. Technically,
-it compiles a container in memory during runtime and then `eval`s it. It's ridiculous I know...
+> Note that the dynamic container is only suitable for development purposes because it is much slower than the
+compiled one - however it is still faster than some of the most well-known DI Containers.
 
 ## Examples
 
