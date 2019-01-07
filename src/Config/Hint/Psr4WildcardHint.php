@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
 
+use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Utils\NamespaceUtil;
 use function class_exists;
 use function interface_exists;
 use function preg_match_all;
 use function preg_replace;
 use function str_replace;
+use function strpos;
 use function strrpos;
 use function substr;
 
@@ -47,8 +49,12 @@ class Psr4WildcardHint extends AbstractHint implements WildcardHintInterface
      */
     public function getDefinitionHints(): array
     {
-        $sourceNamespaceLength = strrpos($this->sourcePattern, "\\");
-        $sourceNamespace = substr($this->sourcePattern, 0, $sourceNamespaceLength);
+        $sourceNamespace = $this->getNamespace($this->sourcePattern);
+        $targetNamespace = $this->getNamespace($this->targetPattern);
+
+        $this->validateNamespace($this->sourcePattern, $sourceNamespace);
+        $this->validateNamespace($this->targetPattern, $targetNamespace);
+
         $sourceRegex = "/" . str_replace([".", "\\", "*"], ["\\.", "\\\\", "(.*)"], $this->sourcePattern) . "/";
 
         $definitionHints = [];
@@ -67,5 +73,19 @@ class Psr4WildcardHint extends AbstractHint implements WildcardHintInterface
         }
 
         return $definitionHints;
+    }
+
+    private function getNamespace(string $pattern): string
+    {
+        $namespaceLength = strrpos($pattern, "\\");
+
+        return substr($pattern, 0, $namespaceLength);
+    }
+
+    private function validateNamespace(string $pattern, string $namespace): void
+    {
+        if (strpos($namespace, "*") !== false) {
+            throw new ContainerException("'$pattern' is an invalid pattern: the namespace part can't contain the asteriks character (*)!");
+        }
     }
 }
