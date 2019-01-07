@@ -137,7 +137,14 @@ by default.
 $container = new Container();
 ```
 
-It's up to you where you generate the container but please be aware that file system speed can affect the time consumption
+Besides from the CLI, you can also build the Container from PHP itself:
+
+```php
+$builder = new FileSystemContainerBuilder(new CompilerConfig(), "/var/www/src/Container/CompiledContainer.php");
+$builder->build();
+```
+
+> It's up to you where you generate the container but please be aware that file system speed can affect the time consumption
 of the compilation as well as the performance of your application. On the other hand, it's much more convenient to put
 the container in a place where it is easily reachable as you might occasionally need to debug it.
 
@@ -178,20 +185,13 @@ class CompilerConfig extends AbstractCompilerConfig
 }
 ```
 
-By providing the prior configuration to the `zen build` command, an `App\Container\Container` class will be
+By providing the prior configuration to the build command, an `App\Container\Container` class will be
 generated and the compiler will resolve constructor dependencies via type hinting and PHPDoc comments as well as property
 dependencies marked by annotations.
 
-Besides from the CLI, you can build the Container from PHP itself:
-
-```php
-$builder = new FileSystemContainerBuilder(new CompilerConfig(), "/var/www/src/Container/CompiledContainer.php");
-$builder->build();
-```
-
 ### Configuring the container
 
-we only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
+We only mentioned so far how to configure the compiler, but we haven't talked about container configuration. This can
 be done by returning an array of `AbstractContainerConfig` child instances in the `getContainerConfigs()`
 method of the compiler config. Let's see an [example]((https://github.com/woohoolabs/zen/blob/master/examples/ContainerConfig.php))
 for the container configuration too:
