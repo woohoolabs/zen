@@ -1,18 +1,24 @@
+## 2.8.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
 ## 2.7.0 - unreleased
 
 ADDED:
 
-- `Psr4NamespaceEntryPoint`: Behaves like the original `WildcardEntryPoint`, but it is faster and more convenient than that if you already use PSR-4
-- `Psr4WildcardHint`: Behaves like the original `WildcardHint`, but it is faster and more convenient than that if you already use PSR-4
+- `Psr4NamespaceEntryPoint`: Behaves like the original `WildcardEntryPoint`, but it is faster and more convenient than that if you use PSR-4
+- `Psr4WildcardHint`: Behaves like the original `WildcardHint`, but it is faster and more convenient than that if you use PSR-4
 
 CHANGED:
 
 - `RuntimeContainer` became much-much faster
 - Faster compilation by optimizing filesystem and array handling
-
-REMOVED:
-
-FIXED:
 
 ## 2.6.0 - 2019-01-04
 
