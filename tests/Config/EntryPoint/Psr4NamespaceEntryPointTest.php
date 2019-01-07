@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Config\EntryPoint;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\EntryPoint\WildcardEntryPoint;
+use WoohooLabs\Zen\Config\EntryPoint\Psr4NamespaceEntryPoint;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AClass;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AInterface;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BClass;
@@ -20,16 +20,38 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\Subdir\ClassH;
-use function dirname;
 
-class WildcardEntryPointTest extends TestCase
+class Psr4NamespaceEntryPointTest extends TestCase
 {
     /**
      * @test
      */
-    public function getOnlyConcreteClassNames()
+    public function getClassNamesNonRecursivelyWhenOnlyInstantiable()
     {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
+        $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), false, true);
+
+        $classNames = $entryPoint->getClassNames();
+
+        $this->assertEqualsCanonicalizing(
+            [
+                AClass::class,
+                BClass::class,
+                ClassC::class,
+                ClassD::class,
+                ClassEImplementation::class,
+                ClassFImplementation::class,
+                G::class,
+            ],
+            $classNames
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getClassNamesRecursivelyWhenOnlyInstantiable()
+    {
+        $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), true, true);
 
         $classNames = $entryPoint->getClassNames();
 
@@ -51,9 +73,9 @@ class WildcardEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNames()
+    public function getClassNamesRecursivelyWhenAll()
     {
-        $entryPoint = WildcardEntryPoint::create($this->getSourcePath(), false);
+        $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), true, false);
 
         $classNames = $entryPoint->getClassNames();
 
@@ -79,8 +101,8 @@ class WildcardEntryPointTest extends TestCase
         );
     }
 
-    private function getSourcePath(): string
+    private function getSourceNamespace(): string
     {
-        return dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Wildcard";
+        return "WoohooLabs\\Zen\\Tests\\Fixture\\DependencyGraph\\Wildcard";
     }
 }

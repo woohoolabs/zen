@@ -84,7 +84,7 @@ class FileSystemUtilTest extends TestCase
     {
         $classes = FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", true);
 
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [
                 EntryPointA::class,
                 "EntryPointB",
@@ -93,11 +93,7 @@ class FileSystemUtilTest extends TestCase
                 EntryPointD1::class,
                 EntryPointD2::class,
             ],
-            $classes,
-            "",
-            0.0,
-            10,
-            true
+            $classes
         );
     }
 

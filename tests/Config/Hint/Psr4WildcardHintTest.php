@@ -5,7 +5,7 @@ namespace WoohooLabs\Zen\Tests\Config\Hint;
 
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
-use WoohooLabs\Zen\Config\Hint\WildcardHint;
+use WoohooLabs\Zen\Config\Hint\Psr4WildcardHint;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AClass;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\AInterface;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BClass;
@@ -20,17 +20,15 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceG;
-use function dirname;
 
-class WildcardHintTest extends TestCase
+class Psr4WildcardHintTest extends TestCase
 {
     /**
      * @test
      */
     public function getDefinitionHintsWithPrefixPattern()
     {
-        $wildcardHint = new WildcardHint(
-            $this->getSourcePath(),
+        $wildcardHint = new Psr4WildcardHint(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Interface",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Class"
         );
@@ -51,8 +49,7 @@ class WildcardHintTest extends TestCase
      */
     public function getPrototypeDefinitionHintsWithPrefixPattern()
     {
-        $wildcardHint = WildcardHint::prototype(
-            $this->getSourcePath(),
+        $wildcardHint = Psr4WildcardHint::prototype(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Interface",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Class"
         );
@@ -73,8 +70,7 @@ class WildcardHintTest extends TestCase
      */
     public function getSingletonDefinitionHintsWithPrefixPattern()
     {
-        $wildcardHint = WildcardHint::singleton(
-            $this->getSourcePath(),
+        $wildcardHint = Psr4WildcardHint::singleton(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Interface",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Class"
         );
@@ -95,8 +91,7 @@ class WildcardHintTest extends TestCase
      */
     public function geNonExistentDefinitionHintsWithPrefixPattern()
     {
-        $wildcardHint = new WildcardHint(
-            $this->getSourcePath(),
+        $wildcardHint = new Psr4WildcardHint(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*Interface",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*NonexistentClass"
         );
@@ -111,8 +106,7 @@ class WildcardHintTest extends TestCase
      */
     public function getDefinitionHintsWithPostfixPattern()
     {
-        $wildcardHint = new WildcardHint(
-            $this->getSourcePath(),
+        $wildcardHint = new Psr4WildcardHint(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\Interface*",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\Class*"
         );
@@ -133,8 +127,7 @@ class WildcardHintTest extends TestCase
      */
     public function getDefinitionHintsWithInfixPattern()
     {
-        $wildcardHint = new WildcardHint(
-            $this->getSourcePath(),
+        $wildcardHint = new Psr4WildcardHint(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\Interface*",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\Class*Implementation"
         );
@@ -155,8 +148,7 @@ class WildcardHintTest extends TestCase
      */
     public function geNonExistentDefinitionHintsWithOnlyPattern()
     {
-        $wildcardHint = new WildcardHint(
-            $this->getSourcePath(),
+        $wildcardHint = new Psr4WildcardHint(
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\Interface*",
             "WoohooLabs\\Zen\Tests\\Fixture\\DependencyGraph\\Wildcard\\*"
         );
@@ -169,10 +161,5 @@ class WildcardHintTest extends TestCase
             ],
             $definitionHints
         );
-    }
-
-    private function getSourcePath(): string
-    {
-        return dirname(__DIR__, 2) . "/Fixture/DependencyGraph/Wildcard";
     }
 }
