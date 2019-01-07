@@ -59,19 +59,14 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
 
             $targetClass = $this->targetPattern;
             foreach ($matches[1] as $match) {
-                $targetClass = preg_replace('/\*/', $match, $targetClass, 1);
+                $targetClass = preg_replace("/\*/", $match, $targetClass, 1);
             }
 
             if (class_exists($targetClass) === false) {
                 continue;
             }
 
-            $definitionHint = new DefinitionHint($targetClass);
-            if ($this->singleton === false) {
-                $definitionHint->setPrototypeScope();
-            }
-
-            $definitionHints[$sourceClass] = $definitionHint;
+            $definitionHints[$sourceClass] = new DefinitionHint($targetClass, $this->singleton ? "singleton" : "prototype");
         }
 
         return $definitionHints;

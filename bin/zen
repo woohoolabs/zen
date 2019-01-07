@@ -13,27 +13,7 @@ if (version_compare("7.1.0", PHP_VERSION, ">")) {
     die(1);
 }
 
-$autoloadPaths = [
-    __DIR__ . "/../../../autoload.php",
-    __DIR__ . "/../../vendor/autoload.php",
-    __DIR__ . "/../vendor/autoload.php",
-];
-
-foreach ($autoloadPaths as $file) {
-    if (file_exists($file)) {
-        define("ZEN_COMPOSER_INSTALL", $file);
-        break;
-    }
-}
-
-unset($file);
-
-if (defined("ZEN_COMPOSER_INSTALL") === false) {
-    fwrite(STDERR, "You need Composer to set up the project dependencies!" . PHP_EOL);
-    die(1);
-}
-
-require ZEN_COMPOSER_INSTALL;
+require getAutoloadPath();
 
 if (isset($argv[1]) === false) {
     die(1);
@@ -45,4 +25,22 @@ if ($argv[1] === "build") {
 
     $builder = new FileSystemContainerBuilder($compilerConfig, $containerFilePath);
     $builder->build();
+}
+
+function getAutoloadPath(): string
+{
+    $paths = [
+        __DIR__ . "/../../../autoload.php",
+        __DIR__ . "/../../vendor/autoload.php",
+        __DIR__ . "/../vendor/autoload.php",
+    ];
+
+    foreach ($paths as $file) {
+        if (file_exists($file)) {
+            return $file;
+        }
+    }
+
+    fwrite(STDERR, "You need Composer to set up the project dependencies!" . PHP_EOL);
+    die(1);
 }
