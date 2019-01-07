@@ -5,10 +5,10 @@ namespace WoohooLabs\Zen\Examples;
 
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
-use WoohooLabs\Zen\Config\EntryPoint\WildcardEntryPoint;
+use WoohooLabs\Zen\Config\EntryPoint\Psr4NamespaceEntryPoint;
 use WoohooLabs\Zen\Config\Hint\ContextDependentDefinitionHint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
-use WoohooLabs\Zen\Config\Hint\WildcardHint;
+use WoohooLabs\Zen\Config\Hint\Psr4WildcardHint;
 use WoohooLabs\Zen\Examples\Controller\AnimalController;
 use WoohooLabs\Zen\Examples\Controller\Authentication\AuthenticationController;
 use WoohooLabs\Zen\Examples\Controller\PlantController;
@@ -31,7 +31,7 @@ class ContainerConfig extends AbstractContainerConfig
             ClassEntryPoint::create(AnimalController::class)
                 ->autoload()
                 ->fileBased(),
-            WildcardEntryPoint::create(__DIR__ . "/Controller"),
+            Psr4NamespaceEntryPoint::create("WoohooLabs\\Zen\\Examples\\Controller"),
         ];
     }
 
@@ -69,8 +69,7 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getWildcardHints(): array
     {
         return [
-            WildcardHint::singleton(
-                __DIR__ . "/Domain",
+            Psr4WildcardHint::singleton(
                 'WoohooLabs\Zen\Examples\Domain\*RepositoryInterface',
                 'WoohooLabs\Zen\Examples\Infrastructure\Mysql*Repository'
             ),

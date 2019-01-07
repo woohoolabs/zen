@@ -2,9 +2,13 @@
 
 ADDED:
 
+- `Psr4NamespaceEntryPoint`: Behaves like the original `WildcardEntryPoint`, but it is faster and more convenient than that if you already use PSR-4
+- `Psr4WildcardHint`: Behaves like the original `WildcardHint`, but it is faster and more convenient than that if you already use PSR-4
+
 CHANGED:
 
-- Made the `RuntimeContainer` much-much more efficient
+- `RuntimeContainer` became much-much faster
+- Faster compilation by optimizing filesystem and array handling
 
 REMOVED:
 
