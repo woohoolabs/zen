@@ -12,8 +12,8 @@ FIXED:
 
 ADDED:
 
-- `Psr4NamespaceEntryPoint`: Behaves like the original `WildcardEntryPoint`, but it is faster and more convenient than that if you use PSR-4
-- `Psr4WildcardHint`: Behaves like the original `WildcardHint`, but it is faster and more convenient than that if you use PSR-4
+- `Psr4NamespaceEntryPoint`: Provides a convenient way to define all classes in a PSR-4 namespace as Entry Point
+- `Psr4WildcardHint`: Provides a convenient way to define Wildcard Hints if you use PSR-4 namespaces
 
 CHANGED:
 
