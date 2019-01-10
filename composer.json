@@ -21,6 +21,8 @@
         "php-di/phpdoc-reader": "^2.0.1"
     },
     "require-dev": {
+        "phpstan/phpstan": "^0.10.8",
+        "phpstan/phpstan-strict-rules": "^0.10.1",
         "phpunit/phpunit": "^7.0.0",
         "squizlabs/php_codesniffer": "^3.4.0",
         "woohoolabs/coding-standard": "^1.0.0"
@@ -46,6 +48,8 @@
         "bin/zen"
     ],
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "phpstan": "phpstan analyse --level 7 src",
+        "phpcs": "phpcs"
     }
 }
