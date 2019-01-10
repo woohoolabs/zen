@@ -8,6 +8,8 @@ REMOVED:
 
 FIXED:
 
+- Edge case issues found by PHPStan
+
 ## 2.7.0 - unreleased
 
 ADDED:

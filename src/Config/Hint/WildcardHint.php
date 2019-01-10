@@ -59,7 +59,11 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
 
             $targetClass = $this->targetPattern;
             foreach ($matches[1] as $match) {
-                $targetClass = preg_replace("/\*/", $match, $targetClass, 1);
+                $result = preg_replace("/\*/", $match, $targetClass, 1);
+
+                if ($result !== null) {
+                    $targetClass = $result;
+                }
             }
 
             if (class_exists($targetClass) === false) {

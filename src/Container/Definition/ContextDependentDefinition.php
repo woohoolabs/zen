@@ -112,12 +112,16 @@ class ContextDependentDefinition implements DefinitionInterface
 
     private function getDefinition(string $parentId): DefinitionInterface
     {
-        if (isset($this->definitions[$parentId]) === false && $this->defaultDefinition === null) {
-            throw new ContainerException(
-                "The Context-Dependent definition with the '{$this->referrerId}' ID can't be injected for the '{$parentId}' class!"
-            );
+        if (isset($this->definitions[$parentId])) {
+            return $this->definitions[$parentId];
         }
 
-        return $this->definitions[$parentId] ?? $this->defaultDefinition;
+        if ($this->defaultDefinition !== null) {
+            return $this->defaultDefinition;
+        }
+
+        throw new ContainerException(
+            "The Context-Dependent definition with the '{$this->referrerId}' ID can't be injected for the '{$parentId}' class!"
+        );
     }
 }

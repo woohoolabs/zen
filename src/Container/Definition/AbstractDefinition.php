@@ -195,7 +195,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
         if ($isFileBased) {
             $path = "__DIR__ . '/";
-            if ($this->isFileBased($this->id) === false && $isFileBased) {
+            if ($this->isFileBased($this->id) === false) {
                 $path .= $fileBasedDefinitionConfig->getRelativeDefinitionDirectory() . "/";
             }
             $path .= "$hash.php'";

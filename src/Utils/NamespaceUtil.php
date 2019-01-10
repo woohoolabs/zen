@@ -34,7 +34,7 @@ class NamespaceUtil
         $classNames = [];
         foreach ($prefixPaths as $prefixPath) {
             $postfixPath = str_replace("\\", DIRECTORY_SEPARATOR, $namespacePostfix);
-            $path = $prefixPath . DIRECTORY_SEPARATOR . ($postfixPath ? $postfixPath . DIRECTORY_SEPARATOR : "");
+            $path = $prefixPath . DIRECTORY_SEPARATOR . ($postfixPath !== "" ? $postfixPath . DIRECTORY_SEPARATOR : "");
             $pathLength = strlen($path);
 
             foreach (FileSystemUtil::getPhpFilesInPath($path, $recursive) as $file) {
@@ -82,6 +82,9 @@ class NamespaceUtil
         throw new ContainerException("PSR-4 autoloader file can not be found!");
     }
 
+    /**
+     * @param array<string, array> $psr4Prefixes
+     */
     private static function getBestMatchingPsr4Prefix(array $psr4Prefixes, string $namespace): string
     {
         $maxLength = 0;

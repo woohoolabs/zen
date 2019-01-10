@@ -106,11 +106,16 @@ class FileSystemUtil
     /**
      * @return string[][]
      */
-    private static function getClassesInFile($filePath, bool $onlyConcreteClasses): array
+    private static function getClassesInFile(string $filePath, bool $onlyConcreteClasses): array
     {
         $classes = [];
         $namespace = 0;
-        $tokens = token_get_all(file_get_contents($filePath));
+        $content = file_get_contents($filePath);
+        if ($content === false) {
+            return [];
+        }
+
+        $tokens = token_get_all($content);
         $count = count($tokens);
         $dlm = false;
 

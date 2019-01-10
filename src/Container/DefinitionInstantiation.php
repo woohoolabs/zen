@@ -23,9 +23,6 @@ final class DefinitionInstantiation
      */
     public $singletonEntries = [];
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
     public function __construct(RuntimeContainer $container)
     {
         $this->container = $container;

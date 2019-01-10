@@ -75,7 +75,7 @@ abstract class AbstractCompilerConfig
      */
     public function getContainerFqcn(): string
     {
-        $namespace = $this->getContainerNamespace() ? $this->getContainerNamespace() . "\\" : "";
+        $namespace = $this->getContainerNamespace() !== "" ? $this->getContainerNamespace() . "\\" : "";
 
         return $namespace . $this->getContainerClassName();
     }

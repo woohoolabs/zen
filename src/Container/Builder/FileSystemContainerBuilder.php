@@ -48,7 +48,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
             $this->createDirectory($definitionDirectory);
 
             foreach ($compiledContainerFiles["definitions"] as $filename => $content) {
-                file_put_contents("$definitionDirectory" . DIRECTORY_SEPARATOR . "$filename", $content);
+                file_put_contents($definitionDirectory . DIRECTORY_SEPARATOR . $filename, $content);
             }
         }
 

@@ -25,7 +25,7 @@ final class Compiler
         $definitionFiles = [];
 
         $container = "<?php\n";
-        if ($compilerConfig->getContainerNamespace()) {
+        if ($compilerConfig->getContainerNamespace() !== "") {
             $container .= "namespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
         $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n\n";

@@ -123,6 +123,9 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function addConstructorArgumentFromValue($value): ClassDefinition
     {
         $this->constructorArguments[] = ["value" => $value];
@@ -344,6 +347,9 @@ class ClassDefinition extends AbstractDefinition
         return $object;
     }
 
+    /**
+     * @param mixed $value
+     */
     private function serializeValue($value): string
     {
         return var_export($value, true);

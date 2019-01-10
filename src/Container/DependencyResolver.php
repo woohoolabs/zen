@@ -204,6 +204,10 @@ final class DependencyResolver
     {
         $this->definitions[$id]->resolveDependencies();
 
+        if ($this->definitions[$id] instanceof ClassDefinition === false) {
+            return;
+        }
+
         if ($this->useConstructorInjection) {
             $this->resolveConstructorArguments($id, $parentId, $this->definitions[$id], $parentEntryPoint, $runtime);
         }
@@ -230,9 +234,9 @@ final class DependencyResolver
         $runtime
     ) {
         try {
-            $reflectionClass = new ReflectionClass($definition->getClassName());
+            $reflectionClass = new ReflectionClass($id);
         } catch (ReflectionException $e) {
-            throw new ContainerException("Cannot inject class: " . $definition->getClassName());
+            throw new ContainerException("Cannot inject class: " . $id);
         }
 
         $constructor = $reflectionClass->getConstructor();
@@ -293,7 +297,7 @@ final class DependencyResolver
         $parentEntryPoint,
         $runtime
     ) {
-        $class = new ReflectionClass($definition->getClassName());
+        $class = new ReflectionClass($id);
 
         $propertyNames = [];
         foreach ($class->getProperties() as $property) {
@@ -306,9 +310,7 @@ final class DependencyResolver
                 continue;
             }
 
-            /** @var Inject $annotation */
-            $annotation = $this->annotationReader->getPropertyAnnotation($property, Inject::class);
-            if ($annotation === null) {
+            if ($this->annotationReader->getPropertyAnnotation($property, Inject::class) === null) {
                 continue;
             }
 
@@ -321,8 +323,7 @@ final class DependencyResolver
             $propertyClass = $this->typeHintReader->getPropertyClass($property);
             if ($propertyClass === null) {
                 throw new ContainerException(
-                    "'@var' PHPDoc comment for property '" . $definition->getClassName() . "::$" . $propertyName .
-                    "' is missing or it is not a class!"
+                    "'@var' PHPDoc comment for property $id::\$$propertyName' is missing or it is not a class!"
                 );
             }
 
@@ -334,7 +335,7 @@ final class DependencyResolver
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
         if (empty($invalidPropertyOverrides) === false) {
             throw new ContainerException(
-                "Class '{$definition->getClassName()}' has the following overridden properties which don't exist: " .
+                "Class '$id' has the following overridden properties which don't exist: " .
                 implode(", ", $invalidPropertyOverrides) . "!"
             );
         }
