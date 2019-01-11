@@ -14,12 +14,6 @@ help:
 build:
 	docker-compose -f docker-compose.examples.yml stop --timeout=2 && docker-compose -f docker-compose.examples.yml up
 
-composer-install:
-	docker run --rm --interactive --tty --volume $(PWD):/app --user $(id -u):$(id -g) composer install --ignore-platform-reqs
-
-composer-update:
-	docker run --rm --interactive --tty --volume $(PWD):/app --user $(id -u):$(id -g) composer update --ignore-platform-reqs
-
 test:
 	docker-compose up
 
@@ -30,4 +24,13 @@ cs:
 	docker-compose run --rm zen-php /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml
 
 cs-fix:
-	docker-compose -f docker-compose.yml run --rm zen-php /var/www/vendor/bin/phpcbf --standard=/var/www/phpcs.xml
+	docker-compose run --rm zen-php /var/www/vendor/bin/phpcbf --standard=/var/www/phpcs.xml
+
+composer-install:
+	docker run --rm --interactive --tty --volume $(PWD):/app --user $(id -u):$(id -g) composer install --ignore-platform-reqs
+
+composer-update:
+	docker run --rm --interactive --tty --volume $(PWD):/app --user $(id -u):$(id -g) composer update --ignore-platform-reqs
+
+release:
+	make test && make phpstan && make cs && ./vendor/bin/releaser release
