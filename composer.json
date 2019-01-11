@@ -52,5 +52,8 @@
         "test": "phpunit",
         "phpstan": "phpstan analyse --level 7 src",
         "phpcs": "phpcs"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

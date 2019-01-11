@@ -19,4 +19,5 @@ docker-compose.yml export-ignore
 docker-compose.examples.yml export-ignore
 Makefile export-ignore
 phpcs.xml export-ignore
+phpstan.neon export-ignore
 phpunit.xml.dist export-ignore
