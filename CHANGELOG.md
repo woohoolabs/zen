@@ -8,6 +8,10 @@ REMOVED:
 
 FIXED:
 
+## 2.7.1 - 2019-01-11
+
+FIXED:
+
 - Edge case issues found by PHPStan
 
 ## 2.7.0 - unreleased
