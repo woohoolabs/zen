@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Project" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
-    <description>PHP Coding Standards for Project</description>
+<ruleset name="Zen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    <description>PHP Coding Standards for Zen</description>
 
     <arg name="basepath" value="."/>
     <arg name="cache" value=".phpcs-cache"/>
