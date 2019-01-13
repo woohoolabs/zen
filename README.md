@@ -220,7 +220,7 @@ class ContainerConfig extends AbstractContainerConfig
             ContainerInterface::class => Container::class,
 
             // Bind the Request class to the RequestInterface (Prototype scope)
-            RequestInterface::class => DefinionHint::singleton(Request::class),
+            RequestInterface::class => DefinionHint::prototype(Request::class),
 
             // Bind the Response class to the ResponseInterface (Singleton scope)
             ResponseInterface::class => DefinionHint::singleton(Response::class),
