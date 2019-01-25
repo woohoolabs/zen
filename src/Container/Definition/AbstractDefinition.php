@@ -105,9 +105,6 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->fileBased;
     }
 
-    /**
-     * @return $this
-     */
     public function increaseReferenceCount(string $parentId, bool $isParentSingleton): DefinitionInterface
     {
         if ($isParentSingleton) {
