@@ -6,12 +6,12 @@ namespace WoohooLabs\Zen\Utils;
 use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Exception\ContainerException;
-use const DIRECTORY_SEPARATOR;
 use function file_exists;
 use function str_replace;
 use function strlen;
 use function substr;
 use function substr_compare;
+use const DIRECTORY_SEPARATOR;
 
 class NamespaceUtil
 {

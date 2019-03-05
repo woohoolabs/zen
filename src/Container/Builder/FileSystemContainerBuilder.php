@@ -9,13 +9,13 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Compiler;
 use WoohooLabs\Zen\Container\DependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
-use const DIRECTORY_SEPARATOR;
 use function dirname;
 use function file_exists;
 use function file_put_contents;
 use function mkdir;
 use function rmdir;
 use function unlink;
+use const DIRECTORY_SEPARATOR;
 
 class FileSystemContainerBuilder implements ContainerBuilderInterface
 {

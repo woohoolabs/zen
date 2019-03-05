@@ -9,12 +9,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use Throwable;
-use const T_ABSTRACT;
-use const T_CLASS;
-use const T_INTERFACE;
-use const T_NS_SEPARATOR;
-use const T_STRING;
-use const T_WHITESPACE;
 use function count;
 use function file_get_contents;
 use function in_array;
@@ -24,6 +18,12 @@ use function strpos;
 use function substr;
 use function substr_compare;
 use function token_get_all;
+use const T_ABSTRACT;
+use const T_CLASS;
+use const T_INTERFACE;
+use const T_NS_SEPARATOR;
+use const T_STRING;
+use const T_WHITESPACE;
 
 class FileSystemUtil
 {
