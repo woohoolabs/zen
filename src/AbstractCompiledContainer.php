@@ -49,7 +49,7 @@ abstract class AbstractCompiledContainer implements ContainerInterface
     protected function setClassProperties($object, array $properties)
     {
         Closure::bind(
-            function () use ($object, $properties) {
+            static function () use ($object, $properties) {
                 foreach ($properties as $name => $value) {
                     $object->$name = $value;
                 }

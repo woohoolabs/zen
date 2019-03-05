@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 2.7.2 - unreleased
+
+CHANGED:
+
+- Improved performance of property injection by using `static function()` (see [this commit](https://github.com/Ocramius/GeneratedHydrator/commit/bc03e8d1681cb1d8bc60c751cd6aeb2a820498f9) for background)
+
 ## 2.7.1 - 2019-01-11
 
 FIXED:
