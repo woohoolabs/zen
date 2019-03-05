@@ -5,6 +5,8 @@ parameters:
         - '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
         - '#^Variable method call on \$this\(WoohooLabs\\Zen\\AbstractCompiledContainer\)\.$#'
         - '#^Variable property access on .*$#'
+        - '#^Empty array passed to foreach\.$#'
+        - '#^Call to function array_key_exists\(\) with .* and \*NEVER\* will always evaluate to true\.$#'
 
 includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
