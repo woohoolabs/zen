@@ -10,7 +10,7 @@ use WoohooLabs\Zen\Utils\FileSystemUtil;
 use function array_keys;
 use function str_replace;
 
-final class Compiler
+final class ContainerCompiler
 {
     /**
      * @param DefinitionInterface[] $definitions

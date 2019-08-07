@@ -2,6 +2,8 @@
 
 ADDED:
 
+- Preloading support for PHP 7.4+
+
 CHANGED:
 
 REMOVED:

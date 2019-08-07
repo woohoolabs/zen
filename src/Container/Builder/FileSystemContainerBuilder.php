@@ -6,8 +6,10 @@ namespace WoohooLabs\Zen\Container\Builder;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
-use WoohooLabs\Zen\Container\Compiler;
-use WoohooLabs\Zen\Container\DependencyResolver;
+use WoohooLabs\Zen\Container\ContainerCompiler;
+use WoohooLabs\Zen\Container\ContainerDependencyResolver;
+use WoohooLabs\Zen\Container\PreloadCompiler;
+use WoohooLabs\Zen\Container\PreloadDependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
 use function dirname;
 use function file_exists;
@@ -29,16 +31,33 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
      */
     private $containerPath;
 
-    public function __construct(AbstractCompilerConfig $compilerConfig, string $containerPath)
+    /**
+     * @var string
+     */
+    private $preloadFilePath;
+
+    public function __construct(AbstractCompilerConfig $compilerConfig, string $containerPath, string $preloadFilePath)
     {
         $this->containerPath = $containerPath;
         $this->compilerConfig = $compilerConfig;
+        $this->preloadFilePath = $preloadFilePath;
     }
 
     public function build(): void
     {
-        $compiler = new Compiler();
-        $dependencyResolver = new DependencyResolver($this->compilerConfig);
+        if ($this->containerPath !== "") {
+            $this->buildContainer();
+        }
+
+        if ($this->preloadFilePath !== "") {
+            $this->buildPreloadFile();
+        }
+    }
+
+    public function buildContainer(): void
+    {
+        $dependencyResolver = new ContainerDependencyResolver($this->compilerConfig);
+        $compiler = new ContainerCompiler();
 
         $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints());
 
@@ -53,6 +72,16 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         }
 
         file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
+    }
+
+    public function buildPreloadFile(): void
+    {
+        $dependencyResolver = new PreloadDependencyResolver($this->compilerConfig);
+        $compiler = new PreloadCompiler();
+
+        $compiledPreloadFile = $compiler->compile($dependencyResolver->resolvePreloads());
+
+        file_put_contents($this->preloadFilePath, $compiledPreloadFile);
     }
 
     private function deleteDirectory(string $directory): void

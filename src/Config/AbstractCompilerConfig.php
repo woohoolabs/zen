@@ -11,6 +11,9 @@ use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
+use WoohooLabs\Zen\Config\Preload\PreloadConfig;
+use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
+use WoohooLabs\Zen\Config\Preload\PreloadInterface;
 use function array_merge;
 use function str_replace;
 
@@ -27,6 +30,11 @@ abstract class AbstractCompilerConfig
     protected $entryPoints;
 
     /**
+     * @var PreloadInterface[]
+     */
+    protected $preloads;
+
+    /**
      * @var DefinitionHintInterface[]
      */
     protected $definitionHints;
@@ -35,6 +43,7 @@ abstract class AbstractCompilerConfig
     {
         $this->containerConfigs = $this->getContainerConfigs();
         $this->setEntryPointMap();
+        $this->setPreloadMap();
         $this->setDefinitionHints();
     }
 
@@ -49,6 +58,11 @@ abstract class AbstractCompilerConfig
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
         return AutoloadConfig::disabledGlobally();
+    }
+
+    public function getPreloadConfig(): PreloadConfigInterface
+    {
+        return PreloadConfig::create();
     }
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface
@@ -90,6 +104,15 @@ abstract class AbstractCompilerConfig
     }
 
     /**
+     * @return PreloadInterface[]
+     * @internal
+     */
+    public function getPreloadMap(): array
+    {
+        return $this->preloads;
+    }
+
+    /**
      * @return DefinitionHintInterface[]
      * @internal
      */
@@ -116,6 +139,20 @@ abstract class AbstractCompilerConfig
                         $this->entryPoints[$id] = $entryPoint;
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * @internal
+     */
+    protected function setPreloadMap(): void
+    {
+        $this->preloads = [];
+
+        foreach ($this->getPreloadConfig()->getPreloads() as $preload) {
+            foreach ($preload->getClassNames() as $id) {
+                $this->preloads[$id] = $preload;
             }
         }
     }

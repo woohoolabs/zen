@@ -7,14 +7,14 @@ use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
-use WoohooLabs\Zen\Container\DependencyResolver;
+use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_merge;
 
 class RuntimeContainer implements ContainerInterface
 {
     /**
-     * @var DependencyResolver
+     * @var ContainerDependencyResolver
      */
     private $dependencyResolver;
 
@@ -25,7 +25,7 @@ class RuntimeContainer implements ContainerInterface
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
-        $this->dependencyResolver = new DependencyResolver($compilerConfig);
+        $this->dependencyResolver = new ContainerDependencyResolver($compilerConfig);
         $this->instantiation = new DefinitionInstantiation($this);
     }
 

@@ -257,24 +257,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $code;
     }
 
-    /**
-     * @param DefinitionInterface[] $definitions
-     */
-    private function collectRelatedClasses(array $definitions, string $id, array &$relatedClasses): void
-    {
-        $definition = $definitions[$id];
-
-        $relatedClasses[$id] = $id;
-        $this->collectParentClasses($id, $relatedClasses);
-
-        foreach ($definition->getClassDependencies() as $relatedClass) {
-            $relatedClasses[$relatedClass] = $relatedClass;
-            $this->collectRelatedClasses($definitions, $relatedClass, $relatedClasses);
-            $this->collectParentClasses($relatedClass, $relatedClasses);
-        }
-    }
-
-    private function collectParentClasses(string $id, array &$relatedClasses): void
+    protected function collectParentClasses(string $id, array &$relatedClasses): void
     {
         try {
             $class = new ReflectionClass($id);
@@ -301,6 +284,23 @@ abstract class AbstractDefinition implements DefinitionInterface
                 unset($relatedClasses[$interface]);
             }
             $relatedClasses[$interface] = $interface;
+        }
+    }
+
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
+    private function collectRelatedClasses(array $definitions, string $id, array &$relatedClasses): void
+    {
+        $definition = $definitions[$id];
+
+        $relatedClasses[$id] = $id;
+        $this->collectParentClasses($id, $relatedClasses);
+
+        foreach ($definition->getClassDependencies() as $relatedClass) {
+            $relatedClasses[$relatedClass] = $relatedClass;
+            $this->collectRelatedClasses($definitions, $relatedClass, $relatedClasses);
+            $this->collectParentClasses($relatedClass, $relatedClasses);
         }
     }
 }

@@ -51,7 +51,7 @@ class FileSystemUtil
         }
 
         // Make the filename relative to the root directory
-        if (strpos($filename, $rootDirectory) === 0) {
+        if ($rootDirectory !== "" && strpos($filename, $rootDirectory) === 0) {
             $filename = substr($filename, strlen($rootDirectory));
         }
 

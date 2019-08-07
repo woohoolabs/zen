@@ -24,7 +24,7 @@ use function array_diff;
 use function array_flip;
 use function implode;
 
-final class DependencyResolver
+final class ContainerDependencyResolver
 {
     /**
      * @var SimpleAnnotationReader
@@ -79,7 +79,7 @@ final class DependencyResolver
     /**
      * @var string[]
      */
-    private $alwaysAutoloadedFiles;
+    private $alwaysAutoloadedClases;
 
     /**
      * @var FileBasedDefinitionConfigInterface
@@ -105,7 +105,7 @@ final class DependencyResolver
 
         $this->autoloadConfig = $compilerConfig->getAutoloadConfig();
         $this->excludedAutoloadedFiles = array_flip($this->autoloadConfig->getExcludedClasses());
-        $this->alwaysAutoloadedFiles = array_flip($this->autoloadConfig->getAlwaysAutoloadedClasses());
+        $this->alwaysAutoloadedClases = array_flip($this->autoloadConfig->getAlwaysAutoloadedClasses());
 
         $this->fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
         $this->excludedFileBasedDefinitions = array_flip($this->fileBasedDefinitionConfig->getExcludedDefinitions());
@@ -347,7 +347,7 @@ final class DependencyResolver
             return false;
         }
 
-        if (isset($this->alwaysAutoloadedFiles[$id])) {
+        if (isset($this->alwaysAutoloadedClases[$id])) {
             return true;
         }
 

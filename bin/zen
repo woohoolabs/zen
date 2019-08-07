@@ -15,15 +15,32 @@ if (version_compare("7.1.0", PHP_VERSION, ">")) {
 
 require getAutoloadPath();
 
-if (isset($argv[1]) === false) {
+$optind = 0;
+$options = getopt("m::p::", ["memory-limit::", "preload::"], $optind);
+
+$memoryLimit = $options["memory-limit"] ?? ($options["m"] ?? "");
+if ($memoryLimit !== "") {
+    ini_set("memory_limit", $memoryLimit);
+}
+
+if (isset($argv[$optind]) === false) {
     die(1);
 }
 
-if ($argv[1] === "build") {
-    $containerFilePath = $argv[2];
-    $compilerConfig = new $argv[3]();
+if ($argv[$optind] === "build") {
+    $containerFilePath = $argv[$optind + 1];
+    $compilerConfig = new $argv[$optind + 2]();
+    $preloadFilePath = $options["preload"] ?? ($options["p"] ?? "");
 
-    $builder = new FileSystemContainerBuilder($compilerConfig, $containerFilePath);
+    $builder = new FileSystemContainerBuilder($compilerConfig, $containerFilePath, $preloadFilePath);
+    $builder->build();
+}
+
+if ($argv[$optind] === "preload") {
+    $preloadFilePath = $argv[$optind + 1];
+    $compilerConfig = new $argv[$optind + 2]();
+
+    $builder = new FileSystemContainerBuilder($compilerConfig, "", $preloadFilePath);
     $builder->build();
 }
 

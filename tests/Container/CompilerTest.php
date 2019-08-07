@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Container\Compiler;
+use WoohooLabs\Zen\Container\ContainerCompiler;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition;
@@ -19,7 +19,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithoutNamespace()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"),
@@ -34,7 +34,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithNamespace()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "EmptyContainerWithNamespace"),
@@ -49,7 +49,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithoutEntryPointWithEntry()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "ContainerWithEntry"),
@@ -66,7 +66,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -93,7 +93,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithAlwaysAutoloadedClasses()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -120,7 +120,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithUnoptimizedAutoloadedPrototypeEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -153,7 +153,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithUnoptimizedAutoloadedSingletonEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -186,7 +186,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithOptimizedAutoloadedEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -216,7 +216,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithFileBasedEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(
@@ -254,7 +254,7 @@ class CompilerTest extends TestCase
      */
     public function compileContainerWithFileBasedAutoloadedEntryPoint()
     {
-        $compiler = new Compiler();
+        $compiler = new ContainerCompiler();
 
         $container = $compiler->compile(
             new StubCompilerConfig(

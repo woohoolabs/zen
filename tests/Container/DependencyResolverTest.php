@@ -9,7 +9,7 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
-use WoohooLabs\Zen\Container\DependencyResolver;
+use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
@@ -340,9 +340,9 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolveEntryPoints();
     }
 
-    private function createDependencyResolver(string $entryPoint, array $definitionHints = []): DependencyResolver
+    private function createDependencyResolver(string $entryPoint, array $definitionHints = []): ContainerDependencyResolver
     {
-        return new DependencyResolver(
+        return new ContainerDependencyResolver(
             new StubCompilerConfig(
                 [
                     new StubContainerConfig([$entryPoint], $definitionHints),

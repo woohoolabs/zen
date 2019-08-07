@@ -8,6 +8,9 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
+use WoohooLabs\Zen\Config\Preload\PreloadConfig;
+use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
+use WoohooLabs\Zen\Config\Preload\Psr4NamespacePreload;
 use WoohooLabs\Zen\Examples\Controller\AbstractController;
 use WoohooLabs\Zen\Examples\Controller\ControllerInterface;
 
@@ -45,6 +48,18 @@ class CompilerConfig extends AbstractCompilerConfig
             ->setExcludedClasses(
                 [
                     AbstractController::class
+                ]
+            );
+    }
+
+    public function getPreloadConfig(): PreloadConfigInterface
+    {
+        return PreloadConfig::create()
+            ->setPreloads(
+                [
+                    Psr4NamespacePreload::create("WoohooLabs\\Zen\\Config"),
+                    Psr4NamespacePreload::create("WoohooLabs\\Zen\\Utils"),
+                    Psr4NamespacePreload::create("WoohooLabs\\Zen\\Container"),
                 ]
             );
     }

@@ -4,4 +4,5 @@ composer.lock
 phpunit.xml
 examples/Container.php
 examples/Definitions/
+examples/preload.php
 tests/Definitions/
