@@ -56,6 +56,22 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function buildPreloadFile(): array
+    {
+        $dependencyResolver = new PreloadDependencyResolver($this->compilerConfig);
+        $classes = $dependencyResolver->resolvePreloads();
+        $compiler = new PreloadCompiler();
+
+        $compiledPreloadFile = $compiler->compile($classes);
+
+        file_put_contents($this->preloadFilePath, $compiledPreloadFile);
+
+        return $classes;
+    }
+
+    /**
      * @param string[] $preloadedClasses
      */
     public function buildContainer(array $preloadedClasses): void
@@ -76,22 +92,6 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         }
 
         file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function buildPreloadFile(): array
-    {
-        $dependencyResolver = new PreloadDependencyResolver($this->compilerConfig);
-        $classes = $dependencyResolver->resolvePreloads();
-        $compiler = new PreloadCompiler();
-
-        $compiledPreloadFile = $compiler->compile($classes);
-
-        file_put_contents($this->preloadFilePath, $compiledPreloadFile);
-
-        return $classes;
     }
 
     private function deleteDirectory(string $directory): void

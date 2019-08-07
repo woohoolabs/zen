@@ -30,11 +30,6 @@ abstract class AbstractCompilerConfig
     protected $entryPoints;
 
     /**
-     * @var PreloadInterface[]
-     */
-    protected $preloads;
-
-    /**
      * @var DefinitionHintInterface[]
      */
     protected $definitionHints;
@@ -43,7 +38,6 @@ abstract class AbstractCompilerConfig
     {
         $this->containerConfigs = $this->getContainerConfigs();
         $this->setEntryPointMap();
-        $this->setPreloadMap();
         $this->setDefinitionHints();
     }
 
@@ -109,7 +103,15 @@ abstract class AbstractCompilerConfig
      */
     public function getPreloadMap(): array
     {
-        return $this->preloads;
+        $preloads = [];
+
+        foreach ($this->getPreloadConfig()->getPreloads() as $preload) {
+            foreach ($preload->getClassNames() as $id) {
+                $preloads[$id] = $preload;
+            }
+        }
+
+        return $preloads;
     }
 
     /**
@@ -139,20 +141,6 @@ abstract class AbstractCompilerConfig
                         $this->entryPoints[$id] = $entryPoint;
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * @internal
-     */
-    protected function setPreloadMap(): void
-    {
-        $this->preloads = [];
-
-        foreach ($this->getPreloadConfig()->getPreloads() as $preload) {
-            foreach ($preload->getClassNames() as $id) {
-                $this->preloads[$id] = $preload;
             }
         }
     }
