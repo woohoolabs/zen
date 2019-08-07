@@ -8,6 +8,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
+use function in_array;
 
 final class PreloadDependencyResolver
 {
@@ -68,7 +69,8 @@ final class PreloadDependencyResolver
                 return;
             }
 
-            $this->classes[$id] = $reflectionClass->getFileName();
+            $filename = $reflectionClass->getFileName();
+            $this->classes[$id] = $filename !== false ? $filename : "";
             $this->resolveParents($reflectionClass);
             $this->resolveTraits($reflectionClass);
             $this->resolveConstructorArguments($reflectionClass);

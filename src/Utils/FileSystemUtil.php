@@ -126,7 +126,7 @@ class FileSystemUtil
                 }
 
                 if (isset($tokens[$i][1])) {
-                    $namespace = $namespace ? $namespace . "\\" . $tokens[$i][1] : $tokens[$i][1];
+                    $namespace = $namespace !== 0 ? $namespace . "\\" . $tokens[$i][1] : $tokens[$i][1];
                     $dlm = true;
                 }
             } elseif ($dlm && ($tokens[$i][0] !== T_NS_SEPARATOR) && ($tokens[$i][0] !== T_STRING)) {

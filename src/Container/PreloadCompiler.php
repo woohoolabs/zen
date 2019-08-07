@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
+use function array_unique;
+
 final class PreloadCompiler
 {
     /**
