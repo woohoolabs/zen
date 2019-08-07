@@ -40,8 +40,16 @@ final class AutoloadedDefinition extends AbstractDefinition
         throw new ContainerException("An autoloaded definition can not be instantiated!");
     }
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
-    {
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string {
         $indent = $this->indent($indentationLevel);
 
         $definition = $compilation->getDefinition($this->id);
@@ -52,7 +60,8 @@ final class AutoloadedDefinition extends AbstractDefinition
             $compilation->getAutoloadConfig(),
             $compilation->getDefinitions(),
             $this->id,
-            $indentationLevel
+            $indentationLevel,
+            $preloadedClasses
         );
 
         $code .= "\n";

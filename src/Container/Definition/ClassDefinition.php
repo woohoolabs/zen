@@ -222,8 +222,16 @@ class ClassDefinition extends AbstractDefinition
         return $instantiation->singletonEntries[$this->id] ?? $instantiation->singletonEntries[$this->id] = $this->instantiateClass($instantiation);
     }
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
-    {
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string {
         $indent = $this->indent($indentationLevel);
         $tab = $this->indent(1);
         $hasProperties = empty($this->properties) === false;
@@ -236,7 +244,8 @@ class ClassDefinition extends AbstractDefinition
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
                 $this->id,
-                $indentationLevel
+                $indentationLevel,
+                $preloadedClasses
             );
             $code .= "\n";
         }
@@ -270,7 +279,8 @@ class ClassDefinition extends AbstractDefinition
                 $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
                     $definition,
                     $compilation,
-                    $constructorIndentationLevel + 1
+                    $constructorIndentationLevel + 1,
+                    $preloadedClasses
                 );
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $constructorArguments[] = "${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]);
@@ -292,7 +302,8 @@ class ClassDefinition extends AbstractDefinition
                     $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->compileEntryReference(
                         $definition,
                         $compilation,
-                        $indentationLevel + 2
+                        $indentationLevel + 2,
+                        $preloadedClasses
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
                     $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";

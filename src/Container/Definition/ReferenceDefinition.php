@@ -109,8 +109,16 @@ class ReferenceDefinition extends AbstractDefinition
             $instantiation->definitions[$this->referencedId]->instantiate($instantiation, $this->id);
     }
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
-    {
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string {
         $indent = $this->indent($indentationLevel);
 
         $code = "";
@@ -120,7 +128,8 @@ class ReferenceDefinition extends AbstractDefinition
                 $compilation->getAutoloadConfig(),
                 $compilation->getDefinitions(),
                 $this->id,
-                $indentationLevel
+                $indentationLevel,
+                $preloadedClasses
             );
             $code .= "\n";
         }
@@ -135,7 +144,7 @@ class ReferenceDefinition extends AbstractDefinition
 
         $definition = $compilation->getDefinition($this->referencedId);
 
-        $code .= $this->compileEntryReference($definition, $compilation, $indentationLevel);
+        $code .= $this->compileEntryReference($definition, $compilation, $indentationLevel, $preloadedClasses);
 
         if ($inline === false) {
             $code .= ";\n";

@@ -42,5 +42,14 @@ interface DefinitionInterface
      */
     public function instantiate($instantiation, $parentId);
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string;
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string;
 }

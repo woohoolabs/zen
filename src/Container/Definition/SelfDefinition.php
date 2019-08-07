@@ -43,8 +43,16 @@ class SelfDefinition extends AbstractDefinition
         return $instantiation->container;
     }
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
-    {
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string {
         $indent = $this->indent($indentationLevel);
 
         if ($inline) {

@@ -45,21 +45,25 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
 
     public function build(): void
     {
-        if ($this->containerPath !== "") {
-            $this->buildContainer();
+        $preloadedClasses = [];
+        if ($this->preloadFilePath !== "") {
+            $preloadedClasses = $this->buildPreloadFile();
         }
 
-        if ($this->preloadFilePath !== "") {
-            $this->buildPreloadFile();
+        if ($this->containerPath !== "") {
+            $this->buildContainer($preloadedClasses);
         }
     }
 
-    public function buildContainer(): void
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function buildContainer(array $preloadedClasses): void
     {
         $dependencyResolver = new ContainerDependencyResolver($this->compilerConfig);
         $compiler = new ContainerCompiler();
 
-        $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints());
+        $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints(), $preloadedClasses);
 
         if (empty($compiledContainerFiles["definitions"]) === false) {
             $definitionDirectory = $this->getDefinitionDirectory();
@@ -74,14 +78,20 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
     }
 
-    public function buildPreloadFile(): void
+    /**
+     * @return string[]
+     */
+    public function buildPreloadFile(): array
     {
         $dependencyResolver = new PreloadDependencyResolver($this->compilerConfig);
+        $classes = $dependencyResolver->resolvePreloads();
         $compiler = new PreloadCompiler();
 
-        $compiledPreloadFile = $compiler->compile($dependencyResolver->resolvePreloads());
+        $compiledPreloadFile = $compiler->compile($classes);
 
         file_put_contents($this->preloadFilePath, $compiledPreloadFile);
+
+        return $classes;
     }
 
     private function deleteDirectory(string $directory): void

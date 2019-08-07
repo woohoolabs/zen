@@ -23,6 +23,7 @@ class CompilerTest extends TestCase
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "", "EmptyContainerWithoutNamespace"),
+            [],
             []
         );
 
@@ -38,6 +39,7 @@ class CompilerTest extends TestCase
 
         $container = $compiler->compile(
             new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "EmptyContainerWithNamespace"),
+            [],
             []
         );
 
@@ -55,7 +57,8 @@ class CompilerTest extends TestCase
             new StubCompilerConfig([], "WoohooLabs\\Zen\\Tests\\Fixture\\Container", "ContainerWithEntry"),
             [
                 StubSingletonDefinition::class => new StubSingletonDefinition(),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntry.php"), $container["container"]);
@@ -82,7 +85,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubSingletonDefinition::class => new StubSingletonDefinition(true),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithEntryPoint.php"), $container["container"]);
@@ -109,6 +113,7 @@ class CompilerTest extends TestCase
                     StubSingletonDefinition::class,
                 ]
             ),
+            [],
             []
         );
 
@@ -139,7 +144,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubPrototypeDefinition::class => new StubPrototypeDefinition(true, true),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals(
@@ -172,7 +178,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubSingletonDefinition::class => new StubSingletonDefinition(true, true, false, 1),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals(
@@ -205,7 +212,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubSingletonDefinition::class => new StubSingletonDefinition(true, true),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals($this->getCompiledContainerSourceCode("ContainerWithOptimizedAutoloadedEntryPoint.php"), $container["container"]);
@@ -235,7 +243,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubSingletonDefinition::class => new StubSingletonDefinition(true, false, true),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals(
@@ -273,7 +282,8 @@ class CompilerTest extends TestCase
             ),
             [
                 StubPrototypeDefinition::class => new StubPrototypeDefinition(true, true, true),
-            ]
+            ],
+            []
         );
 
         $this->assertEquals(

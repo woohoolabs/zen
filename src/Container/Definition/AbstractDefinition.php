@@ -152,22 +152,30 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->entryPoint === false && $this->singletonReferenceCount <= 1 && $this->prototypeReferenceCount === 0;
     }
 
+    /**
+     * @param string[] $preloadedClasses
+     */
     protected function compileEntryReference(
         DefinitionInterface $definition,
         DefinitionCompilation $compilation,
-        int $indentationLevelWhenInlined
+        int $indentationLevelWhenInlined,
+        array $preloadedClasses
     ): string {
         if ($definition->isEntryPoint($this->id) === false) {
-            return $this->compileInlinedEntry($definition, $compilation, $indentationLevelWhenInlined);
+            return $this->compileInlinedEntry($definition, $compilation, $indentationLevelWhenInlined, $preloadedClasses);
         }
 
         return $this->compileReferencedEntry($definition, $compilation->getFileBasedDefinitionConfig());
     }
 
+    /**
+     * @param string[] $preloadedClasses
+     */
     private function compileInlinedEntry(
         DefinitionInterface $definition,
         DefinitionCompilation $compilation,
-        int $indentationLevelWhenInlined
+        int $indentationLevelWhenInlined,
+        array $preloadedClasses
     ): string {
         $id = $definition->getId($this->id);
 
@@ -177,7 +185,7 @@ abstract class AbstractDefinition implements DefinitionInterface
             $code .= "\$this->singletonEntries['$id'] ?? ";
         }
 
-        $code .= $definition->compile($compilation, $this->id, $indentationLevelWhenInlined, true);
+        $code .= $definition->compile($compilation, $this->id, $indentationLevelWhenInlined, true, $preloadedClasses);
 
         return $code;
     }
@@ -223,12 +231,14 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     /**
      * @param DefinitionInterface[] $definitions
+     * @param string[] $preloadedClasses
      */
     protected function includeRelatedClasses(
         AutoloadConfigInterface $autoloadConfig,
         array $definitions,
         string $id,
-        int $indentationLevel
+        int $indentationLevel,
+        array $preloadedClasses
     ): string {
         $indent = $this->indent($indentationLevel);
 
@@ -243,6 +253,10 @@ abstract class AbstractDefinition implements DefinitionInterface
         $code = "";
         foreach ($relatedClasses as $relatedClass) {
             if (isset($alwaysAutoloadedClasses[$relatedClass]) || isset($neverAutoloadedClasses[$relatedClass])) {
+                continue;
+            }
+
+            if (isset($preloadedClasses[$relatedClass])) {
                 continue;
             }
 

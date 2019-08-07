@@ -105,9 +105,17 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->instantiate($instantiation, $this->referrerId);
     }
 
-    public function compile(DefinitionCompilation $compilation, string $parentId, int $indentationLevel, bool $inline = false): string
-    {
-        return $this->getDefinition($parentId)->compile($compilation, $parentId, $indentationLevel, $inline);
+    /**
+     * @param string[] $preloadedClasses
+     */
+    public function compile(
+        DefinitionCompilation $compilation,
+        string $parentId,
+        int $indentationLevel,
+        bool $inline = false,
+        array $preloadedClasses = []
+    ): string {
+        return $this->getDefinition($parentId)->compile($compilation, $parentId, $indentationLevel, $inline, $preloadedClasses);
     }
 
     private function getDefinition(string $parentId): DefinitionInterface

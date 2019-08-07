@@ -7,6 +7,7 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+use function array_key_exists;
 use function array_keys;
 use function str_replace;
 
@@ -14,8 +15,9 @@ final class ContainerCompiler
 {
     /**
      * @param DefinitionInterface[] $definitions
+     * @param string[] $preloadedClasses
      */
-    public function compile(AbstractCompilerConfig $compilerConfig, array $definitions): array
+    public function compile(AbstractCompilerConfig $compilerConfig, array $definitions, array $preloadedClasses): array
     {
         $autoloadConfig = $compilerConfig->getAutoloadConfig();
         $fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
@@ -47,7 +49,7 @@ final class ContainerCompiler
             $definition = $definitions[$id];
 
             $methodName = $this->getHash($id);
-            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false) {
+            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
                 $methodName = "_proxy__$methodName";
             }
 
@@ -66,6 +68,10 @@ final class ContainerCompiler
         $container .= "    {\n";
         $container .= "        \$this->rootDirectory = \$rootDirectory;\n";
         foreach ($autoloadConfig->getAlwaysAutoloadedClasses() as $autoloadedClass) {
+            if (array_key_exists($autoloadedClass, $preloadedClasses)) {
+                continue;
+            }
+
             $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $autoloadedClass);
             $container .= "        include_once \$this->rootDirectory . '$filename';\n";
         }
@@ -79,18 +85,18 @@ final class ContainerCompiler
 
             $definition = $definitions[$id];
 
-            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false) {
+            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
                 $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
 
                 $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
                 if ($autoloadedDefinition->isFileBased()) {
                     $filename = "_proxy__" . $this->getHash($id) . ".php";
                     $definitionFiles[$filename] = "<?php\n\n";
-                    $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, "", 0);
+                    $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
 
                     $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
                 } else {
-                    $container .= $autoloadedDefinition->compile($definitionCompilation, "", 2);
+                    $container .= $autoloadedDefinition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
                 }
                 $container .= "    }\n";
             }
@@ -98,7 +104,7 @@ final class ContainerCompiler
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0);
+                $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
 
                 if ($definition->isEntryPoint()) {
                     $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
@@ -107,7 +113,7 @@ final class ContainerCompiler
                 }
             } else {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definition->compile($definitionCompilation, "", 2);
+                $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
                 $container .= "    }\n";
             }
         }
