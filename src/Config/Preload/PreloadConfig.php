@@ -8,7 +8,12 @@ final class PreloadConfig implements PreloadConfigInterface
     /**
      * @var PreloadInterface[]
      */
-    private $preloads;
+    private $preloadedClasses;
+
+    /**
+     * @var string[]
+     */
+    private $preloadedFiles;
 
     public static function create(): PreloadConfig
     {
@@ -17,15 +22,25 @@ final class PreloadConfig implements PreloadConfigInterface
 
     public function __construct()
     {
-        $this->preloads = [];
+        $this->preloadedClasses = [];
     }
 
     /**
-     * @param PreloadInterface[] $preloads
+     * @param PreloadInterface[] $preloadedClasses
      */
-    public function setPreloads(array $preloads): PreloadConfig
+    public function setPreloadedClasses(array $preloadedClasses): PreloadConfig
     {
-        $this->preloads = $preloads;
+        $this->preloadedClasses = $preloadedClasses;
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $preloadedFiles
+     */
+    public function setPreloadedFiles(array $preloadedFiles): PreloadConfig
+    {
+        $this->preloadedFiles = $preloadedFiles;
 
         return $this;
     }
@@ -33,8 +48,16 @@ final class PreloadConfig implements PreloadConfigInterface
     /**
      * @return PreloadInterface[]
      */
-    public function getPreloads(): array
+    public function getPreloadedClasses(): array
     {
-        return $this->preloads;
+        return $this->preloadedClasses;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPreloadedFiles(): array
+    {
+        return $this->preloadedFiles;
     }
 }

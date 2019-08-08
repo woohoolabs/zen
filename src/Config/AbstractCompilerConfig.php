@@ -105,7 +105,7 @@ abstract class AbstractCompilerConfig
     {
         $preloads = [];
 
-        foreach ($this->getPreloadConfig()->getPreloads() as $preload) {
+        foreach ($this->getPreloadConfig()->getPreloadedClasses() as $preload) {
             foreach ($preload->getClassNames() as $id) {
                 $preloads[$id] = $preload;
             }

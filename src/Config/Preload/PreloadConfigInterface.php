@@ -8,5 +8,10 @@ interface PreloadConfigInterface
     /**
      * @return PreloadInterface[]
      */
-    public function getPreloads(): array;
+    public function getPreloadedClasses(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getPreloadedFiles(): array;
 }

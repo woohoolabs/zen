@@ -64,7 +64,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         $classes = $dependencyResolver->resolvePreloads();
         $compiler = new PreloadCompiler();
 
-        $compiledPreloadFile = $compiler->compile($classes);
+        $compiledPreloadFile = $compiler->compile($this->compilerConfig, $classes);
 
         file_put_contents($this->preloadFilePath, $compiledPreloadFile);
 
