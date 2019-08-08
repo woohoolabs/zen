@@ -5,6 +5,8 @@ namespace WoohooLabs\Zen\Config\Preload;
 
 interface PreloadConfigInterface
 {
+    public function getRelativeBasePath(): string;
+
     /**
      * @return PreloadInterface[]
      */

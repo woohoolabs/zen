@@ -13,6 +13,7 @@ use function count;
 use function file_get_contents;
 use function in_array;
 use function is_string;
+use function ltrim;
 use function strlen;
 use function strpos;
 use function substr;
@@ -27,10 +28,10 @@ use const T_WHITESPACE;
 
 class FileSystemUtil
 {
-    public static function getRelativeFilename(string $rootDirectory, string $className): string
+    public static function getRelativeFilenameForClass(string $basePath, string $className): string
     {
         static $pathCache = [];
-        $key = $rootDirectory . "/" . $className;
+        $key = $basePath . "/" . $className;
 
         if (isset($pathCache[$key])) {
             return $pathCache[$key];
@@ -51,11 +52,18 @@ class FileSystemUtil
         }
 
         // Make the filename relative to the root directory
-        if ($rootDirectory !== "" && strpos($filename, $rootDirectory) === 0) {
-            $filename = substr($filename, strlen($rootDirectory));
-        }
+        $filename = self::getRelativeFilename($basePath, $filename);
 
         $pathCache[$key] = $filename;
+
+        return $filename;
+    }
+
+    public static function getRelativeFilename(string $basePath, string $filename): string
+    {
+        if ($basePath !== "" && strpos($filename, $basePath) === 0) {
+            $filename = ltrim(substr($filename, strlen($basePath)), "\\/");
+        }
 
         return $filename;
     }

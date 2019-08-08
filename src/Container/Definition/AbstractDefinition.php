@@ -260,12 +260,12 @@ abstract class AbstractDefinition implements DefinitionInterface
                 continue;
             }
 
-            $filename = FileSystemUtil::getRelativeFilename($rootDirectory, $relatedClass);
+            $filename = FileSystemUtil::getRelativeFilenameForClass($rootDirectory, $relatedClass);
             if ($filename === "") {
                 continue;
             }
 
-            $code .= "${indent}include_once \$this->rootDirectory . '$filename';\n";
+            $code .= "${indent}include_once \$this->rootDirectory . '/$filename';\n";
         }
 
         return $code;

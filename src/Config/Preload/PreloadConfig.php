@@ -6,6 +6,11 @@ namespace WoohooLabs\Zen\Config\Preload;
 final class PreloadConfig implements PreloadConfigInterface
 {
     /**
+     * @var string
+     */
+    private $relativeBasePath;
+
+    /**
      * @var PreloadInterface[]
      */
     private $preloadedClasses;
@@ -15,14 +20,23 @@ final class PreloadConfig implements PreloadConfigInterface
      */
     private $preloadedFiles;
 
-    public static function create(): PreloadConfig
+    public static function create(string $relativeBasePath = ""): PreloadConfig
     {
-        return new PreloadConfig();
+        return new PreloadConfig($relativeBasePath);
     }
 
-    public function __construct()
+    public function __construct(string $relativeBasePath = "")
     {
+        $this->relativeBasePath = $relativeBasePath;
+        $this->preloadedFiles = [];
         $this->preloadedClasses = [];
+    }
+
+    public function setRelativeBasePath(string $relativeBasePath): PreloadConfig
+    {
+        $this->relativeBasePath = $relativeBasePath;
+
+        return $this;
     }
 
     /**
@@ -43,6 +57,11 @@ final class PreloadConfig implements PreloadConfigInterface
         $this->preloadedFiles = $preloadedFiles;
 
         return $this;
+    }
+
+    public function getRelativeBasePath(): string
+    {
+        return $this->relativeBasePath;
     }
 
     /**

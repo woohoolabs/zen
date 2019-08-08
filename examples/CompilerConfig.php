@@ -54,7 +54,7 @@ class CompilerConfig extends AbstractCompilerConfig
 
     public function getPreloadConfig(): PreloadConfigInterface
     {
-        return PreloadConfig::create()
+        return PreloadConfig::create(dirname(__DIR__))
             ->setPreloadedClasses(
                 [
                     Psr4NamespacePreload::create("WoohooLabs\\Zen\\Config"),

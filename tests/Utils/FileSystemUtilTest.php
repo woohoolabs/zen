@@ -22,7 +22,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWhenNotFound()
     {
-        $filename = FileSystemUtil::getRelativeFilename("", "InexistentClass");
+        $filename = FileSystemUtil::getRelativeFilenameForClass("", "InexistentClass");
 
         $this->assertEquals("", $filename);
     }
@@ -32,7 +32,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWhenInternalClass()
     {
-        $filename = FileSystemUtil::getRelativeFilename("", stdClass::class);
+        $filename = FileSystemUtil::getRelativeFilenameForClass("", stdClass::class);
 
         $this->assertEquals("", $filename);
     }
@@ -42,9 +42,9 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWithoutTrailingSlash()
     {
-        $filename = FileSystemUtil::getRelativeFilename(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", EntryPointA::class);
+        $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", EntryPointA::class);
 
-        $this->assertEquals("/EntryPointA.php", $filename);
+        $this->assertEquals("EntryPointA.php", $filename);
     }
 
     /**
@@ -52,7 +52,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWithTrailingSlash()
     {
-        $filename = FileSystemUtil::getRelativeFilename(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint/", EntryPointA::class);
+        $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint/", EntryPointA::class);
 
         $this->assertEquals("EntryPointA.php", $filename);
     }
@@ -62,7 +62,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWhenInSubdirectory()
     {
-        $filename = FileSystemUtil::getRelativeFilename(dirname(__DIR__) . "/Fixture/DependencyGraph/", EntryPointA::class);
+        $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/", EntryPointA::class);
 
         $this->assertEquals("EntryPoint/EntryPointA.php", $filename);
     }
@@ -72,7 +72,7 @@ class FileSystemUtilTest extends TestCase
      */
     public function getRelativeFilenameWhenOutOfRootDirectory()
     {
-        $filename = FileSystemUtil::getRelativeFilename(dirname(__DIR__) . "/Fixture/DependencyGraph/Mixed", EntryPointA::class);
+        $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/Mixed", EntryPointA::class);
 
         $this->assertEquals(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint/EntryPointA.php", $filename);
     }

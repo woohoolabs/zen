@@ -72,8 +72,8 @@ final class ContainerCompiler
                 continue;
             }
 
-            $filename = FileSystemUtil::getRelativeFilename($autoloadConfig->getRootDirectory(), $autoloadedClass);
-            $container .= "        include_once \$this->rootDirectory . '$filename';\n";
+            $filename = FileSystemUtil::getRelativeFilenameForClass($autoloadConfig->getRootDirectory(), $autoloadedClass);
+            $container .= "        include_once \$this->rootDirectory . '/$filename';\n";
         }
         $container .= "    }\n";
 
