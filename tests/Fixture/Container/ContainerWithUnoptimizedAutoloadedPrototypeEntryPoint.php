@@ -9,7 +9,7 @@ class ContainerWithUnoptimizedAutoloadedPrototypeEntryPoint extends AbstractComp
      * @var string[]
      */
     protected static $entryPoints = [
-        \WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition::class => '_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition',
+        'WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition' => '_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition',
     ];
 
     /**
@@ -29,7 +29,7 @@ class ContainerWithUnoptimizedAutoloadedPrototypeEntryPoint extends AbstractComp
         include_once $this->rootDirectory . '/tests/Double/TestDefinition.php';
         include_once $this->rootDirectory . '/tests/Double/StubPrototypeDefinition.php';
 
-        self::$entryPoints[\WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition::class] = 'WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition';
+        self::$entryPoints['WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition'] = 'WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition';
 
         return $this->WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition();
     }

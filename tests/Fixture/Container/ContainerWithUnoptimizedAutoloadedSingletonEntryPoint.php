@@ -9,7 +9,7 @@ class ContainerWithUnoptimizedAutoloadedSingletonEntryPoint extends AbstractComp
      * @var string[]
      */
     protected static $entryPoints = [
-        \WoohooLabs\Zen\Tests\Double\StubSingletonDefinition::class => '_proxy__WoohooLabs__Zen__Tests__Double__StubSingletonDefinition',
+        'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => '_proxy__WoohooLabs__Zen__Tests__Double__StubSingletonDefinition',
     ];
 
     /**
@@ -29,7 +29,7 @@ class ContainerWithUnoptimizedAutoloadedSingletonEntryPoint extends AbstractComp
         include_once $this->rootDirectory . '/tests/Double/TestDefinition.php';
         include_once $this->rootDirectory . '/tests/Double/StubSingletonDefinition.php';
 
-        self::$entryPoints[\WoohooLabs\Zen\Tests\Double\StubSingletonDefinition::class] = 'WoohooLabs__Zen__Tests__Double__StubSingletonDefinition';
+        self::$entryPoints['WoohooLabs\Zen\Tests\Double\StubSingletonDefinition'] = 'WoohooLabs__Zen__Tests__Double__StubSingletonDefinition';
 
         return $this->WoohooLabs__Zen__Tests__Double__StubSingletonDefinition();
     }

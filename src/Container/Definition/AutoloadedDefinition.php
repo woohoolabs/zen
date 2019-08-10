@@ -65,7 +65,7 @@ final class AutoloadedDefinition extends AbstractDefinition
         );
 
         $code .= "\n";
-        $code .= "${indent}self::\$entryPoints[\\$id::class] = '$hash';\n\n";
+        $code .= "${indent}self::\$entryPoints['$id'] = '$hash';\n\n";
 
         if ($this->isFileBased()) {
             $code .= "${indent}return require __DIR__ . '/$hash.php';\n";

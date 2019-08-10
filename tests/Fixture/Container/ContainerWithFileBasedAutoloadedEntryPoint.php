@@ -9,7 +9,7 @@ class ContainerWithFileBasedAutoloadedEntryPoint extends AbstractCompiledContain
      * @var string[]
      */
     protected static $entryPoints = [
-        \WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition::class => '_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition',
+        'WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition' => '_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition',
     ];
 
     /**

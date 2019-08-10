@@ -6,6 +6,8 @@ ADDED:
 
 CHANGED:
 
+- Removed unnecessary `::class` references from the generated container
+
 REMOVED:
 
 FIXED:

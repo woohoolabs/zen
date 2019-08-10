@@ -9,7 +9,7 @@ class ContainerWithFileBasedEntryPoint extends AbstractCompiledContainer
      * @var string[]
      */
     protected static $entryPoints = [
-        \WoohooLabs\Zen\Tests\Double\StubSingletonDefinition::class => 'WoohooLabs__Zen__Tests__Double__StubSingletonDefinition',
+        'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => 'WoohooLabs__Zen__Tests__Double__StubSingletonDefinition',
     ];
 
     /**

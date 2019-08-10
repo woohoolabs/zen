@@ -53,7 +53,7 @@ final class ContainerCompiler
                 $methodName = "_proxy__$methodName";
             }
 
-            $container .= "        \\$id::class => '" . $methodName . "',\n";
+            $container .= "        '$id' => '" . $methodName . "',\n";
         }
         $container .= "    ];\n\n";
 
