@@ -15,7 +15,7 @@
         "source": "https://github.com/woohoolabs/zen"
     },
     "require": {
-        "php": "^7.1.0",
+        "php": "^7.4.0",
         "psr/container": "^1.0.0",
         "doctrine/annotations": "^1.5.0",
         "php-di/phpdoc-reader": "^2.0.1"
@@ -23,7 +23,7 @@
     "require-dev": {
         "phpstan/phpstan": "^0.11.0",
         "phpstan/phpstan-strict-rules": "^0.11.0",
-        "phpunit/phpunit": "^7.0.0",
+        "phpunit/phpunit": "^8.3.4",
         "squizlabs/php_codesniffer": "^3.4.0",
         "woohoolabs/coding-standard": "^1.0.0",
         "woohoolabs/releaser": "^1.1.0"

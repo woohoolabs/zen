@@ -2,10 +2,11 @@
 
 ADDED:
 
-- Preloading support for PHP 7.4+
+- Support for preloading for PHP 7.4+
 
 CHANGED:
 
+- Increased minimum PHP version requirement to 7.4
 - Removed unnecessary `::class` references from the generated container
 
 REMOVED:
