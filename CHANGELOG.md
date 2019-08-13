@@ -8,6 +8,7 @@ CHANGED:
 
 - Increased minimum PHP version requirement to 7.4
 - Removed unnecessary `::class` references from the generated container
+- Various optimizations via using `array_key_exists()` instead of `isset()` ([further reading](https://github.com/php/php-src/pull/3360))
 
 REMOVED:
 
