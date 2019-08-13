@@ -10,6 +10,7 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
 use function array_flip;
+use function array_key_exists;
 use function array_reverse;
 use function str_repeat;
 use function str_replace;
@@ -252,11 +253,11 @@ abstract class AbstractDefinition implements DefinitionInterface
 
         $code = "";
         foreach ($relatedClasses as $relatedClass) {
-            if (isset($alwaysAutoloadedClasses[$relatedClass]) || isset($neverAutoloadedClasses[$relatedClass])) {
+            if (array_key_exists($relatedClass, $alwaysAutoloadedClasses) || array_key_exists($relatedClass, $neverAutoloadedClasses)) {
                 continue;
             }
 
-            if (isset($preloadedClasses[$relatedClass])) {
+            if (array_key_exists($relatedClass, $preloadedClasses)) {
                 continue;
             }
 
@@ -284,7 +285,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
             $relatedClasses[$name] = $name;
             foreach ($class->getInterfaceNames() as $interface) {
-                if (isset($relatedClasses[$interface])) {
+                if (array_key_exists($interface, $relatedClasses)) {
                     unset($relatedClasses[$interface]);
                 }
                 $relatedClasses[$interface] = $interface;
@@ -294,7 +295,7 @@ abstract class AbstractDefinition implements DefinitionInterface
         }
 
         foreach ($class->getInterfaceNames() as $interface) {
-            if (isset($relatedClasses[$interface])) {
+            if (array_key_exists($interface, $relatedClasses)) {
                 unset($relatedClasses[$interface]);
             }
             $relatedClasses[$interface] = $interface;

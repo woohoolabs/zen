@@ -8,6 +8,7 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
+use function array_key_exists;
 use function in_array;
 
 final class PreloadDependencyResolver
@@ -54,7 +55,7 @@ final class PreloadDependencyResolver
      */
     private function resolve($id)
     {
-        if (isset($this->classes[$id])) {
+        if (array_key_exists("id", $this->classes)) {
             return;
         }
 

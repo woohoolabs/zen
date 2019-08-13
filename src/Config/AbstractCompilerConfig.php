@@ -14,6 +14,7 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
+use function array_key_exists;
 use function array_merge;
 use function str_replace;
 
@@ -137,7 +138,7 @@ abstract class AbstractCompilerConfig
             foreach ($containerConfig->createEntryPoints() as $entryPoint) {
                 foreach ($entryPoint->getClassNames() as $id) {
                     // TODO This condition is only for ensuring backwards compatibility. It should be removed in Zen 3.0.
-                    if (isset($this->entryPoints[$id]) === false) {
+                    if (array_key_exists($id, $this->entryPoints) === false) {
                         $this->entryPoints[$id] = $entryPoint;
                     }
                 }

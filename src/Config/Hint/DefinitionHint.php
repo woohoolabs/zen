@@ -8,6 +8,7 @@ use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function array_key_exists;
 use function array_merge;
 use function is_array;
 use function is_scalar;
@@ -83,7 +84,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
      */
     public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {
-        $isEntryPoint = isset($entryPoints[$id]);
+        $isEntryPoint = array_key_exists($id, $entryPoints);
 
         if ($this->className === $id) {
             return [
@@ -103,7 +104,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             $id => new ReferenceDefinition($id, $this->className, $this->singleton, $isEntryPoint, $isAutoloaded, $isFileBased),
         ];
 
-        if (isset($definitionHints[$this->className])) {
+        if (array_key_exists($this->className, $definitionHints)) {
             $definitions = $definitionHints[$this->className]->toDefinitions(
                 $entryPoints,
                 $definitionHints,
@@ -122,7 +123,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         $classDefinition = new ClassDefinition(
             $this->className,
             $this->singleton,
-            isset($entryPoints[$this->className]),
+            array_key_exists($this->className, $entryPoints),
             false,
             $isFileBased,
             $this->parameters,

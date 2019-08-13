@@ -22,6 +22,7 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use function array_diff;
 use function array_flip;
+use function array_key_exists;
 use function implode;
 
 final class ContainerDependencyResolver
@@ -134,7 +135,7 @@ final class ContainerDependencyResolver
     {
         $this->resetDefinitions();
 
-        if (isset($this->entryPoints[$id]) === false) {
+        if (array_key_exists($id, $this->entryPoints) === false) {
             throw new NotFoundException($id);
         }
 
@@ -152,7 +153,7 @@ final class ContainerDependencyResolver
      */
     private function resolve($id, $parentId, $parentEntryPoint, $runtime)
     {
-        if (isset($this->definitions[$id])) {
+        if (array_key_exists($id, $this->definitions)) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
                 $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
             }
@@ -168,7 +169,7 @@ final class ContainerDependencyResolver
             $isFileBased = $this->isFileBased($id, $parentEntryPoint);
         }
 
-        if (isset($this->definitionHints[$id])) {
+        if (array_key_exists($id, $this->definitionHints)) {
             $definitions = $this->definitionHints[$id]->toDefinitions(
                 $this->entryPoints,
                 $this->definitionHints,
@@ -179,7 +180,7 @@ final class ContainerDependencyResolver
 
             foreach ($definitions as $definitionId => $definition) {
                 /** @var DefinitionInterface $definition */
-                if (isset($this->definitions[$definitionId]) === false) {
+                if (array_key_exists($definitionId, $this->definitions) === false) {
                     $this->definitions[$definitionId] = $definition;
                     $this->resolve($definitionId, $parentId, $parentEntryPoint, $runtime);
                 }
@@ -343,11 +344,11 @@ final class ContainerDependencyResolver
 
     private function isAutoloaded(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (isset($this->excludedAutoloadedFiles[$id])) {
+        if (array_key_exists($id, $this->excludedAutoloadedFiles)) {
             return false;
         }
 
-        if (isset($this->alwaysAutoloadedClases[$id])) {
+        if (array_key_exists($id, $this->alwaysAutoloadedClases)) {
             return true;
         }
 
@@ -356,7 +357,7 @@ final class ContainerDependencyResolver
 
     private function isFileBased(string $id, EntryPointInterface $parentEntryPoint): bool
     {
-        if (isset($this->excludedFileBasedDefinitions[$id])) {
+        if (array_key_exists($id, $this->excludedFileBasedDefinitions)) {
             return false;
         }
 

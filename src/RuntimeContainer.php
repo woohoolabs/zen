@@ -9,6 +9,7 @@ use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\NotFoundException;
+use function array_key_exists;
 use function array_merge;
 
 class RuntimeContainer implements ContainerInterface
@@ -34,7 +35,7 @@ class RuntimeContainer implements ContainerInterface
      */
     public function has($id): bool
     {
-        if (isset($this->instantiation->definitions[$id])) {
+        if (array_key_exists($id, $this->instantiation->definitions)) {
             return $this->instantiation->definitions[$id]->isEntryPoint();
         }
 

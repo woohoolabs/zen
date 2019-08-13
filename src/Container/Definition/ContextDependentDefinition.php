@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Container\Definition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\ContainerException;
+use function array_key_exists;
 
 class ContextDependentDefinition implements DefinitionInterface
 {
@@ -120,7 +121,7 @@ class ContextDependentDefinition implements DefinitionInterface
 
     private function getDefinition(string $parentId): DefinitionInterface
     {
-        if (isset($this->definitions[$parentId])) {
+        if (array_key_exists($parentId, $this->definitions)) {
             return $this->definitions[$parentId];
         }
 

@@ -7,6 +7,7 @@ use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
+use function array_key_exists;
 use function array_merge;
 use function is_string;
 
@@ -75,7 +76,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
      */
     public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {
-        $isEntryPoint = isset($entryPoints[$id]);
+        $isEntryPoint = array_key_exists($id, $entryPoints);
 
         $defaultDefinition = null;
         if ($this->defaultDefinitionHint !== null) {

@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen;
 use Closure;
 use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Exception\NotFoundException;
+use function array_key_exists;
 
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
@@ -24,7 +25,7 @@ abstract class AbstractCompiledContainer implements ContainerInterface
      */
     public function has($id): bool
     {
-        return isset(static::$entryPoints[$id]);
+        return array_key_exists($id, static::$entryPoints);
     }
 
     /**

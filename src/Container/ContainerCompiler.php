@@ -42,7 +42,7 @@ final class ContainerCompiler
         $container .= "     */\n";
         $container .= "    protected static \$entryPoints = [\n";
         foreach ($entryPointIds as $id) {
-            if (isset($definitions[$id]) === false) {
+            if (array_key_exists($id, $definitions) === false) {
                 continue;
             }
 
@@ -79,7 +79,7 @@ final class ContainerCompiler
 
         // Entry Points
         foreach ($entryPointIds as $id) {
-            if (isset($definitions[$id]) === false) {
+            if (array_key_exists($id, $definitions) === false) {
                 continue;
             }
 

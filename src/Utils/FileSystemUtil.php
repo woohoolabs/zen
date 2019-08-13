@@ -9,6 +9,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use Throwable;
+use function array_key_exists;
 use function count;
 use function file_get_contents;
 use function in_array;
@@ -33,7 +34,7 @@ class FileSystemUtil
         static $pathCache = [];
         $key = $basePath . "/" . $className;
 
-        if (isset($pathCache[$key])) {
+        if (array_key_exists($key, $pathCache)) {
             return $pathCache[$key];
         }
 
@@ -143,7 +144,7 @@ class FileSystemUtil
 
             if (self::isRequiredClass($tokens, $i, $onlyConcreteClasses)) {
                 $className = $tokens[$i][1];
-                if (isset($classes[$namespace]) === false) {
+                if (array_key_exists($namespace, $classes) === false) {
                     $classes[$namespace] = [];
                 }
                 $classes[$namespace][] = $className;

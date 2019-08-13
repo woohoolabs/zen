@@ -194,13 +194,13 @@ class ClassDefinition extends AbstractDefinition
         $dependencies = [];
 
         foreach ($this->constructorArguments as $constructorArgument) {
-            if (isset($constructorArgument["class"])) {
+            if (array_key_exists("class", $constructorArgument)) {
                 $dependencies[] = $constructorArgument["class"];
             }
         }
 
         foreach ($this->properties as $property) {
-            if (isset($property["class"])) {
+            if (array_key_exists("class", $property)) {
                 $dependencies[] = $property["class"];
             }
         }
@@ -328,7 +328,7 @@ class ClassDefinition extends AbstractDefinition
     {
         $arguments = [];
         foreach ($this->constructorArguments as $argument) {
-            if (isset($argument["class"])) {
+            if (array_key_exists("class", $argument)) {
                 $arguments[] = $instantiation->definitions[$argument["class"]]->instantiate($instantiation, $this->id);
             } elseif (array_key_exists("value", $argument)) {
                 $arguments[] = $argument["value"];
@@ -341,9 +341,9 @@ class ClassDefinition extends AbstractDefinition
         if (empty($this->properties) === false) {
             $properties = $this->properties;
             Closure::bind(
-                function () use ($instantiation, $className, $object, $properties) {
+                static function () use ($instantiation, $className, $object, $properties) {
                     foreach ($properties as $name => $property) {
-                        if (isset($property["class"])) {
+                        if (array_key_exists("class", $property)) {
                             $object->$name = $instantiation->definitions[$property["class"]]->instantiate($instantiation, $className);
                         } elseif (array_key_exists("value", $property)) {
                             $object->$name = $property["value"];
