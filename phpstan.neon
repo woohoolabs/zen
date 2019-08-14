@@ -7,7 +7,7 @@ parameters:
         - '#^Variable property access on .*$#'
         - '#^Empty array passed to foreach\.$#'
         - '#^Call to function array_key_exists\(\) with .* and \*NEVER\* will always evaluate to true\.$#'
-        - '#^Property .* has no typehint specified\.$#'
+        - '#^PHPDoc tag @var for property .* with type mixed is not subtype of native type.*$#'
 
 includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
