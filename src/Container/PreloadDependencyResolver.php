@@ -55,7 +55,7 @@ final class PreloadDependencyResolver
      */
     private function resolve($id)
     {
-        if (array_key_exists("id", $this->classes)) {
+        if (array_key_exists($id, $this->classes)) {
             return;
         }
 
