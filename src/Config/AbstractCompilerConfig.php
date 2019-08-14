@@ -23,17 +23,17 @@ abstract class AbstractCompilerConfig
     /**
      * @var ContainerConfigInterface[]
      */
-    protected $containerConfigs = [];
+    protected array $containerConfigs = [];
 
     /**
      * @var EntryPointInterface[]
      */
-    protected $entryPoints;
+    protected array $entryPoints;
 
     /**
      * @var DefinitionHintInterface[]
      */
-    protected $definitionHints;
+    protected array $definitionHints;
 
     public function __construct()
     {

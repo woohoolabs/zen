@@ -7,25 +7,13 @@ use function rtrim;
 
 final class AutoloadConfig implements AutoloadConfigInterface
 {
-    /**
-     * @var bool
-     */
-    private $isGlobalAutoloadEnabled;
+    private bool $isGlobalAutoloadEnabled;
 
-    /**
-     * @var string
-     */
-    private $rootDirectory;
+    private string $rootDirectory;
 
-    /**
-     * @var array
-     */
-    private $alwaysAutoloadedClasses;
+    private array $alwaysAutoloadedClasses;
 
-    /**
-     * @var array
-     */
-    private $excludedClasses;
+    private array $excludedClasses;
 
     public static function disabledGlobally(string $rootDirectory = ""): AutoloadConfig
     {

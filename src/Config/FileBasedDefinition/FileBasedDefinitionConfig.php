@@ -7,20 +7,11 @@ use function trim;
 
 final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterface
 {
-    /**
-     * @var bool
-     */
-    private $isGlobalFileBasedDefinitionsEnabled;
+    private bool $isGlobalFileBasedDefinitionsEnabled;
 
-    /**
-     * @var string
-     */
-    private $relativeDefinitionDirectory;
+    private string $relativeDefinitionDirectory;
 
-    /**
-     * @var array
-     */
-    private $excludedDefinitions;
+    private array $excludedDefinitions;
 
     public static function disabledGlobally(string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
     {

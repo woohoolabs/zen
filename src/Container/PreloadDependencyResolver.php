@@ -13,20 +13,17 @@ use function in_array;
 
 final class PreloadDependencyResolver
 {
-    /**
-     * @var PhpDocReader
-     */
-    private $typeHintReader;
+    private PhpDocReader $typeHintReader;
 
     /**
      * @var PreloadInterface[]
      */
-    private $preloads;
+    private array $preloads;
 
     /**
      * @var string[]
      */
-    private $classes;
+    private array $classes;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {

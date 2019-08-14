@@ -16,15 +16,9 @@ use function substr;
 
 class Psr4WildcardHint extends AbstractHint implements WildcardHintInterface
 {
-    /**
-     * @var string
-     */
-    private $sourcePattern;
+    private string $sourcePattern;
 
-    /**
-     * @var string
-     */
-    private $targetPattern;
+    private string $targetPattern;
 
     public static function singleton(string $sourcePattern, string $targetPattern): Psr4WildcardHint
     {

@@ -5,10 +5,7 @@ namespace WoohooLabs\Zen\Config\Preload;
 
 class ClassPreload extends AbstractPreload
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
     public static function create(string $className): ClassPreload
     {

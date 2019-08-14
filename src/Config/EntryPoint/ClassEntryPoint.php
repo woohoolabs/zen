@@ -5,10 +5,7 @@ namespace WoohooLabs\Zen\Config\EntryPoint;
 
 class ClassEntryPoint extends AbstractEntryPoint
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
     public static function create(string $className): ClassEntryPoint
     {

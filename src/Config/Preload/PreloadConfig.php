@@ -5,20 +5,17 @@ namespace WoohooLabs\Zen\Config\Preload;
 
 final class PreloadConfig implements PreloadConfigInterface
 {
-    /**
-     * @var string
-     */
-    private $relativeBasePath;
+    private string $relativeBasePath;
 
     /**
      * @var PreloadInterface[]
      */
-    private $preloadedClasses;
+    private array $preloadedClasses;
 
     /**
      * @var string[]
      */
-    private $preloadedFiles;
+    private array $preloadedFiles;
 
     public static function create(string $relativeBasePath = ""): PreloadConfig
     {

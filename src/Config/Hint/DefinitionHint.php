@@ -15,20 +15,11 @@ use function is_scalar;
 
 class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 {
-    /**
-     * @var string
-     */
-    private $className;
+    private string $className;
 
-    /**
-     * @var array
-     */
-    private $parameters;
+    private array $parameters;
 
-    /**
-     * @var array
-     */
-    private $properties;
+    private array $properties;
 
     public static function singleton(string $className): DefinitionHint
     {

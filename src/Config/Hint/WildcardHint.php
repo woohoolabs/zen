@@ -11,20 +11,11 @@ use function str_replace;
 
 class WildcardHint extends AbstractHint implements WildcardHintInterface
 {
-    /**
-     * @var string
-     */
-    private $sourcePath;
+    private string $sourcePath;
 
-    /**
-     * @var string
-     */
-    private $sourcePattern;
+    private string $sourcePattern;
 
-    /**
-     * @var string
-     */
-    private $targetPattern;
+    private string $targetPattern;
 
     public static function singleton(string $sourcePath, string $sourcePattern, string $targetPattern): WildcardHint
     {

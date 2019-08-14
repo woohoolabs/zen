@@ -18,12 +18,12 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     /**
      * @var EntryPointInterface[]
      */
-    protected $entryPoints;
+    protected array $entryPoints;
 
     /**
      * @var DefinitionHintInterface[]
      */
-    protected $definitionHints;
+    protected array $definitionHints;
 
     public function __construct()
     {

@@ -8,20 +8,11 @@ use function trim;
 
 class Psr4NamespaceEntryPoint extends AbstractEntryPoint
 {
-    /**
-     * @var string
-     */
-    private $namespace;
+    private string $namespace;
 
-    /**
-     * @var bool
-     */
-    private $recursive;
+    private bool $recursive;
 
-    /**
-     * @var bool
-     */
-    private $onlyInstantiable;
+    private bool $onlyInstantiable;
 
     public static function create(string $namespace, bool $recursive = true, bool $onlyInstantiable = true): Psr4NamespaceEntryPoint
     {

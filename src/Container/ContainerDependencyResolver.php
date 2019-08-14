@@ -27,70 +27,49 @@ use function implode;
 
 final class ContainerDependencyResolver
 {
-    /**
-     * @var SimpleAnnotationReader
-     */
-    private $annotationReader;
+    private SimpleAnnotationReader $annotationReader;
 
-    /**
-     * @var PhpDocReader
-     */
-    private $typeHintReader;
+    private PhpDocReader $typeHintReader;
 
-    /**
-     * @var AbstractCompilerConfig
-     */
-    private $compilerConfig;
+    private AbstractCompilerConfig $compilerConfig;
 
-    /**
-     * @var bool
-     */
-    private $useConstructorInjection;
+    private bool $useConstructorInjection;
 
-    /**
-     * @var bool
-     */
-    private $usePropertyInjection;
+    private bool $usePropertyInjection;
 
     /**
      * @var EntryPointInterface[]
      */
-    private $entryPoints;
+    private array $entryPoints;
 
     /**
      * @var DefinitionHintInterface[]
      */
-    private $definitionHints;
+    private array $definitionHints;
 
     /**
      * @var DefinitionInterface[]
      */
-    private $definitions;
+    private array $definitions;
 
-    /**
-     * @var AutoloadConfigInterface
-     */
-    private $autoloadConfig;
+    private AutoloadConfigInterface $autoloadConfig;
 
     /**
      * @var string[]
      */
-    private $excludedAutoloadedFiles;
+    private array $excludedAutoloadedFiles;
 
     /**
      * @var string[]
      */
-    private $alwaysAutoloadedClases;
+    private array $alwaysAutoloadedClases;
 
-    /**
-     * @var FileBasedDefinitionConfigInterface
-     */
-    private $fileBasedDefinitionConfig;
+    private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
 
     /**
      * @var string[]
      */
-    private $excludedFileBasedDefinitions;
+    private array $excludedFileBasedDefinitions;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {

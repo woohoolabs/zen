@@ -5,10 +5,7 @@ namespace WoohooLabs\Zen\Config\Hint;
 
 abstract class AbstractHint
 {
-    /**
-     * @var bool
-     */
-    protected $singleton;
+    protected bool $singleton;
 
     public function __construct(string $scope)
     {
