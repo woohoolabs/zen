@@ -242,7 +242,7 @@ final class ContainerDependencyResolver
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
                 throw new ContainerException(
-                    "Type declaration or '@param' PHPDoc comment for constructor parameter '$paramName' in '" .
+                    "Type declaration or PHPDoc type hint for constructor parameter '$paramName' in '" .
                     "class '{$definition->getClassName()}' is missing or it is not a class!"
                 );
             }
@@ -300,10 +300,17 @@ final class ContainerDependencyResolver
                 );
             }
 
-            $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            $propertyClass = null;
+            $propertyType = $property->getType();
+            if ($propertyType !== null && $propertyType->isBuiltin() === false) {
+                $propertyClass = $propertyType->getName();
+            } else {
+                $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            }
+
             if ($propertyClass === null) {
                 throw new ContainerException(
-                    "'@var' PHPDoc comment for property $id::\$$propertyName' is missing or it is not a class!"
+                    "Type declaration or PHPDoc type hint for property $id::\$$propertyName' is missing or it is not a class!"
                 );
             }
 

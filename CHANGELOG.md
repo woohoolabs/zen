@@ -3,6 +3,7 @@
 ADDED:
 
 - Support for preloading for PHP 7.4+
+- Support for property injection based on property type declarations
 
 CHANGED:
 
