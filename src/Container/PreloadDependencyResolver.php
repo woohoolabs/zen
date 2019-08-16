@@ -135,7 +135,14 @@ final class PreloadDependencyResolver
     private function resolveProperties($reflectionClass)
     {
         foreach ($reflectionClass->getProperties() as $property) {
-            $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            $propertyClass = null;
+            $propertyType = $property->getType();
+            if ($propertyType !== null && $propertyType->isBuiltin() === false) {
+                $propertyClass = $propertyType->getName();
+            } else {
+                $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            }
+
             if ($propertyClass === null) {
                 return;
             }
