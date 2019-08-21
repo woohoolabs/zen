@@ -134,7 +134,7 @@ class FileSystemUtil
                     $namespace = 0;
                 }
 
-                if (array_key_exists(1, $tokens[$i])) {
+                if (isset($tokens[$i][1])) {
                     $namespace = $namespace !== 0 ? $namespace . "\\" . $tokens[$i][1] : $tokens[$i][1];
                     $dlm = true;
                 }
