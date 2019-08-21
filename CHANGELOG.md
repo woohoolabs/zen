@@ -8,6 +8,7 @@ ADDED:
 CHANGED:
 
 - Increased minimum PHP version requirement to 7.4 as property type declarations were added
+- Updated dev dependencies
 - Removed unnecessary `::class` references from the generated container
 - Various optimizations via using `array_key_exists()` instead of `isset()` ([further reading](https://github.com/php/php-src/pull/3360))
 
