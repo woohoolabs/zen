@@ -15,7 +15,7 @@ build:
 	docker-compose -f docker-compose.examples.yml stop --timeout=2 && docker-compose -f docker-compose.examples.yml up
 
 test:
-	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www; php vendor/bin/phpunit"
+	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpunit"
 
 phpstan:
 	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpstan analyse --level 7 src"
