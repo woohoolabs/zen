@@ -72,7 +72,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
 
         $compiledContainerFiles = $compiler->compile($this->compilerConfig, $dependencyResolver->resolveEntryPoints(), $preloadedClasses);
 
-        if (empty($compiledContainerFiles["definitions"]) === false) {
+        if ($compiledContainerFiles["definitions"] !== []) {
             $definitionDirectory = $this->getDefinitionDirectory();
             $this->deleteDirectory($definitionDirectory);
             $this->createDirectory($definitionDirectory);

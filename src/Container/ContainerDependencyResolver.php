@@ -168,7 +168,7 @@ final class ContainerDependencyResolver
             return;
         }
 
-        $this->definitions[$id] = new ClassDefinition($id, true, isset($this->entryPoints[$id]), $isAutoloaded, $isFileBased);
+        $this->definitions[$id] = new ClassDefinition($id, true, array_key_exists($id, $this->entryPoints), $isAutoloaded, $isFileBased);
         $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
     }
 
@@ -253,7 +253,7 @@ final class ContainerDependencyResolver
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
-        if (empty($invalidConstructorParameterOverrides) === false) {
+        if ($invalidConstructorParameterOverrides !== []) {
             throw new ContainerException(
                 "Class '{$definition->getClassName()}' has the following overridden constructor parameters which don't exist: " .
                 implode(", ", $invalidConstructorParameterOverrides) . "!"
@@ -320,7 +320,7 @@ final class ContainerDependencyResolver
         }
 
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
-        if (empty($invalidPropertyOverrides) === false) {
+        if ($invalidPropertyOverrides !== []) {
             throw new ContainerException(
                 "Class '$id' has the following overridden properties which don't exist: " .
                 implode(", ", $invalidPropertyOverrides) . "!"

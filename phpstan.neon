@@ -2,12 +2,8 @@ parameters:
     bootstrap: vendor/autoload.php
     ignoreErrors:
         - '#^Parameter \#4 \$length of function substr_compare expects int, null given\.$#'
-        - '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
         - '#^Variable method call on \$this\(WoohooLabs\\Zen\\AbstractCompiledContainer\)\.$#'
         - '#^Variable property access on .*$#'
-        - '#^Empty array passed to foreach\.$#'
-        - '#^Call to function array_key_exists\(\) with .* and \*NEVER\* will always evaluate to true\.$#'
-        - '#^PHPDoc tag @var for property .* with type mixed is not subtype of native type.*$#'
 
 includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon

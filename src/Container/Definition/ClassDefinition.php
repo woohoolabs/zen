@@ -234,8 +234,8 @@ class ClassDefinition extends AbstractDefinition
     ): string {
         $indent = $this->indent($indentationLevel);
         $tab = $this->indent(1);
-        $hasProperties = empty($this->properties) === false;
-        $hasConstructorArguments = empty($this->constructorArguments) === false;
+        $hasProperties = $this->properties !== [];
+        $hasConstructorArguments = $this->constructorArguments !== [];
 
         $code = "";
 
@@ -273,7 +273,7 @@ class ClassDefinition extends AbstractDefinition
         $constructorArguments = [];
 
         foreach ($this->constructorArguments as $constructorArgument) {
-            if (isset($constructorArgument["class"])) {
+            if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
                 $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
@@ -296,7 +296,7 @@ class ClassDefinition extends AbstractDefinition
             $code .= ",\n";
             $code .= "${indent}${tab}[\n";
             foreach ($this->properties as $propertyName => $property) {
-                if (isset($property["class"])) {
+                if (array_key_exists("class", $property)) {
                     $definition = $compilation->getDefinition($property["class"]);
 
                     $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->compileEntryReference(
@@ -338,7 +338,7 @@ class ClassDefinition extends AbstractDefinition
         $className = $this->id;
         $object = new $className(...$arguments);
 
-        if (empty($this->properties) === false) {
+        if ($this->properties !== []) {
             $properties = $this->properties;
             Closure::bind(
                 static function () use ($instantiation, $className, $object, $properties) {
