@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
@@ -24,7 +25,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function needsDependencyResolution()
+    public function needsDependencyResolution(): void
     {
         $definition = new ReferenceDefinition("", "");
 
@@ -36,7 +37,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function resolveDependencies()
+    public function resolveDependencies(): void
     {
         $definition = new ReferenceDefinition("", "");
 
@@ -48,7 +49,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependencies()
+    public function getClassDependencies(): void
     {
         $definition = new ReferenceDefinition("X\\A", "X\\B");
 
@@ -60,7 +61,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenSingleton()
+    public function instantiateWhenSingleton(): void
     {
         $definition = ReferenceDefinition::singleton("X\\D", ConstructorD::class, true);
         $instantiation = $this->createDefinitionInstantiation(
@@ -80,7 +81,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenPrototypeWithSingletonReference()
+    public function instantiateWhenPrototypeWithSingletonReference(): void
     {
         $definition = ReferenceDefinition::prototype("X\\D", ConstructorD::class, true);
         $instantiation = $this->createDefinitionInstantiation(
@@ -100,7 +101,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenPrototypeWithPrototypeReference()
+    public function instantiateWhenPrototypeWithPrototypeReference(): void
     {
         $definition = ReferenceDefinition::prototype("X\\D", ConstructorD::class, true);
         $instantiation = $this->createDefinitionInstantiation(
@@ -120,7 +121,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenUnoptimizedSingletonClass()
+    public function compileWhenUnoptimizedSingletonClass(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 2);
 
@@ -144,7 +145,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenUnoptimizedSingletonEntryPoint()
+    public function compileWhenUnoptimizedSingletonEntryPoint(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false, 0, 0);
 
@@ -168,7 +169,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenOptimizedSingleton()
+    public function compileWhenOptimizedSingleton(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 0, 0);
 
@@ -192,7 +193,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenUnoptimizedSingletonReference()
+    public function compileWhenUnoptimizedSingletonReference(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true);
 
@@ -216,7 +217,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenPrototype()
+    public function compileWhenPrototype(): void
     {
         $definition = ReferenceDefinition::prototype("X\\A", "X\\B", true);
 
@@ -240,7 +241,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenAutoloaded()
+    public function compileWhenAutoloaded(): void
     {
         $definition = ReferenceDefinition::singleton(ConstructorE::class, ConstructorD::class, true, true);
 
@@ -264,7 +265,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenIndented(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true);
 
@@ -288,7 +289,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenInlined()
+    public function compileWhenInlined(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
 
@@ -312,7 +313,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenBothFileBased()
+    public function compileWhenBothFileBased(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, true);
 
@@ -336,7 +337,7 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenOnlyChildFileBased()
+    public function compileWhenOnlyChildFileBased(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
 
@@ -357,6 +358,9 @@ class ReferenceDefinitionTest extends TestCase
         $this->assertEquals($this->getDefinitionSourceCode("ReferenceDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
     }
 
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
     private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
     {
         $instantiation = new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));

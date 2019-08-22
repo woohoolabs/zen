@@ -10,19 +10,13 @@ use function array_key_exists;
 
 class ContextDependentDefinition implements DefinitionInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $referrerId;
 
-    /**
-     * @var DefinitionInterface|null
-     */
+    /** @var DefinitionInterface|null */
     private $defaultDefinition;
 
-    /**
-     * @var DefinitionInterface[]
-     */
+    /** @var DefinitionInterface[] */
     private $definitions;
 
     /**
@@ -90,6 +84,9 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getClassDependencies(): array
     {
         return [

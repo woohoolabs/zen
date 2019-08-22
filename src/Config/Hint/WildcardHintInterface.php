@@ -6,8 +6,9 @@ namespace WoohooLabs\Zen\Config\Hint;
 interface WildcardHintInterface
 {
     /**
-     * @return DefinitionHintInterface[]
      * @internal
+     *
+     * @return DefinitionHintInterface[]
      */
     public function getDefinitionHints(): array;
 }

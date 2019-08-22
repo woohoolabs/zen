@@ -9,10 +9,11 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 interface DefinitionHintInterface
 {
     /**
-     * @param EntryPointInterface[] $entryPoints
+     * @internal
+     *
+     * @param EntryPointInterface[]     $entryPoints
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
-     * @internal
      */
     public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array;
 }

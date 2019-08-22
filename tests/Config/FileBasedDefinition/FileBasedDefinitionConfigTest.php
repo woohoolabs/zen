@@ -12,7 +12,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function disabledGlobally()
+    public function disabledGlobally(): void
     {
         $fileBasedDefinitionConfig = FileBasedDefinitionConfig::disabledGlobally();
 
@@ -24,7 +24,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function enabledGlobally()
+    public function enabledGlobally(): void
     {
         $fileBasedDefinitionConfig = FileBasedDefinitionConfig::enabledGlobally("");
 
@@ -36,7 +36,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function create()
+    public function create(): void
     {
         $fileBasedDefinitionConfig = FileBasedDefinitionConfig::create(true, "/Definitions/");
 
@@ -50,7 +50,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function setRelativeDefinitionDirectory()
+    public function setRelativeDefinitionDirectory(): void
     {
         $fileBasedDefinitionConfig = new FileBasedDefinitionConfig(true);
 
@@ -62,7 +62,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function getExcludedClassesIsEmptyByDefault()
+    public function getExcludedClassesIsEmptyByDefault(): void
     {
         $fileBasedDefinitionConfig = new FileBasedDefinitionConfig(true);
 
@@ -74,7 +74,7 @@ class FileBasedDefinitionConfigTest extends TestCase
     /**
      * @test
      */
-    public function setExcludedClasses()
+    public function setExcludedClasses(): void
     {
         $fileBasedDefinitionConfig = new FileBasedDefinitionConfig(true);
 

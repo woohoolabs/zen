@@ -12,7 +12,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function disabledGlobally()
+    public function disabledGlobally(): void
     {
         $autoloadConfig = AutoloadConfig::disabledGlobally("");
 
@@ -24,7 +24,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function enabledGlobally()
+    public function enabledGlobally(): void
     {
         $autoloadConfig = AutoloadConfig::enabledGlobally("");
 
@@ -36,7 +36,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function create()
+    public function create(): void
     {
         $autoloadConfig = AutoloadConfig::create(true, "/var/www");
 
@@ -50,7 +50,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function setRootDirectory()
+    public function setRootDirectory(): void
     {
         $autoloadConfig = new AutoloadConfig(true);
 
@@ -62,7 +62,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function getExcludedClassesIsEmptyByDefault()
+    public function getExcludedClassesIsEmptyByDefault(): void
     {
         $autoloadConfig = new AutoloadConfig(true);
 
@@ -74,7 +74,7 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
-    public function setExcludedClasses()
+    public function setExcludedClasses(): void
     {
         $autoloadConfig = new AutoloadConfig(true);
 

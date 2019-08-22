@@ -4,49 +4,41 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\AbstractContainerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
+use WoohooLabs\Zen\Config\ContainerConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $namespace;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $className;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $useConstructorInjection;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $usePropertyInjection;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $useBuiltInAutoloading;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $alwaysAutoloadedClasses;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $useFileBasedDefinition;
 
+    /**
+     * @param AbstractContainerConfig[] $containerConfigs
+     * @param  string[] $alwaysAutoloadedClasses
+     */
     public function __construct(
         array $containerConfigs = [],
         string $namespace = "",
@@ -99,6 +91,9 @@ class StubCompilerConfig extends AbstractCompilerConfig
         return FileBasedDefinitionConfig::create($this->useFileBasedDefinition, "Definitions/");
     }
 
+    /**
+     * @return AbstractContainerConfig[]
+     */
     public function getContainerConfigs(): array
     {
         return $this->containerConfigs;

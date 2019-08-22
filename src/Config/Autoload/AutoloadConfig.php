@@ -10,9 +10,9 @@ final class AutoloadConfig implements AutoloadConfigInterface
     private bool $isGlobalAutoloadEnabled;
 
     private string $rootDirectory;
-
+    /** @var array<int, string> */
     private array $alwaysAutoloadedClasses;
-
+    /** @var array<int, string> */
     private array $excludedClasses;
 
     public static function disabledGlobally(string $rootDirectory = ""): AutoloadConfig
@@ -56,7 +56,7 @@ final class AutoloadConfig implements AutoloadConfigInterface
     }
 
     /**
-     * @param string[] $alwaysAutoloadedClasses
+     * @param array<int, string> $alwaysAutoloadedClasses
      */
     public function setAlwaysAutoloadedClasses(array $alwaysAutoloadedClasses): AutoloadConfig
     {
@@ -65,13 +65,16 @@ final class AutoloadConfig implements AutoloadConfigInterface
         return $this;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getAlwaysAutoloadedClasses(): array
     {
         return $this->alwaysAutoloadedClasses;
     }
 
     /**
-     * @param string[] $excludedClasses
+     * @param array<int, string> $excludedClasses
      */
     public function setExcludedClasses(array $excludedClasses): AutoloadConfig
     {
@@ -80,6 +83,9 @@ final class AutoloadConfig implements AutoloadConfigInterface
         return $this;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getExcludedClasses(): array
     {
         return $this->excludedClasses;

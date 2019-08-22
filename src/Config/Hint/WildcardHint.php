@@ -36,8 +36,9 @@ class WildcardHint extends AbstractHint implements WildcardHintInterface
     }
 
     /**
-     * @return DefinitionHintInterface[]
      * @internal
+     *
+     * @return DefinitionHintInterface[]
      */
     public function getDefinitionHints(): array
     {

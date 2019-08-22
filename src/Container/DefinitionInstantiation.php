@@ -8,19 +8,13 @@ use WoohooLabs\Zen\RuntimeContainer;
 
 final class DefinitionInstantiation
 {
-    /**
-     * @var RuntimeContainer
-     */
+    /** @var RuntimeContainer */
     public $container;
 
-    /**
-     * @var DefinitionInterface[]
-     */
+    /** @var DefinitionInterface[] */
     public $definitions = [];
 
-    /**
-     * @var array
-     */
+    /** @var array<string, mixed> */
     public $singletonEntries = [];
 
     public function __construct(RuntimeContainer $container)

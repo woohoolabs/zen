@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Tests\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
+use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
@@ -40,7 +41,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveClassWhenNonEntryPoint()
+    public function resolveClassWhenNonEntryPoint(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
 
@@ -52,7 +53,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveClassWhenConstructorDependencies()
+    public function resolveClassWhenConstructorDependencies(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
 
@@ -86,7 +87,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveConstructorDependencies()
+    public function resolveConstructorDependencies(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ConstructorA::class);
 
@@ -120,7 +121,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolvePropertyDependencies()
+    public function resolvePropertyDependencies(): void
     {
         $dependencyResolver = $this->createDependencyResolver(
             AnnotationA::class,
@@ -167,7 +168,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveAllDependencies()
+    public function resolveAllDependencies(): void
     {
         $dependencyResolver = $this->createDependencyResolver(MixedA::class);
 
@@ -203,7 +204,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolvePrototypeDependency()
+    public function resolvePrototypeDependency(): void
     {
         $dependencyResolver = $this->createDependencyResolver(
             ConstructorD::class,
@@ -228,7 +229,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveAliasedDependency()
+    public function resolveAliasedDependency(): void
     {
         $dependencyResolver = $this->createDependencyResolver(
             ConstructorC::class,
@@ -259,7 +260,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenInexistentClass()
+    public function resolveEntryPointsWhenInexistentClass(): void
     {
         $dependencyResolver = $this->createDependencyResolver("InexistentClass");
 
@@ -271,7 +272,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenPropertyWithoutTypeHint()
+    public function resolveEntryPointsWhenPropertyWithoutTypeHint(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionA::class);
 
@@ -283,7 +284,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenPropertyWithoutDefaultValueWithScalarTypeHint()
+    public function resolveEntryPointsWhenPropertyWithoutDefaultValueWithScalarTypeHint(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionB::class);
 
@@ -295,7 +296,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenConstructorParameterWithoutDefaultValueWithScalarTypeHint()
+    public function resolveEntryPointsWhenConstructorParameterWithoutDefaultValueWithScalarTypeHint(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionC::class);
 
@@ -307,7 +308,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenConstructorParameterWithoutDefaultValueWithScalarDocBlock()
+    public function resolveEntryPointsWhenWhenConstructorParameterWithoutDefaultValueWithScalarDocBlock(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionD::class);
 
@@ -319,7 +320,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenPropertyWithoutTypeInfo()
+    public function resolveEntryPointsWhenWhenPropertyWithoutTypeInfo(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionE::class);
 
@@ -331,7 +332,7 @@ class DependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenStaticProperty()
+    public function resolveEntryPointsWhenWhenStaticProperty(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionF::class);
 
@@ -340,6 +341,10 @@ class DependencyResolverTest extends TestCase
         $dependencyResolver->resolveEntryPoints();
     }
 
+    /**
+     * @param string $entryPoint
+     * @param DefinitionHintInterface[]|string[] $definitionHints
+     */
     private function createDependencyResolver(string $entryPoint, array $definitionHints = []): ContainerDependencyResolver
     {
         return new ContainerDependencyResolver(

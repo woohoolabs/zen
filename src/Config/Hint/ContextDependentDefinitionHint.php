@@ -13,9 +13,7 @@ use function is_string;
 
 class ContextDependentDefinitionHint implements DefinitionHintInterface
 {
-    /**
-     * @var DefinitionHint|null
-     */
+    /** @var DefinitionHint|null */
     private $defaultDefinitionHint;
 
     /**
@@ -50,7 +48,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     }
 
     /**
-     * @param string[] $parentClasses
+     * @param string[]              $parentClasses
      * @param DefinitionHint|string $definitionHint
      */
     public function setClassContext($definitionHint, array $parentClasses): ContextDependentDefinitionHint
@@ -69,10 +67,11 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     }
 
     /**
-     * @param EntryPointInterface[] $entryPoints
+     * @internal
+     *
+     * @param EntryPointInterface[]     $entryPoints
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
-     * @internal
      */
     public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {

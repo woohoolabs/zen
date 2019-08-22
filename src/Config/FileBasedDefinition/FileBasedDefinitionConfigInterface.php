@@ -10,7 +10,7 @@ interface FileBasedDefinitionConfigInterface
     public function getRelativeDefinitionDirectory(): string;
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getExcludedDefinitions(): array;
 }

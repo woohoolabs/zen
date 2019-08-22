@@ -27,7 +27,7 @@ class WildcardEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getOnlyConcreteClassNames()
+    public function getOnlyConcreteClassNames(): void
     {
         $entryPoint = WildcardEntryPoint::create($this->getSourcePath());
 
@@ -51,7 +51,7 @@ class WildcardEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNames()
+    public function getClassNames(): void
     {
         $entryPoint = WildcardEntryPoint::create($this->getSourcePath(), false);
 

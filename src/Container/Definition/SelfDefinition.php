@@ -28,6 +28,9 @@ class SelfDefinition extends AbstractDefinition
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getClassDependencies(): array
     {
         return [];

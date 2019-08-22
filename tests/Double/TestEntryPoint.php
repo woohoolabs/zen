@@ -7,6 +7,9 @@ use WoohooLabs\Zen\Config\EntryPoint\AbstractEntryPoint;
 
 class TestEntryPoint extends AbstractEntryPoint
 {
+    /**
+     * @return string[]
+     */
     public function getClassNames(): array
     {
         return [];

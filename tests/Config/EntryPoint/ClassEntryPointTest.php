@@ -12,7 +12,7 @@ class ClassEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNames()
+    public function getClassNames(): void
     {
         $entryPoint = ClassEntryPoint::create(EntryPointA::class);
 

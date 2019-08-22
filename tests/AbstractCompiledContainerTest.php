@@ -15,7 +15,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function hasReturnsFalse()
+    public function hasReturnsFalse(): void
     {
         $container = $this->createStubContainer();
 
@@ -27,7 +27,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function hasReturnsTrue()
+    public function hasReturnsTrue(): void
     {
         $container = $this->createStubContainer();
 
@@ -39,7 +39,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function getThrowsNotFoundException()
+    public function getThrowsNotFoundException(): void
     {
         $container = $this->createStubContainer();
 
@@ -51,7 +51,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function getReturnsPrototypeEntry()
+    public function getReturnsPrototypeEntry(): void
     {
         $container = $this->createStubContainer();
 
@@ -66,7 +66,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function getReturnsSingletonEntry()
+    public function getReturnsSingletonEntry(): void
     {
         $container = $this->createStubContainer(true);
 
@@ -78,7 +78,7 @@ class AbstractCompiledContainerTest extends TestCase
     /**
      * @test
      */
-    public function setProperty()
+    public function setProperty(): void
     {
         $container = new ContainerWithInjectedProperty();
 

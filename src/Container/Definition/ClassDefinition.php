@@ -13,31 +13,25 @@ use function var_export;
 
 class ClassDefinition extends AbstractDefinition
 {
-    /**
-     * @var array
-     */
+    /** @var array<int, array<string, mixed>> */
     private $constructorArguments;
 
-    /**
-     * @var array
-     */
+    /** @var array<string, array<string, mixed>> */
     private $properties;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $needsDependencyResolution;
 
-    /**
-     * @var array
-     */
+    /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private $overriddenConstructorParameters;
 
-    /**
-     * @var array
-     */
+    /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private $overriddenProperties;
 
+    /**
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenConstructorParameters
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenProperties
+     */
     public static function singleton(
         string $className,
         bool $isEntryPoint = false,
@@ -61,6 +55,10 @@ class ClassDefinition extends AbstractDefinition
         );
     }
 
+    /**
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenConstructorParameters
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenProperties
+     */
     public static function prototype(
         string $className,
         bool $isEntryPoint = false,
@@ -84,6 +82,10 @@ class ClassDefinition extends AbstractDefinition
         );
     }
 
+    /**
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenConstructorParameters
+     * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenProperties
+     */
     public function __construct(
         string $className,
         bool $isSingleton = true,
@@ -321,10 +323,9 @@ class ClassDefinition extends AbstractDefinition
     }
 
     /**
-     * @param DefinitionInstantiation $instantiation
      * @return mixed
      */
-    private function instantiateClass($instantiation)
+    private function instantiateClass(DefinitionInstantiation $instantiation)
     {
         $arguments = [];
         foreach ($this->constructorArguments as $argument) {
@@ -341,7 +342,7 @@ class ClassDefinition extends AbstractDefinition
         if ($this->properties !== []) {
             $properties = $this->properties;
             Closure::bind(
-                static function () use ($instantiation, $className, $object, $properties) {
+                static function () use ($instantiation, $className, $object, $properties): void {
                     foreach ($properties as $name => $property) {
                         if (array_key_exists("class", $property)) {
                             $object->$name = $instantiation->definitions[$property["class"]]->instantiate($instantiation, $className);

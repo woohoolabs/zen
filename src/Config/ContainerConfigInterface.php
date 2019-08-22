@@ -9,14 +9,16 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 interface ContainerConfigInterface
 {
     /**
-     * @return EntryPointInterface[]
      * @internal
+     *
+     * @return EntryPointInterface[]
      */
     public function createEntryPoints(): array;
 
     /**
-     * @return DefinitionHintInterface[]
      * @internal
+     *
+     * @return DefinitionHintInterface[]
      */
     public function createDefinitionHints(): array;
 }

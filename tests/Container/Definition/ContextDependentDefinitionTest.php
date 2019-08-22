@@ -8,6 +8,7 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\ContainerException;
@@ -24,7 +25,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getId()
+    public function getId(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -44,7 +45,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function idIsMissing()
+    public function idIsMissing(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -62,7 +63,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getHash()
+    public function getHash(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -82,7 +83,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingleton()
+    public function isSingleton(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -102,7 +103,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWithoutDefaultWhenNoParent()
+    public function isSingletonWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -114,7 +115,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWithDefaultWhenNoParent()
+    public function isSingletonWithDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A"), []);
 
@@ -126,7 +127,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWithDefaultWhenParentNotExists()
+    public function isSingletonWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A"), []);
 
@@ -138,7 +139,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWhenParentExists()
+    public function isSingletonWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -156,7 +157,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWithoutDefaultWhenNoParent()
+    public function isEntryPointWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -168,7 +169,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWithDefaultWhenNoParent()
+    public function isEntryPointWithDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", true), []);
 
@@ -180,7 +181,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWithDefaultWhenParentNotExists()
+    public function isEntryPointWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", true), []);
 
@@ -192,7 +193,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWhenParentExists()
+    public function isEntryPointWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -210,7 +211,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWithoutDefaultWhenNoParent()
+    public function isAutoloadedWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -222,7 +223,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWithDefaultWhenNoParent()
+    public function isAutoloadedWithDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
 
@@ -234,7 +235,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWithDefaultWhenParentNotExists()
+    public function isAutoloadedWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
 
@@ -246,7 +247,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWhenParentExists()
+    public function isAutoloadedWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -264,7 +265,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWithoutDefaultWhenNoParent()
+    public function isFileBasedWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -276,7 +277,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWithDefaultWhenNoParent()
+    public function isFileBasedWithDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
 
@@ -288,7 +289,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWithDefaultWhenParentNotExists()
+    public function isFileBasedWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
 
@@ -300,7 +301,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWhenParentExists()
+    public function isFileBasedWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -318,7 +319,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCountWithoutDefaultWhenParentNotExists()
+    public function increaseReferenceCountWithoutDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -330,7 +331,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCountWithDefaultWhenNoParent()
+    public function increaseReferenceCountWithDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -348,7 +349,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCountWithDefaultWhenParentNotExists()
+    public function increaseReferenceCountWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -366,7 +367,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCountWhenParentExists()
+    public function increaseReferenceCountWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "",
@@ -386,7 +387,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function needsDependencyResolution()
+    public function needsDependencyResolution(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -398,7 +399,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function resolveDependencies()
+    public function resolveDependencies(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -410,7 +411,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependencies()
+    public function getClassDependencies(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -422,7 +423,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWithoutDefaultWhenNoParent()
+    public function instantiateWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -434,7 +435,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenDefault()
+    public function instantiateWhenDefault(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -457,7 +458,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenNotDefault()
+    public function instantiateWhenNotDefault(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -482,7 +483,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithoutDefaultWhenNoParent()
+    public function compileWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
 
@@ -503,7 +504,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithDefaultWhenParentNotExists()
+    public function compileWithDefaultWhenParentNotExists(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -532,7 +533,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenParentExists()
+    public function compileWhenParentExists(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -565,7 +566,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenIndented(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -594,7 +595,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenInlined()
+    public function compileWhenInlined(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -623,7 +624,7 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenFileBased()
+    public function compileWhenFileBased(): void
     {
         $definition = new ContextDependentDefinition(
             "X\\A",
@@ -649,6 +650,9 @@ class ContextDependentDefinitionTest extends TestCase
         $this->assertEquals($this->getDefinitionSourceCode("ContextDependentDefinitionWhenFileBased.php"), $compiledDefinition);
     }
 
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
     private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
     {
         $instantiation = new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));

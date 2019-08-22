@@ -106,11 +106,10 @@ final class ContainerDependencyResolver
     }
 
     /**
-     * @param string $id
      * @return DefinitionInterface[]
      * @throws NotFoundException
      */
-    public function resolveEntryPoint($id)
+    public function resolveEntryPoint(string $id): array
     {
         $this->resetDefinitions();
 
@@ -123,14 +122,7 @@ final class ContainerDependencyResolver
         return $this->definitions;
     }
 
-    /**
-     * @param string $id
-     * @param string $parentId
-     * @param EntryPointInterface $parentEntryPoint
-     * @param bool $runtime
-     * @return void
-     */
-    private function resolve($id, $parentId, $parentEntryPoint, $runtime)
+    private function resolve(string $id, string $parentId, EntryPointInterface $parentEntryPoint, bool $runtime): void
     {
         if (array_key_exists($id, $this->definitions)) {
             if ($this->definitions[$id]->needsDependencyResolution()) {
@@ -173,14 +165,9 @@ final class ContainerDependencyResolver
     }
 
     /**
-     * @param string $id
-     * @param string $parentId
-     * @param EntryPointInterface $parentEntryPoint
-     * @param bool $runtime
-     * @return void
      * @throws ContainerException
      */
-    private function resolveDependencies($id, $parentId, $parentEntryPoint, $runtime)
+    private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint, bool $runtime): void
     {
         $this->definitions[$id]->resolveDependencies();
 
@@ -198,21 +185,15 @@ final class ContainerDependencyResolver
     }
 
     /**
-     * @param string $id
-     * @param string $parentId
-     * @param ClassDefinition $definition
-     * @param EntryPointInterface $parentEntryPoint
-     * @param bool $runtime
-     * @return void
      * @throws ContainerException
      */
     private function resolveConstructorArguments(
-        $id,
-        $parentId,
-        $definition,
-        $parentEntryPoint,
-        $runtime
-    ) {
+        string $id,
+        string $parentId,
+        ClassDefinition $definition,
+        EntryPointInterface $parentEntryPoint,
+        bool $runtime
+    ): void {
         try {
             $reflectionClass = new ReflectionClass($id);
         } catch (ReflectionException $e) {
@@ -262,21 +243,15 @@ final class ContainerDependencyResolver
     }
 
     /**
-     * @param string $id
-     * @param string $parentId
-     * @param ClassDefinition $definition
-     * @param EntryPointInterface $parentEntryPoint
-     * @param bool $runtime
-     * @return void
      * @throws ContainerException
      */
     private function resolveProperties(
-        $id,
-        $parentId,
-        $definition,
-        $parentEntryPoint,
-        $runtime
-    ) {
+        string $id,
+        string $parentId,
+        ClassDefinition $definition,
+        EntryPointInterface $parentEntryPoint,
+        bool $runtime
+    ): void {
         $class = new ReflectionClass($id);
 
         $propertyNames = [];
@@ -350,10 +325,7 @@ final class ContainerDependencyResolver
         return $parentEntryPoint->isFileBased($this->fileBasedDefinitionConfig);
     }
 
-    /**
-     * @return void
-     */
-    private function resetDefinitions()
+    private function resetDefinitions(): void
     {
         $this->definitions = [
             ContainerInterface::class => ReferenceDefinition::singleton(

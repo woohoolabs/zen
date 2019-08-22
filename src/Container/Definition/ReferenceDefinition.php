@@ -8,9 +8,7 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class ReferenceDefinition extends AbstractDefinition
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $referencedId;
 
     public static function singleton(
@@ -87,6 +85,9 @@ class ReferenceDefinition extends AbstractDefinition
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getClassDependencies(): array
     {
         return [

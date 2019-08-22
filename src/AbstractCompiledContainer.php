@@ -10,14 +10,10 @@ use function array_key_exists;
 
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array<string, object> */
     protected $singletonEntries = [];
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected static $entryPoints = [];
 
     /**
@@ -48,12 +44,13 @@ abstract class AbstractCompiledContainer implements ContainerInterface
 
     /**
      * @param object $object
+     * @param array<string, mixed> $properties
      * @return object
      */
-    protected function setClassProperties($object, array $properties)
+    protected function setClassProperties($object, $properties)
     {
         Closure::bind(
-            static function () use ($object, $properties) {
+            static function () use ($object, $properties): void {
                 foreach ($properties as $name => $value) {
                     $object->$name = $value;
                 }

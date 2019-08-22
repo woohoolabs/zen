@@ -20,7 +20,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWhenNotFound()
+    public function getRelativeFilenameWhenNotFound(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass("", "InexistentClass");
 
@@ -30,7 +30,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWhenInternalClass()
+    public function getRelativeFilenameWhenInternalClass(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass("", stdClass::class);
 
@@ -40,7 +40,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWithoutTrailingSlash()
+    public function getRelativeFilenameWithoutTrailingSlash(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", EntryPointA::class);
 
@@ -50,7 +50,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWithTrailingSlash()
+    public function getRelativeFilenameWithTrailingSlash(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint/", EntryPointA::class);
 
@@ -60,7 +60,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWhenInSubdirectory()
+    public function getRelativeFilenameWhenInSubdirectory(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/", EntryPointA::class);
 
@@ -70,7 +70,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getRelativeFilenameWhenOutOfRootDirectory()
+    public function getRelativeFilenameWhenOutOfRootDirectory(): void
     {
         $filename = FileSystemUtil::getRelativeFilenameForClass(dirname(__DIR__) . "/Fixture/DependencyGraph/Mixed", EntryPointA::class);
 
@@ -80,7 +80,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getClassesInPathWhenCOnlyConcreteClasses()
+    public function getClassesInPathWhenCOnlyConcreteClasses(): void
     {
         $classes = FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", true);
 
@@ -100,7 +100,7 @@ class FileSystemUtilTest extends TestCase
     /**
      * @test
      */
-    public function getClassesInPathWhenAllClasses()
+    public function getClassesInPathWhenAllClasses(): void
     {
         $classes = FileSystemUtil::getClassesInPath(dirname(__DIR__) . "/Fixture/DependencyGraph/EntryPoint", false);
 

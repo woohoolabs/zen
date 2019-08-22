@@ -15,6 +15,9 @@ use const DIRECTORY_SEPARATOR;
 
 class NamespaceUtil
 {
+    /**
+     * @return array<int, string>
+     */
     public static function getClassesInPsr4Namespace(string $namespace, bool $recursive, bool $onlyInstantiable): array
     {
         /** @var array|null $psr4Prefixes */

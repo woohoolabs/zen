@@ -8,14 +8,10 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 
 abstract class AbstractEntryPoint implements EntryPointInterface
 {
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     private $autoloaded;
 
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     private $fileBased;
 
     /**

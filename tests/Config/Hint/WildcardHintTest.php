@@ -27,7 +27,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function getDefinitionHintsWithPrefixPattern()
+    public function getDefinitionHintsWithPrefixPattern(): void
     {
         $wildcardHint = new WildcardHint(
             $this->getSourcePath(),
@@ -49,7 +49,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function getPrototypeDefinitionHintsWithPrefixPattern()
+    public function getPrototypeDefinitionHintsWithPrefixPattern(): void
     {
         $wildcardHint = WildcardHint::prototype(
             $this->getSourcePath(),
@@ -71,7 +71,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function getSingletonDefinitionHintsWithPrefixPattern()
+    public function getSingletonDefinitionHintsWithPrefixPattern(): void
     {
         $wildcardHint = WildcardHint::singleton(
             $this->getSourcePath(),
@@ -93,7 +93,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function geNonExistentDefinitionHintsWithPrefixPattern()
+    public function geNonExistentDefinitionHintsWithPrefixPattern(): void
     {
         $wildcardHint = new WildcardHint(
             $this->getSourcePath(),
@@ -109,7 +109,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function getDefinitionHintsWithPostfixPattern()
+    public function getDefinitionHintsWithPostfixPattern(): void
     {
         $wildcardHint = new WildcardHint(
             $this->getSourcePath(),
@@ -131,7 +131,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function getDefinitionHintsWithInfixPattern()
+    public function getDefinitionHintsWithInfixPattern(): void
     {
         $wildcardHint = new WildcardHint(
             $this->getSourcePath(),
@@ -153,7 +153,7 @@ class WildcardHintTest extends TestCase
     /**
      * @test
      */
-    public function geNonExistentDefinitionHintsWithOnlyPattern()
+    public function geNonExistentDefinitionHintsWithOnlyPattern(): void
     {
         $wildcardHint = new WildcardHint(
             $this->getSourcePath(),

@@ -17,7 +17,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithoutNamespace()
+    public function compileContainerWithoutNamespace(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -33,7 +33,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithNamespace()
+    public function compileContainerWithNamespace(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -49,7 +49,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithoutEntryPointWithEntry()
+    public function compileContainerWithoutEntryPointWithEntry(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -67,7 +67,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithEntryPoint()
+    public function compileContainerWithEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -95,7 +95,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithAlwaysAutoloadedClasses()
+    public function compileContainerWithAlwaysAutoloadedClasses(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -123,7 +123,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithUnoptimizedAutoloadedPrototypeEntryPoint()
+    public function compileContainerWithUnoptimizedAutoloadedPrototypeEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -157,7 +157,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithUnoptimizedAutoloadedSingletonEntryPoint()
+    public function compileContainerWithUnoptimizedAutoloadedSingletonEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -191,7 +191,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithOptimizedAutoloadedEntryPoint()
+    public function compileContainerWithOptimizedAutoloadedEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -222,7 +222,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithFileBasedEntryPoint()
+    public function compileContainerWithFileBasedEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -261,7 +261,7 @@ class CompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithFileBasedAutoloadedEntryPoint()
+    public function compileContainerWithFileBasedAutoloadedEntryPoint(): void
     {
         $compiler = new ContainerCompiler();
 

@@ -14,7 +14,7 @@ class DefinitionCompilationTest extends TestCase
     /**
      * @test
      */
-    public function getAutoloadConfig()
+    public function getAutoloadConfig(): void
     {
         $compilation = new DefinitionCompilation(
             AutoloadConfig::disabledGlobally(),
@@ -30,7 +30,7 @@ class DefinitionCompilationTest extends TestCase
     /**
      * @test
      */
-    public function getFileBasedDefinitionConfig()
+    public function getFileBasedDefinitionConfig(): void
     {
         $compilation = new DefinitionCompilation(
             AutoloadConfig::disabledGlobally(),
@@ -46,7 +46,7 @@ class DefinitionCompilationTest extends TestCase
     /**
      * @test
      */
-    public function getDefinitions()
+    public function getDefinitions(): void
     {
         $compilation = new DefinitionCompilation(
             AutoloadConfig::disabledGlobally(),
@@ -69,7 +69,7 @@ class DefinitionCompilationTest extends TestCase
     /**
      * @test
      */
-    public function getDefinition()
+    public function getDefinition(): void
     {
         $compilation = new DefinitionCompilation(
             AutoloadConfig::disabledGlobally(),

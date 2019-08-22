@@ -47,8 +47,9 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     abstract protected function getWildcardHints(): array;
 
     /**
-     * @return EntryPointInterface[]
      * @internal
+     *
+     * @return EntryPointInterface[]
      */
     public function createEntryPoints(): array
     {
@@ -56,8 +57,9 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     }
 
     /**
-     * @return DefinitionHintInterface[]
      * @internal
+     *
+     * @return DefinitionHintInterface[]
      */
     public function createDefinitionHints(): array
     {
@@ -70,7 +72,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     protected function setEntryPoints(): void
     {
         $this->entryPoints = array_map(
-            function ($entryPoint): EntryPointInterface {
+            static function ($entryPoint): EntryPointInterface {
                 if ($entryPoint instanceof EntryPointInterface) {
                     return $entryPoint;
                 }
@@ -93,7 +95,7 @@ abstract class AbstractContainerConfig implements ContainerConfigInterface
     protected function setDefinitionHints(): void
     {
         $this->definitionHints = array_map(
-            function ($definitionHint): DefinitionHintInterface {
+            static function ($definitionHint): DefinitionHintInterface {
                 if ($definitionHint instanceof DefinitionHintInterface) {
                     return $definitionHint;
                 }

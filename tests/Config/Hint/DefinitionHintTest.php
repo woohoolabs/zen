@@ -17,7 +17,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function singleton()
+    public function singleton(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
@@ -29,7 +29,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function prototype()
+    public function prototype(): void
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
@@ -41,7 +41,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function setSingletonScope()
+    public function setSingletonScope(): void
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
@@ -53,7 +53,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenIdMismatch()
+    public function toDefinitionsWhenIdMismatch(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
@@ -71,7 +71,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function setParameterWhenNotScalarOrArray()
+    public function setParameterWhenNotScalarOrArray(): void
     {
         $this->expectException(ContainerException::class);
 
@@ -82,7 +82,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function setPropertyWhenNotScalarOrArray()
+    public function setPropertyWhenNotScalarOrArray(): void
     {
         $this->expectException(ContainerException::class);
 
@@ -93,7 +93,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenParameterAndPropertySetAndIdMismatch()
+    public function toDefinitionsWhenParameterAndPropertySetAndIdMismatch(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class)
             ->setParameter("param", "value")
@@ -125,7 +125,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenPrototype()
+    public function toDefinitionsWhenPrototype(): void
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
@@ -142,7 +142,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenAutoloaded()
+    public function toDefinitionsWhenAutoloaded(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
@@ -159,7 +159,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenParameterSet()
+    public function toDefinitionsWhenParameterSet(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class)
             ->setParameter("param", ["abc"]);
@@ -187,7 +187,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWhenPropertySet()
+    public function toDefinitionsWhenPropertySet(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class)
             ->setProperty("property", "value");
@@ -215,7 +215,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function setPrototypeScope()
+    public function setPrototypeScope(): void
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
@@ -227,7 +227,7 @@ class DefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function getClassName()
+    public function getClassName(): void
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 

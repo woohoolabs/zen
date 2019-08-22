@@ -20,7 +20,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOnlyDefault()
+    public function toDefinitionsWithOnlyDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create(ClassA::class);
 
@@ -42,7 +42,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOnlySetDefault()
+    public function toDefinitionsWithOnlySetDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
             ->setDefaultClass(ClassA::class);
@@ -65,7 +65,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOnlyPrototypeDefault()
+    public function toDefinitionsWithOnlyPrototypeDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create(
             DefinitionHint::prototype(ClassA::class)
@@ -89,7 +89,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOnlyAutoloadedDefault()
+    public function toDefinitionsWithOnlyAutoloadedDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create(ClassA::class);
 
@@ -111,7 +111,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithoutDefault()
+    public function toDefinitionsWithoutDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
             ->setClassContext(
@@ -143,7 +143,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toPrototypeDefinitionsWithoutDefault()
+    public function toPrototypeDefinitionsWithoutDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
             ->setClassContext(
@@ -175,7 +175,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toAutoloadedDefinitionsWithoutDefault()
+    public function toAutoloadedDefinitionsWithoutDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
             ->setClassContext(
@@ -207,7 +207,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toMultipleDefinitionsWithoutDefault()
+    public function toMultipleDefinitionsWithoutDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
             ->setClassContext(
@@ -247,7 +247,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithDefault()
+    public function toDefinitionsWithDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create(DefinitionHint::prototype(ClassB::class))
             ->setClassContext(
@@ -280,7 +280,7 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOverriddenDefault()
+    public function toDefinitionsWithOverriddenDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create(DefinitionHint::prototype(ClassA::class))
             ->setClassContext(

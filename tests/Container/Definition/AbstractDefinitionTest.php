@@ -11,7 +11,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getId()
+    public function getId(): void
     {
         $definition = new TestDefinition("A");
 
@@ -23,7 +23,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getHash()
+    public function getHash(): void
     {
         $definition = new TestDefinition("A");
 
@@ -35,7 +35,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getFCQNHash()
+    public function getFCQNHash(): void
     {
         $definition = new TestDefinition("A\\B");
 
@@ -47,7 +47,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWhenTrue()
+    public function isEntryPointWhenTrue(): void
     {
         $definition = new TestDefinition("", true, true);
 
@@ -59,7 +59,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWhenTrue()
+    public function isSingletonWhenTrue(): void
     {
         $definition = new TestDefinition("", true);
 
@@ -71,7 +71,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingletonWhenFalse()
+    public function isSingletonWhenFalse(): void
     {
         $definition = new TestDefinition("", false);
 
@@ -83,7 +83,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPointWhenFalse()
+    public function isEntryPointWhenFalse(): void
     {
         $definition = new TestDefinition("", true, false);
 
@@ -95,7 +95,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWhenTrue()
+    public function isAutoloadedWhenTrue(): void
     {
         $definition = new TestDefinition("", true, false, true);
 
@@ -107,7 +107,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWhenFalse()
+    public function isAutoloadedWhenFalse(): void
     {
         $definition = new TestDefinition("", true, false, false);
 
@@ -119,7 +119,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWhenTrue()
+    public function isFileBasedWhenTrue(): void
     {
         $definition = new TestDefinition("", true, false, false, true);
 
@@ -131,7 +131,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedWhenFalse()
+    public function isFileBasedWhenFalse(): void
     {
         $definition = new TestDefinition("", true, false, false, false);
 
@@ -143,7 +143,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getSingletonReferenceCountWhen0()
+    public function getSingletonReferenceCountWhen0(): void
     {
         $definition = new TestDefinition("", true, false, false, false, 0);
 
@@ -155,7 +155,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getSingletonReferenceCountWhenMore()
+    public function getSingletonReferenceCountWhenMore(): void
     {
         $definition = new TestDefinition("", true, false, false, false, 2);
 
@@ -167,7 +167,7 @@ class AbstractDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCount()
+    public function increaseReferenceCount(): void
     {
         $definition = new TestDefinition("", true, false, false, false, 0);
 

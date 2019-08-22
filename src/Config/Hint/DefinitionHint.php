@@ -16,9 +16,13 @@ use function is_scalar;
 class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 {
     private string $className;
-
+    /**
+     * @var array<string, string|int|float|bool|array<mixed, mixed>|null>
+     */
     private array $parameters;
-
+    /**
+     * @var array<string, string|int|float|bool|array<mixed, mixed>|null>
+     */
     private array $properties;
 
     public static function singleton(string $className): DefinitionHint
@@ -54,7 +58,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
-     * @param string|int|float|bool|array|null $value
+     * @param string|int|float|bool|array<mixed, mixed>|null $value
      */
     public function setProperty(string $name, $value): DefinitionHint
     {
@@ -68,10 +72,11 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
-     * @param EntryPointInterface[] $entryPoints
+     * @internal
+     *
+     * @param EntryPointInterface[]     $entryPoints
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
-     * @internal
      */
     public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
     {

@@ -21,8 +21,9 @@ class WildcardPreload extends AbstractPreload
     }
 
     /**
-     * @return string[]
      * @internal
+     *
+     * @return string[]
      */
     public function getClassNames(): array
     {

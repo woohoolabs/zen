@@ -13,7 +13,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedFalseByDefaultWhenDisabledGlobally()
+    public function isAutoloadedFalseByDefaultWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -25,7 +25,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedTrueByDefaultWhenEnabledGlobally()
+    public function isAutoloadedTrueByDefaultWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -37,7 +37,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function autoloadWhenDisabledGlobally()
+    public function autoloadWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -49,7 +49,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function autoloadWhenEnabledGlobally()
+    public function autoloadWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -61,7 +61,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function disableAutoloadWhenDisabledGlobally()
+    public function disableAutoloadWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -73,7 +73,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function disabledAutoloadWhenEnabledGlobally()
+    public function disabledAutoloadWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -86,7 +86,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedFalseByDefaultWhenDisabledGlobally()
+    public function isFileBasedFalseByDefaultWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -98,7 +98,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function isFileBasedTrueByDefaultWhenEnabledGlobally()
+    public function isFileBasedTrueByDefaultWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -110,7 +110,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function fileBasedWhenDisabledGlobally()
+    public function fileBasedWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -122,7 +122,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function fileBasedWhenEnabledGlobally()
+    public function fileBasedWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -134,7 +134,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function disableFileBasedWhenDisabledGlobally()
+    public function disableFileBasedWhenDisabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 
@@ -147,7 +147,7 @@ class AbstractEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function disableFileBasedWhenEnabledGlobally()
+    public function disableFileBasedWhenEnabledGlobally(): void
     {
         $entryPoint = new TestEntryPoint();
 

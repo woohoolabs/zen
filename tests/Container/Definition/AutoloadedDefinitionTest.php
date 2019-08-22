@@ -24,7 +24,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingleton()
+    public function isSingleton(): void
     {
         $definition = new AutoloadedDefinition("", true);
 
@@ -36,7 +36,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloaded()
+    public function isAutoloaded(): void
     {
         $definition = new AutoloadedDefinition("");
 
@@ -48,7 +48,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function needsDependencyResolution()
+    public function needsDependencyResolution(): void
     {
         $definition = new AutoloadedDefinition("");
 
@@ -60,7 +60,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function resolveDependencies()
+    public function resolveDependencies(): void
     {
         $definition = new AutoloadedDefinition("");
 
@@ -72,7 +72,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependencies()
+    public function getClassDependencies(): void
     {
         $definition = new AutoloadedDefinition("");
 
@@ -84,7 +84,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compile()
+    public function compile(): void
     {
         $definition = new AutoloadedDefinition(MixedE::class);
 
@@ -109,7 +109,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiate()
+    public function instantiate(): void
     {
         $definition = new AutoloadedDefinition(MixedE::class);
 
@@ -121,7 +121,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenIndented(): void
     {
         $definition = new AutoloadedDefinition(MixedE::class);
 
@@ -146,7 +146,7 @@ class AutoloadedDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenFileBased()
+    public function compileWhenFileBased(): void
     {
         $definition = new AutoloadedDefinition(MixedE::class, true, true);
 

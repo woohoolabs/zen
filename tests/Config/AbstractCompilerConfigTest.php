@@ -18,7 +18,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function useConstructorInjection()
+    public function useConstructorInjection(): void
     {
         $config = new StubCompilerConfig([], "", "", true, false);
 
@@ -30,7 +30,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function usePropertyInjection()
+    public function usePropertyInjection(): void
     {
         $config = new StubCompilerConfig([], "", "", true, false);
 
@@ -42,7 +42,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getContainerHash()
+    public function getContainerHash(): void
     {
         $config = new StubCompilerConfig([], "A\\B\\C", "D");
 
@@ -54,7 +54,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getDefaultAutoloadConfig()
+    public function getDefaultAutoloadConfig(): void
     {
         $config = new DummyCompilerConfig();
 
@@ -66,7 +66,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getFileBasedDefinitionConfig()
+    public function getFileBasedDefinitionConfig(): void
     {
         $config = new DummyCompilerConfig();
 
@@ -78,7 +78,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getContainerFqcn()
+    public function getContainerFqcn(): void
     {
         $config = new StubCompilerConfig(
             [],
@@ -94,7 +94,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getEntryPointMap()
+    public function getEntryPointMap(): void
     {
         $config = new StubCompilerConfig(
             [
@@ -135,7 +135,7 @@ class AbstractCompilerConfigTest extends TestCase
     /**
      * @test
      */
-    public function getDefinitionHints()
+    public function getDefinitionHints(): void
     {
         $config = new StubCompilerConfig(
             [

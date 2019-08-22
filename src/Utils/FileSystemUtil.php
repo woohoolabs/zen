@@ -44,11 +44,13 @@ class FileSystemUtil
             $filename = $reflectionClass->getFileName();
         } catch (Throwable $e) {
             $pathCache[$key] = "";
+
             return "";
         }
 
         if ($filename === false) {
             $pathCache[$key] = "";
+
             return "";
         }
 
@@ -154,12 +156,18 @@ class FileSystemUtil
         return $classes;
     }
 
+    /**
+     * @param array<int, mixed> $tokens
+     */
     private static function isNamespace(array $tokens, int $position, bool $dlm): bool
     {
         return (isset($tokens[$position - 2][1]) && $tokens[$position - 2][1] === "namespace") ||
             ($dlm && $tokens[$position - 1][0] === T_NS_SEPARATOR && $tokens[$position][0] === T_STRING);
     }
 
+    /**
+     * @param array<int, mixed> $tokens
+     */
     private static function isRequiredClass(array $tokens, int $position, bool $onlyConcreteClasses): bool
     {
         if ($onlyConcreteClasses) {
@@ -169,6 +177,10 @@ class FileSystemUtil
         return self::isClass($tokens, $position, [T_CLASS, T_INTERFACE], false);
     }
 
+    /**
+     * @param array<int, mixed> $tokens
+     * @param array<int, int> $allowedClassTokens
+     */
     private static function isClass(
         array $tokens,
         int $position,

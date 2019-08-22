@@ -14,14 +14,10 @@ use function array_merge;
 
 class RuntimeContainer implements ContainerInterface
 {
-    /**
-     * @var ContainerDependencyResolver
-     */
+    /** @var ContainerDependencyResolver */
     private $dependencyResolver;
 
-    /**
-     * @var DefinitionInstantiation
-     */
+    /** @var DefinitionInstantiation */
     private $instantiation;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)

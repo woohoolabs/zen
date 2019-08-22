@@ -13,7 +13,7 @@ class DefinitionInstantiationTest extends TestCase
     /**
      * @test
      */
-    public function construct()
+    public function construct(): void
     {
         $instantiation = $this->createDefinitionInstantiation();
 

@@ -26,7 +26,7 @@ class Psr4NamespaceEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNamesNonRecursivelyWhenOnlyInstantiable()
+    public function getClassNamesNonRecursivelyWhenOnlyInstantiable(): void
     {
         $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), false, true);
 
@@ -49,7 +49,7 @@ class Psr4NamespaceEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNamesRecursivelyWhenOnlyInstantiable()
+    public function getClassNamesRecursivelyWhenOnlyInstantiable(): void
     {
         $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), true, true);
 
@@ -73,7 +73,7 @@ class Psr4NamespaceEntryPointTest extends TestCase
     /**
      * @test
      */
-    public function getClassNamesRecursivelyWhenAll()
+    public function getClassNamesRecursivelyWhenAll(): void
     {
         $entryPoint = Psr4NamespaceEntryPoint::create($this->getSourceNamespace(), true, false);
 

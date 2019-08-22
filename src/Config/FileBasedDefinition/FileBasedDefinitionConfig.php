@@ -10,7 +10,9 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     private bool $isGlobalFileBasedDefinitionsEnabled;
 
     private string $relativeDefinitionDirectory;
-
+    /**
+     * @var array<int, string>
+     */
     private array $excludedDefinitions;
 
     public static function disabledGlobally(string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig
@@ -55,7 +57,7 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
     }
 
     /**
-     * @param string[] $excludedDefinitions
+     * @param array<int, string> $excludedDefinitions
      */
     public function setExcludedDefinitions(array $excludedDefinitions): FileBasedDefinitionConfig
     {
@@ -64,6 +66,9 @@ final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterf
         return $this;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getExcludedDefinitions(): array
     {
         return $this->excludedDefinitions;

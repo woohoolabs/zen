@@ -18,7 +18,7 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function hasReturnsFalse()
+    public function hasReturnsFalse(): void
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
@@ -30,7 +30,7 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function hasReturnsTrue()
+    public function hasReturnsTrue(): void
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
@@ -44,7 +44,7 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function getThrowsNotFoundException()
+    public function getThrowsNotFoundException(): void
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
@@ -56,7 +56,7 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function getReturnsPrototypeEntry()
+    public function getReturnsPrototypeEntry(): void
     {
         $container = $this->createRuntimeContainer(
             [ConstructorA::class],
@@ -75,7 +75,7 @@ class RuntimeContainerTest extends TestCase
     /**
      * @test
      */
-    public function getReturnsSingletonEntry()
+    public function getReturnsSingletonEntry(): void
     {
         $container = $this->createRuntimeContainer([ConstructorA::class], []);
 
@@ -88,7 +88,7 @@ class RuntimeContainerTest extends TestCase
 
     /**
      * @param EntryPointInterface[]|string[] $entryPoints
-     * @param DefinitionHintInterface[] $definitionsHints
+     * @param DefinitionHintInterface[]      $definitionsHints
      */
     private function createRuntimeContainer(array $entryPoints, array $definitionsHints): RuntimeContainer
     {

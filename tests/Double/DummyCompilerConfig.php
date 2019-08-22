@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
+use WoohooLabs\Zen\Config\AbstractContainerConfig;
 
 class DummyCompilerConfig extends AbstractCompilerConfig
 {
@@ -27,6 +28,9 @@ class DummyCompilerConfig extends AbstractCompilerConfig
         return false;
     }
 
+    /**
+     * @return AbstractContainerConfig[]
+     */
     public function getContainerConfigs(): array
     {
         return [];

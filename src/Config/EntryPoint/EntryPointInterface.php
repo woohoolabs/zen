@@ -9,8 +9,9 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 interface EntryPointInterface
 {
     /**
-     * @return string[]
      * @internal
+     *
+     * @return string[]
      */
     public function getClassNames(): array;
 

@@ -5,9 +5,7 @@ namespace WoohooLabs\Zen\Tests\Double;
 
 class StubContainerEntry
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $a = false;
 
     public function getA(): bool

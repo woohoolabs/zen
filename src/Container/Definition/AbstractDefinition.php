@@ -17,44 +17,28 @@ use function str_replace;
 
 abstract class AbstractDefinition implements DefinitionInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $hash;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $singleton;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $entryPoint;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $autoloaded;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $fileBased;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $singletonReferenceCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $prototypeReferenceCount;
 
     public function __construct(
@@ -232,7 +216,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     /**
      * @param DefinitionInterface[] $definitions
-     * @param string[] $preloadedClasses
+     * @param string[]              $preloadedClasses
      */
     protected function includeRelatedClasses(
         AutoloadConfigInterface $autoloadConfig,
@@ -272,6 +256,9 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $code;
     }
 
+    /**
+     * @param array<string, string> $relatedClasses
+     */
     protected function collectParentClasses(string $id, array &$relatedClasses): void
     {
         try {
@@ -304,6 +291,7 @@ abstract class AbstractDefinition implements DefinitionInterface
 
     /**
      * @param DefinitionInterface[] $definitions
+     * @param array<string, string> $relatedClasses
      */
     private function collectRelatedClasses(array $definitions, string $id, array &$relatedClasses): void
     {

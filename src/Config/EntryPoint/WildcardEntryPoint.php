@@ -24,8 +24,9 @@ class WildcardEntryPoint extends AbstractEntryPoint
     }
 
     /**
-     * @return string[]
      * @internal
+     *
+     * @return string[]
      */
     public function getClassNames(): array
     {

@@ -24,8 +24,9 @@ class Psr4NamespacePreload extends AbstractPreload
     }
 
     /**
-     * @return string[]
      * @internal
+     *
+     * @return string[]
      */
     public function getClassNames(): array
     {

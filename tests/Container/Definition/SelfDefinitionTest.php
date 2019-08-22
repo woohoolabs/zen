@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Tests\Container\Definition;
 use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
@@ -21,7 +22,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isSingleton()
+    public function isSingleton(): void
     {
         $definition = new SelfDefinition("");
 
@@ -33,7 +34,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isEntryPoint()
+    public function isEntryPoint(): void
     {
         $definition = new SelfDefinition("");
 
@@ -45,7 +46,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloaded()
+    public function isAutoloaded(): void
     {
         $definition = new SelfDefinition("");
 
@@ -57,7 +58,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isFileBased()
+    public function isFileBased(): void
     {
         $definition = new SelfDefinition("");
 
@@ -69,7 +70,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getSingletonReferenceCount()
+    public function getSingletonReferenceCount(): void
     {
         $definition = new SelfDefinition("");
 
@@ -81,7 +82,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function increaseReferenceCount()
+    public function increaseReferenceCount(): void
     {
         $definition = new SelfDefinition("");
 
@@ -96,7 +97,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function needsDependencyResolution()
+    public function needsDependencyResolution(): void
     {
         $definition = new SelfDefinition("");
 
@@ -108,7 +109,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function resolveDependencies()
+    public function resolveDependencies(): void
     {
         $definition = new SelfDefinition("");
 
@@ -120,7 +121,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependencies()
+    public function getClassDependencies(): void
     {
         $definition = new SelfDefinition("");
 
@@ -132,7 +133,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiate()
+    public function instantiate(): void
     {
         $definition = new SelfDefinition("");
 
@@ -144,7 +145,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compile()
+    public function compile(): void
     {
         $definition = new SelfDefinition("");
 
@@ -165,7 +166,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenIndented(): void
     {
         $definition = new SelfDefinition("");
 
@@ -186,7 +187,7 @@ class SelfDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenInlined()
+    public function compileWhenInlined(): void
     {
         $definition = new SelfDefinition("");
 
@@ -204,6 +205,9 @@ class SelfDefinitionTest extends TestCase
         $this->assertEquals($this->getInlinedDefinitionSourceCode("SelfDefinitionWhenInlined.php"), $compiledDefinition);
     }
 
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
     private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
     {
         $instantiation = new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));

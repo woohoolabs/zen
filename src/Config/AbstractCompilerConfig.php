@@ -66,8 +66,9 @@ abstract class AbstractCompilerConfig
     }
 
     /**
-     * @return AbstractContainerConfig[]
      * @internal
+     *
+     * @return AbstractContainerConfig[]
      */
     abstract public function getContainerConfigs(): array;
 
@@ -90,8 +91,9 @@ abstract class AbstractCompilerConfig
     }
 
     /**
-     * @return EntryPointInterface[]
      * @internal
+     *
+     * @return EntryPointInterface[]
      */
     public function getEntryPointMap(): array
     {
@@ -99,8 +101,9 @@ abstract class AbstractCompilerConfig
     }
 
     /**
-     * @return PreloadInterface[]
      * @internal
+     *
+     * @return PreloadInterface[]
      */
     public function getPreloadMap(): array
     {
@@ -116,8 +119,9 @@ abstract class AbstractCompilerConfig
     }
 
     /**
-     * @return DefinitionHintInterface[]
      * @internal
+     *
+     * @return DefinitionHintInterface[]
      */
     public function getDefinitionHints(): array
     {

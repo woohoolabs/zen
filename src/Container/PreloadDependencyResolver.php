@@ -174,10 +174,7 @@ final class PreloadDependencyResolver
         }
     }
 
-    /**
-     * @return void
-     */
-    private function resetClasses()
+    private function resetClasses(): void
     {
         $this->classes = [];
     }

@@ -8,6 +8,7 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
+use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\RuntimeContainer;
@@ -26,7 +27,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function singleton()
+    public function singleton(): void
     {
         $definition = ClassDefinition::singleton("");
 
@@ -38,7 +39,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function prototype()
+    public function prototype(): void
     {
         $definition = ClassDefinition::prototype("");
 
@@ -50,7 +51,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassName()
+    public function getClassName(): void
     {
         $definition = new ClassDefinition("A\\B");
 
@@ -62,7 +63,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function needsDependencyResolutionByDefault()
+    public function needsDependencyResolutionByDefault(): void
     {
         $definition = new ClassDefinition("");
 
@@ -74,7 +75,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function resolveDependencies()
+    public function resolveDependencies(): void
     {
         $definition = new ClassDefinition("");
 
@@ -86,7 +87,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isConstructorParameterOverriddenWhenTrue()
+    public function isConstructorParameterOverriddenWhenTrue(): void
     {
         $definition = ClassDefinition::singleton(
             "A\\B",
@@ -107,7 +108,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isConstructorParameterOverriddenWhenFalse()
+    public function isConstructorParameterOverriddenWhenFalse(): void
     {
         $definition = ClassDefinition::singleton(
             "A\\B",
@@ -128,7 +129,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getOverriddenConstructorParameters()
+    public function getOverriddenConstructorParameters(): void
     {
         $definition = ClassDefinition::singleton(
             "A\\B",
@@ -152,7 +153,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependenciesWhenEmpty()
+    public function getClassDependenciesWhenEmpty(): void
     {
         $definition = ClassDefinition::singleton("X\\A");
 
@@ -164,7 +165,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function getClassDependencies()
+    public function getClassDependencies(): void
     {
         $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -184,7 +185,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenSingleton()
+    public function instantiateWhenSingleton(): void
     {
         $definition = ClassDefinition::singleton(ConstructorD::class, true);
         $instantiation = $this->createDefinitionInstantiation([ConstructorD::class => $definition]);
@@ -199,7 +200,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWhenPrototype()
+    public function instantiateWhenPrototype(): void
     {
         $definition = ClassDefinition::prototype(ConstructorD::class, true);
         $instantiation = $this->createDefinitionInstantiation([ConstructorD::class => $definition]);
@@ -214,7 +215,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWithConstructorArguments()
+    public function instantiateWithConstructorArguments(): void
     {
         $definition = ClassDefinition::singleton(ConstructorA::class, true)
             ->addConstructorArgumentFromClass(ConstructorB::class)
@@ -236,7 +237,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function instantiateWithProperties()
+    public function instantiateWithProperties(): void
     {
         $definition = ClassDefinition::singleton(AnnotationB::class, true, false, false, [], ["value" => "abc"])
             ->addPropertyFromClass("d", AnnotationD::class)
@@ -256,7 +257,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenUnoptimizedSingletonClass()
+    public function compileWhenUnoptimizedSingletonClass(): void
     {
         $definition = ClassDefinition::singleton("X\\A", false, false, false, [], [], 2);
 
@@ -279,7 +280,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenUnoptimizedSingletonEntryPoint()
+    public function compileWhenUnoptimizedSingletonEntryPoint(): void
     {
         $definition = ClassDefinition::singleton("X\\A", true, false, false, [], [], 0);
 
@@ -302,7 +303,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenOptimizedSingletonClass()
+    public function compileWhenOptimizedSingletonClass(): void
     {
         $definition = ClassDefinition::singleton("X\\A", false, false, false, [], [], 1);
 
@@ -325,7 +326,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenPrototypeWithOptionalConstructorDependencies()
+    public function compileWhenPrototypeWithOptionalConstructorDependencies(): void
     {
         $definition = ClassDefinition::prototype("X\\A");
 
@@ -351,7 +352,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithRequiredEntryPointConstructorDependencies()
+    public function compileWithRequiredEntryPointConstructorDependencies(): void
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -381,7 +382,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenPrototypeWithRequiredInlinedConstructorDependencies()
+    public function compileWhenPrototypeWithRequiredInlinedConstructorDependencies(): void
     {
         $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -411,7 +412,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenContextDependentConstructorInjection()
+    public function compileWhenContextDependentConstructorInjection(): void
     {
         $definition = ClassDefinition::singleton("X\\A", true)
             ->addConstructorArgumentFromClass("X\\B")
@@ -449,7 +450,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithOptionalConstructorDependencies()
+    public function compileWithOptionalConstructorDependencies(): void
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addConstructorArgumentFromValue("")
@@ -482,7 +483,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithOverriddenConstructorDependencies()
+    public function compileWithOverriddenConstructorDependencies(): void
     {
         $definition = ClassDefinition::prototype(
             "X\\A",
@@ -523,7 +524,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithPropertyDependencies()
+    public function compileWithPropertyDependencies(): void
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addPropertyFromClass("b", "X\\B")
@@ -553,7 +554,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWithOverriddenPropertyDependencies()
+    public function compileWithOverriddenPropertyDependencies(): void
     {
         $definition = ClassDefinition::prototype(
             "X\\A",
@@ -593,7 +594,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenContextDependentPropertyInjection()
+    public function compileWhenContextDependentPropertyInjection(): void
     {
         $definition = ClassDefinition::singleton("X\\A", true)
             ->addPropertyFromClass("b", "X\\B")
@@ -631,7 +632,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenMultipleReferenceForOptimizableClass()
+    public function compileWhenMultipleReferenceForOptimizableClass(): void
     {
         $definition = ClassDefinition::singleton("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -660,7 +661,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenIndented()
+    public function compileWhenIndented(): void
     {
         $definition = ClassDefinition::prototype("X\\A")
             ->addConstructorArgumentFromClass("X\\B")
@@ -695,7 +696,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenAutoloaded()
+    public function compileWhenAutoloaded(): void
     {
         $definition = ClassDefinition::singleton(ConstructorD::class, true, true);
 
@@ -721,7 +722,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenBothFileBased()
+    public function compileWhenBothFileBased(): void
     {
         $definition = ClassDefinition::singleton("X\\A", true, false, true)
             ->addConstructorArgumentFromClass("X\\B");
@@ -746,7 +747,7 @@ class ClassDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenOnlyChildFileBased()
+    public function compileWhenOnlyChildFileBased(): void
     {
         $definition = ClassDefinition::singleton("X\\A", true, false, false)
             ->addConstructorArgumentFromClass("X\\B");
@@ -768,6 +769,9 @@ class ClassDefinitionTest extends TestCase
         $this->assertEquals($this->getDefinitionSourceCode("ClassDefinitionWhenOnlyChildFileBased.php"), $compiledDefinition);
     }
 
+    /**
+     * @param DefinitionInterface[] $definitions
+     */
     private function createDefinitionInstantiation(array $definitions): DefinitionInstantiation
     {
         $instantiation = new DefinitionInstantiation(new RuntimeContainer(new DummyCompilerConfig()));
