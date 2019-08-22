@@ -342,7 +342,6 @@ class DependencyResolverTest extends TestCase
     }
 
     /**
-     * @param string $entryPoint
      * @param DefinitionHintInterface[]|string[] $definitionHints
      */
     private function createDependencyResolver(string $entryPoint, array $definitionHints = []): ContainerDependencyResolver

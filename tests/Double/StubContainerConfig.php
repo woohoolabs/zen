@@ -14,9 +14,9 @@ class StubContainerConfig extends AbstractContainerConfig
     private $wildcardHints;
 
     /**
-     * @param EntryPointInterface[]|string[] $entryPoints
+     * @param EntryPointInterface[]|string[]     $entryPoints
      * @param DefinitionHintInterface[]|string[] $definitionHints
-     * @param WildcardHintInterface[] $wildcardHints
+     * @param WildcardHintInterface[]            $wildcardHints
      */
     public function __construct(array $entryPoints = [], array $definitionHints = [], array $wildcardHints = [])
     {

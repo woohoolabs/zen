@@ -7,7 +7,6 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
-use WoohooLabs\Zen\Config\ContainerConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use function dirname;
@@ -37,7 +36,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
 
     /**
      * @param AbstractContainerConfig[] $containerConfigs
-     * @param  string[] $alwaysAutoloadedClasses
+     * @param  string[]                  $alwaysAutoloadedClasses
      */
     public function __construct(
         array $containerConfigs = [],

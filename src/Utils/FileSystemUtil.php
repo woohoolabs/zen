@@ -179,7 +179,7 @@ class FileSystemUtil
 
     /**
      * @param array<int, mixed> $tokens
-     * @param array<int, int> $allowedClassTokens
+     * @param array<int, int>   $allowedClassTokens
      */
     private static function isClass(
         array $tokens,
