@@ -137,14 +137,17 @@ final class PreloadDependencyResolver
         foreach ($reflectionClass->getProperties() as $property) {
             $propertyClass = null;
             $propertyType = $property->getType();
-            if ($propertyType !== null && $propertyType->isBuiltin() === false) {
+
+            if ($propertyType !== null) {
                 $propertyClass = $propertyType->getName();
+                if ($propertyType->isBuiltin()) {
+                    continue;
+                }
             } else {
                 $propertyClass = $this->typeHintReader->getPropertyClass($property);
-            }
-
-            if ($propertyClass === null) {
-                return;
+                if ($propertyClass === null) {
+                    continue;
+                }
             }
 
             $this->resolve($propertyClass);
@@ -161,7 +164,7 @@ final class PreloadDependencyResolver
             foreach ($method->getParameters() as $parameter) {
                 $parameterClass = $this->typeHintReader->getParameterClass($parameter);
                 if ($parameterClass === null) {
-                    return;
+                    continue;
                 }
 
                 $this->resolve($parameterClass);
