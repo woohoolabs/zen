@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Preload;
 
+use function rtrim;
+
 final class PreloadConfig implements PreloadConfigInterface
 {
     private string $relativeBasePath;
@@ -21,14 +23,14 @@ final class PreloadConfig implements PreloadConfigInterface
 
     public function __construct(string $relativeBasePath = "")
     {
-        $this->relativeBasePath = $relativeBasePath;
+        $this->setRelativeBasePath($relativeBasePath);
         $this->preloadedFiles = [];
         $this->preloadedClasses = [];
     }
 
     public function setRelativeBasePath(string $relativeBasePath): PreloadConfig
     {
-        $this->relativeBasePath = $relativeBasePath;
+        $this->relativeBasePath = rtrim($relativeBasePath, "\\/");
 
         return $this;
     }
