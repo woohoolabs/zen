@@ -11,14 +11,15 @@ class WildcardPreload extends AbstractPreload
     private string $directoryName;
     private bool $onlyConcreteClasses;
 
-    public static function create(string $directoryName): WildcardPreload
+    public static function create(string $directoryName, bool $onlyConcreteClasses = false): WildcardPreload
     {
-        return new WildcardPreload($directoryName);
+        return new WildcardPreload($directoryName, $onlyConcreteClasses);
     }
 
-    public function __construct(string $directoryName)
+    public function __construct(string $directoryName, bool $onlyConcreteClasses = false)
     {
         $this->directoryName = rtrim($directoryName, "\\/");
+        $this->onlyConcreteClasses = $onlyConcreteClasses;
     }
 
     /**
@@ -28,6 +29,6 @@ class WildcardPreload extends AbstractPreload
      */
     public function getClassNames(): array
     {
-        return FileSystemUtil::getClassesInPath($this->directoryName, false);
+        return FileSystemUtil::getClassesInPath($this->directoryName, $this->onlyConcreteClasses);
     }
 }

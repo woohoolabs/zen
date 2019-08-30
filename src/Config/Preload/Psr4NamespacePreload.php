@@ -10,16 +10,18 @@ class Psr4NamespacePreload extends AbstractPreload
 {
     private string $namespace;
     private bool $recursive;
+    private bool $onlyInstantiable;
 
-    public static function create(string $namespace, bool $recursive = true): Psr4NamespacePreload
+    public static function create(string $namespace, bool $recursive = true, bool $onlyInstantiable = false): Psr4NamespacePreload
     {
-        return new Psr4NamespacePreload($namespace, $recursive);
+        return new Psr4NamespacePreload($namespace, $recursive, $onlyInstantiable);
     }
 
-    public function __construct(string $namespace, bool $recursive = true)
+    public function __construct(string $namespace, bool $recursive = true, bool $onlyInstantiable = false)
     {
         $this->namespace = trim($namespace, "\\");
         $this->recursive = $recursive;
+        $this->onlyInstantiable = $onlyInstantiable;
     }
 
     /**
@@ -29,6 +31,6 @@ class Psr4NamespacePreload extends AbstractPreload
      */
     public function getClassNames(): array
     {
-        return NamespaceUtil::getClassesInPsr4Namespace($this->namespace, $this->recursive, false);
+        return NamespaceUtil::getClassesInPsr4Namespace($this->namespace, $this->recursive, $this->onlyInstantiable);
     }
 }
