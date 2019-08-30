@@ -36,7 +36,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedC;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedD;
 
-class DependencyResolverTest extends TestCase
+class ContainerDependencyResolverTest extends TestCase
 {
     /**
      * @test

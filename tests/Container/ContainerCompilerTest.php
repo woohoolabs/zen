@@ -12,7 +12,7 @@ use WoohooLabs\Zen\Tests\Double\StubSingletonDefinition;
 use function dirname;
 use function file_get_contents;
 
-class CompilerTest extends TestCase
+class ContainerCompilerTest extends TestCase
 {
     /**
      * @test

@@ -50,6 +50,18 @@ class AutoloadConfigTest extends TestCase
     /**
      * @test
      */
+    public function createWhenRootHasTrailingSlash(): void
+    {
+        $autoloadConfig = AutoloadConfig::create(true, "/var/www/");
+
+        $rootDirectory = $autoloadConfig->getRootDirectory();
+
+        $this->assertEquals("/var/www", $rootDirectory);
+    }
+
+    /**
+     * @test
+     */
     public function setRootDirectory(): void
     {
         $autoloadConfig = new AutoloadConfig(true);
