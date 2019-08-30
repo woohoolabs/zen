@@ -8,7 +8,6 @@ use function rtrim;
 final class AutoloadConfig implements AutoloadConfigInterface
 {
     private bool $isGlobalAutoloadEnabled;
-
     private string $rootDirectory;
     /** @var array<int, string> */
     private array $alwaysAutoloadedClasses;
@@ -33,7 +32,7 @@ final class AutoloadConfig implements AutoloadConfigInterface
     public function __construct(bool $isGlobalAutoloadEnabled, string $rootDirectory = "")
     {
         $this->isGlobalAutoloadEnabled = $isGlobalAutoloadEnabled;
-        $this->rootDirectory = $rootDirectory;
+        $this->setRootDirectory($rootDirectory);
         $this->alwaysAutoloadedClasses = [];
         $this->excludedClasses = [];
     }

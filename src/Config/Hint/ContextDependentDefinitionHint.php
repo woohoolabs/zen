@@ -15,10 +15,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
 {
     /** @var DefinitionHint|null */
     private $defaultDefinitionHint;
-
-    /**
-     * @var DefinitionHint[]
-     */
+    /** @var DefinitionHint[] */
     private array $definitionHints = [];
 
     /**

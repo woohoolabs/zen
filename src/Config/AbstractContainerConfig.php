@@ -15,14 +15,9 @@ use function is_string;
 
 abstract class AbstractContainerConfig implements ContainerConfigInterface
 {
-    /**
-     * @var EntryPointInterface[]
-     */
+    /** @var EntryPointInterface[] */
     protected array $entryPoints;
-
-    /**
-     * @var DefinitionHintInterface[]
-     */
+    /** @var DefinitionHintInterface[] */
     protected array $definitionHints;
 
     public function __construct()

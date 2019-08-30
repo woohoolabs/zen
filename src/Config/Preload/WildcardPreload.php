@@ -9,6 +9,7 @@ use function rtrim;
 class WildcardPreload extends AbstractPreload
 {
     private string $directoryName;
+    private bool $onlyConcreteClasses;
 
     public static function create(string $directoryName): WildcardPreload
     {

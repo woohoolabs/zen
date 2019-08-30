@@ -10,7 +10,6 @@ abstract class AbstractEntryPoint implements EntryPointInterface
 {
     /** @var bool|null */
     private $autoloaded;
-
     /** @var bool|null */
     private $fileBased;
 

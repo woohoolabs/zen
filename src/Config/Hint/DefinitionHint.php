@@ -16,13 +16,9 @@ use function is_scalar;
 class DefinitionHint extends AbstractHint implements DefinitionHintInterface
 {
     private string $className;
-    /**
-     * @var array<string, string|int|float|bool|array<mixed, mixed>|null>
-     */
+    /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private array $parameters;
-    /**
-     * @var array<string, string|int|float|bool|array<mixed, mixed>|null>
-     */
+    /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private array $properties;
 
     public static function singleton(string $className): DefinitionHint

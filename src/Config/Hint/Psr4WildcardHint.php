@@ -17,7 +17,6 @@ use function substr;
 class Psr4WildcardHint extends AbstractHint implements WildcardHintInterface
 {
     private string $sourcePattern;
-
     private string $targetPattern;
 
     public static function singleton(string $sourcePattern, string $targetPattern): Psr4WildcardHint

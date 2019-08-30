@@ -12,9 +12,7 @@ use function str_replace;
 class WildcardHint extends AbstractHint implements WildcardHintInterface
 {
     private string $sourcePath;
-
     private string $sourcePattern;
-
     private string $targetPattern;
 
     public static function singleton(string $sourcePath, string $sourcePattern, string $targetPattern): WildcardHint

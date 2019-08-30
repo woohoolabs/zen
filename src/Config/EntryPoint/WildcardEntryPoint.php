@@ -9,7 +9,6 @@ use function rtrim;
 class WildcardEntryPoint extends AbstractEntryPoint
 {
     private string $directoryName;
-
     private bool $onlyConcreteClasses;
 
     public static function create(string $directoryName, bool $onlyConcreteClasses = true): WildcardEntryPoint

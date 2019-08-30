@@ -9,7 +9,6 @@ use function trim;
 class Psr4NamespacePreload extends AbstractPreload
 {
     private string $namespace;
-
     private bool $recursive;
 
     public static function create(string $namespace, bool $recursive = true): Psr4NamespacePreload

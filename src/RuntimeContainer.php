@@ -16,7 +16,6 @@ class RuntimeContainer implements ContainerInterface
 {
     /** @var ContainerDependencyResolver */
     private $dependencyResolver;
-
     /** @var DefinitionInstantiation */
     private $instantiation;
 

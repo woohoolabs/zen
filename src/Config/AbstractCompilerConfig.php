@@ -20,19 +20,11 @@ use function str_replace;
 
 abstract class AbstractCompilerConfig
 {
-    /**
-     * @var ContainerConfigInterface[]
-     */
+    /** @var ContainerConfigInterface[] */
     protected array $containerConfigs = [];
-
-    /**
-     * @var EntryPointInterface[]
-     */
+    /** @var EntryPointInterface[] */
     protected array $entryPoints;
-
-    /**
-     * @var DefinitionHintInterface[]
-     */
+    /** @var DefinitionHintInterface[] */
     protected array $definitionHints;
 
     public function __construct()

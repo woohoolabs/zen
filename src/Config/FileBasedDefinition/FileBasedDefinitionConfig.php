@@ -8,11 +8,8 @@ use function trim;
 final class FileBasedDefinitionConfig implements FileBasedDefinitionConfigInterface
 {
     private bool $isGlobalFileBasedDefinitionsEnabled;
-
     private string $relativeDefinitionDirectory;
-    /**
-     * @var array<int, string>
-     */
+    /** @var array<int, string> */
     private array $excludedDefinitions;
 
     public static function disabledGlobally(string $relativeDefinitionDirectory = ""): FileBasedDefinitionConfig

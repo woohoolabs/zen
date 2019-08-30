@@ -22,9 +22,7 @@ use const DIRECTORY_SEPARATOR;
 class FileSystemContainerBuilder implements ContainerBuilderInterface
 {
     protected AbstractCompilerConfig $compilerConfig;
-
     private string $containerPath;
-
     private string $preloadFilePath;
 
     public function __construct(AbstractCompilerConfig $compilerConfig, string $containerPath, string $preloadFilePath)
