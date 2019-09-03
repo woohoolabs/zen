@@ -9,34 +9,25 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
+use WoohooLabs\Zen\Config\Preload\PreloadConfig;
+use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
 use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig
 {
-    /** @var string */
-    private $namespace;
-
-    /** @var string */
-    private $className;
-
-    /** @var bool */
-    private $useConstructorInjection;
-
-    /** @var bool */
-    private $usePropertyInjection;
-
-    /** @var bool */
-    private $useBuiltInAutoloading;
-
+    private string $namespace;
+    private string $className;
+    private bool $useConstructorInjection;
+    private bool $usePropertyInjection;
+    private bool $useBuiltInAutoloading;
     /** @var string[] */
-    private $alwaysAutoloadedClasses;
-
-    /** @var bool */
-    private $useFileBasedDefinition;
+    private array $alwaysAutoloadedClasses;
+    private bool $useFileBasedDefinition;
+    private PreloadConfigInterface $preloadConfig;
 
     /**
      * @param AbstractContainerConfig[] $containerConfigs
-     * @param  string[]                  $alwaysAutoloadedClasses
+     * @param string[] $alwaysAutoloadedClasses
      */
     public function __construct(
         array $containerConfigs = [],
@@ -46,7 +37,8 @@ class StubCompilerConfig extends AbstractCompilerConfig
         bool $usePropertyInjection = true,
         bool $useBuiltInAutoloading = false,
         array $alwaysAutoloadedClasses = [],
-        bool $useFileBasedDefinition = false
+        bool $useFileBasedDefinition = false,
+        ?PreloadConfigInterface $preloadConfig = null
     ) {
         $this->namespace = $namespace;
         $this->className = $className;
@@ -56,6 +48,7 @@ class StubCompilerConfig extends AbstractCompilerConfig
         $this->useBuiltInAutoloading = $useBuiltInAutoloading;
         $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
         $this->useFileBasedDefinition = $useFileBasedDefinition;
+        $this->preloadConfig = $preloadConfig ?? new PreloadConfig();
         parent::__construct();
     }
 
@@ -83,6 +76,11 @@ class StubCompilerConfig extends AbstractCompilerConfig
     {
         return AutoloadConfig::create($this->useBuiltInAutoloading, dirname(__DIR__, 2))
             ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
+    }
+
+    public function getPreloadConfig(): PreloadConfigInterface
+    {
+        return $this->preloadConfig;
     }
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface

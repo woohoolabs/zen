@@ -7,14 +7,8 @@ use WoohooLabs\Zen\AbstractCompiledContainer;
 
 class StubContainer extends AbstractCompiledContainer
 {
-    /**
-     * @var bool
-     */
-    private $isSingleton;
-
-    /**
-     * @var string[]
-     */
+    private bool $isSingleton;
+    /** @var string[] */
     protected static $entryPoints = [
         StubContainerEntry::class => "WoohooLabs__Zen__Tests__Double__StubContainerEntry",
     ];

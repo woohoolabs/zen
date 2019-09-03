@@ -10,10 +10,7 @@ final class PreloadConfig implements PreloadConfigInterface
     private string $relativeBasePath;
     /** @var PreloadInterface[] */
     private array $preloadedClasses;
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $preloadedFiles;
 
     public static function create(string $relativeBasePath = ""): PreloadConfig
@@ -24,8 +21,13 @@ final class PreloadConfig implements PreloadConfigInterface
     public function __construct(string $relativeBasePath = "")
     {
         $this->setRelativeBasePath($relativeBasePath);
-        $this->preloadedFiles = [];
         $this->preloadedClasses = [];
+        $this->preloadedFiles = [];
+    }
+
+    public function getRelativeBasePath(): string
+    {
+        return $this->relativeBasePath;
     }
 
     public function setRelativeBasePath(string $relativeBasePath): PreloadConfig
@@ -33,6 +35,14 @@ final class PreloadConfig implements PreloadConfigInterface
         $this->relativeBasePath = rtrim($relativeBasePath, "\\/");
 
         return $this;
+    }
+
+    /**
+     * @return PreloadInterface[]
+     */
+    public function getPreloadedClasses(): array
+    {
+        return $this->preloadedClasses;
     }
 
     /**
@@ -53,19 +63,6 @@ final class PreloadConfig implements PreloadConfigInterface
         $this->preloadedFiles = $preloadedFiles;
 
         return $this;
-    }
-
-    public function getRelativeBasePath(): string
-    {
-        return $this->relativeBasePath;
-    }
-
-    /**
-     * @return PreloadInterface[]
-     */
-    public function getPreloadedClasses(): array
-    {
-        return $this->preloadedClasses;
     }
 
     /**

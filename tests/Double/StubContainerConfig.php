@@ -11,7 +11,7 @@ use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 class StubContainerConfig extends AbstractContainerConfig
 {
     /** @var WildcardHintInterface[] */
-    private $wildcardHints;
+    private array $wildcardHints;
 
     /**
      * @param EntryPointInterface[]|string[]     $entryPoints
