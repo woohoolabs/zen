@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use WoohooLabs\Zen\Container\Builder\FileSystemContainerBuilder;
 
-if (version_compare("7.1.0", PHP_VERSION, ">")) {
+if (version_compare("7.4.0", PHP_VERSION, ">")) {
     fwrite(
         STDERR,
-        "Woohoo Labs. Zen requires PHP 7.1 or later." . PHP_EOL
+        "Woohoo Labs. Zen requires PHP 7.4 or later." . PHP_EOL
     );
 
     die(1);
