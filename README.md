@@ -556,7 +556,7 @@ According to an [initial benchmark](https://github.com/composer/composer/issues/
 can be achieved by only preloading the "hot" files: those ones which are used the most often. Another gotcha is that in order
 for preload to work, every class dependency (parent classes, interfaces, traits, property types, parameter types and return types)
 of a preloaded file must also be preloaded. It means, someone has to resolve these dependencies. And that's something
-Zen can be used for!
+Zen can definitely do!
 
 If you want to create a preload file, first, configure your [Compiler Configuration](#configuring-the-compiler) by adding
 the following method:
