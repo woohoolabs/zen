@@ -1,4 +1,14 @@
-## 2.8.0 - unreleased
+## 2.9.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
+## 2.8.0 - 2019-09-04
 
 ADDED:
 
@@ -12,10 +22,6 @@ CHANGED:
 - Updated dev dependencies
 - Removed unnecessary `::class` references from the generated container
 - Various optimizations via using `array_key_exists()` instead of `isset()` ([further reading](https://github.com/php/php-src/pull/3360))
-
-REMOVED:
-
-FIXED:
 
 ## 2.7.2 - 2019-03-05
 
