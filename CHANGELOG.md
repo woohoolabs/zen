@@ -8,6 +8,12 @@ REMOVED:
 
 FIXED:
 
+## 2.8.1 - 2019-09-04
+
+FIXED:
+
+- Run-time PHP version check
+
 ## 2.8.0 - 2019-09-04
 
 ADDED:
