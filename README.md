@@ -98,14 +98,19 @@ public function __construct(A $a, $b, $c = true)
 ```
 
 In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity!), and
-provide their type with a `@var` PHPDoc tag in the following way:
+provide their type via either a type declaration or a `@var` PHPDoc tag, as shown below:
 
 ```php
 /**
  * @Inject
  * @var A
  */
- private $a;
+ private A $a;
+
+/**
+ * @Inject
+ */
+ private B $b;
 ```
 
 As a rule of thumb, you should only rely on constructor injection, because using test doubles in your unit tests
