@@ -57,6 +57,7 @@ one of the fastest PHP containers out there.
 - Supports autowiring
 - Supports scalar and context-dependent injection
 - Supports dynamic usage for development
+- Supports generating a [preload file](https://wiki.php.net/rfc/preload)
 
 ## Install
 
@@ -545,6 +546,63 @@ compiled container's constructor like below:
 ```php
 $container = new Container("/var/www");
 ```
+
+### Generating a preload file
+
+Preloading is a performance optimizating [feature](https://wiki.php.net/rfc/preload) introduced in PHP 7.4 which compiles
+PHP files and loads them into shared memory by running a dedicated preload file when starting up PHP.
+
+According to an [initial benchmark](https://github.com/composer/composer/issues/7777#issuecomment-440268416), the best speedup
+can be achieved by only preloading the "hot" files: those ones which are used the most often. Another gotcha is that in order
+for preload to work, every class dependency (parent classes, interfaces, traits, property types, parameter types and return types)
+of a preloaded file must also be preloaded. It means, someone has to resolve these dependencies. And that's something
+Zen can be used for!
+
+If you want to create a preload file, first, configure your [Compiler Configuration](#configuring-the-compiler) by adding
+the following method:
+
+```php
+public function getPreloadConfig(): PreloadConfigInterface
+{
+    return PreloadConfig::create()
+        ->setPreloadedClasses(
+            [
+                Psr4NamespacePreload::create('WoohooLabs\Zen\Examples\Domain'),
+                ClassPreload::create('WoohooLabs\Zen\Examples\Utils\AnimalUtil'),
+            ]
+        )
+        ->setPreloadedFiles(
+            [
+                __DIR__ . "/examples/Utils/UserUtil.php",
+            ]
+        );
+}
+```
+
+This configuration indicates that we want to preload the following:
+- All classes and all their dependencies in the `WoohooLabs\Zen\Examples\Domain` namespace
+- The `WoohooLabs\Zen\Examples\Utils\AnimalUtil` class and all its dependencies
+- The `examples/Utils/UserUtil.php` file (dependency resolution isn't performed in case of files)
+
+By default, the PHP files in the preload file will be referenced absolutely. However, if you provide a base path for the
+`PreoadConfig` (either via its constructor, or via the `PreoadConfig::setRelativeBasePath()` method), file references will
+become relative.
+
+In order to create the preload file, you have two possibilities:
+
+1. Build the preload file along with the container:
+```bash
+./bin/zen --preload="/var/www/examples/preload.php" build /var/www/examples/Container.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
+```
+
+This way, first the container is created as `/var/www/examples/Container.php`, then the preload file as `/var/www/examples/preload.php`.
+
+2. Build the preload file separately:
+```bash
+./bin/zen preload /var/www/examples/preload.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
+```
+
+This way, only the preload file is created as `/var/www/examples/Container.php`.
 
 ### File-based definitions
 
