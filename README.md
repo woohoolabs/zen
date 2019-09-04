@@ -549,8 +549,8 @@ $container = new Container("/var/www");
 
 ### Generating a preload file
 
-Preloading is a performance optimizating [feature](https://wiki.php.net/rfc/preload) introduced in PHP 7.4 which compiles
-PHP files and loads them into shared memory by running a dedicated preload file when starting up PHP.
+Preloading is a [feature](https://wiki.php.net/rfc/preload) introduced in PHP 7.4 for optimizing performance by compiling
+PHP files and loading them into shared memory when PHP starts up using a dedicated preload file.
 
 According to an [initial benchmark](https://github.com/composer/composer/issues/7777#issuecomment-440268416), the best speedup
 can be achieved by only preloading the "hot" files: those ones which are used the most often. Another gotcha is that in order
