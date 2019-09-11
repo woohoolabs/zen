@@ -1,7 +1,6 @@
 vendor/
 /.phpcs-cache
 /.phpunit.result.cache
-composer.lock
 phpunit.xml
 examples/Container.php
 examples/Definitions/
