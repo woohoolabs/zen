@@ -1,6 +1,6 @@
 {
     "name": "woohoolabs/zen",
-    "description": "Woohoo Labs. Zen DI Container",
+    "description": "Woohoo Labs. Zen DI Container and preload file generator",
     "type": "library",
     "keywords": ["Woohoo Labs.", "Zen", "DI", "DIC", "Ioc", "Dependency Injection Container", "PSR-11", "Preload", "Preload Generator"],
     "license": "MIT",
