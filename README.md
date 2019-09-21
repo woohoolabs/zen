@@ -82,7 +82,7 @@ As Zen is a PSR-11 compliant container, it supports the `$container->has()` and
 
 ### Types of injection
 
-Only constructor and property injection of objects are supported by Zen.
+Only constructor and property injection of objects and scalar types are supported by Zen.
 
 In order to use constructor injection, you have to declare the type of the parameters or add a `@param` PHPDoc tag for them. If a
 parameter has a default value then this value will be injected. Here is an example of a constructor with valid parameters:
@@ -105,7 +105,7 @@ provide their type via either a type declaration or a `@var` PHPDoc tag, as show
  * @Inject
  * @var A
  */
- private A $a;
+ private $a;
 
 /**
  * @Inject
@@ -215,10 +215,10 @@ class ContainerConfig extends AbstractContainerConfig
     protected function getEntryPoints(): array
     {
         return [
-            // Define all classes in a PSR-4 namespace as Entry Point
+            // Define all classes in a PSR-4 namespace as Entry Points
             Psr4NamespaceEntryPoint::singleton('WoohooLabs\Zen\Examples\Controller'),
 
-            // Define all classes in a directory as Entry Point
+            // Define all classes in a directory as Entry Points
             WildcardEntryPoint::singleton(__DIR__ . "/Controller"),
 
             // Define a class as Entry Point
@@ -296,7 +296,7 @@ protected function getEntryPoints(): array
 }
 ```
 
-This way, you can define all classes in a specific PSR-4 namespace as entry point. Please note that only concrete
+This way, you can define all classes in a specific PSR-4 namespace as Entry Point. Please note that only concrete
 classes are included by default and detection is done recursively.
 
 Last but not least, you are able to define Entry Points individually too:
@@ -484,7 +484,7 @@ on it, then the class/[definition hint](#hints) in the first parameter of the `s
 then a `ContainerException` will be thrown if the interface is injected as a dependency of any class other than the listed
 ones in the second parameter of the `setClassContext()` method calls.
 
-### Built-in autoloading of entry points
+### Built-in autoloading of Entry Points
 
 If you have big object graphs then autoloading can take relatively
 [much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
@@ -597,14 +597,14 @@ In order to create the preload file, you have two possibilities:
 
 1. Build the preload file along with the container:
 ```bash
-./bin/zen --preload="/var/www/examples/preload.php" build /var/www/examples/Container.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
+./vendor/bin/zen --preload="/var/www/examples/preload.php" build /var/www/examples/Container.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
 ```
 
 This way, first the container is created as `/var/www/examples/Container.php`, then the preload file as `/var/www/examples/preload.php`.
 
 2. Build the preload file separately:
 ```bash
-./bin/zen preload /var/www/examples/preload.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
+./vendor/bin/zen preload /var/www/examples/preload.php "WoohooLabs\\Zen\\Examples\\CompilerConfig"
 ```
 
 This way, only the preload file is created as `/var/www/examples/Container.php`.

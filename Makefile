@@ -14,7 +14,7 @@ composer-install: ## Install Composer dependencies
 composer-update: ## Update Composer dependencies
 	docker run --rm --interactive --tty --volume $(PWD):/app --user $(id -u):$(id -g) composer update --ignore-platform-reqs
 
-test: ## Run PHPUnit for the unit tests
+test: ## Run PHPUnit to execute the unit tests
 	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpunit"
 
 phpstan: ## Run PHPStan to perform static analysis
