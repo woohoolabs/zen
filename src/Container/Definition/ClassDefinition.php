@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
@@ -6,6 +7,7 @@ namespace WoohooLabs\Zen\Container\Definition;
 use Closure;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
+
 use function array_key_exists;
 use function array_keys;
 use function implode;
@@ -15,16 +17,12 @@ class ClassDefinition extends AbstractDefinition
 {
     /** @var array<int, array<string, mixed>> */
     private $constructorArguments;
-
     /** @var array<string, array<string, mixed>> */
     private $properties;
-
     /** @var bool */
     private $needsDependencyResolution;
-
     /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private $overriddenConstructorParameters;
-
     /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
     private $overriddenProperties;
 

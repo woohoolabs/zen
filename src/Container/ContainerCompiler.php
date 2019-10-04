@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
@@ -7,6 +8,7 @@ use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function array_key_exists;
 use function array_keys;
 use function str_replace;

@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
 
 use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Utils\NamespaceUtil;
+
 use function class_exists;
 use function interface_exists;
 use function preg_match_all;

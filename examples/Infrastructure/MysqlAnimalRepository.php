@@ -8,10 +8,7 @@ use WoohooLabs\Zen\Examples\Utils\AnimalUtil;
 
 class MysqlAnimalRepository implements AnimalRepositoryInterface
 {
-    /**
-     * @var AnimalUtil
-     */
-    private $util;
+    private AnimalUtil $util;
 
     public function __construct(AnimalUtil $util)
     {

@@ -9,21 +9,12 @@ use WoohooLabs\Zen\Examples\View\PlantView;
 
 class PlantController extends AbstractController
 {
-    /**
-     * @Inject
-     * @var PlantUtil
-     */
-    private $util;
+    /** @Inject */
+    private PlantUtil $util;
 
-    /**
-     * @Inject
-     * @var PlantServiceInterface
-     */
-    private $service;
+    /** @Inject */
+    private PlantServiceInterface $service;
 
-    /**
-     * @Inject
-     * @var PlantView
-     */
-    private $view;
+    /** @Inject */
+    private PlantView $view;
 }

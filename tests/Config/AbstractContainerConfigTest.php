@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Compiler;
@@ -18,6 +19,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BClass;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\BInterface;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\ClassC;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\ClassD;
+
 use function dirname;
 
 class AbstractContainerConfigTest extends TestCase

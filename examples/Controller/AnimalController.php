@@ -8,15 +8,9 @@ use WoohooLabs\Zen\Examples\Service\AnimalServiceInterface;
 
 class AnimalController extends AbstractController
 {
-    /**
-     * @Inject
-     * @var AnimalRepositoryInterface
-     */
-    private $repository;
+    /** @Inject */
+    private AnimalRepositoryInterface $repository;
 
-    /**
-     * @Inject
-     * @var AnimalServiceInterface
-     */
-    private $service;
+    /** @Inject */
+    private AnimalServiceInterface $service;
 }

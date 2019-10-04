@@ -7,9 +7,6 @@ use WoohooLabs\Zen\Examples\Service\AuthenticationService;
 
 abstract class AbstractController implements ControllerInterface
 {
-    /**
-     * @Inject
-     * @var AuthenticationService
-     */
-    protected $authenticationService;
+    /** @Inject */
+    protected AuthenticationService $authenticationService;
 }

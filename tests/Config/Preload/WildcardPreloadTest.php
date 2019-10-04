@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Config\Preload;
@@ -20,6 +21,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\InterfaceG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Wildcard\Subdir\ClassH;
+
 use function dirname;
 
 class WildcardPreloadTest extends TestCase

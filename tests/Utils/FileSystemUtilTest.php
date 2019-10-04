@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Utils;
@@ -13,6 +14,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPoint\EntryPointGAbstract;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPointD1\EntryPointD1;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\EntryPointD2\EntryPointD2;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function dirname;
 
 class FileSystemUtilTest extends TestCase

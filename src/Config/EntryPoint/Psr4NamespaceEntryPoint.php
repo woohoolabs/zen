@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\EntryPoint;
 
 use WoohooLabs\Zen\Utils\NamespaceUtil;
+
 use function trim;
 
 class Psr4NamespaceEntryPoint extends AbstractEntryPoint

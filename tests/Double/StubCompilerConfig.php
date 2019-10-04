@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Double;
@@ -11,6 +12,7 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
+
 use function dirname;
 
 class StubCompilerConfig extends AbstractCompilerConfig

@@ -7,10 +7,7 @@ use WoohooLabs\Zen\Examples\Utils\UserUtil;
 
 class AuthenticationService
 {
-    /**
-     * @var UserUtil
-     */
-    private $util;
+    private UserUtil $util;
 
     public function __construct(UserUtil $util)
     {

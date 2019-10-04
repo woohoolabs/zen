@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Container\Definition;
@@ -15,6 +16,7 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\RuntimeContainer;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
+
 use function dirname;
 use function file_get_contents;
 use function str_replace;

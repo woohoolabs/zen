@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Container\Definition;
@@ -18,6 +19,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
+
 use function dirname;
 use function file_get_contents;
 use function str_replace;

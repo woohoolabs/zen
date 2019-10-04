@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
 
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function class_exists;
 use function preg_match_all;
 use function preg_replace;

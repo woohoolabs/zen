@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Utils;
@@ -9,6 +10,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use Throwable;
+
 use function array_key_exists;
 use function count;
 use function file_get_contents;
@@ -20,6 +22,7 @@ use function strpos;
 use function substr;
 use function substr_compare;
 use function token_get_all;
+
 use const T_ABSTRACT;
 use const T_CLASS;
 use const T_INTERFACE;

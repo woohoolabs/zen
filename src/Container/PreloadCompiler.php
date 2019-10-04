@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function array_merge;
 use function array_unique;
 use function array_values;

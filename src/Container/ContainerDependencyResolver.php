@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
@@ -20,6 +21,7 @@ use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
+
 use function array_diff;
 use function array_flip;
 use function array_key_exists;
@@ -28,47 +30,23 @@ use function implode;
 final class ContainerDependencyResolver
 {
     private SimpleAnnotationReader $annotationReader;
-
     private PhpDocReader $typeHintReader;
-
     private AbstractCompilerConfig $compilerConfig;
-
     private bool $useConstructorInjection;
-
     private bool $usePropertyInjection;
-
-    /**
-     * @var EntryPointInterface[]
-     */
+    /** @var EntryPointInterface[] */
     private array $entryPoints;
-
-    /**
-     * @var DefinitionHintInterface[]
-     */
+    /** @var DefinitionHintInterface[] */
     private array $definitionHints;
-
-    /**
-     * @var DefinitionInterface[]
-     */
+    /** @var DefinitionInterface[] */
     private array $definitions;
-
     private AutoloadConfigInterface $autoloadConfig;
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $excludedAutoloadedFiles;
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $alwaysAutoloadedClases;
-
     private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $excludedFileBasedDefinitions;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)

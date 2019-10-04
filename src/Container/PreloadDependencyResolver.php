@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
@@ -8,21 +9,16 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
+
 use function array_key_exists;
 use function in_array;
 
 final class PreloadDependencyResolver
 {
     private PhpDocReader $typeHintReader;
-
-    /**
-     * @var PreloadInterface[]
-     */
+    /** @var PreloadInterface[] */
     private array $preloads;
-
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $classes;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)

@@ -7,14 +7,8 @@ use WoohooLabs\Zen\Examples\Utils\PlantUtil;
 
 class PlantService implements PlantServiceInterface
 {
-    /**
-     * @var PlantUtil
-     */
-    private $util;
-
-    /**
-     * @var string
-     */
+    private PlantUtil $util;
+    /** @var string */
     private $plantType;
 
     public function __construct(PlantUtil $util, string $plantType)

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
@@ -6,16 +7,15 @@ namespace WoohooLabs\Zen\Container\Definition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\ContainerException;
+
 use function array_key_exists;
 
 class ContextDependentDefinition implements DefinitionInterface
 {
     /** @var string */
     private $referrerId;
-
     /** @var DefinitionInterface|null */
     private $defaultDefinition;
-
     /** @var DefinitionInterface[] */
     private $definitions;
 

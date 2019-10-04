@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\EntryPoint;
@@ -8,10 +9,8 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 
 abstract class AbstractEntryPoint implements EntryPointInterface
 {
-    /** @var bool|null */
-    private $autoloaded;
-    /** @var bool|null */
-    private $fileBased;
+    private ?bool $autoloaded;
+    private ?bool $fileBased;
 
     /**
      * @return $this

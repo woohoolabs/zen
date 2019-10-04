@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
@@ -11,10 +12,8 @@ final class DefinitionCompilation
 {
     /** @var AutoloadConfigInterface */
     private $autoloadConfig;
-
     /** @var FileBasedDefinitionConfigInterface */
     private $fileBasedDefinitionConfig;
-
     /** @var DefinitionInterface[] */
     private $definitions;
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Container;
@@ -7,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Container\PreloadCompiler;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
+
 use function dirname;
 use function file_get_contents;
 

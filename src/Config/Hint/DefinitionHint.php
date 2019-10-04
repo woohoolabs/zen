@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Hint;
@@ -8,6 +9,7 @@ use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\ReferenceDefinition;
 use WoohooLabs\Zen\Exception\ContainerException;
+
 use function array_key_exists;
 use function array_merge;
 use function is_array;

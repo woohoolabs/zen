@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Definition;
@@ -9,6 +10,7 @@ use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function array_flip;
 use function array_key_exists;
 use function array_reverse;
@@ -19,25 +21,18 @@ abstract class AbstractDefinition implements DefinitionInterface
 {
     /** @var string */
     protected $id;
-
     /** @var string */
     protected $hash;
-
     /** @var bool */
     protected $singleton;
-
     /** @var bool */
     private $entryPoint;
-
     /** @var bool */
     private $autoloaded;
-
     /** @var bool */
     private $fileBased;
-
     /** @var int */
     private $singletonReferenceCount;
-
     /** @var int */
     private $prototypeReferenceCount;
 

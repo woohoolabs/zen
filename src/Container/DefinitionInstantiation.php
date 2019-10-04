@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
@@ -10,10 +11,8 @@ final class DefinitionInstantiation
 {
     /** @var RuntimeContainer */
     public $container;
-
     /** @var DefinitionInterface[] */
     public $definitions = [];
-
     /** @var array<string, mixed> */
     public $singletonEntries = [];
 

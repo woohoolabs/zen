@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container\Builder;
@@ -11,12 +12,14 @@ use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Container\PreloadCompiler;
 use WoohooLabs\Zen\Container\PreloadDependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
+
 use function dirname;
 use function file_exists;
 use function file_put_contents;
 use function mkdir;
 use function rmdir;
 use function unlink;
+
 use const DIRECTORY_SEPARATOR;
 
 class FileSystemContainerBuilder implements ContainerBuilderInterface

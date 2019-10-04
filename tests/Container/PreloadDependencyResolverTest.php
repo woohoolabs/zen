@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Container;
@@ -26,6 +27,7 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadH;
+
 use function dirname;
 
 class PreloadDependencyResolverTest extends TestCase

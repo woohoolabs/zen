@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen;
@@ -6,6 +7,7 @@ namespace WoohooLabs\Zen;
 use Closure;
 use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Exception\NotFoundException;
+
 use function array_key_exists;
 
 abstract class AbstractCompiledContainer implements ContainerInterface

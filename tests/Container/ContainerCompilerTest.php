@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Container;
@@ -9,6 +10,7 @@ use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
 use WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition;
 use WoohooLabs\Zen\Tests\Double\StubSingletonDefinition;
+
 use function dirname;
 use function file_get_contents;
 

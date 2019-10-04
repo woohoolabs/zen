@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Preload;
 
 use WoohooLabs\Zen\Utils\NamespaceUtil;
+
 use function trim;
 
 class Psr4NamespacePreload extends AbstractPreload

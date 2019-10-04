@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config\Preload;
 
 use WoohooLabs\Zen\Utils\FileSystemUtil;
+
 use function rtrim;
 
 class WildcardPreload extends AbstractPreload

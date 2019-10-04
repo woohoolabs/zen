@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
@@ -14,6 +15,7 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
+
 use function array_key_exists;
 use function array_merge;
 use function str_replace;

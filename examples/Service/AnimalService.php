@@ -7,10 +7,7 @@ use WoohooLabs\Zen\Examples\Utils\AnimalUtil;
 
 class AnimalService implements AnimalServiceInterface
 {
-    /**
-     * @var AnimalUtil
-     */
-    private $util;
+    private AnimalUtil $util;
 
     public function __construct(AnimalUtil $util)
     {

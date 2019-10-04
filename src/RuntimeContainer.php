@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen;
@@ -9,6 +10,7 @@ use WoohooLabs\Zen\Container\ContainerDependencyResolver;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\Exception\NotFoundException;
+
 use function array_key_exists;
 use function array_merge;
 

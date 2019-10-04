@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Config;
@@ -9,6 +10,7 @@ use WoohooLabs\Zen\Config\Hint\DefinitionHint;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
 use WoohooLabs\Zen\Config\Hint\WildcardHintInterface;
 use WoohooLabs\Zen\Exception\ContainerException;
+
 use function array_map;
 use function array_merge;
 use function is_string;
