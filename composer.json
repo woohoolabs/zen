@@ -51,7 +51,8 @@
     "scripts": {
         "test": "phpunit",
         "phpstan": "phpstan analyse --level 7 src",
-        "phpcs": "phpcs"
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf"
     },
     "config": {
         "sort-packages": true
