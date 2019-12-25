@@ -15,7 +15,7 @@ abstract class AbstractCompiledContainer implements ContainerInterface
     /** @var array<string, object> */
     protected $singletonEntries = [];
     /** @var string[] */
-    protected static $entryPoints = [];
+    protected static array $entryPoints = [];
 
     /**
      * @param string $id

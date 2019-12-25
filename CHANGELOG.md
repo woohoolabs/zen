@@ -4,6 +4,9 @@ ADDED:
 
 CHANGED:
 
+- The generated container uses `declare(strict_types=1)`
+- The generated container is PSR-12 compliant and uses typed properties
+
 REMOVED:
 
 FIXED:

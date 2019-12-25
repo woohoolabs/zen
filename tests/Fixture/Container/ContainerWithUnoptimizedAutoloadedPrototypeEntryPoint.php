@@ -1,23 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WoohooLabs\Zen\Tests\Fixture\Container;
 
 use WoohooLabs\Zen\AbstractCompiledContainer;
 
 class ContainerWithUnoptimizedAutoloadedPrototypeEntryPoint extends AbstractCompiledContainer
 {
-    /**
-     * @var string[]
-     */
-    protected static $entryPoints = [
+    /** @var string[] */
+    protected static array $entryPoints = [
         'WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition' => '_proxy__WoohooLabs__Zen__Tests__Double__StubPrototypeDefinition',
     ];
+    protected string $rootDirectory;
 
-    /**
-     * @var string
-     */
-    protected $rootDirectory;
-
-    public function __construct(string $rootDirectory = '')
+    public function __construct(string $rootDirectory = "")
     {
         $this->rootDirectory = $rootDirectory;
     }

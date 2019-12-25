@@ -30,8 +30,10 @@ final class ContainerCompiler
         $definitionFiles = [];
 
         $container = "<?php\n";
+        $container .= "\ndeclare(strict_types=1);\n";
+
         if ($compilerConfig->getContainerNamespace() !== "") {
-            $container .= "namespace " . $compilerConfig->getContainerNamespace() . ";\n";
+            $container .= "\nnamespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
         $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractCompiledContainer\n";
@@ -40,10 +42,8 @@ final class ContainerCompiler
         // Entry points
         $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
 
-        $container .= "    /**\n";
-        $container .= "     * @var string[]\n";
-        $container .= "     */\n";
-        $container .= "    protected static \$entryPoints = [\n";
+        $container .= "    /** @var string[] */\n";
+        $container .= "    protected static array \$entryPoints = [\n";
         foreach ($entryPointIds as $id) {
             if (array_key_exists($id, $definitions) === false) {
                 continue;
@@ -58,16 +58,13 @@ final class ContainerCompiler
 
             $container .= "        '$id' => '" . $methodName . "',\n";
         }
-        $container .= "    ];\n\n";
+        $container .= "    ];\n";
 
         // Root directory property
-        $container .= "    /**\n";
-        $container .= "     * @var string\n";
-        $container .= "     */\n";
-        $container .= "    protected \$rootDirectory;\n\n";
+        $container .= "    protected string \$rootDirectory;\n\n";
 
         // Constructor
-        $container .= "    public function __construct(string \$rootDirectory = '')\n";
+        $container .= "    public function __construct(string \$rootDirectory = \"\")\n";
         $container .= "    {\n";
         $container .= "        \$this->rootDirectory = \$rootDirectory;\n";
         foreach ($autoloadConfig->getAlwaysAutoloadedClasses() as $autoloadedClass) {

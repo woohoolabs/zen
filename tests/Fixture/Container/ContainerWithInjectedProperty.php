@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WoohooLabs\Zen\Tests\Fixture\Container;
 
 use WoohooLabs\Zen\AbstractCompiledContainer;
@@ -6,12 +9,9 @@ use WoohooLabs\Zen\Tests\Double\StubContainerEntry;
 
 class ContainerWithInjectedProperty extends AbstractCompiledContainer
 {
-    /**
-     * @var string
-     */
-    protected $rootDirectory;
+    protected string $rootDirectory;
 
-    public function __construct(string $rootDirectory = '')
+    public function __construct(string $rootDirectory = "")
     {
         $this->rootDirectory = $rootDirectory;
     }
