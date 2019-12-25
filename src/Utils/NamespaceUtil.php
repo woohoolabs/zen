@@ -23,7 +23,7 @@ class NamespaceUtil
      */
     public static function getClassesInPsr4Namespace(string $namespace, bool $recursive, bool $onlyInstantiable): array
     {
-        /** @var array|null $psr4Prefixes */
+        /** @var array<mixed, mixed>|null $psr4Prefixes */
         static $psr4Prefixes = null;
         if ($psr4Prefixes === null) {
             $psr4Prefixes = require self::getPsr4AutoloaderPath();

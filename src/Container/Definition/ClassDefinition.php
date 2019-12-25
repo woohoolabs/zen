@@ -171,6 +171,9 @@ class ClassDefinition extends AbstractDefinition
         return array_key_exists($name, $this->overriddenConstructorParameters);
     }
 
+    /**
+     * @return array<int, string|int|float|bool|array<mixed, mixed>|null>
+     */
     public function getOverriddenConstructorParameters(): array
     {
         return array_keys($this->overriddenConstructorParameters);
@@ -181,6 +184,9 @@ class ClassDefinition extends AbstractDefinition
         return array_key_exists($name, $this->overriddenProperties);
     }
 
+    /**
+     * @return array<int, string|int|float|bool|array<mixed, mixed>|null>
+     */
     public function getOverriddenProperties(): array
     {
         return array_keys($this->overriddenProperties);

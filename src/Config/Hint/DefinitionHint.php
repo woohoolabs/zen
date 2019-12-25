@@ -42,7 +42,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     }
 
     /**
-     * @param string|int|float|bool|array|null $value
+     * @param string|int|float|bool|array<mixed, mixed>|null $value
      */
     public function setParameter(string $name, $value): DefinitionHint
     {

@@ -6,6 +6,7 @@ CHANGED:
 
 - The generated container uses `declare(strict_types=1)`
 - The generated container is PSR-12 compliant and uses typed properties
+- Upgraded to PHPStan 0.12
 
 REMOVED:
 

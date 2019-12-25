@@ -147,18 +147,20 @@ final class ContainerDependencyResolver
      */
     private function resolveDependencies(string $id, string $parentId, EntryPointInterface $parentEntryPoint, bool $runtime): void
     {
-        $this->definitions[$id]->resolveDependencies();
+        $definition = $this->definitions[$id];
 
-        if ($this->definitions[$id] instanceof ClassDefinition === false) {
+        $definition->resolveDependencies();
+
+        if ($definition instanceof ClassDefinition === false) {
             return;
         }
 
         if ($this->useConstructorInjection) {
-            $this->resolveConstructorArguments($id, $parentId, $this->definitions[$id], $parentEntryPoint, $runtime);
+            $this->resolveConstructorArguments($id, $parentId, $definition, $parentEntryPoint, $runtime);
         }
 
         if ($this->usePropertyInjection) {
-            $this->resolveProperties($id, $parentId, $this->definitions[$id], $parentEntryPoint, $runtime);
+            $this->resolveProperties($id, $parentId, $definition, $parentEntryPoint, $runtime);
         }
     }
 
