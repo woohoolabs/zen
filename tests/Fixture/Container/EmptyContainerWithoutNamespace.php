@@ -6,7 +6,6 @@ use WoohooLabs\Zen\AbstractCompiledContainer;
 
 class EmptyContainerWithoutNamespace extends AbstractCompiledContainer
 {
-    /** @var string[] */
     protected static array $entryPoints = [
     ];
     protected string $rootDirectory;

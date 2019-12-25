@@ -8,7 +8,6 @@ use WoohooLabs\Zen\AbstractCompiledContainer;
 
 class ContainerWithUnoptimizedAutoloadedSingletonEntryPoint extends AbstractCompiledContainer
 {
-    /** @var string[] */
     protected static array $entryPoints = [
         'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => '_proxy__WoohooLabs__Zen__Tests__Double__StubSingletonDefinition',
     ];

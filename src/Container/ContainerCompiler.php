@@ -42,7 +42,6 @@ final class ContainerCompiler
         // Entry points
         $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
 
-        $container .= "    /** @var string[] */\n";
         $container .= "    protected static array \$entryPoints = [\n";
         foreach ($entryPointIds as $id) {
             if (array_key_exists($id, $definitions) === false) {
