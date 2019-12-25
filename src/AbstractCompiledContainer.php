@@ -13,7 +13,7 @@ use function array_key_exists;
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
     /** @var array<string, object> */
-    protected $singletonEntries = [];
+    protected array $singletonEntries = [];
     /** @var array<string, string> */
     protected static array $entryPoints = [];
 
