@@ -3,7 +3,8 @@ version: '2'
 services:
     zen-php:
         container_name: zen-php
-        image: php:7.4.0-cli-alpine3.10
+        image: php:7.4.1-cli-alpine3.10
         volumes:
             - .:/var/www
-        command: /bin/sh -c "cd /var/www; php vendor/bin/phpunit"
+        working_dir: /var/www
+        command: /bin/sh -c "php vendor/bin/phpunit"
