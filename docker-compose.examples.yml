@@ -6,4 +6,5 @@ services:
         image: php:7.4.0-cli-alpine3.10
         volumes:
             - .:/var/www
-        command: /bin/sh -c "cd /var/www; /var/www/examples/run.sh"
+        working_dir: /var/www
+        command: /bin/sh -c "./examples/run.sh"
