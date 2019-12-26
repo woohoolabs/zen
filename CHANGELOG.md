@@ -1,16 +1,20 @@
-## 2.9.0 - unreleased
+## 3.0.0 - unreleased
 
 ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
+## 2.9.0 - 2019-12-26
 
 CHANGED:
 
 - The generated container uses `declare(strict_types=1)`
 - The generated container is PSR-12 compliant and uses typed properties
 - Upgrade to PHPStan 0.12
-
-REMOVED:
-
-FIXED:
 
 ## 2.8.1 - 2019-09-04
 
