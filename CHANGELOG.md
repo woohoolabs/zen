@@ -88,7 +88,7 @@ FIXED:
 CHANGED:
 
 - Apply the Woohoo Labs. Coding Standard
-- Slightly optimized compilation time by importing functions from the global namespace 
+- Slightly optimized compilation time by importing functions from the global namespace
 
 ## 2.5.0 - 2018-12-08
 
