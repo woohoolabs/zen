@@ -2,11 +2,11 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Build Status][ico-build]][link-build]
+[![Coverage Status][ico-coverage]][link-coverage]
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![Gitter][ico-gitter]][link-gitter]
+[![Gitter][ico-support]][link-support]
 
 **Woohoo Labs. Zen is a very fast and easy-to-use, PSR-11 (former Container-Interop) compliant DI Container.**
 
@@ -706,17 +706,17 @@ The MIT License (MIT). Please see the [License File](LICENSE.md) for more inform
 
 [ico-version]: https://img.shields.io/packagist/v/woohoolabs/zen.svg
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
-[ico-travis]: https://img.shields.io/travis/woohoolabs/zen/master.svg
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/woohoolabs/zen.svg
+[ico-build]: https://img.shields.io/github/workflow/status/woohoolabs/zen/Continuous%20Integration
+[ico-coverage]: https://img.shields.io/codecov/c/github/woohoolabs/zen
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/woohoolabs/zen.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/woohoolabs/zen.svg
-[ico-gitter]: https://badges.gitter.im/woohoolabs/zen.svg
+[ico-support]: https://badges.gitter.im/woohoolabs/zen.svg
 
 [link-packagist]: https://packagist.org/packages/woohoolabs/zen
-[link-travis]: https://travis-ci.org/woohoolabs/zen
-[link-scrutinizer]: https://scrutinizer-ci.com/g/woohoolabs/zen/code-structure
+[link-build]: https://github.com/woohoolabs/zen/actions
+[link-coverage]: https://scrutinizer-ci.com/g/woohoolabs/zen/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/woohoolabs/zen
 [link-downloads]: https://packagist.org/packages/woohoolabs/zen
 [link-author]: https://github.com/kocsismate
 [link-contributors]: ../../contributors
-[link-gitter]: https://gitter.im/woohoolabs/zen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[link-support]: https://gitter.im/woohoolabs/zen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
