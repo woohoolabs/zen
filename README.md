@@ -714,7 +714,7 @@ The MIT License (MIT). Please see the [License File](LICENSE.md) for more inform
 
 [link-version]: https://packagist.org/packages/woohoolabs/zen
 [link-build]: https://github.com/woohoolabs/zen/actions
-[link-coverage]: https://scrutinizer-ci.com/g/woohoolabs/zen/code-structure
+[link-coverage]: https://codecov.io/gh/woohoolabs/zen
 [link-code-quality]: https://scrutinizer-ci.com/g/woohoolabs/zen
 [link-downloads]: https://packagist.org/packages/woohoolabs/zen
 [link-author]: https://github.com/kocsismate
