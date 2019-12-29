@@ -1,6 +1,6 @@
 # Woohoo Labs. Zen
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Latest Version on Packagist][ico-version]][link-version]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-build]][link-build]
 [![Coverage Status][ico-coverage]][link-coverage]
@@ -712,7 +712,7 @@ The MIT License (MIT). Please see the [License File](LICENSE.md) for more inform
 [ico-downloads]: https://img.shields.io/packagist/dt/woohoolabs/zen.svg
 [ico-support]: https://badges.gitter.im/woohoolabs/zen.svg
 
-[link-packagist]: https://packagist.org/packages/woohoolabs/zen
+[link-version]: https://packagist.org/packages/woohoolabs/zen
 [link-build]: https://github.com/woohoolabs/zen/actions
 [link-coverage]: https://scrutinizer-ci.com/g/woohoolabs/zen/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/woohoolabs/zen
