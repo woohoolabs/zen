@@ -1,5 +1,6 @@
 parameters:
-    bootstrap: vendor/autoload.php
+    bootstrapFiles:
+        - vendor/autoload.php
     ignoreErrors:
         - '#^Parameter \#4 \$length of function substr_compare expects int, null given\.$#'
         - '#^Variable method call on \$this\(WoohooLabs\\Zen\\AbstractCompiledContainer\)\.$#'
