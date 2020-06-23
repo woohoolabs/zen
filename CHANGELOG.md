@@ -8,9 +8,9 @@ REMOVED:
 
 FIXED:
 
-## 2.9.1 - unreleased
+## 2.9.1 - 2020-06-23
 
-CHANGED:
+ADDED:
 
 - Support for PHP 8
 - Support for PHPUnit 9
