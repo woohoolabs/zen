@@ -15,7 +15,7 @@
         "source": "https://github.com/woohoolabs/zen"
     },
     "require": {
-        "php": "^7.4.0",
+        "php": "^7.4.0||^8.0.0",
         "psr/container": "^1.0.0",
         "doctrine/annotations": "^1.7.0",
         "php-di/phpdoc-reader": "^2.1.0"
