@@ -38,8 +38,7 @@ class CompilerConfig extends AbstractCompilerConfig
 
     public function getAutoloadConfig(): AutoloadConfigInterface
     {
-        ;
-        return AutoloadConfig::enabledGlobally(dirname(__DIR__))
+        return AutoloadConfig::disabledGlobally(dirname(__DIR__))
             ->setAlwaysAutoloadedClasses(
                 [
                     ControllerInterface::class,

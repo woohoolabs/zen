@@ -12,12 +12,10 @@ use function array_key_exists;
 
 class ContextDependentDefinition implements DefinitionInterface
 {
-    /** @var string */
-    private $referrerId;
-    /** @var DefinitionInterface|null */
-    private $defaultDefinition;
+    private string $referrerId;
+    private ?DefinitionInterface $defaultDefinition;
     /** @var DefinitionInterface[] */
-    private $definitions;
+    private array $definitions;
 
     /**
      * @param DefinitionInterface[] $contextDependentDefinitions
@@ -69,6 +67,11 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->isAutoloadingInlinable($parentId, $inline);
     }
 
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        return false;
+    }
+
     public function isSingletonCheckEliminable(string $parentId = ""): bool
     {
         return $this->getDefinition($parentId)->isSingletonCheckEliminable($parentId);
@@ -96,9 +99,8 @@ class ContextDependentDefinition implements DefinitionInterface
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         return $this->getDefinition($parentId)->instantiate($instantiation, $this->referrerId);
     }

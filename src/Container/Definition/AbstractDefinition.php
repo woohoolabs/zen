@@ -19,22 +19,14 @@ use function str_replace;
 
 abstract class AbstractDefinition implements DefinitionInterface
 {
-    /** @var string */
-    protected $id;
-    /** @var string */
-    protected $hash;
-    /** @var bool */
-    protected $singleton;
-    /** @var bool */
-    private $entryPoint;
-    /** @var bool */
-    private $autoloaded;
-    /** @var bool */
-    private $fileBased;
-    /** @var int */
-    private $singletonReferenceCount;
-    /** @var int */
-    private $prototypeReferenceCount;
+    protected string $id;
+    protected string $hash;
+    protected bool $singleton;
+    private bool $entryPoint;
+    private bool $autoloaded;
+    private bool $fileBased;
+    private int $singletonReferenceCount;
+    private int $prototypeReferenceCount;
 
     public function __construct(
         string $id,
@@ -121,6 +113,11 @@ abstract class AbstractDefinition implements DefinitionInterface
         }
 
         return true;
+    }
+
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        return false;
     }
 
     public function isSingletonCheckEliminable(string $parentId = ""): bool

@@ -24,6 +24,15 @@ class SelfDefinition extends AbstractDefinition
         return false;
     }
 
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        if ($this->getPrototypeReferenceCount() + $this->getSingletonReferenceCount() > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function resolveDependencies(): DefinitionInterface
     {
         return $this;
@@ -40,9 +49,8 @@ class SelfDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         return $instantiation->container;
     }

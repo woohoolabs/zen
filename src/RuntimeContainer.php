@@ -16,10 +16,8 @@ use function array_merge;
 
 class RuntimeContainer implements ContainerInterface
 {
-    /** @var ContainerDependencyResolver */
-    private $dependencyResolver;
-    /** @var DefinitionInstantiation */
-    private $instantiation;
+    private ContainerDependencyResolver $dependencyResolver;
+    private DefinitionInstantiation $instantiation;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
@@ -47,10 +45,9 @@ class RuntimeContainer implements ContainerInterface
 
     /**
      * @param string $id
-     * @return mixed
      * @throws NotFoundException
      */
-    public function get($id)
+    public function get($id): mixed
     {
         return $this->instantiation->singletonEntries[$id] ?? ($this->instantiation->definitions[$id] ?? $this->resolve($id))->instantiate($this->instantiation, "");
     }

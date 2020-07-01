@@ -9,8 +9,7 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class ReferenceDefinition extends AbstractDefinition
 {
-    /** @var string */
-    private $referencedId;
+    private string $referencedId;
 
     public static function singleton(
         string $referrerId,
@@ -76,6 +75,19 @@ class ReferenceDefinition extends AbstractDefinition
         $this->referencedId = $referencedId;
     }
 
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        if ($this->isEntryPoint($parentId) === false || $this->isAutoloaded($parentId) || $this->isFileBased($parentId)) {
+            return false;
+        }
+
+        if ($this->getSingletonReferenceCount() + $this->getPrototypeReferenceCount() > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function needsDependencyResolution(): bool
     {
         return false;
@@ -99,9 +111,8 @@ class ReferenceDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         if ($this->singleton === false) {
             return $instantiation->definitions[$this->referencedId]->instantiate($instantiation, $this->id);

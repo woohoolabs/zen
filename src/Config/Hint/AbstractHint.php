@@ -18,20 +18,14 @@ abstract class AbstractHint
         return $this->singleton;
     }
 
-    /**
-     * @return $this
-     */
-    public function setSingletonScope()
+    public function setSingletonScope(): static
     {
         $this->singleton = true;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setPrototypeScope()
+    public function setPrototypeScope(): static
     {
         $this->singleton = false;
 

@@ -25,6 +25,8 @@ interface DefinitionInterface
 
     public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool;
 
+    public function isDefinitionInlinable(string $parentId = ""): bool;
+
     public function isSingletonCheckEliminable(string $parentId = ""): bool;
 
     public function needsDependencyResolution(): bool;
@@ -39,9 +41,8 @@ interface DefinitionInterface
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId);
+    public function instantiate($instantiation, $parentId): mixed;
 
     /**
      * @param string[] $preloadedClasses

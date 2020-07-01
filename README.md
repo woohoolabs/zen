@@ -71,7 +71,7 @@ $ composer require woohoolabs/zen
 > Note: The tests and examples won't be downloaded by default. You have to use `composer require woohoolabs/zen --prefer-source`
 or clone the repository if you need them.
 
-Zen 2.8 requires PHP 7.4 at least, but you may use Zen 2.7.2 for PHP 7.1+.
+Zen 3 requires PHP 8.0 at least, but you may use 2.8.0 for PHP 7.4 and Zen 2.7.2 for PHP 7.1+.
 
 ## Basic Usage
 

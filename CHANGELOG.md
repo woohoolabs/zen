@@ -4,6 +4,9 @@ ADDED:
 
 CHANGED:
 
+- Increased minimum version requirement to PHP 8
+- Significantly improved performance
+
 REMOVED:
 
 FIXED:

@@ -35,29 +35,10 @@ final class ContainerCompiler
         if ($compilerConfig->getContainerNamespace() !== "") {
             $container .= "\nnamespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
-        $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n\n";
+        $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n";
+        $container .= "\nuse WoohooLabs\\Zen\\Exception\\NotFoundException;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractCompiledContainer\n";
         $container .= "{\n";
-
-        // Entry points
-        $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
-
-        $container .= "    protected static array \$entryPoints = [\n";
-        foreach ($entryPointIds as $id) {
-            if (array_key_exists($id, $definitions) === false) {
-                continue;
-            }
-
-            $definition = $definitions[$id];
-
-            $methodName = $this->getHash($id);
-            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
-                $methodName = "_proxy__$methodName";
-            }
-
-            $container .= "        '$id' => '" . $methodName . "',\n";
-        }
-        $container .= "    ];\n";
 
         // Root directory property
         $container .= "    protected string \$rootDirectory;\n\n";
@@ -74,6 +55,68 @@ final class ContainerCompiler
             $filename = FileSystemUtil::getRelativeFilenameForClass($autoloadConfig->getRootDirectory(), $autoloadedClass);
             $container .= "        include_once \$this->rootDirectory . '/$filename';\n";
         }
+        $container .= "    }\n\n";
+
+        $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
+
+        // ContainerInterface::has()
+
+        $container .= "    /**\n";
+        $container .= "     * @param string \$id\n";
+        $container .= "     */\n";
+        $container .= "    public function has(\$id): bool\n";
+        $container .= "    {\n";
+        $container .= "        return match (\$id) {\n";
+
+        foreach ($entryPointIds as $id) {
+            if (array_key_exists($id, $definitions) === false) {
+                continue;
+            }
+
+            $container .= "            '$id' => true,\n";
+        }
+        $container .= "            default => false,\n";
+        $container .= "        };\n";
+        $container .= "    }\n\n";
+
+        // ContainerInterface::get()
+
+        $container .= "    /**\n";
+        $container .= "     * @param string \$id\n";
+        $container .= "     * @throws NotFoundException\n";
+        $container .= "     */\n";
+        $container .= "    public function get(\$id): mixed\n";
+        $container .= "    {\n";
+        $container .= "        return \$this->singletonEntries[\$id] ?? match (\$id) {\n";
+
+        foreach ($entryPointIds as $id) {
+            if (array_key_exists($id, $definitions) === false) {
+                continue;
+            }
+
+            $definition = $definitions[$id];
+
+            if ($definition->isDefinitionInlinable("")) {
+                $container .= "            '$id' => " . $definition->compile(
+                    $definitionCompilation,
+                    "",
+                    3,
+                    true,
+                    $preloadedClasses
+                );
+                $container .= ",\n";
+            } else {
+                $methodName = $this->getHash($id);
+                if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
+                    $methodName = "_proxy__$methodName";
+                }
+
+                $container .= "            '$id' => \$this->$methodName(),\n";
+            }
+
+        }
+        $container .= "            default => throw new NotFoundException(\$id),\n";
+        $container .= "        };\n";
         $container .= "    }\n";
 
         // Entry Points
@@ -83,6 +126,10 @@ final class ContainerCompiler
             }
 
             $definition = $definitions[$id];
+
+            if ($definition->isDefinitionInlinable("")) {
+                continue;
+            }
 
             if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
                 $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());

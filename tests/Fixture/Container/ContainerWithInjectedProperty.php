@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Fixture\Container;
 
 use WoohooLabs\Zen\AbstractCompiledContainer;
+use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Double\StubContainerEntry;
 
 class ContainerWithInjectedProperty extends AbstractCompiledContainer
@@ -16,7 +17,30 @@ class ContainerWithInjectedProperty extends AbstractCompiledContainer
         $this->rootDirectory = $rootDirectory;
     }
 
-    protected function A()
+    /**
+     * @param string $id
+     */
+    public function has($id): bool
+    {
+        return match ($id) {
+            'A' => true,
+            default => false,
+        };
+    }
+
+    /**
+     * @param string $id
+     * @throws NotFoundException
+     */
+    public function get($id): mixed
+    {
+        return $this->singletonEntries[$id] ?? match ($id) {
+            'A' => $this->A(),
+            default => throw new NotFoundException($id),
+        };
+    }
+
+    public function A()
     {
         return true;
     }

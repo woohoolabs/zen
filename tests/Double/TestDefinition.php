@@ -44,9 +44,8 @@ class TestDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         return null;
     }

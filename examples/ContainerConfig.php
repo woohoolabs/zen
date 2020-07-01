@@ -26,7 +26,7 @@ class ContainerConfig extends AbstractContainerConfig
     {
         return [
             ClassEntryPoint::create(AnimalServiceInterface::class)
-                ->disableAutoload()
+                ->autoload()
                 ->fileBased(),
             ClassEntryPoint::create(AnimalController::class)
                 ->autoload()

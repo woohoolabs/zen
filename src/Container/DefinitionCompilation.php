@@ -10,12 +10,10 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 final class DefinitionCompilation
 {
-    /** @var AutoloadConfigInterface */
-    private $autoloadConfig;
-    /** @var FileBasedDefinitionConfigInterface */
-    private $fileBasedDefinitionConfig;
+    private AutoloadConfigInterface $autoloadConfig;
+    private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
     /** @var DefinitionInterface[] */
-    private $definitions;
+    private array $definitions;
 
     /**
      * @param DefinitionInterface[] $definitions

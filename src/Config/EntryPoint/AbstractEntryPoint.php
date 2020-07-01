@@ -12,20 +12,14 @@ abstract class AbstractEntryPoint implements EntryPointInterface
     private ?bool $autoloaded;
     private ?bool $fileBased;
 
-    /**
-     * @return $this
-     */
-    public function autoload()
+    public function autoload(): static
     {
         $this->autoloaded = true;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function disableAutoload()
+    public function disableAutoload(): static
     {
         $this->autoloaded = false;
 
@@ -40,20 +34,14 @@ abstract class AbstractEntryPoint implements EntryPointInterface
         return $this->autoloaded ?? $autoloadConfig->isGlobalAutoloadEnabled();
     }
 
-    /**
-     * @return $this
-     */
-    public function fileBased()
+    public function fileBased(): static
     {
         $this->fileBased = true;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function disableFileBased()
+    public function disableFileBased(): static
     {
         $this->fileBased = false;
 
