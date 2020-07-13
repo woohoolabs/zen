@@ -53,12 +53,6 @@ final class AutoloadedDefinition extends AbstractDefinition
         bool $inline = false,
         array $preloadedClasses = []
     ): string {
-        $indent = $this->indent($indentationLevel);
-
-        $definition = $compilation->getDefinition($this->id);
-        $id = $definition->getId();
-        $hash = $definition->getHash();
-
         $code = $this->includeRelatedClasses(
             $compilation->getAutoloadConfig(),
             $compilation->getDefinitions(),
@@ -68,13 +62,6 @@ final class AutoloadedDefinition extends AbstractDefinition
         );
 
         $code .= "\n";
-        $code .= "${indent}self::\$entryPoints['$id'] = '$hash';\n\n";
-
-        if ($this->isFileBased()) {
-            $code .= "${indent}return require __DIR__ . '/$hash.php';\n";
-        } else {
-            $code .= "${indent}return \$this->$hash();\n";
-        }
 
         return $code;
     }

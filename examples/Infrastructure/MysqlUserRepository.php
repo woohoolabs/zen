@@ -5,6 +5,6 @@ namespace WoohooLabs\Zen\Examples\Infrastructure;
 
 use WoohooLabs\Zen\Examples\Domain\UserRepositoryInterface;
 
-class MySqlUserRepository implements UserRepositoryInterface
+class MysqlUserRepository implements UserRepositoryInterface
 {
 }

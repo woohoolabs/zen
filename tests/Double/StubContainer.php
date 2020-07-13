@@ -26,10 +26,10 @@ class StubContainer extends AbstractCompiledContainer
 
     public function get($id): mixed
     {
-        return isset($this->entryPoints[$id]) ? $this->entryPoints[$id]() : $this->throwNotFoundException($id);
+        return isset($this->entryPoints[$id]) ? $this->{$this->entryPoints[$id]}() : $this->throwNotFoundException($id);
     }
 
-    protected function WoohooLabs__Zen__Tests__Double__StubContainerEntry()
+    public function WoohooLabs__Zen__Tests__Double__StubContainerEntry()
     {
         $entry = new StubContainerEntry();
 
