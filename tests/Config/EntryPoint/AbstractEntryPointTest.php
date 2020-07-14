@@ -5,85 +5,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Config\EntryPoint;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Tests\Double\TestEntryPoint;
 
 class AbstractEntryPointTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function isAutoloadedFalseByDefaultWhenDisabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $isAutoloaded = $entryPoint->isAutoloaded(AutoloadConfig::disabledGlobally());
-
-        $this->assertFalse($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloadedTrueByDefaultWhenEnabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $isAutoloaded = $entryPoint->isAutoloaded(AutoloadConfig::enabledGlobally(""));
-
-        $this->assertTrue($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
-    public function autoloadWhenDisabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $entryPoint->autoload();
-
-        $this->assertTrue($entryPoint->isAutoloaded(AutoloadConfig::disabledGlobally()));
-    }
-
-    /**
-     * @test
-     */
-    public function autoloadWhenEnabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $entryPoint->autoload();
-
-        $this->assertTrue($entryPoint->isAutoloaded(AutoloadConfig::enabledGlobally("")));
-    }
-
-    /**
-     * @test
-     */
-    public function disableAutoloadWhenDisabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $entryPoint->disableAutoload();
-
-        $this->assertFalse($entryPoint->isAutoloaded(AutoloadConfig::disabledGlobally()));
-    }
-
-    /**
-     * @test
-     */
-    public function disabledAutoloadWhenEnabledGlobally(): void
-    {
-        $entryPoint = new TestEntryPoint();
-
-        $entryPoint->autoload();
-        $entryPoint->disableAutoload();
-
-        $this->assertFalse($entryPoint->isAutoloaded(AutoloadConfig::enabledGlobally("")));
-    }
-
     /**
      * @test
      */

@@ -47,11 +47,6 @@ class ContextDependentDefinition implements DefinitionInterface
         return $this->getDefinition($parentId)->isEntryPoint($parentId);
     }
 
-    public function isAutoloaded(string $parentId = ""): bool
-    {
-        return $this->getDefinition($parentId)->isAutoloaded($parentId);
-    }
-
     public function isFileBased(string $parentId = ""): bool
     {
         return $this->getDefinition($parentId)->isFileBased($parentId);
@@ -60,11 +55,6 @@ class ContextDependentDefinition implements DefinitionInterface
     public function increaseReferenceCount(string $parentId, bool $isSingletonParent): DefinitionInterface
     {
         return $this->getDefinition($parentId)->increaseReferenceCount($parentId, $isSingletonParent);
-    }
-
-    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
-    {
-        return $this->getDefinition($parentId)->isAutoloadingInlinable($parentId, $inline);
     }
 
     public function isDefinitionInlinable(string $parentId = ""): bool

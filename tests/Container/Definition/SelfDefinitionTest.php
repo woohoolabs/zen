@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 use WoohooLabs\Zen\Container\Definition\SelfDefinition;
@@ -43,18 +42,6 @@ class SelfDefinitionTest extends TestCase
         $isEntryPoint = $definition->isEntryPoint();
 
         $this->assertFalse($isEntryPoint);
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloaded(): void
-    {
-        $definition = new SelfDefinition("");
-
-        $isAutoloaded = $definition->isAutoloaded();
-
-        $this->assertFalse($isAutoloaded);
     }
 
     /**
@@ -153,7 +140,6 @@ class SelfDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
@@ -174,7 +160,6 @@ class SelfDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
@@ -195,7 +180,6 @@ class SelfDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),

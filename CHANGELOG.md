@@ -9,6 +9,8 @@ CHANGED:
 
 REMOVED:
 
+- Support for built-in autoloading
+
 FIXED:
 
 ## 2.9.1 - 2020-06-23

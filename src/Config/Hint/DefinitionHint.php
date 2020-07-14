@@ -76,7 +76,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
-    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
+    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isFileBased): array
     {
         $isEntryPoint = array_key_exists($id, $entryPoints);
 
@@ -86,7 +86,6 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                     $this->className,
                     $this->singleton,
                     $isEntryPoint,
-                    $isAutoloaded,
                     $isFileBased,
                     $this->parameters,
                     $this->properties
@@ -95,7 +94,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
         }
 
         $result = [
-            $id => new ReferenceDefinition($id, $this->className, $this->singleton, $isEntryPoint, $isAutoloaded, $isFileBased),
+            $id => new ReferenceDefinition($id, $this->className, $this->singleton, $isEntryPoint, $isFileBased),
         ];
 
         if (array_key_exists($this->className, $definitionHints)) {
@@ -103,7 +102,6 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
                 $entryPoints,
                 $definitionHints,
                 $this->className,
-                false,
                 $isFileBased
             );
 
@@ -118,7 +116,6 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
             $this->className,
             $this->singleton,
             array_key_exists($this->className, $entryPoints),
-            false,
             $isFileBased,
             $this->parameters,
             $this->properties

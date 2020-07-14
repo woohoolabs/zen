@@ -134,8 +134,6 @@ class PreloadDependencyResolverTest extends TestCase
                 false,
                 false,
                 false,
-                [],
-                false,
                 PreloadConfig::create()
                     ->setPreloadedClasses($preloadedClasses)
             )

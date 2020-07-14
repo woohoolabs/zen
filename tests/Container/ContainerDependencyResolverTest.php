@@ -142,7 +142,7 @@ class ContainerDependencyResolverTest extends TestCase
                     ->addPropertyFromClass("b", AnnotationB::class)
                     ->addPropertyFromClass("c", AnnotationC::class)
                     ->resolveDependencies(),
-                AnnotationB::class => ClassDefinition::singleton(AnnotationB::class, false, false, false, [], ["value" => "abc"])
+                AnnotationB::class => ClassDefinition::singleton(AnnotationB::class, false, false, [], ["value" => "abc"])
                     ->addPropertyFromClass("e2", AnnotationE::class)
                     ->addPropertyFromClass("d", AnnotationD::class)
                     ->addPropertyFromOverride("value")

@@ -6,7 +6,6 @@ namespace WoohooLabs\Zen\Container\Definition;
 
 use ReflectionClass;
 use ReflectionException;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Utils\FileSystemUtil;
@@ -23,7 +22,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected string $hash;
     protected bool $singleton;
     private bool $entryPoint;
-    private bool $autoloaded;
     private bool $fileBased;
     private int $singletonReferenceCount;
     private int $prototypeReferenceCount;
@@ -32,7 +30,6 @@ abstract class AbstractDefinition implements DefinitionInterface
         string $id,
         bool $isSingleton,
         bool $isEntryPoint,
-        bool $isAutoloaded,
         bool $isFileBased,
         int $singletonReferenceCount,
         int $prototypeReferenceCount
@@ -41,7 +38,6 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->hash = $this->hash($id);
         $this->singleton = $isSingleton;
         $this->entryPoint = $isEntryPoint;
-        $this->autoloaded = $isAutoloaded;
         $this->fileBased = $isFileBased;
         $this->singletonReferenceCount = $singletonReferenceCount;
         $this->prototypeReferenceCount = $prototypeReferenceCount;
@@ -65,11 +61,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     public function isEntryPoint(string $parentId = ""): bool
     {
         return $this->entryPoint;
-    }
-
-    public function isAutoloaded(string $parentId = ""): bool
-    {
-        return $this->autoloaded;
     }
 
     public function isFileBased(string $parentId = ""): bool
@@ -96,23 +87,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     public function getPrototypeReferenceCount(): int
     {
         return $this->prototypeReferenceCount;
-    }
-
-    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
-    {
-        if ($this->autoloaded === false || $this->entryPoint === false || $this->singleton === false) {
-            return false;
-        }
-
-        if ($this->singletonReferenceCount > 0 || $this->prototypeReferenceCount > 0) {
-            return false;
-        }
-
-        if ($inline) {
-            return false;
-        }
-
-        return true;
     }
 
     public function isDefinitionInlinable(string $parentId = ""): bool
@@ -204,48 +178,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected function indent(int $indentationLevel): string
     {
         return str_repeat(" ", $indentationLevel * 4);
-    }
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     * @param string[]              $preloadedClasses
-     */
-    protected function includeRelatedClasses(
-        AutoloadConfigInterface $autoloadConfig,
-        array $definitions,
-        string $id,
-        int $indentationLevel,
-        array $preloadedClasses
-    ): string {
-        $indent = $this->indent($indentationLevel);
-
-        $relatedClasses = [];
-        $this->collectRelatedClasses($definitions, $id, $relatedClasses);
-        $relatedClasses = array_reverse($relatedClasses);
-
-        $rootDirectory = $autoloadConfig->getRootDirectory();
-        $alwaysAutoloadedClasses = array_flip($autoloadConfig->getAlwaysAutoloadedClasses());
-        $neverAutoloadedClasses = array_flip($autoloadConfig->getExcludedClasses());
-
-        $code = "";
-        foreach ($relatedClasses as $relatedClass) {
-            if (array_key_exists($relatedClass, $alwaysAutoloadedClasses) || array_key_exists($relatedClass, $neverAutoloadedClasses)) {
-                continue;
-            }
-
-            if (array_key_exists($relatedClass, $preloadedClasses)) {
-                continue;
-            }
-
-            $filename = FileSystemUtil::getRelativeFilenameForClass($rootDirectory, $relatedClass);
-            if ($filename === "") {
-                continue;
-            }
-
-            $code .= "${indent}include_once \$this->rootDirectory . '/$filename';\n";
-        }
-
-        return $code;
     }
 
     /**

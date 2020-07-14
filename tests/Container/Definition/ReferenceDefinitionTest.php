@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
@@ -15,7 +14,6 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\RuntimeContainer;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorE;
 
 use function dirname;
 use function file_get_contents;
@@ -125,11 +123,10 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenUnoptimizedSingletonClass(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 2);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, 2);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -149,11 +146,10 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenUnoptimizedSingletonEntryPoint(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false, 0, 0);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, 0, 0);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -173,15 +169,14 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenOptimizedSingleton(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, false, 0, 0);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", false, false, 0, 0);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, false, [], [], 1, 0),
+                    "X\\B" => ClassDefinition::singleton("X\\B", false, false, [], [], 1, 0),
                 ]
             ),
             "",
@@ -201,7 +196,6 @@ class ReferenceDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -225,7 +219,6 @@ class ReferenceDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -243,37 +236,12 @@ class ReferenceDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function compileWhenAutoloaded(): void
-    {
-        $definition = ReferenceDefinition::singleton(ConstructorE::class, ConstructorD::class, true, true);
-
-        $compiledDefinition = $definition->compile(
-            new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(dirname(__DIR__, 2)),
-                FileBasedDefinitionConfig::disabledGlobally(),
-                [
-                    ConstructorE::class => $definition,
-                    ConstructorD::class => ClassDefinition::singleton(ConstructorD::class, true),
-                ]
-            ),
-            "",
-            0,
-            false
-        );
-
-        $this->assertEquals($this->getDefinitionSourceCode("ReferenceDefinitionWhenAutoloaded.php"), $compiledDefinition);
-    }
-
-    /**
-     * @test
-     */
     public function compileWhenIndented(): void
     {
         $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -293,11 +261,10 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenInlined(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\A" => $definition,
@@ -317,15 +284,14 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenBothFileBased(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, true);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, true);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally("Definitions"),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, true),
                 ]
             ),
             "",
@@ -341,15 +307,14 @@ class ReferenceDefinitionTest extends TestCase
      */
     public function compileWhenOnlyChildFileBased(): void
     {
-        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false, false);
+        $definition = ReferenceDefinition::singleton("X\\A", "X\\B", true, false);
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally("Definitions"),
                 [
                     "X\\A" => $definition,
-                    "X\\B" => ClassDefinition::singleton("X\\B", true, false, true),
+                    "X\\B" => ClassDefinition::singleton("X\\B", true, true),
                 ]
             ),
             "",

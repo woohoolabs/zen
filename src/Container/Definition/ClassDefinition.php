@@ -32,7 +32,6 @@ class ClassDefinition extends AbstractDefinition
     public static function singleton(
         string $className,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -43,7 +42,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             true,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
@@ -59,7 +57,6 @@ class ClassDefinition extends AbstractDefinition
     public static function prototype(
         string $className,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -70,7 +67,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             false,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
@@ -87,7 +83,6 @@ class ClassDefinition extends AbstractDefinition
         string $className,
         bool $isSingleton = true,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -98,7 +93,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             $isSingleton,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -164,7 +158,7 @@ class ClassDefinition extends AbstractDefinition
 
     public function isDefinitionInlinable(string $parentId = ""): bool
     {
-        if ($this->isEntryPoint($parentId) === false || $this->isAutoloaded($parentId) || $this->isFileBased($parentId)) {
+        if ($this->isEntryPoint($parentId) === false || $this->isFileBased($parentId)) {
             return false;
         }
 
@@ -252,17 +246,6 @@ class ClassDefinition extends AbstractDefinition
         $hasConstructorArguments = $this->constructorArguments !== [];
 
         $code = "";
-
-        if ($this->isAutoloadingInlinable($parentId, $inline)) {
-            $code .= $this->includeRelatedClasses(
-                $compilation->getAutoloadConfig(),
-                $compilation->getDefinitions(),
-                $this->id,
-                $indentationLevel,
-                $preloadedClasses
-            );
-            $code .= "\n";
-        }
 
         if ($inline === false) {
             $code .= "${indent}return ";

@@ -6,7 +6,6 @@ namespace WoohooLabs\Zen\Tests\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\Hint\DefinitionHint;
@@ -50,18 +49,6 @@ class AbstractCompilerConfigTest extends TestCase
         $containerHash = $config->getContainerHash();
 
         $this->assertEquals("A__B__C__D", $containerHash);
-    }
-
-    /**
-     * @test
-     */
-    public function getDefaultAutoloadConfig(): void
-    {
-        $config = new DummyCompilerConfig();
-
-        $autoloadConfig = $config->getAutoloadConfig();
-
-        $this->assertEquals(AutoloadConfig::disabledGlobally(), $autoloadConfig);
     }
 
     /**

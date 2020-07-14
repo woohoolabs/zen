@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 final class DefinitionCompilation
 {
-    private AutoloadConfigInterface $autoloadConfig;
     private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
     /** @var DefinitionInterface[] */
     private array $definitions;
@@ -19,18 +17,11 @@ final class DefinitionCompilation
      * @param DefinitionInterface[] $definitions
      */
     public function __construct(
-        AutoloadConfigInterface $autoloadConfig,
         FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig,
         array $definitions
     ) {
-        $this->autoloadConfig = $autoloadConfig;
         $this->fileBasedDefinitionConfig = $fileBasedDefinitionConfig;
         $this->definitions = $definitions;
-    }
-
-    public function getAutoloadConfig(): AutoloadConfigInterface
-    {
-        return $this->autoloadConfig;
     }
 
     public function getFileBasedDefinitionConfig(): FileBasedDefinitionConfigInterface

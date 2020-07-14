@@ -6,8 +6,6 @@ namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\AbstractContainerConfig;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
@@ -21,15 +19,12 @@ class StubCompilerConfig extends AbstractCompilerConfig
     private string $className;
     private bool $useConstructorInjection;
     private bool $usePropertyInjection;
-    private bool $useBuiltInAutoloading;
     /** @var string[] */
-    private array $alwaysAutoloadedClasses;
     private bool $useFileBasedDefinition;
     private PreloadConfigInterface $preloadConfig;
 
     /**
      * @param AbstractContainerConfig[] $containerConfigs
-     * @param string[] $alwaysAutoloadedClasses
      */
     public function __construct(
         array $containerConfigs = [],
@@ -37,8 +32,6 @@ class StubCompilerConfig extends AbstractCompilerConfig
         string $className = "",
         bool $useConstructorInjection = true,
         bool $usePropertyInjection = true,
-        bool $useBuiltInAutoloading = false,
-        array $alwaysAutoloadedClasses = [],
         bool $useFileBasedDefinition = false,
         ?PreloadConfigInterface $preloadConfig = null
     ) {
@@ -47,8 +40,6 @@ class StubCompilerConfig extends AbstractCompilerConfig
         $this->containerConfigs = $containerConfigs;
         $this->useConstructorInjection = $useConstructorInjection;
         $this->usePropertyInjection = $usePropertyInjection;
-        $this->useBuiltInAutoloading = $useBuiltInAutoloading;
-        $this->alwaysAutoloadedClasses = $alwaysAutoloadedClasses;
         $this->useFileBasedDefinition = $useFileBasedDefinition;
         $this->preloadConfig = $preloadConfig ?? new PreloadConfig();
         parent::__construct();
@@ -72,12 +63,6 @@ class StubCompilerConfig extends AbstractCompilerConfig
     public function usePropertyInjection(): bool
     {
         return $this->usePropertyInjection;
-    }
-
-    public function getAutoloadConfig(): AutoloadConfigInterface
-    {
-        return AutoloadConfig::create($this->useBuiltInAutoloading, dirname(__DIR__, 2))
-            ->setAlwaysAutoloadedClasses($this->alwaysAutoloadedClasses);
     }
 
     public function getPreloadConfig(): PreloadConfigInterface

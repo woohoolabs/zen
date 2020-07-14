@@ -10,13 +10,6 @@ use WoohooLabs\Zen\Tests\Double\StubContainerEntry;
 
 class ContainerWithInjectedProperty extends AbstractCompiledContainer
 {
-    protected string $rootDirectory;
-
-    public function __construct(string $rootDirectory = "")
-    {
-        $this->rootDirectory = $rootDirectory;
-    }
-
     /**
      * @param string $id
      */

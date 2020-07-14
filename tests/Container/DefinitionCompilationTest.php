@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
@@ -15,29 +14,9 @@ class DefinitionCompilationTest extends TestCase
     /**
      * @test
      */
-    public function getAutoloadConfig(): void
-    {
-        $compilation = new DefinitionCompilation(
-            AutoloadConfig::disabledGlobally(),
-            FileBasedDefinitionConfig::disabledGlobally(),
-            []
-        );
-
-        $autoloadConfig = $compilation->getAutoloadConfig();
-
-        $this->assertEquals(AutoloadConfig::disabledGlobally(), $autoloadConfig);
-    }
-
-    /**
-     * @test
-     */
     public function getFileBasedDefinitionConfig(): void
     {
-        $compilation = new DefinitionCompilation(
-            AutoloadConfig::disabledGlobally(),
-            FileBasedDefinitionConfig::disabledGlobally(),
-            []
-        );
+        $compilation = new DefinitionCompilation(FileBasedDefinitionConfig::disabledGlobally(), []);
 
         $fileBasedDefinitionConfig = $compilation->getFileBasedDefinitionConfig();
 
@@ -50,7 +29,6 @@ class DefinitionCompilationTest extends TestCase
     public function getDefinitions(): void
     {
         $compilation = new DefinitionCompilation(
-            AutoloadConfig::disabledGlobally(),
             FileBasedDefinitionConfig::disabledGlobally(),
             [
                 "X\\A" => ClassDefinition::singleton(""),
@@ -73,7 +51,6 @@ class DefinitionCompilationTest extends TestCase
     public function getDefinition(): void
     {
         $compilation = new DefinitionCompilation(
-            AutoloadConfig::disabledGlobally(),
             FileBasedDefinitionConfig::disabledGlobally(),
             [
                 "X\\A" => ClassDefinition::singleton(""),

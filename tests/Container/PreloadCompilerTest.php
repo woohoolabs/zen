@@ -62,8 +62,6 @@ class PreloadCompilerTest extends TestCase
                 false,
                 false,
                 false,
-                [],
-                false,
                 new PreloadConfig("/var/www")
             ),
             [

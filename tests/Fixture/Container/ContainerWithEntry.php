@@ -9,13 +9,6 @@ use WoohooLabs\Zen\Exception\NotFoundException;
 
 class ContainerWithEntry extends AbstractCompiledContainer
 {
-    protected string $rootDirectory;
-
-    public function __construct(string $rootDirectory = "")
-    {
-        $this->rootDirectory = $rootDirectory;
-    }
-
     /**
      * @param string $id
      */

@@ -15,7 +15,6 @@ class ReferenceDefinition extends AbstractDefinition
         string $referrerId,
         string $referencedId,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -25,7 +24,6 @@ class ReferenceDefinition extends AbstractDefinition
             $referencedId,
             true,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -36,7 +34,6 @@ class ReferenceDefinition extends AbstractDefinition
         string $referrerId,
         string $referencedId,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -46,7 +43,6 @@ class ReferenceDefinition extends AbstractDefinition
             $referencedId,
             false,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -58,7 +54,6 @@ class ReferenceDefinition extends AbstractDefinition
         string $referencedId,
         bool $isSingleton = true,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -67,7 +62,6 @@ class ReferenceDefinition extends AbstractDefinition
             $referrerId,
             $isSingleton,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -77,7 +71,7 @@ class ReferenceDefinition extends AbstractDefinition
 
     public function isDefinitionInlinable(string $parentId = ""): bool
     {
-        if ($this->isEntryPoint($parentId) === false || $this->isAutoloaded($parentId) || $this->isFileBased($parentId)) {
+        if ($this->isEntryPoint($parentId) === false || $this->isFileBased($parentId)) {
             return false;
         }
 
@@ -135,17 +129,6 @@ class ReferenceDefinition extends AbstractDefinition
         $indent = $this->indent($indentationLevel);
 
         $code = "";
-
-        if ($this->isAutoloadingInlinable($parentId, $inline)) {
-            $code .= $this->includeRelatedClasses(
-                $compilation->getAutoloadConfig(),
-                $compilation->getDefinitions(),
-                $this->id,
-                $indentationLevel,
-                $preloadedClasses
-            );
-            $code .= "\n";
-        }
 
         if ($inline === false) {
             $code .= "${indent}return ";

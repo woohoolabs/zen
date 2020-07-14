@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
-use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
-use WoohooLabs\Zen\Utils\FileSystemUtil;
 
 use function array_key_exists;
 use function array_keys;
@@ -22,10 +20,9 @@ final class ContainerCompiler
      */
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions, array $preloadedClasses): array
     {
-        $autoloadConfig = $compilerConfig->getAutoloadConfig();
         $fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
         $fileBasedDefinitionDirectory = $fileBasedDefinitionConfig->getRelativeDefinitionDirectory();
-        $definitionCompilation = new DefinitionCompilation($autoloadConfig, $fileBasedDefinitionConfig, $definitions);
+        $definitionCompilation = new DefinitionCompilation($fileBasedDefinitionConfig, $definitions);
 
         $definitionFiles = [];
 
@@ -39,23 +36,6 @@ final class ContainerCompiler
         $container .= "use WoohooLabs\\Zen\\Exception\\NotFoundException;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractCompiledContainer\n";
         $container .= "{\n";
-
-        // Root directory property
-        $container .= "    protected string \$rootDirectory;\n\n";
-
-        // Constructor
-        $container .= "    public function __construct(string \$rootDirectory = \"\")\n";
-        $container .= "    {\n";
-        $container .= "        \$this->rootDirectory = \$rootDirectory;\n";
-        foreach ($autoloadConfig->getAlwaysAutoloadedClasses() as $autoloadedClass) {
-            if (array_key_exists($autoloadedClass, $preloadedClasses)) {
-                continue;
-            }
-
-            $filename = FileSystemUtil::getRelativeFilenameForClass($autoloadConfig->getRootDirectory(), $autoloadedClass);
-            $container .= "        include_once \$this->rootDirectory . '/$filename';\n";
-        }
-        $container .= "    }\n\n";
 
         $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
 
@@ -127,16 +107,9 @@ final class ContainerCompiler
                 continue;
             }
 
-            $autoloadingCode = "";
-            if ($definition->isAutoloaded() && array_key_exists($id, $preloadedClasses) === false) {
-                $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
-                $autoloadingCode .= $autoloadedDefinition->compile($definitionCompilation, "", $definition->isFileBased() ? 0 : 2, false, $preloadedClasses);
-            }
-
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $autoloadingCode;
                 $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
 
                 if ($definition->isEntryPoint()) {
@@ -146,7 +119,6 @@ final class ContainerCompiler
                 }
             } else {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $autoloadingCode;
                 $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
                 $container .= "    }\n";
             }

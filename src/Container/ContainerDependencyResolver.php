@@ -11,7 +11,6 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
@@ -40,11 +39,6 @@ final class ContainerDependencyResolver
     private array $definitionHints;
     /** @var DefinitionInterface[] */
     private array $definitions;
-    private AutoloadConfigInterface $autoloadConfig;
-    /** @var string[] */
-    private array $excludedAutoloadedFiles;
-    /** @var string[] */
-    private array $alwaysAutoloadedClases;
     private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
     /** @var string[] */
     private array $excludedFileBasedDefinitions;
@@ -60,10 +54,6 @@ final class ContainerDependencyResolver
         $this->usePropertyInjection = $compilerConfig->usePropertyInjection();
         $this->entryPoints = $compilerConfig->getEntryPointMap();
         $this->definitionHints = $compilerConfig->getDefinitionHints();
-
-        $this->autoloadConfig = $compilerConfig->getAutoloadConfig();
-        $this->excludedAutoloadedFiles = array_flip($this->autoloadConfig->getExcludedClasses());
-        $this->alwaysAutoloadedClases = array_flip($this->autoloadConfig->getAlwaysAutoloadedClasses());
 
         $this->fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
         $this->excludedFileBasedDefinitions = array_flip($this->fileBasedDefinitionConfig->getExcludedDefinitions());
@@ -110,20 +100,13 @@ final class ContainerDependencyResolver
             return;
         }
 
-        if ($runtime) {
-            $isAutoloaded = false;
-            $isFileBased = false;
-        } else {
-            $isAutoloaded = $this->isAutoloaded($id, $parentEntryPoint);
-            $isFileBased = $this->isFileBased($id, $parentEntryPoint);
-        }
+        $isFileBased = $runtime ? false : $this->isFileBased($id, $parentEntryPoint);
 
         if (array_key_exists($id, $this->definitionHints)) {
             $definitions = $this->definitionHints[$id]->toDefinitions(
                 $this->entryPoints,
                 $this->definitionHints,
                 $id,
-                $isAutoloaded,
                 $isFileBased
             );
 
@@ -138,7 +121,7 @@ final class ContainerDependencyResolver
             return;
         }
 
-        $this->definitions[$id] = new ClassDefinition($id, true, array_key_exists($id, $this->entryPoints), $isAutoloaded, $isFileBased);
+        $this->definitions[$id] = new ClassDefinition($id, true, array_key_exists($id, $this->entryPoints), $isFileBased);
         $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
     }
 
@@ -281,19 +264,6 @@ final class ContainerDependencyResolver
                 implode(", ", $invalidPropertyOverrides) . "!"
             );
         }
-    }
-
-    private function isAutoloaded(string $id, EntryPointInterface $parentEntryPoint): bool
-    {
-        if (array_key_exists($id, $this->excludedAutoloadedFiles)) {
-            return false;
-        }
-
-        if (array_key_exists($id, $this->alwaysAutoloadedClases)) {
-            return true;
-        }
-
-        return $parentEntryPoint->isAutoloaded($this->autoloadConfig);
     }
 
     private function isFileBased(string $id, EntryPointInterface $parentEntryPoint): bool

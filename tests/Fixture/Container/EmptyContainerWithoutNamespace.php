@@ -7,13 +7,6 @@ use WoohooLabs\Zen\Exception\NotFoundException;
 
 class EmptyContainerWithoutNamespace extends AbstractCompiledContainer
 {
-    protected string $rootDirectory;
-
-    public function __construct(string $rootDirectory = "")
-    {
-        $this->rootDirectory = $rootDirectory;
-    }
-
     /**
      * @param string $id
      */

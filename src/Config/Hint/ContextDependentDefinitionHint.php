@@ -61,7 +61,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
-    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
+    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isFileBased): array
     {
         $isEntryPoint = array_key_exists($id, $entryPoints);
 
@@ -71,7 +71,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $this->defaultDefinitionHint->getClassName(),
                 $this->defaultDefinitionHint->isSingleton(),
                 $isEntryPoint,
-                $isAutoloaded,
                 $isFileBased
             );
         }
@@ -82,7 +81,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $definitionHint->getClassName(),
                 $definitionHint->isSingleton(),
                 $isEntryPoint,
-                $isAutoloaded,
                 $isFileBased
             );
         }
@@ -101,7 +99,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $entryPoints,
                 $definitionHints,
                 $definitionHint->getClassName(),
-                $isAutoloaded,
                 $isFileBased
             );
         }
