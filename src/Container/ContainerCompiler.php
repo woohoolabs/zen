@@ -48,12 +48,13 @@ final class ContainerCompiler
         $container .= "    {\n";
         $container .= "        return match (\$id) {\n";
 
-        foreach ($entryPointIds as $id) {
+        $entryPointCount = count($entryPointIds);
+        foreach ($entryPointIds as $i => $id) {
             if (array_key_exists($id, $definitions) === false) {
                 continue;
             }
 
-            $container .= "            '$id' => true,\n";
+            $container .= "            '$id'" . ($i === $entryPointCount - 1 ? " => true" : "") . ",\n";
         }
         $container .= "            default => false,\n";
         $container .= "        };\n";
