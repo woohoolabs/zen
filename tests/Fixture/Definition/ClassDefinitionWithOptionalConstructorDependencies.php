@@ -8,5 +8,5 @@ return new \X\A(
     NULL,
     array (
   'a' => false,
-)
+),
 );

@@ -267,25 +267,23 @@ class ClassDefinition extends AbstractDefinition
 
         $constructorIndentationLevel = $indentationLevel + ($hasProperties ? 1 : 0);
         $constructorIndent = $this->indent($constructorIndentationLevel);
-        $constructorArguments = [];
 
         foreach ($this->constructorArguments as $constructorArgument) {
             if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
+                $code .= "\n${constructorIndent}${tab}" . $this->compileEntryReference(
                     $definition,
                     $compilation,
                     $constructorIndentationLevel + 1,
                     $preloadedClasses
-                );
+                ) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
-                $constructorArguments[] = "${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]);
+                $code .= "\n${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
             }
         }
 
         if ($hasConstructorArguments) {
-            $code .= "\n" . implode(",\n", $constructorArguments);
             $code .= "\n${constructorIndent})";
         }
 
