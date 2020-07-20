@@ -26,10 +26,6 @@ class SelfDefinition extends AbstractDefinition
 
     public function isDefinitionInlinable(string $parentId = ""): bool
     {
-        if ($this->getPrototypeReferenceCount() + $this->getSingletonReferenceCount() > 0) {
-            return false;
-        }
-
         return true;
     }
 

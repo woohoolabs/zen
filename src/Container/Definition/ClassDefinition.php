@@ -158,11 +158,11 @@ class ClassDefinition extends AbstractDefinition
 
     public function isDefinitionInlinable(string $parentId = ""): bool
     {
-        if ($this->isEntryPoint($parentId) === false || $this->isFileBased($parentId)) {
-            return false;
+        if ($this->isFileBased($parentId)) {
+            return true;
         }
 
-        if ($this->getSingletonReferenceCount() + $this->getPrototypeReferenceCount() > 0) {
+        if ($this->getSingletonReferenceCount() || $this->getPrototypeReferenceCount()) {
             return false;
         }
 
