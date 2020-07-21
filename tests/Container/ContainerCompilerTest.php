@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use WoohooLabs\Zen\Container\ContainerCompiler;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
-use WoohooLabs\Zen\Tests\Double\StubPrototypeDefinition;
 use WoohooLabs\Zen\Tests\Double\StubSingletonDefinition;
 
 use function dirname;

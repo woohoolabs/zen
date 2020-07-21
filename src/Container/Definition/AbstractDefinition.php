@@ -8,11 +8,8 @@ use ReflectionClass;
 use ReflectionException;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
-use WoohooLabs\Zen\Utils\FileSystemUtil;
 
-use function array_flip;
 use function array_key_exists;
-use function array_reverse;
 use function str_repeat;
 use function str_replace;
 

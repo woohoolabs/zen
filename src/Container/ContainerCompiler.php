@@ -9,6 +9,7 @@ use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
 
 use function array_key_exists;
 use function array_keys;
+use function count;
 use function str_replace;
 
 final class ContainerCompiler
@@ -90,7 +91,6 @@ final class ContainerCompiler
                 $methodName = $this->getHash($id);
                 $container .= "            '$id' => \$this->$methodName(),\n";
             }
-
         }
         $container .= "            default => throw new NotFoundException(\$id),\n";
         $container .= "        };\n";

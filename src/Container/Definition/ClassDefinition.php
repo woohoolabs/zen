@@ -10,7 +10,6 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 use function array_key_exists;
 use function array_keys;
-use function implode;
 use function var_export;
 
 class ClassDefinition extends AbstractDefinition
