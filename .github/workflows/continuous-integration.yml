@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --ignore-platform-reqs
 
       - name: "Run PHP CodeSniffer"
         run: php8.0 vendor/bin/phpcs --standard=phpcs.xml
@@ -67,7 +67,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins --ignore-platform-reqs
 
       - name: "Run phpstan/phpstan"
         run: php8.0 vendor/bin/phpstan analyse --level 8 src
@@ -144,7 +144,7 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins --ignore-platform-reqs
 
       - name: "Dump Xdebug filter with phpunit/phpunit"
         run: php8.0 vendor/bin/phpunit --dump-xdebug-filter=.build/phpunit/xdebug-filter.php
