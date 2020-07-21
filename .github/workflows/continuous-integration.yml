@@ -14,14 +14,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 7.4"
-        run: |
-          sudo add-apt-repository ppa:ondrej/php
-          sudo apt-get update
-          sudo apt-get install php7.4 php7.4-mbstring php7.4-xml
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer:v2
 
       - name: "Validate composer.json"
-        run: php7.4 $(which composer) validate --strict
+        run: php8.0 $(which composer) validate --strict
 
       - name: "Cache dependencies"
         uses: actions/cache@v1
@@ -33,10 +35,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php7.4 $(which composer) install --no-interaction --no-progress --no-suggest
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest
 
       - name: "Run PHP CodeSniffer"
-        run: php7.4 vendor/bin/phpcs --standard=phpcs.xml
+        run: php8.0 vendor/bin/phpcs --standard=phpcs.xml
 
   static-code-analysis:
     name: "Static Code Analysis"
@@ -47,11 +49,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 7.4"
-        run: |
-          sudo add-apt-repository ppa:ondrej/php
-          sudo apt-get update
-          sudo apt-get install php7.4 php7.4-mbstring php7.4-xml
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer:v2
 
       - name: "Cache dependencies"
         uses: actions/cache@v1
@@ -63,10 +67,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php7.4 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
 
       - name: "Run phpstan/phpstan"
-        run: php7.4 vendor/bin/phpstan analyse --level 7 src
+        run: php8.0 vendor/bin/phpstan analyse --level 8 src
 
   tests:
     name: "Tests"
@@ -76,7 +80,7 @@ jobs:
     strategy:
       matrix:
         php-binary:
-          - php7.4
+          - php8.0
 
         dependencies:
           - lowest
@@ -86,11 +90,12 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 7.4"
-        run: |
-          sudo add-apt-repository ppa:ondrej/php
-          sudo apt-get update
-          sudo apt-get install php7.4 php7.4-mbstring php7.4-xml
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          tools: composer:v2
 
       - name: "Cache dependencies"
         uses: actions/cache@v1
@@ -121,11 +126,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 7.4"
-        run: |
-          sudo add-apt-repository ppa:ondrej/php
-          sudo apt-get update
-          sudo apt-get install php7.4 php7.4-mbstring php7.4-xdebug php7.4-xml
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          coverage: xdebug
+          tools: composer:v2
 
       - name: "Cache dependencies"
         uses: actions/cache@v1
@@ -137,13 +144,13 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php7.4 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
 
       - name: "Dump Xdebug filter with phpunit/phpunit"
-        run: php7.4 vendor/bin/phpunit --dump-xdebug-filter=.build/phpunit/xdebug-filter.php
+        run: php8.0 vendor/bin/phpunit --dump-xdebug-filter=.build/phpunit/xdebug-filter.php
 
       - name: "Collect code coverage with Xdebug and phpunit/phpunit"
-        run: php7.4 vendor/bin/phpunit --coverage-clover=build/logs/clover.xml --prepend=.build/phpunit/xdebug-filter.php
+        run: php8.0 vendor/bin/phpunit --coverage-clover=build/logs/clover.xml --prepend=.build/phpunit/xdebug-filter.php
 
       - name: "Download code coverage uploader for Codecov.io"
         run: curl -s https://codecov.io/bash -o codecov
