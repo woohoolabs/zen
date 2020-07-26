@@ -81,7 +81,7 @@ final class ContainerCompiler
             if ($definition->isDefinitionInlinable("")) {
                 if ($definition->isFileBased("")) {
                     $filename = $this->getHash($id) . ".php";
-                    $container .= "            '$id' => require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+                    $container .= "            '$id' => require __DIR__ . '/$fileBasedDefinitionDirectory/$filename',\n";
                 } else {
                     $container .= "            '$id' => " . $definition->compile(
                             $definitionCompilation,
@@ -109,21 +109,13 @@ final class ContainerCompiler
 
             $definition = $definitions[$id];
 
-            if ($definition->isFileBased()) {
-                $filename = $this->getHash($id) . ".php";
-                $definitionFiles[$filename] = "<?php\n\n";
-                $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
-
-                if ($definition->isDefinitionInlinable("") === false && $definition->isEntryPoint()) {
-                    $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                    $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
-                    $container .= "    }\n";
-                }
-            } elseif ($definition->isDefinitionInlinable("") === false) {
-                $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
-                $container .= "    }\n";
+            if ($definition->isDefinitionInlinable("")) {
+                continue;
             }
+
+            $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
+            $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
+            $container .= "    }\n";
         }
 
         $container .= "}\n";
