@@ -79,14 +79,19 @@ final class ContainerCompiler
             $definition = $definitions[$id];
 
             if ($definition->isDefinitionInlinable("")) {
-                $container .= "            '$id' => " . $definition->compile(
-                    $definitionCompilation,
-                    "",
-                    3,
-                    true,
-                    $preloadedClasses
-                );
-                $container .= ",\n";
+                if ($definition->isFileBased("")) {
+                    $filename = $this->getHash($id) . ".php";
+                    $container .= "            '$id' => require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+                } else {
+                    $container .= "            '$id' => " . $definition->compile(
+                            $definitionCompilation,
+                            "",
+                            3,
+                            true,
+                            $preloadedClasses
+                        );
+                    $container .= ",\n";
+                }
             } else {
                 $methodName = $this->getHash($id);
                 $container .= "            '$id' => \$this->$methodName(),\n";
@@ -104,21 +109,17 @@ final class ContainerCompiler
 
             $definition = $definitions[$id];
 
-            if ($definition->isDefinitionInlinable("")) {
-                continue;
-            }
-
             if ($definition->isFileBased()) {
                 $filename = $this->getHash($id) . ".php";
                 $definitionFiles[$filename] = "<?php\n\n";
                 $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
 
-                if ($definition->isEntryPoint()) {
+                if ($definition->isDefinitionInlinable("") === false && $definition->isEntryPoint()) {
                     $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
                     $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
                     $container .= "    }\n";
                 }
-            } else {
+            } elseif ($definition->isDefinitionInlinable("") === false) {
                 $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
                 $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
                 $container .= "    }\n";
