@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Fixture\Container;
 
-use stdClass;
 use WoohooLabs\Zen\AbstractCompiledContainer;
 use WoohooLabs\Zen\Exception\NotFoundException;
-use WoohooLabs\Zen\Tests\Double\StubContainerEntry;
 
-class ContainerWithInjectedProperty extends AbstractCompiledContainer
+class ContainerWithFileBasedEntryPointWhenInlinable extends AbstractCompiledContainer
 {
     /**
      * @param string $id
@@ -17,7 +15,7 @@ class ContainerWithInjectedProperty extends AbstractCompiledContainer
     public function has($id): bool
     {
         return match ($id) {
-            'A' => true,
+            'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => true,
             default => false,
         };
     }
@@ -29,21 +27,8 @@ class ContainerWithInjectedProperty extends AbstractCompiledContainer
     public function get($id): mixed
     {
         return $this->singletonEntries[$id] ?? match ($id) {
-            'A' => $this->A(),
+            'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => require __DIR__ . '/Definitions/WoohooLabs__Zen__Tests__Double__StubSingletonDefinition.php',
             default => throw new NotFoundException($id),
         };
-    }
-
-    public function A()
-    {
-        return true;
-    }
-
-    public function getProperty(): stdClass
-    {
-        $entry = new StubContainerEntry();
-        $this->setClassProperties($entry, ['a' => $this->singletonEntries['A'] ?? $this->A()]);
-
-        return $entry->getA();
     }
 }

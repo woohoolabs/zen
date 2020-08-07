@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Double;
 
+use stdClass;
+
 class StubContainerEntry
 {
-    private bool $a = false;
-
-    public function getA(): bool
+    public function getA(): stdClass
     {
-        return $this->a;
+        return new stdClass();
     }
 }

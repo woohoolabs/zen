@@ -1,13 +1,12 @@
 <?php
-
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Tests\Fixture\Container;
+namespace WoohooLabs\Zen\Tests\Double;
 
 use WoohooLabs\Zen\AbstractCompiledContainer;
 use WoohooLabs\Zen\Exception\NotFoundException;
 
-class ContainerWithFileBasedEntryPoint extends AbstractCompiledContainer
+class StubSingletonContainer extends AbstractCompiledContainer
 {
     /**
      * @param string $id
@@ -15,7 +14,7 @@ class ContainerWithFileBasedEntryPoint extends AbstractCompiledContainer
     public function has($id): bool
     {
         return match ($id) {
-            'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => true,
+            'WoohooLabs\Zen\Tests\Double\StubContainerEntry' => true,
             default => false,
         };
     }
@@ -27,13 +26,8 @@ class ContainerWithFileBasedEntryPoint extends AbstractCompiledContainer
     public function get($id): mixed
     {
         return $this->singletonEntries[$id] ?? match ($id) {
-            'WoohooLabs\Zen\Tests\Double\StubSingletonDefinition' => $this->WoohooLabs__Zen__Tests__Double__StubSingletonDefinition(),
+            'WoohooLabs\Zen\Tests\Double\StubContainerEntry' => $this->singletonEntries['WoohooLabs\Zen\Tests\Double\StubContainerEntry'] = new \WoohooLabs\Zen\Tests\Double\StubContainerEntry(),
             default => throw new NotFoundException($id),
         };
-    }
-
-    public function WoohooLabs__Zen__Tests__Double__StubSingletonDefinition()
-    {
-        return require __DIR__ . '/Definitions/WoohooLabs__Zen__Tests__Double__StubSingletonDefinition.php';
     }
 }

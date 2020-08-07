@@ -96,7 +96,7 @@ class ContainerCompilerTest extends TestCase
     /**
      * @test
      */
-    public function compileContainerWithFileBasedEntryPoint(): void
+    public function compileContainerWithFileBasedEntryPointWhenInlinable(): void
     {
         $compiler = new ContainerCompiler();
 
@@ -110,19 +110,58 @@ class ContainerCompilerTest extends TestCase
                     ),
                 ],
                 "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
-                "ContainerWithFileBasedEntryPoint",
+                "ContainerWithFileBasedEntryPointWhenInlinable",
                 true,
                 true,
                 true
             ),
             [
-                StubSingletonDefinition::class => new StubSingletonDefinition(true, true),
+                StubSingletonDefinition::class => new StubSingletonDefinition(true, true, 0, 0, true),
             ],
             []
         );
 
         $this->assertEquals(
-            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPoint.php"),
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPointWhenInlinable.php"),
+            $container["container"]
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPoint-Definition.php"),
+            $container["definitions"]["WoohooLabs__Zen__Tests__Double__StubSingletonDefinition.php"]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function compileContainerWithFileBasedEntryPointWhenNotInlinable(): void
+    {
+        $compiler = new ContainerCompiler();
+
+        $container = $compiler->compile(
+            new StubCompilerConfig(
+                [
+                    new StubContainerConfig(
+                        [
+                            StubSingletonDefinition::class,
+                        ]
+                    ),
+                ],
+                "WoohooLabs\\Zen\\Tests\\Fixture\\Container",
+                "ContainerWithFileBasedEntryPointWhenNotInlinable",
+                true,
+                true,
+                true
+            ),
+            [
+                StubSingletonDefinition::class => new StubSingletonDefinition(true, true, 0, 0, false),
+            ],
+            []
+        );
+
+        $this->assertEquals(
+            $this->getCompiledContainerSourceCode("ContainerWithFileBasedEntryPointWhenNotInlinable.php"),
             $container["container"]
         );
 
