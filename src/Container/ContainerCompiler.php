@@ -108,13 +108,23 @@ final class ContainerCompiler
             }
 
             $definition = $definitions[$id];
+            $filename = $this->getHash($id) . ".php";
+
+            if ($definition->isFileBased()) {
+                $definitionFiles[$filename] = "<?php\n\n";
+                $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
+            }
 
             if ($definition->isDefinitionInlinable("")) {
                 continue;
             }
 
             $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-            $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
+            if ($definition->isFileBased()) {
+                $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+            } else {
+                $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
+            }
             $container .= "    }\n";
         }
 
