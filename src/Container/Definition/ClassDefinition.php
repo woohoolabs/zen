@@ -161,7 +161,7 @@ class ClassDefinition extends AbstractDefinition
             return true;
         }
 
-        if ($this->getSingletonReferenceCount() || $this->getPrototypeReferenceCount()) {
+        if ($this->getSingletonReferenceCount() >= 1 || $this->getPrototypeReferenceCount() >= 1) {
             return false;
         }
 

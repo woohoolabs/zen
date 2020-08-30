@@ -3,7 +3,6 @@ parameters:
         - vendor/autoload.php
     ignoreErrors:
         - '#^Parameter \#4 \$length of function substr_compare expects int, null given\.$#'
-        - '#^Variable method call on \$this\(WoohooLabs\\Zen\\AbstractCompiledContainer\)\.$#'
         - '#^Variable property access on .*$#'
         - '#^Parameter \#1 \$argument of class ReflectionClass constructor expects class-string\<T of object\>\|T of object, string given\.$#'
         - '#^Call to an undefined method ReflectionType::getName\(\)\.$#'
