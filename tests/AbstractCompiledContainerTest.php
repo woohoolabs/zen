@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use WoohooLabs\Zen\Exception\NotFoundException;
-use WoohooLabs\Zen\Tests\Double\StubPrototypeContainer;
 use WoohooLabs\Zen\Tests\Double\StubContainerEntry;
+use WoohooLabs\Zen\Tests\Double\StubPrototypeContainer;
 use WoohooLabs\Zen\Tests\Double\StubSingletonContainer;
 use WoohooLabs\Zen\Tests\Fixture\Container\ContainerWithInjectedProperty;
 

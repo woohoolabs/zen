@@ -84,12 +84,12 @@ final class ContainerCompiler
                     $container .= "            '$id' => require __DIR__ . '/$fileBasedDefinitionDirectory/$filename',\n";
                 } else {
                     $container .= "            '$id' => " . $definition->compile(
-                            $definitionCompilation,
-                            "",
-                            3,
-                            true,
-                            $preloadedClasses
-                        );
+                        $definitionCompilation,
+                        "",
+                        3,
+                        true,
+                        $preloadedClasses
+                    );
                     $container .= ",\n";
                 }
             } else {
