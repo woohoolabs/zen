@@ -2,6 +2,8 @@
 
 ADDED:
 
+- Support for the `#[Inject]` property attribute
+
 CHANGED:
 
 - Increased minimum version requirement to PHP 8
@@ -10,6 +12,7 @@ CHANGED:
 REMOVED:
 
 - Support for built-in autoloading
+- Support for `@Inject` annotation
 
 FIXED:
 

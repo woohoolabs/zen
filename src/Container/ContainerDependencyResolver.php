@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -28,7 +27,6 @@ use function implode;
 
 final class ContainerDependencyResolver
 {
-    private SimpleAnnotationReader $annotationReader;
     private PhpDocReader $typeHintReader;
     private AbstractCompilerConfig $compilerConfig;
     private bool $useConstructorInjection;
@@ -45,8 +43,6 @@ final class ContainerDependencyResolver
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
-        $this->annotationReader = new SimpleAnnotationReader();
-        $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
         $this->typeHintReader = new PhpDocReader();
 
         $this->compilerConfig = $compilerConfig;
@@ -186,8 +182,8 @@ final class ContainerDependencyResolver
             $paramClass = $this->typeHintReader->getParameterClass($param);
             if ($paramClass === null) {
                 throw new ContainerException(
-                    "Type declaration or PHPDoc type hint for constructor parameter '$paramName' in '" .
-                    "class '{$definition->getClassName()}' is missing or it is not a class!"
+                    "Type declaration or PHPDoc type hint for constructor parameter $paramName in '" .
+                    "class {$definition->getClassName()} is missing or it is not a class!"
                 );
             }
 
@@ -199,7 +195,7 @@ final class ContainerDependencyResolver
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
         if ($invalidConstructorParameterOverrides !== []) {
             throw new ContainerException(
-                "Class '{$definition->getClassName()}' has the following overridden constructor parameters which don't exist: " .
+                "Class {$definition->getClassName()} has the following overridden constructor parameters which don't exist: " .
                 implode(", ", $invalidConstructorParameterOverrides) . "!"
             );
         }
@@ -228,13 +224,13 @@ final class ContainerDependencyResolver
                 continue;
             }
 
-            if ($this->annotationReader->getPropertyAnnotation($property, Inject::class) === null) {
+            if ($property->getAttributes(Inject::class) === []) {
                 continue;
             }
 
             if ($property->isStatic()) {
                 throw new ContainerException(
-                    "Property '{$class->getName()}::\$$propertyName' is static and can't be injected upon!"
+                    "Property {$class->getName()}::\$$propertyName is static and can't be injected upon!"
                 );
             }
 
@@ -248,7 +244,7 @@ final class ContainerDependencyResolver
 
             if ($propertyClass === null) {
                 throw new ContainerException(
-                    "Type declaration or PHPDoc type hint for property $id::\$$propertyName' is missing or it is not a class!"
+                    "Type declaration or PHPDoc type hint for property $id::\$$propertyName is missing or it is not a class!"
                 );
             }
 
@@ -260,7 +256,7 @@ final class ContainerDependencyResolver
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
         if ($invalidPropertyOverrides !== []) {
             throw new ContainerException(
-                "Class '$id' has the following overridden properties which don't exist: " .
+                "Class $id has the following overridden properties which don't exist: " .
                 implode(", ", $invalidPropertyOverrides) . "!"
             );
         }

@@ -7,6 +7,6 @@ use WoohooLabs\Zen\Examples\Service\AuthenticationService;
 
 class AuthenticationController
 {
-    /** @Inject */
+    #[Inject]
     protected AuthenticationService $service;
 }

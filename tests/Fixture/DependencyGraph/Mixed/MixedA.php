@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed;
 
+use WoohooLabs\Zen\Annotation\Inject;
+
 class MixedA
 {
-    /**
-     * @Inject
-     * @var MixedD
-     */
+    #[Inject]
+    /** @var MixedD */
     private $d;
 
     /**

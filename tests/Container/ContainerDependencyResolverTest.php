@@ -16,11 +16,11 @@ use WoohooLabs\Zen\Exception\ContainerException;
 use WoohooLabs\Zen\Exception\NotFoundException;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
 use WoohooLabs\Zen\Tests\Double\StubContainerConfig;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationA;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationB;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationC;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationD;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationE;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeA;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeB;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeC;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeD;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorC;
@@ -125,9 +125,9 @@ class ContainerDependencyResolverTest extends TestCase
     public function resolvePropertyDependencies(): void
     {
         $dependencyResolver = $this->createDependencyResolver(
-            AnnotationA::class,
+            AttributeA::class,
             [
-                AnnotationB::class => DefinitionHint::singleton(AnnotationB::class)
+                AttributeB::class => DefinitionHint::singleton(AttributeB::class)
                     ->setProperty("value", "abc"),
             ]
         );
@@ -138,27 +138,27 @@ class ContainerDependencyResolverTest extends TestCase
             [
                 ContainerInterface::class => ReferenceDefinition::singleton(ContainerInterface::class, "", true),
                 "" => new SelfDefinition(""),
-                AnnotationA::class => ClassDefinition::singleton(AnnotationA::class, true)
-                    ->addPropertyFromClass("b", AnnotationB::class)
-                    ->addPropertyFromClass("c", AnnotationC::class)
+                AttributeA::class => ClassDefinition::singleton(AttributeA::class, true)
+                    ->addPropertyFromClass("b", AttributeB::class)
+                    ->addPropertyFromClass("c", AttributeC::class)
                     ->resolveDependencies(),
-                AnnotationB::class => ClassDefinition::singleton(AnnotationB::class, false, false, [], ["value" => "abc"])
-                    ->addPropertyFromClass("e2", AnnotationE::class)
-                    ->addPropertyFromClass("d", AnnotationD::class)
+                AttributeB::class => ClassDefinition::singleton(AttributeB::class, false, false, [], ["value" => "abc"])
+                    ->addPropertyFromClass("e2", AttributeE::class)
+                    ->addPropertyFromClass("d", AttributeD::class)
                     ->addPropertyFromOverride("value")
                     ->resolveDependencies()
                     ->increaseReferenceCount("", true),
-                AnnotationC::class => ClassDefinition::singleton(AnnotationC::class)
-                    ->addPropertyFromClass("e1", AnnotationE::class)
-                    ->addPropertyFromClass("e2", AnnotationE::class)
+                AttributeC::class => ClassDefinition::singleton(AttributeC::class)
+                    ->addPropertyFromClass("e1", AttributeE::class)
+                    ->addPropertyFromClass("e2", AttributeE::class)
                     ->resolveDependencies()
                     ->increaseReferenceCount("", true),
-                AnnotationE::class => ClassDefinition::singleton(AnnotationE::class)
+                AttributeE::class => ClassDefinition::singleton(AttributeE::class)
                     ->resolveDependencies()
                     ->increaseReferenceCount("", true)
                     ->increaseReferenceCount("", true)
                     ->increaseReferenceCount("", true),
-                AnnotationD::class => ClassDefinition::singleton(AnnotationD::class)
+                AttributeD::class => ClassDefinition::singleton(AttributeD::class)
                     ->resolveDependencies()
                     ->increaseReferenceCount("", true),
             ],

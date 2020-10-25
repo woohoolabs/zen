@@ -13,8 +13,8 @@ use WoohooLabs\Zen\Container\DefinitionCompilation;
 use WoohooLabs\Zen\Container\DefinitionInstantiation;
 use WoohooLabs\Zen\RuntimeContainer;
 use WoohooLabs\Zen\Tests\Double\DummyCompilerConfig;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationB;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationD;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeB;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorD;
@@ -237,19 +237,19 @@ class ClassDefinitionTest extends TestCase
      */
     public function instantiateWithProperties(): void
     {
-        $definition = ClassDefinition::singleton(AnnotationB::class, true, false, [], ["value" => "abc"])
-            ->addPropertyFromClass("d", AnnotationD::class)
+        $definition = ClassDefinition::singleton(AttributeB::class, true, false, [], ["value" => "abc"])
+            ->addPropertyFromClass("d", AttributeD::class)
             ->addPropertyFromOverride("value");
         $instantiation = $this->createDefinitionInstantiation(
             [
-                AnnotationB::class => $definition,
-                AnnotationD::class => ClassDefinition::singleton(ConstructorD::class),
+                AttributeB::class => $definition,
+                AttributeD::class => ClassDefinition::singleton(ConstructorD::class),
             ]
         );
 
         $object = $definition->instantiate($instantiation, "");
 
-        $this->assertInstanceOf(AnnotationB::class, $object);
+        $this->assertInstanceOf(AttributeB::class, $object);
     }
 
     /**

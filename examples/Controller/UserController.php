@@ -8,9 +8,9 @@ use WoohooLabs\Zen\Examples\View\UserView;
 
 class UserController extends AbstractController
 {
-    /** @Inject */
+    #[Inject]
     private UserService $service;
 
-    /** @Inject */
+    #[Inject]
     private UserView $view;
 }
