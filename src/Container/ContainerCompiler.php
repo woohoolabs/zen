@@ -111,7 +111,7 @@ final class ContainerCompiler
             $filename = $this->getHash($id) . ".php";
 
             if ($definition->isFileBased()) {
-                $definitionFiles[$filename] = "<?php\n\n";
+                $definitionFiles[$filename] = "<?php\n\ndeclare(strict_types=1);\n\n";
                 $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
             }
 
