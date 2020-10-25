@@ -32,6 +32,8 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionC;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionD;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionF;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionG;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Exception\ExceptionH;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Mixed\MixedC;
@@ -309,7 +311,7 @@ class ContainerDependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenConstructorParameterWithoutDefaultValueWithScalarDocBlock(): void
+    public function resolveEntryPointsWhenConstructorParameterWithoutDefaultValueWithScalarDocBlock(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionD::class);
 
@@ -321,7 +323,7 @@ class ContainerDependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenPropertyWithoutTypeInfo(): void
+    public function resolveEntryPointsWhenPropertyWithoutTypeInfo(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionE::class);
 
@@ -333,9 +335,33 @@ class ContainerDependencyResolverTest extends TestCase
     /**
      * @test
      */
-    public function resolveEntryPointsWhenWhenStaticProperty(): void
+    public function resolveEntryPointsWhenStaticProperty(): void
     {
         $dependencyResolver = $this->createDependencyResolver(ExceptionF::class);
+
+        $this->expectException(ContainerException::class);
+
+        $dependencyResolver->resolveEntryPoints();
+    }
+
+    /**
+     * @test
+     */
+    public function resolveEntryPointsWhenPropertyWithUnionType(): void
+    {
+        $dependencyResolver = $this->createDependencyResolver(ExceptionG::class);
+
+        $this->expectException(ContainerException::class);
+
+        $dependencyResolver->resolveEntryPoints();
+    }
+
+    /**
+     * @test
+     */
+    public function resolveEntryPointsWhenParamWithUnionType(): void
+    {
+        $dependencyResolver = $this->createDependencyResolver(ExceptionH::class);
 
         $this->expectException(ContainerException::class);
 

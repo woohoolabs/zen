@@ -7,6 +7,8 @@ namespace WoohooLabs\Zen\Container;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
+use ReflectionUnionType;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
 
@@ -44,9 +46,8 @@ final class PreloadDependencyResolver
 
     /**
      * @param string $id
-     * @return void
      */
-    private function resolve($id)
+    private function resolve($id): void
     {
         if (array_key_exists($id, $this->classes)) {
             return;
@@ -76,9 +77,8 @@ final class PreloadDependencyResolver
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @return void
      */
-    private function resolveParents($reflectionClass)
+    private function resolveParents($reflectionClass): void
     {
         foreach ($reflectionClass->getInterfaceNames() as $interface) {
             $this->resolve($interface);
@@ -94,9 +94,8 @@ final class PreloadDependencyResolver
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @return void
      */
-    private function resolveTraits($reflectionClass)
+    private function resolveTraits($reflectionClass): void
     {
         foreach ($reflectionClass->getTraitNames() as $trait) {
             $this->resolve($trait);
@@ -105,9 +104,8 @@ final class PreloadDependencyResolver
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @return void
      */
-    private function resolveConstructorArguments($reflectionClass)
+    private function resolveConstructorArguments($reflectionClass): void
     {
         $constructor = $reflectionClass->getConstructor();
         if ($constructor === null) {
@@ -126,49 +124,63 @@ final class PreloadDependencyResolver
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @return void
      */
-    private function resolveProperties($reflectionClass)
+    private function resolveProperties($reflectionClass): void
     {
         foreach ($reflectionClass->getProperties() as $property) {
             $propertyClass = null;
             $propertyType = $property->getType();
 
-            if ($propertyType !== null) {
-                $propertyClass = $propertyType->getName();
-                if ($propertyType->isBuiltin()) {
-                    continue;
-                }
-            } else {
+            if ($propertyType === null) {
                 $propertyClass = $this->typeHintReader->getPropertyClass($property);
-                if ($propertyClass === null) {
-                    continue;
+                if ($propertyClass !== null) {
+                    $this->resolve($propertyClass);
+                }
+            } else if ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
+                $this->resolve($propertyType->getName());
+            } else if ($propertyType instanceof ReflectionUnionType) {
+                foreach ($propertyType->getTypes() as $type) {
+                    if ($type instanceof ReflectionNamedType && $type->isBuiltin() === false) {
+                        $this->resolve($type->getName());
+                    }
                 }
             }
-
-            $this->resolve($propertyClass);
         }
     }
 
     /**
      * @param ReflectionClass $reflectionClass
-     * @return void
      */
-    private function resolveMethods($reflectionClass)
+    private function resolveMethods($reflectionClass): void
     {
         foreach ($reflectionClass->getMethods() as $method) {
             foreach ($method->getParameters() as $parameter) {
-                $parameterClass = $this->typeHintReader->getParameterClass($parameter);
-                if ($parameterClass === null) {
-                    continue;
+                $type = $parameter->getType();
+                if ($type === null) {
+                    $class = $this->typeHintReader->getParameterClass($parameter);
+                    if ($class !== null) {
+                        $this->resolve($class);
+                    }
+                } elseif ($type instanceof ReflectionNamedType && $type->isBuiltin() === false) {
+                    $this->resolve($type->getName());
+                } elseif ($type instanceof ReflectionUnionType) {
+                    foreach ($type->getTypes() as $subType) {
+                        if ($subType instanceof ReflectionNamedType && $subType->isBuiltin() === false) {
+                            $this->resolve($subType->getName());
+                        }
+                    }
                 }
-
-                $this->resolve($parameterClass);
             }
 
             $returnType = $method->getReturnType();
-            if ($returnType !== null && $returnType->isBuiltin() === false) {
+            if ($returnType instanceof ReflectionNamedType && $returnType->isBuiltin() === false) {
                 $this->resolve($returnType->getName());
+            } elseif ($returnType instanceof ReflectionUnionType) {
+                foreach ($returnType->getTypes() as $subType) {
+                    if ($subType instanceof ReflectionNamedType && $subType->isBuiltin() === false) {
+                        $this->resolve($subType->getName());
+                    }
+                }
             }
         }
     }

@@ -28,6 +28,8 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadH;
 
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadI;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadJ;
 use function dirname;
 
 class PreloadDependencyResolverTest extends TestCase
@@ -116,6 +118,31 @@ class PreloadDependencyResolverTest extends TestCase
                 PreloadF::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadF.php",
                 PreloadG::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadG.php",
                 PreloadH::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadH.php",
+            ],
+            $preloads
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function resolvePreloadsWhenUnionType(): void
+    {
+        $dependencyResolver = $this->createDependencyResolver(
+            [
+                new ClassPreload(PreloadJ::class),
+            ]
+        );
+
+        $preloads = $dependencyResolver->resolvePreloads();
+
+        $this->assertEquals(
+            [
+                PreloadF::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadF.php",
+                PreloadG::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadG.php",
+                PreloadH::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadH.php",
+                PreloadI::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadI.php",
+                PreloadJ::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadJ.php",
             ],
             $preloads
         );

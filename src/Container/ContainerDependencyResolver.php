@@ -8,6 +8,8 @@ use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
+use ReflectionUnionType;
 use WoohooLabs\Zen\Attribute\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
@@ -165,8 +167,8 @@ final class ContainerDependencyResolver
         }
 
         $paramNames = [];
-        foreach ($constructor->getParameters() as $param) {
-            $paramName = $param->getName();
+        foreach ($constructor->getParameters() as $parameter) {
+            $paramName = $parameter->getName();
             $paramNames[] = $paramName;
 
             if ($definition->isConstructorParameterOverridden($paramName)) {
@@ -174,22 +176,29 @@ final class ContainerDependencyResolver
                 continue;
             }
 
-            if ($param->isOptional()) {
-                $definition->addConstructorArgumentFromValue($param->getDefaultValue());
+            if ($parameter->isOptional()) {
+                $definition->addConstructorArgumentFromValue($parameter->getDefaultValue());
                 continue;
             }
 
-            $paramClass = $this->typeHintReader->getParameterClass($param);
-            if ($paramClass === null) {
+            $parameterClass = null;
+            $parameterType = $parameter->getType();
+            if ($parameterType === null) {
+                $parameterClass = $this->typeHintReader->getParameterClass($parameter);
+            } elseif ($parameterType instanceof ReflectionNamedType && $parameterType->isBuiltin() === false) {
+                $parameterClass = $parameterType->getName();
+            }
+
+            if ($parameterClass === null) {
                 throw new ContainerException(
-                    "Type declaration or PHPDoc type hint for constructor parameter $paramName in '" .
+                    "Type declaration or PHPDoc type hint for constructor parameter $paramName of " .
                     "class {$definition->getClassName()} is missing or it is not a class!"
                 );
             }
 
-            $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass, $id, $parentEntryPoint, $runtime);
-            $this->definitions[$paramClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
+            $definition->addConstructorArgumentFromClass($parameterClass);
+            $this->resolve($parameterClass, $id, $parentEntryPoint, $runtime);
+            $this->definitions[$parameterClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
@@ -236,10 +245,10 @@ final class ContainerDependencyResolver
 
             $propertyClass = null;
             $propertyType = $property->getType();
-            if ($propertyType !== null && $propertyType->isBuiltin() === false) {
-                $propertyClass = $propertyType->getName();
-            } else {
+            if ($propertyType === null) {
                 $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            } elseif ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
+                $propertyClass = $propertyType->getName();
             }
 
             if ($propertyClass === null) {

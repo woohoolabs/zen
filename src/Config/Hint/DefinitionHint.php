@@ -47,7 +47,7 @@ class DefinitionHint extends AbstractHint implements DefinitionHintInterface
     public function setParameter(string $name, $value): DefinitionHint
     {
         if (is_scalar($value) === false && is_array($value) === false) {
-            throw new ContainerException("Constructor argument '$name' in '$this->className' must be a scalar or an array!");
+            throw new ContainerException("Constructor parameter $name of $this->className must be a scalar or an array!");
         }
 
         $this->parameters[$name] = $value;
