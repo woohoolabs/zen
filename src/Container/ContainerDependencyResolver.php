@@ -8,7 +8,7 @@ use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
-use WoohooLabs\Zen\Annotation\Inject;
+use WoohooLabs\Zen\Attribute\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;

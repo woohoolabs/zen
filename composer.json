@@ -33,10 +33,7 @@
     "autoload": {
         "psr-4": {
             "WoohooLabs\\Zen\\": "src/"
-        },
-        "files": [
-            "src/Annotation/Inject.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
