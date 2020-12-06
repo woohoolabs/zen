@@ -81,6 +81,7 @@ jobs:
       matrix:
         php-binary:
           - php8.0
+          - php8.1
 
         dependencies:
           - lowest
