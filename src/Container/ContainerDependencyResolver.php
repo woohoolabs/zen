@@ -9,7 +9,6 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
-use ReflectionUnionType;
 use WoohooLabs\Zen\Attribute\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
