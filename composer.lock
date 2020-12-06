@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a92cf9e010d356d6ed2a2c5e0160f0b",
+    "content-hash": "d2e37de7df9fba1b5c6cfba359a7552e",
     "packages": [
         {
             "name": "php-di/phpdoc-reader",
