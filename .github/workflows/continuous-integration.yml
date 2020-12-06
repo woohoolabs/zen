@@ -23,7 +23,7 @@ jobs:
           tools: composer:v2
 
       - name: "Validate composer.json"
-        run: php8.0 $(which composer) validate --strict
+        run: php $(which composer) validate --strict
 
       - name: "Cache dependencies"
         uses: actions/cache@v1
@@ -35,10 +35,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest
+        run: php $(which composer) install --no-interaction --no-progress --no-suggest
 
       - name: "Run PHP CodeSniffer"
-        run: php8.0 vendor/bin/phpcs --standard=phpcs.xml
+        run: php vendor/bin/phpcs --standard=phpcs.xml
 
   static-code-analysis:
     name: "Static Code Analysis"
@@ -67,10 +67,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
 
       - name: "Run phpstan/phpstan"
-        run: php8.0 vendor/bin/phpstan analyse --level 8 src
+        run: php vendor/bin/phpstan analyse --level 8 src
 
   tests:
     name: "Tests"
@@ -79,9 +79,9 @@ jobs:
 
     strategy:
       matrix:
-        php-binary:
-          - php8.0
-          - php
+        php-versions:
+          - 8.0
+          - 8.1
 
         dependencies:
           - lowest
@@ -91,10 +91,10 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 8.0"
+      - name: "Install PHP ${{ matrix.versions }}"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.0"
+          php-version: ${{ matrix.versions }}
           extensions: mbstring, xml
           tools: composer:v2
 
@@ -109,14 +109,14 @@ jobs:
 
       - name: "Install lowest dependencies with composer"
         if: matrix.dependencies == 'lowest'
-        run: ${{ matrix.php-binary }} $(which composer) update --no-interaction --no-progress --no-suggest --no-plugins --prefer-lowest
+        run: php $(which composer) update --no-interaction --no-progress --no-suggest --no-plugins --prefer-lowest
 
       - name: "Install highest dependencies with composer"
         if: matrix.dependencies == 'highest'
-        run: ${{ matrix.php-binary }} $(which composer) update --no-interaction --no-progress --no-suggest --no-plugins
+        run: php $(which composer) update --no-interaction --no-progress --no-suggest --no-plugins
 
       - name: "Run unit tests"
-        run: ${{ matrix.php-binary }} vendor/bin/phpunit
+        run: php vendor/bin/phpunit
 
   code-coverage:
     name: "Code Coverage"
@@ -145,10 +145,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: "Install dependencies with composer"
-        run: php8.0 $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
+        run: php $(which composer) install --no-interaction --no-progress --no-suggest --no-plugins
 
       - name: "Collect code coverage with Xdebug and phpunit/phpunit"
-        run: php8.0 vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
+        run: php vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
 
       - name: "Download code coverage uploader for Codecov.io"
         run: curl -s https://codecov.io/bash -o codecov
