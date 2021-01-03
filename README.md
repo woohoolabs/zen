@@ -136,7 +136,7 @@ $ ./vendor/bin/zen build CONTAINER_PATH COMPILER_CONFIG_CLASS_NAME
 ```
 
 This results in a new file `CONTAINER_PATH` (e.g.: "/var/www/app/Container/Container.php") which can be directly
-instantiated (assuming autoloading is property set up) in your project. No other configuration is needed during runtime
+instantiated (assuming autoloading is properly set up) in your project. No other configuration is needed during runtime
 by default.
 
 ```php
