@@ -7,6 +7,7 @@ namespace WoohooLabs\Zen\Container;
 use PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
 
@@ -134,7 +135,7 @@ final class PreloadDependencyResolver
             $propertyClass = null;
             $propertyType = $property->getType();
 
-            if ($propertyType !== null) {
+            if ($propertyType instanceof ReflectionNamedType) {
                 $propertyClass = $propertyType->getName();
                 if ($propertyType->isBuiltin()) {
                     continue;
@@ -167,7 +168,7 @@ final class PreloadDependencyResolver
             }
 
             $returnType = $method->getReturnType();
-            if ($returnType !== null && $returnType->isBuiltin() === false) {
+            if ($returnType instanceof ReflectionNamedType && $returnType->isBuiltin() === false) {
                 $this->resolve($returnType->getName());
             }
         }

@@ -9,6 +9,7 @@ use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
 use WoohooLabs\Zen\Annotation\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
@@ -257,7 +258,7 @@ final class ContainerDependencyResolver
 
             $propertyClass = null;
             $propertyType = $property->getType();
-            if ($propertyType !== null && $propertyType->isBuiltin() === false) {
+            if ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
                 $propertyClass = $propertyType->getName();
             } else {
                 $propertyClass = $this->typeHintReader->getPropertyClass($property);
