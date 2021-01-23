@@ -3,7 +3,7 @@ version: '2'
 services:
     zen-php:
         container_name: zen-php
-        image: php:7.4.1-cli-alpine3.10
+        image: php:7.4-cli-alpine3.12
         volumes:
             - .:/var/www
         working_dir: /var/www
