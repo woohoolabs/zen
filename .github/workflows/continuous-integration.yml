@@ -138,6 +138,7 @@ jobs:
         with:
             php-version: "8.0"
             extensions: mbstring, xml
+            coverage: xdebug:v3
             tools: composer:v2
 
       - name: "Determine Composer cache directory"
