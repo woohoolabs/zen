@@ -10,17 +10,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version:
-          - "7.4"
-
     steps:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Set default PHP version"
-        run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php-version }}
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer:v2
 
       - name: "Validate composer.json"
         run: composer validate --strict
@@ -28,6 +28,7 @@ jobs:
       - name: "Determine Composer cache directory"
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: "Cache dependencies"
         uses: actions/cache@v2
         with:
@@ -46,21 +47,22 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version:
-          - "7.4"
-
     steps:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Set default PHP version"
-        run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php-version }}
+      - name: "Install PHP 8.0"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer:v2
 
       - name: "Determine Composer cache directory"
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: "Cache dependencies"
         uses: actions/cache@v2
         with:
@@ -72,7 +74,7 @@ jobs:
         run: composer install --no-interaction --no-progress --no-plugins
 
       - name: "Run phpstan/phpstan"
-        run: vendor/bin/phpstan analyse --level 7 src/
+        run: vendor/bin/phpstan analyse --level 8 src/
 
   tests:
     name: "Tests"
@@ -81,8 +83,11 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php-versions:
           - "7.4"
+          - "8.0"
+          - "8.1"
+
         dependencies:
           - lowest
           - highest
@@ -91,12 +96,17 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Set default PHP version"
-        run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php-version }}
+      - name: "Install PHP ${{ matrix.php-versions }}"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-versions }}"
+          extensions: mbstring, xml
+          tools: composer:v2
 
       - name: "Determine Composer cache directory"
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: "Cache dependencies"
         uses: actions/cache@v2
         with:
@@ -120,21 +130,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-version:
-          - "7.4"
-
     steps:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Set default PHP version"
-        run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php-version }}
+      - name: "Install PHP ${{ matrix.php-versions }}"
+        uses: shivammathur/setup-php@v2
+        with:
+            php-version: "${{ matrix.php-versions }}"
+            extensions: mbstring, xml
+            tools: composer:v2
 
       - name: "Determine Composer cache directory"
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: "Cache dependencies"
         uses: actions/cache@v2
         with:
