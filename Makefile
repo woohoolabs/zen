@@ -5,7 +5,7 @@ $(VERBOSE).SILENT:
 help: ## Print the help screen
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-build: ## Try out the examples by building the example container
+build: ## Try out the examples by building the example container
 	docker-compose -f docker-compose.examples.yml stop --timeout=2 && docker-compose -f docker-compose.examples.yml up
 
 composer-install: ## Install Composer dependencies
@@ -18,7 +18,7 @@ test: ## Run PHPUnit to execute the unit tests
 	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpunit"
 
 phpstan: ## Run PHPStan to perform static analysis
-	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpstan analyse --level 7 src"
+	docker-compose run --rm --no-deps zen-php /bin/sh -c "cd /var/www && ./vendor/bin/phpstan analyse --level 8 src"
 
 cs: ## Run PHP CodeSniffer to detect issues with coding style
 	docker-compose run --rm --no-deps zen-php /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml
