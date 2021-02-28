@@ -136,9 +136,9 @@ final class PreloadDependencyResolver
                 if ($propertyClass !== null) {
                     $this->resolve($propertyClass);
                 }
-            } else if ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
+            } elseif ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
                 $this->resolve($propertyType->getName());
-            } else if ($propertyType instanceof ReflectionUnionType) {
+            } elseif ($propertyType instanceof ReflectionUnionType) {
                 foreach ($propertyType->getTypes() as $type) {
                     if ($type instanceof ReflectionNamedType && $type->isBuiltin() === false) {
                         $this->resolve($type->getName());

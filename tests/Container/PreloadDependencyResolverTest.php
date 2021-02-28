@@ -27,9 +27,9 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadH;
-
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadI;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadJ;
+
 use function dirname;
 
 class PreloadDependencyResolverTest extends TestCase
