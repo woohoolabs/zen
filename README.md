@@ -660,7 +660,7 @@ compiled one - however it is still faster than some of the most well-known DI Co
 
 ## Examples
 
-If you want to see how Zen works, have a look at the [examples](https://github.com/woohoolabs/yin/tree/master/examples)
+If you want to see how Zen works, have a look at the [examples](https://github.com/woohoolabs/zen/tree/master/examples)
 folder, where you can find an example configuration (`CompilerConfig`). If `docker-compose` and `make` is available
 on your system, then just run the following commands in order to build a container:
 
