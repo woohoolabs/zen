@@ -17,7 +17,7 @@
     <file>src/</file>
     <file>tests/</file>
 
-    <exclude-pattern>tests/Double/StubContainer.php</exclude-pattern>
+    <exclude-pattern>tests/Double/Stub*Container.php</exclude-pattern>
     <exclude-pattern>tests/Fixture/</exclude-pattern>
 
     <rule ref="WoohooLabs"/>
