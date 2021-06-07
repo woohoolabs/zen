@@ -11,16 +11,19 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class TestDefinition extends AbstractDefinition
 {
+    private bool $definitionInlinable;
+
     public function __construct(
         string $id,
         bool $isSingleton = true,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
-        int $prototypeReferenceCount = 0
+        int $prototypeReferenceCount = 0,
+        bool $isDefinitionInlinable = false
     ) {
-        parent::__construct($id, $isSingleton, $isEntryPoint, $isAutoloaded, $isFileBased, $singletonReferenceCount, $prototypeReferenceCount);
+        parent::__construct($id, $isSingleton, $isEntryPoint, $isFileBased, $singletonReferenceCount, $prototypeReferenceCount);
+        $this->definitionInlinable = $isDefinitionInlinable;
     }
 
     public function needsDependencyResolution(): bool
@@ -44,9 +47,8 @@ class TestDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         return null;
     }
@@ -62,5 +64,10 @@ class TestDefinition extends AbstractDefinition
         array $preloadedClasses = []
     ): string {
         return "";
+    }
+
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        return $this->definitionInlinable;
     }
 }

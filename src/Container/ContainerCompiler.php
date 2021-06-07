@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Container;
 
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
-use WoohooLabs\Zen\Container\Definition\AutoloadedDefinition;
 use WoohooLabs\Zen\Container\Definition\DefinitionInterface;
-use WoohooLabs\Zen\Utils\FileSystemUtil;
 
 use function array_key_exists;
 use function array_keys;
+use function count;
 use function str_replace;
 
 final class ContainerCompiler
@@ -22,10 +21,9 @@ final class ContainerCompiler
      */
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions, array $preloadedClasses): array
     {
-        $autoloadConfig = $compilerConfig->getAutoloadConfig();
         $fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
         $fileBasedDefinitionDirectory = $fileBasedDefinitionConfig->getRelativeDefinitionDirectory();
-        $definitionCompilation = new DefinitionCompilation($autoloadConfig, $fileBasedDefinitionConfig, $definitions);
+        $definitionCompilation = new DefinitionCompilation($fileBasedDefinitionConfig, $definitions);
 
         $definitionFiles = [];
 
@@ -35,14 +33,44 @@ final class ContainerCompiler
         if ($compilerConfig->getContainerNamespace() !== "") {
             $container .= "\nnamespace " . $compilerConfig->getContainerNamespace() . ";\n";
         }
-        $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n\n";
+        $container .= "\nuse WoohooLabs\\Zen\\AbstractCompiledContainer;\n";
+        $container .= "use WoohooLabs\\Zen\\Exception\\NotFoundException;\n\n";
         $container .= "class " . $compilerConfig->getContainerClassName() . " extends AbstractCompiledContainer\n";
         $container .= "{\n";
 
-        // Entry points
         $entryPointIds = array_keys($compilerConfig->getEntryPointMap());
 
-        $container .= "    protected static array \$entryPoints = [\n";
+        // ContainerInterface::has()
+
+        $container .= "    /**\n";
+        $container .= "     * @param string \$id\n";
+        $container .= "     */\n";
+        $container .= "    public function has(\$id): bool\n";
+        $container .= "    {\n";
+        $container .= "        return match (\$id) {\n";
+
+        $entryPointCount = count($entryPointIds);
+        foreach ($entryPointIds as $i => $id) {
+            if (array_key_exists($id, $definitions) === false) {
+                continue;
+            }
+
+            $container .= "            '$id'" . ($i === $entryPointCount - 1 ? " => true" : "") . ",\n";
+        }
+        $container .= "            default => false,\n";
+        $container .= "        };\n";
+        $container .= "    }\n\n";
+
+        // ContainerInterface::get()
+
+        $container .= "    /**\n";
+        $container .= "     * @param string \$id\n";
+        $container .= "     * @throws NotFoundException\n";
+        $container .= "     */\n";
+        $container .= "    public function get(\$id): mixed\n";
+        $container .= "    {\n";
+        $container .= "        return \$this->singletonEntries[\$id] ?? match (\$id) {\n";
+
         foreach ($entryPointIds as $id) {
             if (array_key_exists($id, $definitions) === false) {
                 continue;
@@ -50,30 +78,27 @@ final class ContainerCompiler
 
             $definition = $definitions[$id];
 
-            $methodName = $this->getHash($id);
-            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
-                $methodName = "_proxy__$methodName";
+            if ($definition->isDefinitionInlinable("")) {
+                if ($definition->isFileBased("")) {
+                    $filename = $this->getHash($id) . ".php";
+                    $container .= "            '$id' => require __DIR__ . '/$fileBasedDefinitionDirectory/$filename',\n";
+                } else {
+                    $container .= "            '$id' => " . $definition->compile(
+                        $definitionCompilation,
+                        "",
+                        3,
+                        true,
+                        $preloadedClasses
+                    );
+                    $container .= ",\n";
+                }
+            } else {
+                $methodName = $this->getHash($id);
+                $container .= "            '$id' => \$this->$methodName(),\n";
             }
-
-            $container .= "        '$id' => '" . $methodName . "',\n";
         }
-        $container .= "    ];\n";
-
-        // Root directory property
-        $container .= "    protected string \$rootDirectory;\n\n";
-
-        // Constructor
-        $container .= "    public function __construct(string \$rootDirectory = \"\")\n";
-        $container .= "    {\n";
-        $container .= "        \$this->rootDirectory = \$rootDirectory;\n";
-        foreach ($autoloadConfig->getAlwaysAutoloadedClasses() as $autoloadedClass) {
-            if (array_key_exists($autoloadedClass, $preloadedClasses)) {
-                continue;
-            }
-
-            $filename = FileSystemUtil::getRelativeFilenameForClass($autoloadConfig->getRootDirectory(), $autoloadedClass);
-            $container .= "        include_once \$this->rootDirectory . '/$filename';\n";
-        }
+        $container .= "            default => throw new NotFoundException(\$id),\n";
+        $container .= "        };\n";
         $container .= "    }\n";
 
         // Entry Points
@@ -83,38 +108,24 @@ final class ContainerCompiler
             }
 
             $definition = $definitions[$id];
-
-            if ($definition->isAutoloaded() && $definition->isAutoloadingInlinable() === false && array_key_exists($id, $preloadedClasses) === false) {
-                $autoloadedDefinition = new AutoloadedDefinition($id, true, $definition->isFileBased());
-
-                $container .= "\n    public function _proxy__" . $this->getHash($id) . "()\n    {\n";
-                if ($autoloadedDefinition->isFileBased()) {
-                    $filename = "_proxy__" . $this->getHash($id) . ".php";
-                    $definitionFiles[$filename] = "<?php\n\n";
-                    $definitionFiles[$filename] .= $autoloadedDefinition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
-
-                    $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
-                } else {
-                    $container .= $autoloadedDefinition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
-                }
-                $container .= "    }\n";
-            }
+            $filename = $this->getHash($id) . ".php";
 
             if ($definition->isFileBased()) {
-                $filename = $this->getHash($id) . ".php";
-                $definitionFiles[$filename] = "<?php\n\n";
+                $definitionFiles[$filename] = "<?php\n\ndeclare(strict_types=1);\n\n";
                 $definitionFiles[$filename] .= $definition->compile($definitionCompilation, "", 0, false, $preloadedClasses);
-
-                if ($definition->isEntryPoint()) {
-                    $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                    $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
-                    $container .= "    }\n";
-                }
-            } else {
-                $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
-                $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
-                $container .= "    }\n";
             }
+
+            if ($definition->isDefinitionInlinable("")) {
+                continue;
+            }
+
+            $container .= "\n    public function " . $this->getHash($id) . "()\n    {\n";
+            if ($definition->isFileBased()) {
+                $container .= "        return require __DIR__ . '/$fileBasedDefinitionDirectory/$filename';\n";
+            } else {
+                $container .= $definition->compile($definitionCompilation, "", 2, false, $preloadedClasses);
+            }
+            $container .= "    }\n";
         }
 
         $container .= "}\n";

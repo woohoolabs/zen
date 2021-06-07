@@ -5,5 +5,5 @@ return new \X\A(
     0,
     array (
   'a' => false,
-)
+),
 );

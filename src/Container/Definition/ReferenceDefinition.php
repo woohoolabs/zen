@@ -9,14 +9,12 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 class ReferenceDefinition extends AbstractDefinition
 {
-    /** @var string */
-    private $referencedId;
+    private string $referencedId;
 
     public static function singleton(
         string $referrerId,
         string $referencedId,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -26,7 +24,6 @@ class ReferenceDefinition extends AbstractDefinition
             $referencedId,
             true,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -37,7 +34,6 @@ class ReferenceDefinition extends AbstractDefinition
         string $referrerId,
         string $referencedId,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -47,7 +43,6 @@ class ReferenceDefinition extends AbstractDefinition
             $referencedId,
             false,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -59,7 +54,6 @@ class ReferenceDefinition extends AbstractDefinition
         string $referencedId,
         bool $isSingleton = true,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         int $singletonReferenceCount = 0,
         int $prototypeReferenceCount = 0
@@ -68,12 +62,24 @@ class ReferenceDefinition extends AbstractDefinition
             $referrerId,
             $isSingleton,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
         );
         $this->referencedId = $referencedId;
+    }
+
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        if ($this->isFileBased($parentId)) {
+            return true;
+        }
+
+        if ($this->getSingletonReferenceCount() >= 1 || $this->getPrototypeReferenceCount() >= 1) {
+            return false;
+        }
+
+        return true;
     }
 
     public function needsDependencyResolution(): bool
@@ -99,9 +105,8 @@ class ReferenceDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         if ($this->singleton === false) {
             return $instantiation->definitions[$this->referencedId]->instantiate($instantiation, $this->id);
@@ -124,17 +129,6 @@ class ReferenceDefinition extends AbstractDefinition
         $indent = $this->indent($indentationLevel);
 
         $code = "";
-
-        if ($this->isAutoloadingInlinable($parentId, $inline)) {
-            $code .= $this->includeRelatedClasses(
-                $compilation->getAutoloadConfig(),
-                $compilation->getDefinitions(),
-                $this->id,
-                $indentationLevel,
-                $preloadedClasses
-            );
-            $code .= "\n";
-        }
 
         if ($inline === false) {
             $code .= "${indent}return ";

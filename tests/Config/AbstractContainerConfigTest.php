@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WoohooLabs\Zen\Tests\Compiler;
+namespace WoohooLabs\Zen\Tests\Config;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;

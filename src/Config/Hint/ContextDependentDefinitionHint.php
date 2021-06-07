@@ -15,31 +15,21 @@ use function is_string;
 
 class ContextDependentDefinitionHint implements DefinitionHintInterface
 {
-    /** @var DefinitionHint|null */
-    private $defaultDefinitionHint;
+    private ?DefinitionHint $defaultDefinitionHint;
     /** @var DefinitionHint[] */
     private array $definitionHints = [];
 
-    /**
-     * @param DefinitionHint|string|null $defaultDefinitionHint
-     */
-    public static function create($defaultDefinitionHint = null): ContextDependentDefinitionHint
+    public static function create(DefinitionHint|string|null $defaultDefinitionHint = null): ContextDependentDefinitionHint
     {
         return new self($defaultDefinitionHint);
     }
 
-    /**
-     * @param DefinitionHint|string|null $defaultDefinitionHint
-     */
-    public function __construct($defaultDefinitionHint = null)
+    public function __construct(DefinitionHint|string|null $defaultDefinitionHint = null)
     {
         $this->defaultDefinitionHint = $this->createDefinitionHint($defaultDefinitionHint);
     }
 
-    /**
-     * @param DefinitionHint|string $defaultDefinitionHint
-     */
-    public function setDefaultClass($defaultDefinitionHint): ContextDependentDefinitionHint
+    public function setDefaultClass(DefinitionHint|string $defaultDefinitionHint): ContextDependentDefinitionHint
     {
         $this->defaultDefinitionHint = $this->createDefinitionHint($defaultDefinitionHint);
 
@@ -47,10 +37,9 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
     }
 
     /**
-     * @param string[]              $parentClasses
-     * @param DefinitionHint|string $definitionHint
+     * @param string[] $parentClasses
      */
-    public function setClassContext($definitionHint, array $parentClasses): ContextDependentDefinitionHint
+    public function setClassContext(DefinitionHint|string $definitionHint, array $parentClasses): ContextDependentDefinitionHint
     {
         $definitionHint = $this->createDefinitionHint($definitionHint);
 
@@ -72,7 +61,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
      * @param DefinitionHintInterface[] $definitionHints
      * @return DefinitionInterface[]
      */
-    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isAutoloaded, bool $isFileBased): array
+    public function toDefinitions(array $entryPoints, array $definitionHints, string $id, bool $isFileBased): array
     {
         $isEntryPoint = array_key_exists($id, $entryPoints);
 
@@ -82,7 +71,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $this->defaultDefinitionHint->getClassName(),
                 $this->defaultDefinitionHint->isSingleton(),
                 $isEntryPoint,
-                $isAutoloaded,
                 $isFileBased
             );
         }
@@ -93,7 +81,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $definitionHint->getClassName(),
                 $definitionHint->isSingleton(),
                 $isEntryPoint,
-                $isAutoloaded,
                 $isFileBased
             );
         }
@@ -112,7 +99,6 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
                 $entryPoints,
                 $definitionHints,
                 $definitionHint->getClassName(),
-                $isAutoloaded,
                 $isFileBased
             );
         }
@@ -120,10 +106,7 @@ class ContextDependentDefinitionHint implements DefinitionHintInterface
         return array_merge($result, ...$definitionHintDefinitions);
     }
 
-    /**
-     * @param DefinitionHint|string|null $definitionHint
-     */
-    private function createDefinitionHint($definitionHint): ?DefinitionHint
+    private function createDefinitionHint(DefinitionHint|string|null $definitionHint): ?DefinitionHint
     {
         return is_string($definitionHint) ? new DefinitionHint($definitionHint) : $definitionHint;
     }

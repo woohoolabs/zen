@@ -58,12 +58,12 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::singleton(ClassA::class);
 
-        $definitions = $hint->toDefinitions([], [], ClassB::class, false, false);
+        $definitions = $hint->toDefinitions([], [], ClassB::class, false);
 
         $this->assertEquals(
             [
-                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class, true, false, false, false, 0),
-                ClassA::class => new ClassDefinition(ClassA::class, true, false, false, false, [], [], 1),
+                ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class, true, false, false, 0),
+                ClassA::class => new ClassDefinition(ClassA::class, true, false, false, [], [], 1),
             ],
             $definitions
         );
@@ -100,14 +100,13 @@ class DefinitionHintTest extends TestCase
             ->setParameter("param", "value")
             ->setProperty("property", "value");
 
-        $definitions = $hint->toDefinitions([], [], ClassB::class, false, false);
+        $definitions = $hint->toDefinitions([], [], ClassB::class, false);
 
         $this->assertEquals(
             [
                 ClassB::class => new ReferenceDefinition(ClassB::class, ClassA::class),
                 ClassA::class => ClassDefinition::singleton(
                     ClassA::class,
-                    false,
                     false,
                     false,
                     [
@@ -130,28 +129,11 @@ class DefinitionHintTest extends TestCase
     {
         $hint = DefinitionHint::prototype(ClassA::class);
 
-        $definitions = $hint->toDefinitions([], [], ClassA::class, false, false);
+        $definitions = $hint->toDefinitions([], [], ClassA::class, false);
 
         $this->assertEquals(
             [
                 ClassA::class => new ClassDefinition(ClassA::class, false),
-            ],
-            $definitions
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function toDefinitionsWhenAutoloaded(): void
-    {
-        $hint = DefinitionHint::singleton(ClassA::class);
-
-        $definitions = $hint->toDefinitions([], [], ClassA::class, true, false);
-
-        $this->assertEquals(
-            [
-                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
             ],
             $definitions
         );
@@ -165,14 +147,13 @@ class DefinitionHintTest extends TestCase
         $hint = DefinitionHint::singleton(ClassA::class)
             ->setParameter("param", ["abc"]);
 
-        $definitions = $hint->toDefinitions([], [], ClassA::class, false, false);
+        $definitions = $hint->toDefinitions([], [], ClassA::class, false);
 
         $this->assertEquals(
             [
                 ClassA::class => new ClassDefinition(
                     ClassA::class,
                     true,
-                    false,
                     false,
                     false,
                     [
@@ -193,14 +174,13 @@ class DefinitionHintTest extends TestCase
         $hint = DefinitionHint::singleton(ClassA::class)
             ->setProperty("property", "value");
 
-        $definitions = $hint->toDefinitions([], [], ClassA::class, false, false);
+        $definitions = $hint->toDefinitions([], [], ClassA::class, false);
 
         $this->assertEquals(
             [
                 ClassA::class => new ClassDefinition(
                     ClassA::class,
                     true,
-                    false,
                     false,
                     false,
                     [],

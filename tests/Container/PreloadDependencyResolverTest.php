@@ -10,11 +10,11 @@ use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadInterface;
 use WoohooLabs\Zen\Container\PreloadDependencyResolver;
 use WoohooLabs\Zen\Tests\Double\StubCompilerConfig;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationA;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationB;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationC;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationD;
-use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Annotation\AnnotationE;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeA;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeB;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeC;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeD;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Attribute\AttributeE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorA;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorB;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Constructor\ConstructorC;
@@ -27,6 +27,8 @@ use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadE;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadF;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadG;
 use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadH;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadI;
+use WoohooLabs\Zen\Tests\Fixture\DependencyGraph\Preload\PreloadJ;
 
 use function dirname;
 
@@ -75,7 +77,7 @@ class PreloadDependencyResolverTest extends TestCase
     {
         $dependencyResolver = $this->createDependencyResolver(
             [
-                new ClassPreload(AnnotationA::class),
+                new ClassPreload(AttributeA::class),
             ]
         );
 
@@ -83,11 +85,11 @@ class PreloadDependencyResolverTest extends TestCase
 
         $this->assertEquals(
             [
-                AnnotationA::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Annotation/AnnotationA.php",
-                AnnotationB::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Annotation/AnnotationB.php",
-                AnnotationC::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Annotation/AnnotationC.php",
-                AnnotationD::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Annotation/AnnotationD.php",
-                AnnotationE::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Annotation/AnnotationE.php",
+                AttributeA::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Attribute/AttributeA.php",
+                AttributeB::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Attribute/AttributeB.php",
+                AttributeC::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Attribute/AttributeC.php",
+                AttributeD::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Attribute/AttributeD.php",
+                AttributeE::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Attribute/AttributeE.php",
             ],
             $preloads
         );
@@ -122,6 +124,31 @@ class PreloadDependencyResolverTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function resolvePreloadsWhenUnionType(): void
+    {
+        $dependencyResolver = $this->createDependencyResolver(
+            [
+                new ClassPreload(PreloadJ::class),
+            ]
+        );
+
+        $preloads = $dependencyResolver->resolvePreloads();
+
+        $this->assertEquals(
+            [
+                PreloadF::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadF.php",
+                PreloadG::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadG.php",
+                PreloadH::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadH.php",
+                PreloadI::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadI.php",
+                PreloadJ::class => dirname(__DIR__) . "/Fixture/DependencyGraph/Preload/PreloadJ.php",
+            ],
+            $preloads
+        );
+    }
+
+    /**
      * @param PreloadInterface[] $preloadedClasses
      */
     private function createDependencyResolver(array $preloadedClasses): PreloadDependencyResolver
@@ -133,8 +160,6 @@ class PreloadDependencyResolverTest extends TestCase
                 "",
                 false,
                 false,
-                false,
-                [],
                 false,
                 PreloadConfig::create()
                     ->setPreloadedClasses($preloadedClasses)

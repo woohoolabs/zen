@@ -26,10 +26,8 @@ class ContainerConfig extends AbstractContainerConfig
     {
         return [
             ClassEntryPoint::create(AnimalServiceInterface::class)
-                ->disableAutoload()
                 ->fileBased(),
             ClassEntryPoint::create(AnimalController::class)
-                ->autoload()
                 ->fileBased(),
             Psr4NamespaceEntryPoint::create("WoohooLabs\\Zen\\Examples\\Controller"),
         ];

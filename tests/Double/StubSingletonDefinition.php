@@ -8,9 +8,22 @@ use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 class StubSingletonDefinition extends TestDefinition
 {
-    public function __construct(bool $isEntryPoint = false, bool $isAutoloaded = false, bool $isFileBased = false, int $referenceCount = 0)
-    {
-        parent::__construct(self::class, true, $isEntryPoint, $isAutoloaded, $isFileBased, $referenceCount);
+    public function __construct(
+        bool $isEntryPoint = false,
+        bool $isFileBased = false,
+        int $singletonReferenceCount = 0,
+        int $prototypeReferenceCount = 0,
+        bool $isDefinitionInlinable = false
+    ) {
+        parent::__construct(
+            self::class,
+            true,
+            $isEntryPoint,
+            $isFileBased,
+            $singletonReferenceCount,
+            $prototypeReferenceCount,
+            $isDefinitionInlinable
+        );
     }
 
     /**

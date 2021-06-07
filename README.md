@@ -71,7 +71,7 @@ $ composer require woohoolabs/zen
 > Note: The tests and examples won't be downloaded by default. You have to use `composer require woohoolabs/zen --prefer-source`
 or clone the repository if you need them.
 
-Zen 2.8 requires PHP 7.4 at least, but you may use Zen 2.7.2 for PHP 7.1+.
+Zen 3 requires PHP 8.0 at least, but you may use 2.8.0 for PHP 7.4 and Zen 2.7.2 for PHP 7.1+.
 
 ## Basic Usage
 
@@ -97,20 +97,16 @@ public function __construct(A $a, $b, $c = true)
 }
 ```
 
-In order to use property injection, you have to annotate your properties with `@Inject` (mind case-sensitivity!), and
+In order to use property injection, you have to annotate your properties with `#[Inject]` (mind case-sensitivity!), and
 provide their type via either a type declaration or a `@var` PHPDoc tag, as shown below:
 
 ```php
-/**
- * @Inject
- * @var A
- */
- private $a;
+#[Inject]
+/** @var A */
+private $a;
 
-/**
- * @Inject
- */
- private B $b;
+#[Inject]
+private B $b;
 ```
 
 As a rule of thumb, you should only rely on constructor injection, because using test doubles in your unit tests
@@ -483,74 +479,6 @@ on it, then the class/[definition hint](#hints) in the first parameter of the `s
 > Note that if you don't set a default implementation (either via the `setDefaultClass()` method or via constructor parameter)
 then a `ContainerException` will be thrown if the interface is injected as a dependency of any class other than the listed
 ones in the second parameter of the `setClassContext()` method calls.
-
-### Built-in autoloading of Entry Points
-
-If you have big object graphs then autoloading can take relatively
-[much time](https://blog.blackfire.io/speeding-up-autoloading-on-php-5-6-7-0-for-everyone.html).
-[Inspired by Symfony](https://github.com/symfony/symfony/pull/24872), Zen offers a similar functionality
-that tries to improve the situation: starting from Zen 2.3, you can configure the container to autoload your
-[Entry Points](#entry-points) and all their dependencies by including them (using `include_once`) just before their
-first retrieval.
-
-There are two ways of enabling this feature:
-
-- Globally: Configure your [Compiler Configuration](#configuring-the-compiler) by adding this method:
-```php
-public function getAutoloadConfig(): AutoloadConfigInterface
-{
-    return AutoloadConfig::enableGlobally("/var/www");
-}
-```
-
-This way, all your Entry Points will be autoladed by Zen. Note that the first parameter in the example above is the root
-directory of your project.
-
-- Selectively: You can choose which Entry Points are to be autoloaded.
-```php
-protected function getEntryPoints(): array
-{
-    return [
-        Psr4WildcardEntryPoint::create('Src\Controller')
-            ->autoload(),
-
-        WildcardEntryPoint::create(__DIR__ . "/Controller")
-            ->autoload(),
-
-        ClassEntryPoint::create(Class10::class)
-            ->disableAutoload(),      
-    ];
-}
-```
-
-You can also define such classes that should be always autoloaded or which should be never autoloaded by Zen:
-
-```php
-public function getAutoloadConfig(): AutoloadConfigInterface
-{
-    return AutoloadConfig::enableGlobally("/var/www")
-        ->setAlwaysAutoloadedClasses(
-            [
-                "VeryImportantClass1",
-            ]
-        )
-        ->setNeverAutoloadedClasses(
-            [
-                "NotImportantClass1",
-            ]
-        );
-}
-```
-
-This effects that the `VeryImportantClass1` is included just after the compiled container has been instantiated, while the
-`NotImportantClass1` won't ever be included by Zen.
-
-**Important:** If you autoload the classes by Zen, you have to pass the root directory of the project in the first parameter of the
-compiled container's constructor like below:
-
-```php
-$container = new Container("/var/www");
-```
 
 ### Generating a preload file
 

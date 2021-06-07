@@ -10,21 +10,19 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 use function array_key_exists;
 use function array_keys;
-use function implode;
 use function var_export;
 
 class ClassDefinition extends AbstractDefinition
 {
     /** @var array<int, array<string, mixed>> */
-    private $constructorArguments;
+    private array $constructorArguments;
     /** @var array<string, array<string, mixed>> */
-    private $properties;
-    /** @var bool */
-    private $needsDependencyResolution;
+    private array $properties;
+    private bool $needsDependencyResolution;
     /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
-    private $overriddenConstructorParameters;
+    private array $overriddenConstructorParameters;
     /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */
-    private $overriddenProperties;
+    private array $overriddenProperties;
 
     /**
      * @param array<string, string|int|float|bool|array<mixed, mixed>|null> $overriddenConstructorParameters
@@ -33,7 +31,6 @@ class ClassDefinition extends AbstractDefinition
     public static function singleton(
         string $className,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -44,7 +41,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             true,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
@@ -60,7 +56,6 @@ class ClassDefinition extends AbstractDefinition
     public static function prototype(
         string $className,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -71,7 +66,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             false,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $overriddenConstructorParameters,
             $overriddenProperties,
@@ -88,7 +82,6 @@ class ClassDefinition extends AbstractDefinition
         string $className,
         bool $isSingleton = true,
         bool $isEntryPoint = false,
-        bool $isAutoloaded = false,
         bool $isFileBased = false,
         array $overriddenConstructorParameters = [],
         array $overriddenProperties = [],
@@ -99,7 +92,6 @@ class ClassDefinition extends AbstractDefinition
             $className,
             $isSingleton,
             $isEntryPoint,
-            $isAutoloaded,
             $isFileBased,
             $singletonReferenceCount,
             $prototypeReferenceCount
@@ -123,10 +115,7 @@ class ClassDefinition extends AbstractDefinition
         return $this;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function addConstructorArgumentFromValue($value): ClassDefinition
+    public function addConstructorArgumentFromValue(mixed $value): ClassDefinition
     {
         $this->constructorArguments[] = ["value" => $value];
 
@@ -164,6 +153,19 @@ class ClassDefinition extends AbstractDefinition
         $this->needsDependencyResolution = false;
 
         return $this;
+    }
+
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        if ($this->isFileBased($parentId)) {
+            return true;
+        }
+
+        if ($this->getSingletonReferenceCount() >= 1 || $this->getPrototypeReferenceCount() >= 1) {
+            return false;
+        }
+
+        return true;
     }
 
     public function isConstructorParameterOverridden(string $name): bool
@@ -217,9 +219,8 @@ class ClassDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         if ($this->singleton === false) {
             return $this->instantiateClass($instantiation);
@@ -245,17 +246,6 @@ class ClassDefinition extends AbstractDefinition
 
         $code = "";
 
-        if ($this->isAutoloadingInlinable($parentId, $inline)) {
-            $code .= $this->includeRelatedClasses(
-                $compilation->getAutoloadConfig(),
-                $compilation->getDefinitions(),
-                $this->id,
-                $indentationLevel,
-                $preloadedClasses
-            );
-            $code .= "\n";
-        }
-
         if ($inline === false) {
             $code .= "${indent}return ";
         }
@@ -276,25 +266,23 @@ class ClassDefinition extends AbstractDefinition
 
         $constructorIndentationLevel = $indentationLevel + ($hasProperties ? 1 : 0);
         $constructorIndent = $this->indent($constructorIndentationLevel);
-        $constructorArguments = [];
 
         foreach ($this->constructorArguments as $constructorArgument) {
             if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $constructorArguments[] = "${constructorIndent}${tab}" . $this->compileEntryReference(
+                $code .= "\n${constructorIndent}${tab}" . $this->compileEntryReference(
                     $definition,
                     $compilation,
                     $constructorIndentationLevel + 1,
                     $preloadedClasses
-                );
+                ) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
-                $constructorArguments[] = "${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]);
+                $code .= "\n${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
             }
         }
 
         if ($hasConstructorArguments) {
-            $code .= "\n" . implode(",\n", $constructorArguments);
             $code .= "\n${constructorIndent})";
         }
 
@@ -326,10 +314,7 @@ class ClassDefinition extends AbstractDefinition
         return $code;
     }
 
-    /**
-     * @return mixed
-     */
-    private function instantiateClass(DefinitionInstantiation $instantiation)
+    private function instantiateClass(DefinitionInstantiation $instantiation): mixed
     {
         $arguments = [];
         foreach ($this->constructorArguments as $argument) {
@@ -363,10 +348,7 @@ class ClassDefinition extends AbstractDefinition
         return $object;
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function serializeValue($value): string
+    private function serializeValue(mixed $value): string
     {
         return var_export($value, true);
     }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Examples\Controller\Authentication;
 
+use WoohooLabs\Zen\Attribute\Inject;
 use WoohooLabs\Zen\Examples\Service\AuthenticationService;
 
 class AuthenticationController
 {
-    /** @Inject */
+    #[Inject]
     protected AuthenticationService $service;
 }

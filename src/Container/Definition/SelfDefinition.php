@@ -11,7 +11,7 @@ class SelfDefinition extends AbstractDefinition
 {
     public function __construct(string $className)
     {
-        parent::__construct($className, true, false, false, false, 0, 0);
+        parent::__construct($className, true, false, false, 0, 0);
     }
 
     public function increaseReferenceCount(string $parentId, bool $isParentSingleton): DefinitionInterface
@@ -22,6 +22,11 @@ class SelfDefinition extends AbstractDefinition
     public function needsDependencyResolution(): bool
     {
         return false;
+    }
+
+    public function isDefinitionInlinable(string $parentId = ""): bool
+    {
+        return true;
     }
 
     public function resolveDependencies(): DefinitionInterface
@@ -40,9 +45,8 @@ class SelfDefinition extends AbstractDefinition
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId)
+    public function instantiate($instantiation, $parentId): mixed
     {
         return $instantiation->container;
     }

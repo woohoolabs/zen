@@ -90,28 +90,6 @@ class ContextDependentDefinitionHintTest extends TestCase
     /**
      * @test
      */
-    public function toDefinitionsWithOnlyAutoloadedDefault(): void
-    {
-        $hint = ContextDependentDefinitionHint::create(ClassA::class);
-
-        $definitions = $hint->toDefinitions([], [], InterfaceA::class, true, false);
-
-        $this->assertEquals(
-            [
-                InterfaceA::class => new ContextDependentDefinition(
-                    InterfaceA::class,
-                    new ClassDefinition(ClassA::class, true, false, true),
-                    []
-                ),
-                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
-            ],
-            $definitions
-        );
-    }
-
-    /**
-     * @test
-     */
     public function toDefinitionsWithoutDefault(): void
     {
         $hint = ContextDependentDefinitionHint::create()
@@ -168,38 +146,6 @@ class ContextDependentDefinitionHintTest extends TestCase
                     ]
                 ),
                 ClassA::class => new ClassDefinition(ClassA::class, false),
-            ],
-            $definitions
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function toAutoloadedDefinitionsWithoutDefault(): void
-    {
-        $hint = ContextDependentDefinitionHint::create()
-            ->setClassContext(
-                DefinitionHint::singleton(ClassA::class),
-                [
-                    ClassD::class,
-                    ClassE::class,
-                ]
-            );
-
-        $definitions = $hint->toDefinitions([], [], InterfaceA::class, true, false);
-
-        $this->assertEquals(
-            [
-                InterfaceA::class => new ContextDependentDefinition(
-                    InterfaceA::class,
-                    null,
-                    [
-                        ClassD::class => new ClassDefinition(ClassA::class, true, false, true),
-                        ClassE::class => new ClassDefinition(ClassA::class, true, false, true),
-                    ]
-                ),
-                ClassA::class => new ClassDefinition(ClassA::class, true, false, true),
             ],
             $definitions
         );

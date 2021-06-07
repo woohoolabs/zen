@@ -17,13 +17,11 @@ interface DefinitionInterface
 
     public function isEntryPoint(string $parentId = ""): bool;
 
-    public function isAutoloaded(string $parentId = ""): bool;
-
     public function isFileBased(string $parentId = ""): bool;
 
     public function increaseReferenceCount(string $parentId, bool $isParentSingleton): DefinitionInterface;
 
-    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool;
+    public function isDefinitionInlinable(string $parentId = ""): bool;
 
     public function isSingletonCheckEliminable(string $parentId = ""): bool;
 
@@ -39,9 +37,8 @@ interface DefinitionInterface
     /**
      * @param DefinitionInstantiation $instantiation
      * @param string $parentId
-     * @return mixed
      */
-    public function instantiate($instantiation, $parentId);
+    public function instantiate($instantiation, $parentId): mixed;
 
     /**
      * @param string[] $preloadedClasses

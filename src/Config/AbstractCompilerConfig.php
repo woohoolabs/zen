@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Config;
 
 use Psr\Container\ContainerInterface;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\EntryPoint\ClassEntryPoint;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
@@ -43,11 +41,6 @@ abstract class AbstractCompilerConfig
     abstract public function useConstructorInjection(): bool;
 
     abstract public function usePropertyInjection(): bool;
-
-    public function getAutoloadConfig(): AutoloadConfigInterface
-    {
-        return AutoloadConfig::disabledGlobally();
-    }
 
     public function getPreloadConfig(): PreloadConfigInterface
     {

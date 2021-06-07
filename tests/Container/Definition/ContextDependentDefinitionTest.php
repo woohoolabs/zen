@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WoohooLabs\Zen\Tests\Container\Definition;
 
 use PHPUnit\Framework\TestCase;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfig;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfig;
 use WoohooLabs\Zen\Container\Definition\ClassDefinition;
 use WoohooLabs\Zen\Container\Definition\ContextDependentDefinition;
@@ -213,60 +212,6 @@ class ContextDependentDefinitionTest extends TestCase
     /**
      * @test
      */
-    public function isAutoloadedWithoutDefaultWhenNoParent(): void
-    {
-        $definition = new ContextDependentDefinition("", null, []);
-
-        $this->expectException(ContainerException::class);
-
-        $definition->isAutoloaded();
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloadedWithDefaultWhenNoParent(): void
-    {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
-
-        $isAutoloaded = $definition->isAutoloaded();
-
-        $this->assertTrue($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloadedWithDefaultWhenParentNotExists(): void
-    {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
-
-        $isAutoloaded = $definition->isAutoloaded("X\\B");
-
-        $this->assertTrue($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
-    public function isAutoloadedWhenParentExists(): void
-    {
-        $definition = new ContextDependentDefinition(
-            "",
-            null,
-            [
-                "X\\A" => ClassDefinition::singleton("X\\B", false, true),
-            ]
-        );
-
-        $isAutoloaded = $definition->isAutoloaded("X\\A");
-
-        $this->assertTrue($isAutoloaded);
-    }
-
-    /**
-     * @test
-     */
     public function isFileBasedWithoutDefaultWhenNoParent(): void
     {
         $definition = new ContextDependentDefinition("", null, []);
@@ -281,7 +226,7 @@ class ContextDependentDefinitionTest extends TestCase
      */
     public function isFileBasedWithDefaultWhenNoParent(): void
     {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
 
         $isFileBased = $definition->isFileBased();
 
@@ -293,7 +238,7 @@ class ContextDependentDefinitionTest extends TestCase
      */
     public function isFileBasedWithDefaultWhenParentNotExists(): void
     {
-        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, false, true), []);
+        $definition = new ContextDependentDefinition("", ClassDefinition::singleton("X\\A", false, true), []);
 
         $isFileBased = $definition->isFileBased("X\\B");
 
@@ -309,7 +254,7 @@ class ContextDependentDefinitionTest extends TestCase
             "",
             null,
             [
-                "X\\A" => ClassDefinition::singleton("X\\B", false, false, true),
+                "X\\A" => ClassDefinition::singleton("X\\B", false, true),
             ]
         );
 
@@ -493,7 +438,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 []
             ),
@@ -518,7 +462,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\B" => ClassDefinition::singleton("X\\C"),
@@ -549,7 +492,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\B" => ClassDefinition::singleton("X\\C", true),
@@ -580,7 +522,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\B" => ClassDefinition::singleton("X\\C", true),
@@ -609,7 +550,6 @@ class ContextDependentDefinitionTest extends TestCase
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally(),
                 [
                     "X\\B" => ClassDefinition::singleton("X\\C", true),
@@ -632,16 +572,15 @@ class ContextDependentDefinitionTest extends TestCase
             "X\\A",
             null,
             [
-                "X\\Z" => ClassDefinition::singleton("X\\C", true, false, true),
+                "X\\Z" => ClassDefinition::singleton("X\\C", true, true),
             ]
         );
 
         $compiledDefinition = $definition->compile(
             new DefinitionCompilation(
-                AutoloadConfig::disabledGlobally(),
                 FileBasedDefinitionConfig::disabledGlobally("Definitions"),
                 [
-                    "X\\Z" => ClassDefinition::singleton("X\\C", true, false, true),
+                    "X\\Z" => ClassDefinition::singleton("X\\C", true, true),
                 ]
             ),
             "X\\Z",

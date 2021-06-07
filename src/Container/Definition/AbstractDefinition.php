@@ -6,41 +6,27 @@ namespace WoohooLabs\Zen\Container\Definition;
 
 use ReflectionClass;
 use ReflectionException;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Container\DefinitionCompilation;
-use WoohooLabs\Zen\Utils\FileSystemUtil;
 
-use function array_flip;
 use function array_key_exists;
-use function array_reverse;
 use function str_repeat;
 use function str_replace;
 
 abstract class AbstractDefinition implements DefinitionInterface
 {
-    /** @var string */
-    protected $id;
-    /** @var string */
-    protected $hash;
-    /** @var bool */
-    protected $singleton;
-    /** @var bool */
-    private $entryPoint;
-    /** @var bool */
-    private $autoloaded;
-    /** @var bool */
-    private $fileBased;
-    /** @var int */
-    private $singletonReferenceCount;
-    /** @var int */
-    private $prototypeReferenceCount;
+    protected string $id;
+    protected string $hash;
+    protected bool $singleton;
+    private bool $entryPoint;
+    private bool $fileBased;
+    private int $singletonReferenceCount;
+    private int $prototypeReferenceCount;
 
     public function __construct(
         string $id,
         bool $isSingleton,
         bool $isEntryPoint,
-        bool $isAutoloaded,
         bool $isFileBased,
         int $singletonReferenceCount,
         int $prototypeReferenceCount
@@ -49,7 +35,6 @@ abstract class AbstractDefinition implements DefinitionInterface
         $this->hash = $this->hash($id);
         $this->singleton = $isSingleton;
         $this->entryPoint = $isEntryPoint;
-        $this->autoloaded = $isAutoloaded;
         $this->fileBased = $isFileBased;
         $this->singletonReferenceCount = $singletonReferenceCount;
         $this->prototypeReferenceCount = $prototypeReferenceCount;
@@ -73,11 +58,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     public function isEntryPoint(string $parentId = ""): bool
     {
         return $this->entryPoint;
-    }
-
-    public function isAutoloaded(string $parentId = ""): bool
-    {
-        return $this->autoloaded;
     }
 
     public function isFileBased(string $parentId = ""): bool
@@ -106,21 +86,9 @@ abstract class AbstractDefinition implements DefinitionInterface
         return $this->prototypeReferenceCount;
     }
 
-    public function isAutoloadingInlinable(string $parentId = "", bool $inline = false): bool
+    public function isDefinitionInlinable(string $parentId = ""): bool
     {
-        if ($this->autoloaded === false || $this->entryPoint === false || $this->singleton === false) {
-            return false;
-        }
-
-        if ($this->singletonReferenceCount > 0 || $this->prototypeReferenceCount > 0) {
-            return false;
-        }
-
-        if ($inline) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public function isSingletonCheckEliminable(string $parentId = ""): bool
@@ -210,48 +178,6 @@ abstract class AbstractDefinition implements DefinitionInterface
     }
 
     /**
-     * @param DefinitionInterface[] $definitions
-     * @param string[]              $preloadedClasses
-     */
-    protected function includeRelatedClasses(
-        AutoloadConfigInterface $autoloadConfig,
-        array $definitions,
-        string $id,
-        int $indentationLevel,
-        array $preloadedClasses
-    ): string {
-        $indent = $this->indent($indentationLevel);
-
-        $relatedClasses = [];
-        $this->collectRelatedClasses($definitions, $id, $relatedClasses);
-        $relatedClasses = array_reverse($relatedClasses);
-
-        $rootDirectory = $autoloadConfig->getRootDirectory();
-        $alwaysAutoloadedClasses = array_flip($autoloadConfig->getAlwaysAutoloadedClasses());
-        $neverAutoloadedClasses = array_flip($autoloadConfig->getExcludedClasses());
-
-        $code = "";
-        foreach ($relatedClasses as $relatedClass) {
-            if (array_key_exists($relatedClass, $alwaysAutoloadedClasses) || array_key_exists($relatedClass, $neverAutoloadedClasses)) {
-                continue;
-            }
-
-            if (array_key_exists($relatedClass, $preloadedClasses)) {
-                continue;
-            }
-
-            $filename = FileSystemUtil::getRelativeFilenameForClass($rootDirectory, $relatedClass);
-            if ($filename === "") {
-                continue;
-            }
-
-            $code .= "${indent}include_once \$this->rootDirectory . '/$filename';\n";
-        }
-
-        return $code;
-    }
-
-    /**
      * @param array<string, string> $relatedClasses
      */
     protected function collectParentClasses(string $id, array &$relatedClasses): void
@@ -281,24 +207,6 @@ abstract class AbstractDefinition implements DefinitionInterface
                 unset($relatedClasses[$interface]);
             }
             $relatedClasses[$interface] = $interface;
-        }
-    }
-
-    /**
-     * @param DefinitionInterface[] $definitions
-     * @param array<string, string> $relatedClasses
-     */
-    private function collectRelatedClasses(array $definitions, string $id, array &$relatedClasses): void
-    {
-        $definition = $definitions[$id];
-
-        $relatedClasses[$id] = $id;
-        $this->collectParentClasses($id, $relatedClasses);
-
-        foreach ($definition->getClassDependencies() as $relatedClass) {
-            $relatedClasses[$relatedClass] = $relatedClass;
-            $this->collectRelatedClasses($definitions, $relatedClass, $relatedClasses);
-            $this->collectParentClasses($relatedClass, $relatedClasses);
         }
     }
 }

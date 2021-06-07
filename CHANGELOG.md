@@ -1,4 +1,4 @@
-## 3.0.0 - unreleased
+## 3.1.0 - unreleased
 
 ADDED:
 
@@ -7,6 +7,22 @@ CHANGED:
 REMOVED:
 
 FIXED:
+
+## 3.0.0 - 2021-06-07
+
+ADDED:
+
+- Support for the `#[Inject]` property attribute
+
+CHANGED:
+
+- Increased minimum version requirement to PHP 8
+- Significantly improved performance
+
+REMOVED:
+
+- Support for built-in autoloading
+- Support for `@Inject` annotation
 
 ## 2.9.1 - 2020-06-23
 

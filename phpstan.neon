@@ -2,9 +2,8 @@ parameters:
     bootstrapFiles:
         - vendor/autoload.php
     ignoreErrors:
-        - '#^Variable method call on \$this\(WoohooLabs\\Zen\\AbstractCompiledContainer\)\.$#'
         - '#^Variable property access on .*$#'
-        - '#^Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class-string\<T of object\>\|T of object, string given\.$#'
+        - '#^Parameter .* of class ReflectionClass constructor expects class-string\<T of object\>\|T of object, string given\.$#'
         -
             message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
             path: src/Config/AbstractContainerConfig.php

@@ -8,40 +8,21 @@ use Closure;
 use Psr\Container\ContainerInterface;
 use WoohooLabs\Zen\Exception\NotFoundException;
 
-use function array_key_exists;
-
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
     /** @var array<string, object> */
     protected array $singletonEntries = [];
-    /** @var array<string, string> */
-    protected static array $entryPoints = [];
 
     /**
      * @param string $id
      */
-    public function has($id): bool
-    {
-        return array_key_exists($id, static::$entryPoints);
-    }
+    abstract public function has($id);
 
     /**
      * @param string $id
-     * @return mixed
      * @throws NotFoundException
      */
-    public function get($id)
-    {
-        return $this->singletonEntries[$id] ?? $this->{static::$entryPoints[$id] ?? "throwNotFoundException"}($id);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function throwNotFoundException(string $id)
-    {
-        throw new NotFoundException($id);
-    }
+    abstract public function get($id): mixed;
 
     /**
      * @param object $object

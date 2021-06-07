@@ -9,12 +9,11 @@ use WoohooLabs\Zen\RuntimeContainer;
 
 final class DefinitionInstantiation
 {
-    /** @var RuntimeContainer */
-    public $container;
+    public RuntimeContainer $container;
     /** @var DefinitionInterface[] */
-    public $definitions = [];
+    public array $definitions = [];
     /** @var array<string, mixed> */
-    public $singletonEntries = [];
+    public array $singletonEntries = [];
 
     public function __construct(RuntimeContainer $container)
     {

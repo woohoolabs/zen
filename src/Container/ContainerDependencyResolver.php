@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Container;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use PhpDocReader\PhpDocReader;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
-use WoohooLabs\Zen\Annotation\Inject;
+use WoohooLabs\Zen\Attribute\Inject;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
-use WoohooLabs\Zen\Config\Autoload\AutoloadConfigInterface;
 use WoohooLabs\Zen\Config\EntryPoint\EntryPointInterface;
 use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface;
 use WoohooLabs\Zen\Config\Hint\DefinitionHintInterface;
@@ -30,7 +28,6 @@ use function implode;
 
 final class ContainerDependencyResolver
 {
-    private SimpleAnnotationReader $annotationReader;
     private PhpDocReader $typeHintReader;
     private AbstractCompilerConfig $compilerConfig;
     private bool $useConstructorInjection;
@@ -41,19 +38,12 @@ final class ContainerDependencyResolver
     private array $definitionHints;
     /** @var DefinitionInterface[] */
     private array $definitions;
-    private AutoloadConfigInterface $autoloadConfig;
-    /** @var string[] */
-    private array $excludedAutoloadedFiles;
-    /** @var string[] */
-    private array $alwaysAutoloadedClases;
     private FileBasedDefinitionConfigInterface $fileBasedDefinitionConfig;
     /** @var string[] */
     private array $excludedFileBasedDefinitions;
 
     public function __construct(AbstractCompilerConfig $compilerConfig)
     {
-        $this->annotationReader = new SimpleAnnotationReader();
-        $this->annotationReader->addNamespace('WoohooLabs\Zen\Annotation');
         $this->typeHintReader = new PhpDocReader();
 
         $this->compilerConfig = $compilerConfig;
@@ -61,10 +51,6 @@ final class ContainerDependencyResolver
         $this->usePropertyInjection = $compilerConfig->usePropertyInjection();
         $this->entryPoints = $compilerConfig->getEntryPointMap();
         $this->definitionHints = $compilerConfig->getDefinitionHints();
-
-        $this->autoloadConfig = $compilerConfig->getAutoloadConfig();
-        $this->excludedAutoloadedFiles = array_flip($this->autoloadConfig->getExcludedClasses());
-        $this->alwaysAutoloadedClases = array_flip($this->autoloadConfig->getAlwaysAutoloadedClasses());
 
         $this->fileBasedDefinitionConfig = $compilerConfig->getFileBasedDefinitionConfig();
         $this->excludedFileBasedDefinitions = array_flip($this->fileBasedDefinitionConfig->getExcludedDefinitions());
@@ -111,20 +97,13 @@ final class ContainerDependencyResolver
             return;
         }
 
-        if ($runtime) {
-            $isAutoloaded = false;
-            $isFileBased = false;
-        } else {
-            $isAutoloaded = $this->isAutoloaded($id, $parentEntryPoint);
-            $isFileBased = $this->isFileBased($id, $parentEntryPoint);
-        }
+        $isFileBased = $runtime ? false : $this->isFileBased($id, $parentEntryPoint);
 
         if (array_key_exists($id, $this->definitionHints)) {
             $definitions = $this->definitionHints[$id]->toDefinitions(
                 $this->entryPoints,
                 $this->definitionHints,
                 $id,
-                $isAutoloaded,
                 $isFileBased
             );
 
@@ -139,7 +118,7 @@ final class ContainerDependencyResolver
             return;
         }
 
-        $this->definitions[$id] = new ClassDefinition($id, true, array_key_exists($id, $this->entryPoints), $isAutoloaded, $isFileBased);
+        $this->definitions[$id] = new ClassDefinition($id, true, array_key_exists($id, $this->entryPoints), $isFileBased);
         $this->resolveDependencies($id, $parentId, $parentEntryPoint, $runtime);
     }
 
@@ -187,8 +166,8 @@ final class ContainerDependencyResolver
         }
 
         $paramNames = [];
-        foreach ($constructor->getParameters() as $param) {
-            $paramName = $param->getName();
+        foreach ($constructor->getParameters() as $parameter) {
+            $paramName = $parameter->getName();
             $paramNames[] = $paramName;
 
             if ($definition->isConstructorParameterOverridden($paramName)) {
@@ -196,28 +175,35 @@ final class ContainerDependencyResolver
                 continue;
             }
 
-            if ($param->isOptional()) {
-                $definition->addConstructorArgumentFromValue($param->getDefaultValue());
+            if ($parameter->isOptional()) {
+                $definition->addConstructorArgumentFromValue($parameter->getDefaultValue());
                 continue;
             }
 
-            $paramClass = $this->typeHintReader->getParameterClass($param);
-            if ($paramClass === null) {
+            $parameterClass = null;
+            $parameterType = $parameter->getType();
+            if ($parameterType === null) {
+                $parameterClass = $this->typeHintReader->getParameterClass($parameter);
+            } elseif ($parameterType instanceof ReflectionNamedType && $parameterType->isBuiltin() === false) {
+                $parameterClass = $parameterType->getName();
+            }
+
+            if ($parameterClass === null) {
                 throw new ContainerException(
-                    "Type declaration or PHPDoc type hint for constructor parameter '$paramName' in '" .
-                    "class '{$definition->getClassName()}' is missing or it is not a class!"
+                    "Type declaration or PHPDoc type hint for constructor parameter $paramName of " .
+                    "class {$definition->getClassName()} is missing or it is not a class!"
                 );
             }
 
-            $definition->addConstructorArgumentFromClass($paramClass);
-            $this->resolve($paramClass, $id, $parentEntryPoint, $runtime);
-            $this->definitions[$paramClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
+            $definition->addConstructorArgumentFromClass($parameterClass);
+            $this->resolve($parameterClass, $id, $parentEntryPoint, $runtime);
+            $this->definitions[$parameterClass]->increaseReferenceCount($id, $definition->isSingleton($parentId));
         }
 
         $invalidConstructorParameterOverrides = array_diff($definition->getOverriddenConstructorParameters(), $paramNames);
         if ($invalidConstructorParameterOverrides !== []) {
             throw new ContainerException(
-                "Class '{$definition->getClassName()}' has the following overridden constructor parameters which don't exist: " .
+                "Class {$definition->getClassName()} has the following overridden constructor parameters which don't exist: " .
                 implode(", ", $invalidConstructorParameterOverrides) . "!"
             );
         }
@@ -246,27 +232,27 @@ final class ContainerDependencyResolver
                 continue;
             }
 
-            if ($this->annotationReader->getPropertyAnnotation($property, Inject::class) === null) {
+            if ($property->getAttributes(Inject::class) === []) {
                 continue;
             }
 
             if ($property->isStatic()) {
                 throw new ContainerException(
-                    "Property '{$class->getName()}::\$$propertyName' is static and can't be injected upon!"
+                    "Property {$class->getName()}::\$$propertyName is static and can't be injected upon!"
                 );
             }
 
             $propertyClass = null;
             $propertyType = $property->getType();
-            if ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
-                $propertyClass = $propertyType->getName();
-            } else {
+            if ($propertyType === null) {
                 $propertyClass = $this->typeHintReader->getPropertyClass($property);
+            } elseif ($propertyType instanceof ReflectionNamedType && $propertyType->isBuiltin() === false) {
+                $propertyClass = $propertyType->getName();
             }
 
             if ($propertyClass === null) {
                 throw new ContainerException(
-                    "Type declaration or PHPDoc type hint for property $id::\$$propertyName' is missing or it is not a class!"
+                    "Type declaration or PHPDoc type hint for property $id::\$$propertyName is missing or it is not a class!"
                 );
             }
 
@@ -278,23 +264,10 @@ final class ContainerDependencyResolver
         $invalidPropertyOverrides = array_diff($definition->getOverriddenProperties(), $propertyNames);
         if ($invalidPropertyOverrides !== []) {
             throw new ContainerException(
-                "Class '$id' has the following overridden properties which don't exist: " .
+                "Class $id has the following overridden properties which don't exist: " .
                 implode(", ", $invalidPropertyOverrides) . "!"
             );
         }
-    }
-
-    private function isAutoloaded(string $id, EntryPointInterface $parentEntryPoint): bool
-    {
-        if (array_key_exists($id, $this->excludedAutoloadedFiles)) {
-            return false;
-        }
-
-        if (array_key_exists($id, $this->alwaysAutoloadedClases)) {
-            return true;
-        }
-
-        return $parentEntryPoint->isAutoloaded($this->autoloadConfig);
     }
 
     private function isFileBased(string $id, EntryPointInterface $parentEntryPoint): bool
