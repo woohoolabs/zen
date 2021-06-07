@@ -1,4 +1,4 @@
-## 3.0.0 - unreleased
+## 3.0.0 - 2021-06-07
 
 ADDED:
 
@@ -13,8 +13,6 @@ REMOVED:
 
 - Support for built-in autoloading
 - Support for `@Inject` annotation
-
-FIXED:
 
 ## 2.9.1 - 2020-06-23
 
