@@ -160,7 +160,7 @@ class FileSystemUtil
     }
 
     /**
-     * @param array<int, mixed> $tokens
+     * @param array<int, array<int, int|string>|string> $tokens
      */
     private static function isNamespace(array $tokens, int $position, bool $dlm): bool
     {
@@ -169,7 +169,7 @@ class FileSystemUtil
     }
 
     /**
-     * @param array<int, mixed> $tokens
+     * @param array<int, array<int, int|string>|string> $tokens
      */
     private static function isRequiredClass(array $tokens, int $position, bool $onlyConcreteClasses): bool
     {
@@ -181,8 +181,8 @@ class FileSystemUtil
     }
 
     /**
-     * @param array<int, mixed> $tokens
-     * @param array<int, int>   $allowedClassTokens
+     * @param array<int, array<int, int|string>|string> $tokens
+     * @param array<int, int> $allowedClassTokens
      */
     private static function isClass(
         array $tokens,

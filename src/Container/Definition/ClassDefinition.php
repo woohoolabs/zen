@@ -14,9 +14,9 @@ use function var_export;
 
 class ClassDefinition extends AbstractDefinition
 {
-    /** @var array<int, array<string, mixed>> */
+    /** @var array<int, array{class?: string, value?: mixed}> */
     private array $constructorArguments;
-    /** @var array<string, array<string, mixed>> */
+    /** @var array<string, array{class?: string, value?: mixed}> */
     private array $properties;
     private bool $needsDependencyResolution;
     /** @var array<string, string|int|float|bool|array<mixed, mixed>|null> */

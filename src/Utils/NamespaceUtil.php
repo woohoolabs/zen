@@ -23,7 +23,7 @@ class NamespaceUtil
      */
     public static function getClassesInPsr4Namespace(string $namespace, bool $recursive, bool $onlyInstantiable): array
     {
-        /** @var array<mixed, mixed>|null $psr4Prefixes */
+        /** @var array<string, array<string, string>>|null $psr4Prefixes */
         static $psr4Prefixes = null;
         if ($psr4Prefixes === null) {
             $psr4Prefixes = require self::getPsr4AutoloaderPath();
@@ -89,7 +89,7 @@ class NamespaceUtil
     }
 
     /**
-     * @param array<string, array> $psr4Prefixes
+     * @param array<string, array<string, string>> $psr4Prefixes
      */
     private static function getBestMatchingPsr4Prefix(array $psr4Prefixes, string $namespace): string
     {

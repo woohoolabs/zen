@@ -17,7 +17,7 @@ final class ContainerCompiler
     /**
      * @param DefinitionInterface[] $definitions
      * @param string[]              $preloadedClasses
-     * @return array<string, mixed>
+     * @return array{container: string, definitions: array<string, string>}
      */
     public function compile(AbstractCompilerConfig $compilerConfig, array $definitions, array $preloadedClasses): array
     {
