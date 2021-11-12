@@ -4,7 +4,6 @@
 [![Software License][ico-license]](LICENSE)
 [![Build Status][ico-build]][link-build]
 [![Coverage Status][ico-coverage]][link-coverage]
-[![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Gitter][ico-support]][link-support]
 
@@ -169,22 +168,22 @@ class CompilerConfig extends AbstractCompilerConfig
     {
         return "App\\Container";
     }
-    
+
     public function getContainerClassName(): string
     {
         return "Container";
     }
-    
+
     public function useConstructorInjection(): bool
     {
         return true;
     }
-    
+
     public function usePropertyInjection(): bool
     {
         return true;
     }
-    
+
     public function getContainerConfigs(): array
     {
         return [
@@ -271,7 +270,7 @@ the compilation phase resulting in the full object graph (this feature is usuall
 The following example shows a configuration which instructs the compiler to recursively search for all classes in the
 `Controller` directory and discover all of their dependencies. Please note that only concrete classes are included by default,
 and detection is done recursively.
- 
+
 ```php
 protected function getEntryPoints(): array
 {
@@ -636,14 +635,12 @@ The MIT License (MIT). Please see the [License File](LICENSE) for more informati
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
 [ico-build]: https://img.shields.io/github/workflow/status/woohoolabs/zen/Continuous%20Integration
 [ico-coverage]: https://img.shields.io/codecov/c/github/woohoolabs/zen
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/woohoolabs/zen.svg
 [ico-downloads]: https://img.shields.io/packagist/dt/woohoolabs/zen.svg
 [ico-support]: https://badges.gitter.im/woohoolabs/zen.svg
 
 [link-version]: https://packagist.org/packages/woohoolabs/zen
 [link-build]: https://github.com/woohoolabs/zen/actions
 [link-coverage]: https://codecov.io/gh/woohoolabs/zen
-[link-code-quality]: https://scrutinizer-ci.com/g/woohoolabs/zen
 [link-downloads]: https://packagist.org/packages/woohoolabs/zen
 [link-author]: https://github.com/kocsismate
 [link-contributors]: ../../contributors
