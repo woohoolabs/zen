@@ -6,3 +6,4 @@ examples/Container.php
 examples/Definitions/
 examples/preload.php
 tests/Definitions/
+.idea

@@ -13,8 +13,9 @@ class ContainerWithInjectedProperty extends AbstractCompiledContainer
 {
     /**
      * @param string $id
+     * @return bool
      */
-    public function has($id): bool
+    public function has(string $id): bool
     {
         return match ($id) {
             'A' => true,
@@ -24,9 +25,10 @@ class ContainerWithInjectedProperty extends AbstractCompiledContainer
 
     /**
      * @param string $id
+     * @return mixed
      * @throws NotFoundException
      */
-    public function get($id): mixed
+    public function get(string $id): mixed
     {
         return $this->singletonEntries[$id] ?? match ($id) {
             'A' => $this->A(),
