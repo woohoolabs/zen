@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46772d5f596266ea7bb270cc2b5bed6a",
+    "content-hash": "458189ad964c8bf29ca4951bb129516f",
     "packages": [
         {
             "name": "php-di/phpdoc-reader",
@@ -2637,7 +2637,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0"
+        "php": "^8.0.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
