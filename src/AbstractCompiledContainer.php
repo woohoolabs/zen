@@ -16,20 +16,20 @@ abstract class AbstractCompiledContainer implements ContainerInterface
     /**
      * @param string $id
      */
-    abstract public function has($id);
+    abstract public function has(string $id): bool;
 
     /**
      * @param string $id
      * @throws NotFoundException
      */
-    abstract public function get($id): mixed;
+    abstract public function get(string $id): mixed;
 
     /**
      * @param object $object
      * @param array<string, mixed> $properties
      * @return object
      */
-    protected function setClassProperties($object, $properties)
+    protected function setClassProperties(object $object, array $properties): object
     {
         Closure::bind(
             static function () use ($object, $properties): void {
