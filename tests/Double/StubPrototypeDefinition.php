@@ -25,6 +25,6 @@ class StubPrototypeDefinition extends TestDefinition
     ): string {
         $indent = $this->indent($indentationLevel);
 
-        return "${indent}// This is a dummy definition.\n";
+        return "{$indent}// This is a dummy definition.\n";
     }
 }
