@@ -25,10 +25,7 @@ class RuntimeContainer implements ContainerInterface
         $this->instantiation = new DefinitionInstantiation($this);
     }
 
-    /**
-     * @param string $id
-     */
-    public function has($id): bool
+    public function has(string $id): bool
     {
         if (array_key_exists($id, $this->instantiation->definitions)) {
             return $this->instantiation->definitions[$id]->isEntryPoint();
@@ -44,20 +41,17 @@ class RuntimeContainer implements ContainerInterface
     }
 
     /**
-     * @param string $id
      * @throws NotFoundException
      */
-    public function get($id): mixed
+    public function get(string $id): mixed
     {
         return $this->instantiation->singletonEntries[$id] ?? ($this->instantiation->definitions[$id] ?? $this->resolve($id))->instantiate($this->instantiation, "");
     }
 
     /**
-     * @param string $id
-     * @return DefinitionInterface
      * @throws NotFoundException
      */
-    private function resolve($id)
+    private function resolve(string $id): DefinitionInterface
     {
         $this->instantiation->definitions = array_merge(
             $this->instantiation->definitions,

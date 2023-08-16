@@ -6,29 +6,13 @@ namespace WoohooLabs\Zen;
 
 use Closure;
 use Psr\Container\ContainerInterface;
-use WoohooLabs\Zen\Exception\NotFoundException;
 
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
     /** @var array<string, object> */
     protected array $singletonEntries = [];
 
-    /**
-     * @param string $id
-     */
-    abstract public function has(string $id): bool;
-
-    /**
-     * @param string $id
-     * @throws NotFoundException
-     */
-    abstract public function get(string $id): mixed;
-
-    /**
-     * @param object $object
-     * @param array<string, mixed> $properties
-     * @return object
-     */
+    /** @param array<string, mixed> $properties */
     protected function setClassProperties(object $object, array $properties): object
     {
         Closure::bind(
