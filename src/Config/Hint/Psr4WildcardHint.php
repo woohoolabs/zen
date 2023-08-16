@@ -85,7 +85,7 @@ class Psr4WildcardHint extends AbstractHint implements WildcardHintInterface
     private function validateNamespace(string $pattern, string $namespace): void
     {
         if (strpos($namespace, "*") !== false) {
-            throw new ContainerException("'$pattern' is an invalid pattern: the namespace part can't contain the asteriks character (*)!");
+            throw new ContainerException("'$pattern' is an invalid pattern: the namespace part can't contain the asterisk character (*)!");
         }
     }
 }
