@@ -3,7 +3,7 @@ version: '2'
 services:
     zen-php:
         container_name: zen-php
-        image: php:8.0-cli
+        image: php:8.2-cli
         volumes:
             - .:/var/www
         working_dir: /var/www
