@@ -20,8 +20,8 @@
         "php-di/phpdoc-reader": "^2.2.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.0.0",
-        "phpstan/phpstan-strict-rules": "^1.0.0",
+        "phpstan/phpstan": "^1.10.0",
+        "phpstan/phpstan-strict-rules": "^1.5.0",
         "phpunit/phpunit": "^9.5.0",
         "squizlabs/php_codesniffer": "^3.6.0",
         "woohoolabs/coding-standard": "^2.3.0",
