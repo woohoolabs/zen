@@ -6,6 +6,7 @@ namespace WoohooLabs\Zen\Container\Builder;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use WoohooLabs\Zen\Config\AbstractCompilerConfig;
 use WoohooLabs\Zen\Container\ContainerCompiler;
 use WoohooLabs\Zen\Container\ContainerDependencyResolver;
@@ -13,6 +14,7 @@ use WoohooLabs\Zen\Container\PreloadCompiler;
 use WoohooLabs\Zen\Container\PreloadDependencyResolver;
 use WoohooLabs\Zen\Exception\ContainerException;
 
+use function assert;
 use function dirname;
 use function file_exists;
 use function file_put_contents;
@@ -96,6 +98,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
 
         foreach ($files as $file) {
+            assert($file instanceof SplFileInfo);
             if ($file->isDir()) {
                 rmdir($file->getRealPath());
             } else {

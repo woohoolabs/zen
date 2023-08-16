@@ -9,9 +9,11 @@ use IteratorIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use SplFileInfo;
 use Throwable;
 
 use function array_key_exists;
+use function assert;
 use function count;
 use function file_get_contents;
 use function in_array;
@@ -107,6 +109,7 @@ class FileSystemUtil
 
         $result = [];
         foreach ($iterator as $file) {
+            assert($file instanceof SplFileInfo);
             $path = $file->getPathname();
 
             if (isset($path[4]) && substr_compare($path, ".php", -4, null, $caseInsensitive) === 0) {
