@@ -8,6 +8,8 @@ use stdClass;
 
 class StubContainerEntry
 {
+    public mixed $a;
+
     public function getA(): stdClass
     {
         return new stdClass();
