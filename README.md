@@ -228,10 +228,10 @@ class ContainerConfig extends AbstractContainerConfig
             ContainerInterface::class => Container::class,
 
             // Bind the Request class to the RequestInterface (Prototype scope)
-            RequestInterface::class => DefinionHint::prototype(Request::class),
+            RequestInterface::class => DefinitionHint::prototype(Request::class),
 
             // Bind the Response class to the ResponseInterface (Singleton scope)
-            ResponseInterface::class => DefinionHint::singleton(Response::class),
+            ResponseInterface::class => DefinitionHint::singleton(Response::class),
         ];
     }
 
@@ -633,7 +633,7 @@ The MIT License (MIT). Please see the [License File](LICENSE) for more informati
 
 [ico-version]: https://img.shields.io/packagist/v/woohoolabs/zen.svg
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
-[ico-build]: https://img.shields.io/github/workflow/status/woohoolabs/zen/Continuous%20Integration
+[ico-build]: https://github.com/woohoolabs/zen/actions/workflows/continuous-integration.yml/badge.svg
 [ico-coverage]: https://img.shields.io/codecov/c/github/woohoolabs/zen
 [ico-downloads]: https://img.shields.io/packagist/dt/woohoolabs/zen.svg
 [ico-support]: https://badges.gitter.im/woohoolabs/zen.svg
@@ -643,5 +643,5 @@ The MIT License (MIT). Please see the [License File](LICENSE) for more informati
 [link-coverage]: https://codecov.io/gh/woohoolabs/zen
 [link-downloads]: https://packagist.org/packages/woohoolabs/zen
 [link-author]: https://github.com/kocsismate
-[link-contributors]: ../../contributors
+[link-contributors]: https://github.com/woohoolabs/zen/graphs/contributors
 [link-support]: https://gitter.im/woohoolabs/zen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
