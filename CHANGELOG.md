@@ -1,12 +1,13 @@
-## 3.1.0 - unreleased
 
-ADDED:
+## 3.1.0 - 2023-08-19
 
 CHANGED:
 
-REMOVED:
+- Upgraded to PSR-11 v2.0.0
 
 FIXED:
+
+- [https://github.com/woohoolabs/zen/pull/16](Deprecation notices on PHP 8.2)
 
 ## 3.0.0 - 2021-06-07
 
