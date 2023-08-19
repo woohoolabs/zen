@@ -247,7 +247,7 @@ class ClassDefinition extends AbstractDefinition
         $code = "";
 
         if ($inline === false) {
-            $code .= "${indent}return ";
+            $code .= "{$indent}return ";
         }
 
         if ($this->isSingletonCheckEliminable($parentId) === false) {
@@ -256,7 +256,7 @@ class ClassDefinition extends AbstractDefinition
 
         if ($hasProperties) {
             $code .= "\$this->setClassProperties(\n";
-            $code .= "${indent}${tab}";
+            $code .= "{$indent}{$tab}";
         }
 
         $code .= "new \\" . $this->getClassName() . "(";
@@ -271,40 +271,40 @@ class ClassDefinition extends AbstractDefinition
             if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $code .= "\n${constructorIndent}${tab}" . $this->compileEntryReference(
+                $code .= "\n{$constructorIndent}{$tab}" . $this->compileEntryReference(
                     $definition,
                     $compilation,
                     $constructorIndentationLevel + 1,
                     $preloadedClasses
                 ) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
-                $code .= "\n${constructorIndent}${tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
+                $code .= "\n{$constructorIndent}{$tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
             }
         }
 
         if ($hasConstructorArguments) {
-            $code .= "\n${constructorIndent})";
+            $code .= "\n{$constructorIndent})";
         }
 
         if ($hasProperties) {
             $code .= ",\n";
-            $code .= "${indent}${tab}[\n";
+            $code .= "{$indent}{$tab}[\n";
             foreach ($this->properties as $propertyName => $property) {
                 if (array_key_exists("class", $property)) {
                     $definition = $compilation->getDefinition($property["class"]);
 
-                    $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->compileEntryReference(
+                    $code .= "{$indent}{$tab}{$tab}'$propertyName' => " . $this->compileEntryReference(
                         $definition,
                         $compilation,
                         $indentationLevel + 2,
                         $preloadedClasses
                     ) . ",\n";
                 } elseif (array_key_exists("value", $property)) {
-                    $code .= "${indent}${tab}${tab}'$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
+                    $code .= "{$indent}{$tab}{$tab}'$propertyName' => " . $this->serializeValue($property["value"]) . ",\n";
                 }
             }
-            $code .= "${indent}${tab}]\n";
-            $code .= "${indent})";
+            $code .= "{$indent}{$tab}]\n";
+            $code .= "{$indent})";
         }
 
         if ($inline === false) {

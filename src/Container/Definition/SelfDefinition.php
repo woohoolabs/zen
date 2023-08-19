@@ -67,6 +67,6 @@ class SelfDefinition extends AbstractDefinition
             return "\$this";
         }
 
-        return "${indent}return \$this;\n";
+        return "{$indent}return \$this;\n";
     }
 }

@@ -131,7 +131,7 @@ class ReferenceDefinition extends AbstractDefinition
         $code = "";
 
         if ($inline === false) {
-            $code .= "${indent}return ";
+            $code .= "{$indent}return ";
         }
 
         if ($this->isSingletonCheckEliminable($parentId) === false) {

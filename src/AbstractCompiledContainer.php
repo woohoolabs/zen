@@ -7,6 +7,8 @@ namespace WoohooLabs\Zen;
 use Closure;
 use Psr\Container\ContainerInterface;
 
+use function property_exists;
+
 abstract class AbstractCompiledContainer implements ContainerInterface
 {
     /** @var array<string, object> */
@@ -18,7 +20,9 @@ abstract class AbstractCompiledContainer implements ContainerInterface
         Closure::bind(
             static function () use ($object, $properties): void {
                 foreach ($properties as $name => $value) {
-                    $object->$name = $value;
+                    if (property_exists($object, $name)) {
+                        $object->$name = $value;
+                    }
                 }
             },
             null,
