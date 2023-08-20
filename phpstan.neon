@@ -8,14 +8,14 @@ parameters:
             message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
             path: src/Config/AbstractContainerConfig.php
         -
-        	message: '#^Unreachable statement - code above always terminates\.$#'
-        	path: src/Config/AbstractContainerConfig.php
+            message: '#^Unreachable statement - code above always terminates\.$#'
+            path: src/Config/AbstractContainerConfig.php
         -
-        	message: '#^Property WoohooLabs\\Zen\\Container\\ContainerDependencyResolver::\$excludedFileBasedDefinitions \(array\<string\>\) does not accept array\<string, int\>\.$#'
-        	path: src/Container/ContainerDependencyResolver.php
+            message: '#^Property WoohooLabs\\Zen\\Container\\ContainerDependencyResolver::\$excludedFileBasedDefinitions \(array\<string\>\) does not accept array\<string, int\>\.$#'
+            path: src/Container/ContainerDependencyResolver.php
         -
-        	message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<int, array\<int\|string, mixed\>\|bool\|float\|int\|string\|null\> given\.$#'
-        	path: src/Container/ContainerDependencyResolver.php
+            message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<int, array\<int\|string, mixed\>\|bool\|float\|int\|string\|null\> given\.$#'
+            path: src/Container/ContainerDependencyResolver.php
     checkGenericClassInNonGenericObjectType: false
 
 includes:
