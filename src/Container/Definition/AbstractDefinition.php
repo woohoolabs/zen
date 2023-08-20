@@ -10,6 +10,8 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 use function array_key_exists;
+use function array_reduce;
+use function explode;
 use function str_repeat;
 use function str_replace;
 
