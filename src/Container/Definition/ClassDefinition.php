@@ -271,14 +271,17 @@ class ClassDefinition extends AbstractDefinition
             if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $code .= "\n{$constructorIndent}{$tab}" . $this->compileEntryReference(
+                $code .= $this->indentLines("{$constructorIndent}{$tab}", $this->compileEntryReference(
                     $definition,
                     $compilation,
                     $constructorIndentationLevel + 1,
                     $preloadedClasses
-                ) . ",";
+                )) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
-                $code .= "\n{$constructorIndent}{$tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
+                $code .= $this->indentLines(
+                        "{$constructorIndent}{$tab}",
+                        $this->serializeValue($constructorArgument["value"])
+                    ) . ",";
             }
         }
 
@@ -350,6 +353,6 @@ class ClassDefinition extends AbstractDefinition
 
     private function serializeValue(mixed $value): string
     {
-        return var_export($value, true);
+        return preg_replace("/^( +)/m", "$1$1", var_export($value, true));
     }
 }

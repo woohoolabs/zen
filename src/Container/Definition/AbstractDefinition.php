@@ -177,6 +177,17 @@ abstract class AbstractDefinition implements DefinitionInterface
         return str_repeat(" ", $indentationLevel * 4);
     }
 
+    protected function indentLines(string $indentation, string $lines): string
+    {
+        return array_reduce(
+            explode("\n", $lines),
+            static function($output, $line) use ($indentation) {
+                return $output . "\n" . $indentation.$line;
+            },
+            ""
+        );
+    }
+
     /**
      * @param array<string, string> $relatedClasses
      */
