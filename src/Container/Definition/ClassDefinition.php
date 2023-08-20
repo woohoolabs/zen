@@ -354,6 +354,6 @@ class ClassDefinition extends AbstractDefinition
 
     private function serializeValue(mixed $value): string
     {
-        return (string)preg_replace("/^( +)/m", "$1$1", var_export($value, true));
+        return (string) preg_replace("/^( +)/m", "$1$1", var_export($value, true));
     }
 }
