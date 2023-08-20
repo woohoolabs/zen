@@ -280,9 +280,9 @@ class ClassDefinition extends AbstractDefinition
                 )) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
                 $code .= $this->indentLines(
-                        "{$constructorIndent}{$tab}",
-                        $this->serializeValue($constructorArgument["value"])
-                    ) . ",";
+                    "{$constructorIndent}{$tab}",
+                    $this->serializeValue($constructorArgument["value"])
+                ) . ",";
             }
         }
 
@@ -354,6 +354,6 @@ class ClassDefinition extends AbstractDefinition
 
     private function serializeValue(mixed $value): string
     {
-        return preg_replace("/^( +)/m", "$1$1", var_export($value, true));
+        return (string)preg_replace("/^( +)/m", "$1$1", var_export($value, true));
     }
 }
