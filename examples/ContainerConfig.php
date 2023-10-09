@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Examples;
@@ -60,7 +61,7 @@ class ContainerConfig extends AbstractContainerConfig
                         UserController::class,
                         AuthenticationController::class,
                     ]
-                )
+                ),
         ];
     }
 

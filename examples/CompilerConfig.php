@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WoohooLabs\Zen\Examples;
@@ -9,8 +10,8 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 use WoohooLabs\Zen\Config\Preload\PreloadConfig;
 use WoohooLabs\Zen\Config\Preload\PreloadConfigInterface;
 use WoohooLabs\Zen\Config\Preload\Psr4NamespacePreload;
-use WoohooLabs\Zen\Examples\Controller\AbstractController;
-use WoohooLabs\Zen\Examples\Controller\ControllerInterface;
+
+use function dirname;
 
 class CompilerConfig extends AbstractCompilerConfig
 {
