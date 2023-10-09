@@ -7,9 +7,12 @@ indent_size = 4
 indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
+eclint_block_comment_start = /*
+eclint_block_comment = *
+eclint_block_comment_end = */
 
 [Makefile]
 indent_style = tab
 
-[*.yml]
+[{*.yml,*.xml,*.xml.dist}]
 indent_size = 2
