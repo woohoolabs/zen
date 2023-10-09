@@ -275,7 +275,7 @@ class ClassDefinition extends AbstractDefinition
                 $code .= $this->indentLines("{$constructorIndent}{$tab}", $this->compileEntryReference(
                     $definition,
                     $compilation,
-                    $constructorIndentationLevel + 1,
+                    0,
                     $preloadedClasses
                 )) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
