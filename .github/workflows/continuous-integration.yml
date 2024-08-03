@@ -51,10 +51,10 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@master
 
-      - name: "Install PHP 8.4"
+      - name: "Install PHP 8.3"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.3"
           extensions: mbstring, xml
           coverage: none
           tools: composer:v2
