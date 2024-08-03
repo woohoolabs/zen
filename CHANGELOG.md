@@ -1,12 +1,8 @@
-## 3.2.0 - unreleased
-
-ADDED:
+## 3.1.1 - 2024-08-03
 
 CHANGED:
 
-REMOVED:
-
-FIXED:
+- Improved error handling of file-system operations
 
 ## 3.1.0 - 2023-08-19
 
