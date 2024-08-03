@@ -60,7 +60,10 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
 
         $compiledPreloadFile = $compiler->compile($this->compilerConfig, $classes);
 
-        file_put_contents($this->preloadFilePath, $compiledPreloadFile);
+        $result = file_put_contents($this->preloadFilePath, $compiledPreloadFile);
+        if ($result === false) {
+            throw new ContainerException("File '$this->preloadFilePath' cannot be written");
+        }
 
         return $classes;
     }
@@ -81,11 +84,18 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
             $this->createDirectory($definitionDirectory);
 
             foreach ($compiledContainerFiles["definitions"] as $filename => $content) {
-                file_put_contents($definitionDirectory . DIRECTORY_SEPARATOR . $filename, $content);
+                $file = $definitionDirectory . DIRECTORY_SEPARATOR . $filename;
+                $result = file_put_contents($file, $content);
+                if ($result === false) {
+                    throw new ContainerException("File '$$file' cannot be written");
+                }
             }
         }
 
-        file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
+        $result = file_put_contents($this->containerPath, $compiledContainerFiles["container"]);
+        if ($result === false) {
+            throw new ContainerException("File '$this->containerPath' cannot be written");
+        }
     }
 
     private function deleteDirectory(string $directory): void
@@ -100,9 +110,15 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         foreach ($files as $file) {
             assert($file instanceof SplFileInfo);
             if ($file->isDir()) {
-                rmdir($file->getRealPath());
+                $result = rmdir($file->getRealPath());
+                if ($result === false) {
+                    throw new ContainerException("Directory '" . $file->getRealPath() . "' cannot be deleted");
+                }
             } else {
-                unlink($file->getRealPath());
+                $result = unlink($file->getRealPath());
+                if ($result === false) {
+                    throw new ContainerException("File '" . $file->getRealPath() . "' cannot be deleted");
+                }
             }
         }
 
@@ -120,7 +136,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
 
         $result = mkdir($directory);
         if ($result === false) {
-            throw new ContainerException("Directory '$directory' can not be created!");
+            throw new ContainerException("Directory '$directory' cannot be created");
         }
     }
 
@@ -130,7 +146,7 @@ class FileSystemContainerBuilder implements ContainerBuilderInterface
         $relativeDirectory = $this->compilerConfig->getFileBasedDefinitionConfig()->getRelativeDefinitionDirectory();
 
         if ($relativeDirectory === "") {
-            throw new ContainerException("Relative directory of file-based definitions can not be empty!");
+            throw new ContainerException("Relative directory of file-based definitions cannot be empty");
         }
 
         return $basePath . DIRECTORY_SEPARATOR . $relativeDirectory;
