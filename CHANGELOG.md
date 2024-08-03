@@ -1,3 +1,13 @@
+## 3.2.0 - unreleased
+
+ADDED:
+
+CHANGED:
+
+REMOVED:
+
+FIXED:
+
 ## 3.1.1 - 2024-08-03
 
 CHANGED:
