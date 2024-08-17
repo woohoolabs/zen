@@ -10,6 +10,8 @@ use WoohooLabs\Zen\Config\FileBasedDefinition\FileBasedDefinitionConfigInterface
 use WoohooLabs\Zen\Container\DefinitionCompilation;
 
 use function array_key_exists;
+use function array_reduce;
+use function explode;
 use function str_repeat;
 use function str_replace;
 
@@ -175,6 +177,17 @@ abstract class AbstractDefinition implements DefinitionInterface
     protected function indent(int $indentationLevel): string
     {
         return str_repeat(" ", $indentationLevel * 4);
+    }
+
+    protected function indentLines(string $indentation, string $lines): string
+    {
+        return array_reduce(
+            explode("\n", $lines),
+            static function ($output, $line) use ($indentation) {
+                return $output . "\n" . $indentation . $line;
+            },
+            ""
+        );
     }
 
     /**

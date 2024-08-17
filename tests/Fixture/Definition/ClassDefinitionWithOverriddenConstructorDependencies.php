@@ -4,6 +4,6 @@ return new \X\A(
     NULL,
     0,
     array (
-  'a' => false,
-),
+        'a' => false,
+    ),
 );

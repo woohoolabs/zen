@@ -10,6 +10,7 @@ use WoohooLabs\Zen\Container\DefinitionInstantiation;
 
 use function array_key_exists;
 use function array_keys;
+use function preg_replace;
 use function var_export;
 
 class ClassDefinition extends AbstractDefinition
@@ -271,14 +272,17 @@ class ClassDefinition extends AbstractDefinition
             if (array_key_exists("class", $constructorArgument)) {
                 $definition = $compilation->getDefinition($constructorArgument["class"]);
 
-                $code .= "\n{$constructorIndent}{$tab}" . $this->compileEntryReference(
+                $code .= $this->indentLines("{$constructorIndent}{$tab}", $this->compileEntryReference(
                     $definition,
                     $compilation,
-                    $constructorIndentationLevel + 1,
+                    0,
                     $preloadedClasses
-                ) . ",";
+                )) . ",";
             } elseif (array_key_exists("value", $constructorArgument)) {
-                $code .= "\n{$constructorIndent}{$tab}" . $this->serializeValue($constructorArgument["value"]) . ",";
+                $code .= $this->indentLines(
+                    "{$constructorIndent}{$tab}",
+                    $this->serializeValue($constructorArgument["value"])
+                ) . ",";
             }
         }
 
@@ -350,6 +354,6 @@ class ClassDefinition extends AbstractDefinition
 
     private function serializeValue(mixed $value): string
     {
-        return var_export($value, true);
+        return (string) preg_replace("/^( +)/m", "$1$1", var_export($value, true));
     }
 }

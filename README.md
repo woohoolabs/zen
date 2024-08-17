@@ -141,9 +141,9 @@ $container = new Container();
 In case of very big projects, you might run out of memory when building the container. You can circumvent this issue by manually
 setting the memory limit:
 
- ```bash
- ./vendor/bin/zen --memory-limit="128M" build /var/www/app/Container/Container.php "App\\Container\\CompilerConfig"
- ```
+```bash
+./vendor/bin/zen --memory-limit="128M" build /var/www/app/Container/Container.php "App\\Container\\CompilerConfig"
+```
 
 Besides via the CLI, you can also build the Container via PHP itself:
 

@@ -7,6 +7,6 @@ return new \X\A(
     1345.999,
     NULL,
     array (
-  'a' => false,
-),
+        'a' => false,
+    ),
 );
